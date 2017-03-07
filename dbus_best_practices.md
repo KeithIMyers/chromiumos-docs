@@ -69,20 +69,19 @@ name**. Unique connection names are analogous to IP addresses. This name will
 start with a colon, e.g. `:1.25`. Connections are established using `dbus::Bus`.
 
 After connecting to D-Bus, a process can additionally request a **well-known
-name**. Well-known names are analogous to hostnames and allow processes to find
-each other. By convention, these take the form `org.chromium.ProgramName`, and
-they're also sometimes referred to as **service names** in the Chrome OS
-codebase. Ownership of a well-known name is requested using
+name** (also sometimes referred to as a **service name** in the Chrome OS
+codebase). Well-known names are analogous to hostnames and allow processes to
+find each other. By convention, these take the form `org.chromium.ProgramName`.
+Ownership of a well-known name is requested using
 `dbus::Bus::RequestOwnership()` or `dbus::Bus::RequestOwnershipAndBlock()`.
 
-To receive method calls, a program typically registers an **object path**.
-Object paths take the form `/org/chromium/ProgramName` and are sometimes
-referred to as **service paths** in the Chrome OS codebase. A D-Bus object owned
-by the current process is represented by `dbus::ExportedObject` and is
-registered using `dbus::Bus::GetExportedObject()`. To get an **object proxy**
-that can be used to call methods on or register for signals from an object
-exported by a remote service, pass a service name and path to
-`dbus::Bus::GetObjectProxy()`.
+To receive method calls, a program typically registers an **object path** (also
+sometimes referred to as a **service path** in the Chrome OS codebase). Object
+paths take the form `/org/chromium/ProgramName`. A D-Bus object owned by the
+current process is represented by `dbus::ExportedObject` and is registered using
+`dbus::Bus::GetExportedObject()`. To get an **object proxy** that can be used to
+call methods on or register for signals from an object exported by a remote
+service, pass a service name and path to `dbus::Bus::GetObjectProxy()`.
 
 A named group of methods and signals is called an **interface**. Interface names
 look similar to well-known names, e.g. `org.chromium.ProgramNameInterface`.
@@ -97,7 +96,7 @@ tutorial](http://dbus.freedesktop.org/doc/dbus-tutorial.html#members),
 > parameters"). **Signals** are broadcasts from the object to any interested
 > observers of the object; signals may contain a data payload.
 
-Use a *method call* (see `dbus::MethodCall`,
+Use a **method call** (see `dbus::MethodCall`,
 `dbus::ExportedObject::ExportMethod()`, and `dbus::ObjectProxy::CallMethod*()`)
 to send a request to another D-Bus client. Method calls trigger replies: errors
 are sent to report failures, and (possibly-empty) replies are returned on
@@ -137,8 +136,8 @@ configure each peripheral by setting properties on its object.
 Avoid using patterns like this in new code if possible:
 
 *   Use of multiple objects can result in complicated client code. In the above
-    example, a caller would now need to retain many `dbus::ExportedObject`
-    objects.
+    example, a caller would now need to interact with multiple
+    `dbus::ObjectProxy` objects.
 *   D-Bus's property implementation relies heavily on variant types, again
     complicating client code.
 *   There is a long-term goal to switch Chrome OS IPC from D-Bus to Mojo. Heavy
