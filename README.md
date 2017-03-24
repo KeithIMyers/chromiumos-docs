@@ -26,6 +26,12 @@ Then browse to e.g.
 
 To review someone else's changes, apply them locally first.
 
+## Top level documents:
+
+* [Chrome OS D-Bus best practices](dbus_best_practices.md)
+* [Chrome OS commit pipeline](cros_commit_pipeline.md)
+* [Chrome on Chrome OS commit pipeline](chrome_commit_pipeline.md)
+
 [Gitiles-flavored Markdown]: https://gerrit.googlesource.com/gitiles/+/master/Documentation/markdown.md
 [rendered by Gitiles]: https://chromium.googlesource.com/chromiumos/docs/+/master/
 [Chromium documentation guidelines]: https://chromium.googlesource.com/chromium/src/+/master/docs/documentation_guidelines.md
