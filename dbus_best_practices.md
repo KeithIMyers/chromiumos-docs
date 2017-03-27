@@ -9,6 +9,8 @@ daemons or Chrome) connect to the system bus via
 This document describes best practices for using D-Bus within Chrome OS system
 daemons.
 
+[TOC]
+
 ## Use Chrome's D-Bus bindings.
 
 Since 2013, Chrome's C++ D-Bus bindings have been available on Chrome OS as part
