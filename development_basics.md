@@ -63,7 +63,7 @@ Both kernel and firmware code should follow the [Linux kernel coding style]. The
 ### Shell
 
 Sometimes shell scripting can be the best way to perform lightweight,
-non-persistent tasks that needs to run periodically on Chrome OS systems, but
+non-persistent tasks that need to run periodically on Chrome OS systems, but
 there are also big downsides: it's much more difficult to write tests for shell
 scripts than for C++ code, and scripts have a tendency to grow to the point
 where they become difficult to maintain. If you're planning to add a shell
@@ -74,14 +74,14 @@ Shell scripts are mainly used for a few categories of tasks in Chrome OS:
 
 *   Upstart initialization scripts, as in [src/platform2/init]. See the
     [init STYLE file] and [init README file] for guidelines.
-*   Portage .ebuild files, as in the [chromiumos-overlay repository]. We follow
-    the upstream guidelines; see the [Ebuild Writing] page and specifically the
-    [Ebuild File Format].
+*   Portage `.ebuild` files, as in the [chromiumos-overlay repository]. We
+    follow the upstream guidelines; see the [Ebuild Writing] page and
+    specifically the [Ebuild File Format].
 *   Miscellaneous development-related tasks
 
 Read the [Google shell style guide] and [Chromium OS shell style guidelines]
 before writing scripts, with the caveat that the Upstart or Portage guidelines
-take precedent when writing those types of scripts.
+take precedence when writing those types of scripts.
 
 ### Python
 
@@ -90,7 +90,7 @@ but Python is used heavily for development and testing.
 
 We largely follow the [Google Python style guide], but see the
 [Chromium OS Python style guidelines] for important differences, particularly
-around spacing and naming. For tests, see the [autotest coding style].
+around indenting and naming. For tests, see the [autotest coding style].
 
 ## Testing
 
@@ -102,10 +102,10 @@ heavy refactoring.
 
 Good unit tests are fast, lightweight, reliable, and easy to run within the
 chroot as part of your development workflow. We use [Google Test] (which is
-comprised of the GoogleTest unit testing framework and the GoogleMock mock
-framework) to test C++ code. The [Why Google C++ Testing Framework?] and [Google
-Test FAQ] are good introductions, and the [unit testing document] has more
-details about how unit tests get run.
+comprised of the GoogleTest unit testing framework and the GoogleMock mocking
+framework) to test C++ code. [Why Google C++ Testing Framework?] and the
+[Google Test FAQ] are good introductions, and the [unit testing document] has
+more details about how unit tests get run.
 
 Note that although GoogleMock is permitted, there are some pitfalls:
 
@@ -113,8 +113,8 @@ Note that although GoogleMock is permitted, there are some pitfalls:
     production code within unit tests.
 *   GoogleMock often produces spammy, hard-to-read output when a test calls
     unimportant methods that haven't been mocked.
-*   On the other hand, it's difficult to maintain a long list of expectations
-    for methods that you don't actually care about.
+*   On the other hand, it's tedious to maintain long lists of expectations for
+    methods that you don't actually care about.
 
 GoogleMock can help verify complex interactions like multiple objects' methods
 being called in a specific order, but for simpler cases it's often cleaner to
