@@ -94,6 +94,9 @@ around indenting and naming. For tests, see the [autotest coding style].
 
 ## Testing
 
+The [Chromium OS testing site] is the main repository of information about
+testing.
+
 ### Unit tests
 
 Unit tests should be added alongside new code. It's important to design your
@@ -184,6 +187,9 @@ and outdated information. Instead, create a new issue and refer to the prior
 issue in its initial description. Text of the form `issue 123` will
 automatically be turned into a link.
 
+There is much more information about filing bugs and using labels in the
+[Chromium bug reporting guidelines].
+
 ## Mailing lists
 
 We use the [Chromium technical discussion groups] and
@@ -221,6 +227,7 @@ and mailing lists rather than the internal versions.
 [Google Python style guide]: https://google.github.io/styleguide/pyguide.html
 [Chromium OS Python style guidelines]: https://www.chromium.org/chromium-os/python-style-guidelines
 [autotest coding style]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/coding-style.md
+[Chromium OS testing site]: https://www.chromium.org/chromium-os/testing
 [Google Test]: https://github.com/google/googletest
 [Why Google C++ Testing Framework?]: https://github.com/google/googletest/blob/master/googletest/docs/Primer.md
 [Google Test FAQ]: https://github.com/google/googletest/blob/master/googletest/docs/FAQ.md
@@ -231,6 +238,7 @@ and mailing lists rather than the internal versions.
 [Developer Guide's code review instructions]: https://www.chromium.org/chromium-os/developer-guide#TOC-Upload-your-changes-and-get-a-code-review
 [Gerrit notification settings]: https://chromium-review.googlesource.com/settings/#Notifications
 [chromium issue tracker]: https://bugs.chromium.org/p/chromium/issues/list
+[Chromium bug reporting guidelines]: https://www.chromium.org/for-testers/bug-reporting-guidelines
 [Chromium technical discussion groups]: https://www.chromium.org/developers/technical-discussion-groups
 [Chromium OS technical discussion groups]: https://www.chromium.org/chromium-os/discussion-groups
 [chromium-os-dev]: https://groups.google.com/a/chromium.org/forum/#!forum/chromium-os-dev
