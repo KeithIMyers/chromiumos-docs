@@ -83,6 +83,13 @@ Read the [Google shell style guide] and [Chromium OS shell style guidelines]
 before writing scripts, with the caveat that the Upstart or Portage guidelines
 take precedence when writing those types of scripts.
 
+For shell scripts that ship with the OS image, be extra careful. The shell
+provides powerful features, but the flip side is that security pitfalls are
+tricky to avoid. Think twice whether your shell statements can have unintended
+side effects, in particular if your script runs with full privileges (as is the
+case with init scripts). As a guideline, keep things simple and move more
+complex processing to a properly sandboxed environment in an C++ daemon.
+
 ### Python
 
 The Python interpreter is not included in production Chrome OS system images,
