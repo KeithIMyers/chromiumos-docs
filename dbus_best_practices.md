@@ -251,6 +251,38 @@ service will also hang. This is unacceptable for most production code: even if
 your service isn't user-facing, it will probably eventually be called (either
 directly or indirectly) by something that is.
 
+## Be careful when making changes to in-use methods and signals.
+
+D-Bus relies on a message's sender and receiver agreeing about the format of the
+message's contents. A message contains a sequence of arguments of various types,
+and it's possible to change an in-use method or signal's arguments by ensuring
+that the receiver is able to read both the old and new format (e.g. by
+inspecting the return values of `dbus::MessageWriter::Pop...`). This results in
+fragile, complicated code, however, and should only be used temporarily during
+the transition to a new message signature.
+
+If you need to make more dramatic changes to a method's signature and are unable
+to use the above approach, you can:
+
+*   Add a temporary method with a new name and the new signature to the server.
+*   Update all callers to call the new, temporary method with updated arguments.
+*   Update the server so the old method also has the new signature.
+*   Update all callers to call the old method again.
+*   Remove the new, temporary method from the server.
+
+Signals can be updated in a similar fashion by making the server emit both old
+and new versions with different names.
+
+Note that you may need to wait a week or more between each change if the code
+spans the Chrome repository and one or more Chrome OS repositories, since it
+takes time for updated versions of Chrome to be integrated into the OS and since
+developers also sometimes deploy tip-of-tree versions of Chrome to older OS
+images. As a result, make the changes in-place as described earlier if possible.
+
+If you find yourself needing to make frequent changes to messages or want to
+introduce optional arguments, protocol buffers are a better choice. See the next
+item.
+
 ## Consider using protocol buffers for complex messages.
 
 [Protocol buffers](https://github.com/google/protobuf) provide an extensible way
@@ -264,7 +296,9 @@ Arguments of various types can be written to D-Bus messages via
 `dbus::MessageWriter` and read using `dbus::MessageReader`, but this approach
 has drawbacks:
 
-*   Code to pop multiple arguments from a message one at a time is verbose and
+*   Code that pops multiple arguments from a message one at a time is verbose
+    and fragile.
+*   Code that uses D-Bus string-to-variant dictionaries is even more verbose and
     fragile.
 *   There is no compile-time checking that the correct argument types are
     written or read from messages.
