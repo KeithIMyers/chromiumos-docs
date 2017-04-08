@@ -1,10 +1,10 @@
 # Chrome OS D-Bus Best Practices
 
-Chrome OS uses [D-Bus](https://www.freedesktop.org/wiki/Software/dbus/) for
-inter-process communication. At a high level, D-Bus consists of a **system bus**
-that is managed by a `dbus-daemon` process. **Clients** (typically either system
-daemons or Chrome) connect to the system bus via
-`/var/run/dbus/system_bus_socket` and use it to communicate with each other.
+Chrome OS uses [D-Bus] for inter-process communication. At a high level, D-Bus
+consists of a **system bus** that is managed by a `dbus-daemon` process.
+**Clients** (typically either system daemons or Chrome) connect to the system
+bus via `/var/run/dbus/system_bus_socket` and use it to communicate with each
+other.
 
 This document describes best practices for using D-Bus within Chrome OS system
 daemons.
@@ -14,44 +14,33 @@ daemons.
 ## Use Chrome's D-Bus bindings.
 
 Since 2013, Chrome's C++ D-Bus bindings have been available on Chrome OS as part
-of the [`libchrome`
-package](https://android.googlesource.com/platform/external/libchrome/+/master/dbus/)
-(specifically, in a `libbase-dbus` shared library). These bindings integrate
-tightly with Chrome's message loop and callback classes and follow our style
-guide and C++ best practices. They have been written to avoid common pitfalls
-frequently encountered in older Chrome OS code (e.g. mixing up service names and
-paths, failing to reply to method calls, etc.). **All new C++ code should use
-Chrome's bindings.**
+of the [libchrome package] (specifically, in a `libbase-dbus` shared library).
+These bindings integrate tightly with Chrome's message loop and callback classes
+and follow our style guide and C++ best practices. They have been written to
+avoid common pitfalls frequently encountered in older Chrome OS code (e.g.
+mixing up service names and paths, failing to reply to method calls, etc.).
+**All new C++ code should use Chrome's bindings.**
 
-libbrillo (formerly known as libchromeos) provides [additional
-code](https://android.googlesource.com/platform/external/libbrillo/+/master/brillo/dbus/)
-built on top of libchrome's bindings, along with [`DBusDaemon` and
-`DBusServiceDaemon`
-classes](https://android.googlesource.com/platform/external/libbrillo/+/master/brillo/daemons/dbus_daemon.h)
-that can reduce repetitive setup code. It may be useful in daemons that already
-use other code from libbrillo.
-[chromeos-dbus-bindings](https://chromium.googlesource.com/aosp/platform/external/dbus-binding-generator/+/master/chromeos-dbus-bindings/)
-can be used to generate custom bindings for libbrillo-based D-Bus daemons, as
-well.
+[libbrillo] (formerly known as libchromeos) provides additional code built on
+top of libchrome's bindings, along with [DBusDaemon and DBusServiceDaemon
+classes] that can reduce repetitive setup code. It may be useful in daemons that
+already use other code from libbrillo. [chromeos-dbus-bindings] can be used to
+generate custom bindings for libbrillo-based D-Bus daemons, as well.
 
 Other D-Bus bindings are used by some older Chrome OS code:
 
-*   [libdbus](https://dbus.freedesktop.org/doc/api/html/index.html), the
-    low-level D-Bus C API: Chrome's bindings are built on top of this library,
-    but you should not use it directly. It requires careful memory management,
-    doesn't integrate well with C++, and makes it easy to make mistakes. As the
-    library's own documentation says, "if you use this low-level API directly,
-    you're signing up for some pain."
-*   [dbus-glib](https://dbus.freedesktop.org/doc/dbus-glib/): GLib implements
-    its [own object
-    system](https://developer.gnome.org/gobject/stable/gobject-The-Base-Object-Type.html)
-    with subtle ref/unref semantics and expects to use its [own message
-    loop](https://developer.gnome.org/glib/stable/glib-The-Main-Event-Loop.html).
-    Code using it is prone to memory leaks and use-after-free bugs, and it
-    doesn't integrate easily with Chrome's message loop.
-*   [dbus-c++](http://dbus-cplusplus.sourceforge.net/): This library is
-    unmaintained. It makes heavy use of exceptions (which are forbidden in
-    Chrome C++ code) and doesn't integrate well with the rest of our code.
+*   [libdbus], the low-level D-Bus C API: Chrome's bindings are built on top of
+    this library, but you should not use it directly. It requires careful memory
+    management, doesn't integrate well with C++, and makes it easy to make
+    mistakes. As the library's own documentation says, "if you use this
+    low-level API directly, you're signing up for some pain."
+*   [dbus-glib]: GLib implements its own [own object system] with subtle
+    ref/unref semantics and expects to use its [own message loop]. Code using it
+    is prone to memory leaks and use-after-free bugs, and it doesn't integrate
+    easily with Chrome's message loop.
+*   [dbus-c++]: This library is unmaintained. It makes heavy use of exceptions
+    (which are forbidden in Chrome C++ code) and doesn't integrate well with the
+    rest of our code.
 
 Avoid using these bindings for new code and consider updating existing code to
 use Chrome's bindings as well (as has been done for `session_manager`, `shill`,
@@ -90,8 +79,7 @@ look similar to well-known names, e.g. `org.chromium.ProgramNameInterface`.
 
 ## Use method calls for requests. Use signals for announcements.
 
-Quoting the [upstream D-Bus
-tutorial](http://dbus.freedesktop.org/doc/dbus-tutorial.html#members),
+Quoting the [upstream D-Bus tutorial],
 
 > **Methods** are operations that can be invoked on an object, with optional
 > input (aka arguments or "in parameters") and output (aka return values or "out
@@ -124,9 +112,8 @@ Examples of events announced via signals:
 
 D-Bus provides additional functionality beyond the core concepts described
 above. A process can export multiple objects, set properties on objects, and
-implement the [object manager
-interface](https://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-objectmanager)
-to automatically inform other clients about changes.
+implement the [object manager interface] to automatically inform other clients
+about changes.
 
 For example, consider a hypothetical `PeripheralManager` service that allows
 configuration of external peripherals. One possible implementation would export
@@ -192,18 +179,22 @@ change in ownership of a single name.
 
 ## Use `system_api` to share constants
 
-The [`system_api`](https://chromium.googlesource.com/chromiumos/platform/system_api/+/master) repository is available within Chrome and all other Chrome OS repositories. All D-Bus-related constants or other definitions that need to be shared between repositories should live in `system_api`:
+The [system_api] repository is available within Chrome and all other Chrome OS
+repositories. All D-Bus-related constants or other definitions that need to be
+shared between repositories should live in `system_api`:
 
 *   service names and paths
 *   interface, method, and signal names
 *   enum values used as arguments in method calls or signals
 *   definitions of protocol buffers encoded as arguments
 
-`system_api` is manually uprev-ed within Chrome by updating the SHA1 within the top-level `DEPS` file.
+`system_api` is manually uprev-ed within Chrome by updating the SHA1 within the
+top-level `DEPS` file.
 
 ## Methods’ names should contain verbs. Signals’ names should describe what just happened.
 
-Like C++ methods, D-Bus methods should have names containing imperative verbs describing the action that will be performed:
+Like C++ methods, D-Bus methods should have names containing imperative verbs
+describing the action that will be performed:
 
 *   `StoreDeviceLocalAccountPolicy` is exported by the session manager and
     called by Chrome to tell the session manager to store policy information.
@@ -285,12 +276,12 @@ item.
 
 ## Consider using protocol buffers for complex messages.
 
-[Protocol buffers](https://github.com/google/protobuf) provide an extensible way
-to serialize arbitrary data. Fields in a protocol buffer are referenced via
-human-readable names in code but are also assigned fixed integer identifiers;
-messages sent by newer clients remain readable by older clients even after
-fields have been added or removed. This is particularly useful for maintaining
-compatibility between different versions of Chrome and the rest of Chrome OS.
+[Protocol buffers] provide an extensible way to serialize arbitrary data. Fields
+in a protocol buffer are referenced via human-readable names in code but are
+also assigned fixed integer identifiers; messages sent by newer clients remain
+readable by older clients even after fields have been added or removed. This is
+particularly useful for maintaining compatibility between different versions of
+Chrome and the rest of Chrome OS.
 
 Arguments of various types can be written to D-Bus messages via
 `dbus::MessageWriter` and read using `dbus::MessageReader`, but this approach
@@ -323,10 +314,10 @@ impossible to visually inspect signal arguments using `dbus-monitor`.
 D-Bus limits the number of in-flight method calls between two clients. If a
 client receives a method call but does not send a reply, the call will stay open
 indefinitely. At some point, additional method calls will not be delivered. In
-the past, this subtlety has caused at least one [difficult-to-track-down
-bug](https://crbug.com/208247). If your process exports method calls, make sure
-you always send replies or errors by running the
-`dbus::ExportedObject::ResponseSender` passed to your method callback.
+the past, this subtlety has caused at least one [difficult-to-track-down bug].
+If your process exports method calls, make sure you always send replies or
+errors by running the `dbus::ExportedObject::ResponseSender` passed to your
+method callback.
 
 ## Configure permissions correctly.
 
@@ -339,13 +330,29 @@ policy denies name requests and method calls, `<allow>` directives (rather than
 
 ## Limit use of D-Bus to start services on-demand.
 
-D-Bus has the ability to [start a
-service](https://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-starting-services)
-when a message is sent to its well-known name. This functionality is controlled
-by configuration files in `/usr/share/dbus-1/system-services`. Chrome OS
-generally uses [Upstart](http://upstart.ubuntu.com/) to manage services, and
-D-Bus service activation is much less flexible (e.g. no support for
-dependencies). D-Bus activation is currently used for short-lived processes that
-need to run with a UID different from the process that starts them. Start your
-services via Upstart unless there are compelling reasons to use D-Bus
-activation.
+D-Bus has the ability to [start a service] when a message is sent to its
+well-known name. This functionality is controlled by configuration files in
+`/usr/share/dbus-1/system-services`. Chrome OS generally uses [Upstart] to
+manage services, and D-Bus service activation is much less flexible (e.g. no
+support for dependencies). D-Bus activation is currently used for short-lived
+processes that need to run with a UID different from the process that starts
+them. Start your services via Upstart unless there are compelling reasons to use
+D-Bus activation.
+
+[D-Bus]: https://www.freedesktop.org/wiki/Software/dbus/
+[libchrome package]: https://android.googlesource.com/platform/external/libchrome/+/master/dbus/
+[libbrillo]: https://android.googlesource.com/platform/external/libbrillo/+/master/brillo/dbus/
+[DBusDaemon and DBusServiceDaemon classes]: https://android.googlesource.com/platform/external/libbrillo/+/master/brillo/daemons/dbus_daemon.h
+[chromeos-dbus-bindings]: https://chromium.googlesource.com/aosp/platform/external/dbus-binding-generator/+/master/chromeos-dbus-bindings/
+[libdbus]: https://dbus.freedesktop.org/doc/api/html/index.html
+[dbus-glib]: https://dbus.freedesktop.org/doc/dbus-glib/
+[own object system]: https://developer.gnome.org/gobject/stable/gobject-The-Base-Object-Type.html
+[own message loop]: https://developer.gnome.org/glib/stable/glib-The-Main-Event-Loop.html
+[dbus-c++]: http://dbus-cplusplus.sourceforge.net/
+[upstream D-Bus tutorial]: http://dbus.freedesktop.org/doc/dbus-tutorial.html#members
+[object manager interface]: https://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-objectmanager
+[system_api]: https://chromium.googlesource.com/chromiumos/platform/system_api/+/master
+[Protocol buffers]: https://github.com/google/protobuf
+[difficult-to-track-down bug]: https://crbug.com/208247
+[start a service]: https://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-starting-services
+[Upstart]: http://upstart.ubuntu.com/
