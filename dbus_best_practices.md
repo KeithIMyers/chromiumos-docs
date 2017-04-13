@@ -24,8 +24,9 @@ mixing up service names and paths, failing to reply to method calls, etc.).
 [libbrillo] (formerly known as libchromeos) provides additional code built on
 top of libchrome's bindings, along with [DBusDaemon and DBusServiceDaemon
 classes] that can reduce repetitive setup code. It may be useful in daemons that
-already use other code from libbrillo. [chromeos-dbus-bindings] can be used to
-generate custom bindings for libbrillo-based D-Bus daemons, as well.
+already use other code from libbrillo. [chromeos-dbus-bindings] (also known as
+`dbus-bindings-generator`) can be used to generate custom bindings for
+libbrillo-based D-Bus daemons, as well.
 
 Other D-Bus bindings are used by some older Chrome OS code:
 
@@ -248,9 +249,21 @@ D-Bus relies on a message's sender and receiver agreeing about the format of the
 message's contents. A message contains a sequence of arguments of various types,
 and it's possible to change an in-use method or signal's arguments by ensuring
 that the receiver is able to read both the old and new format (e.g. by
-inspecting the return values of `dbus::MessageWriter::Pop...`). This results in
-fragile, complicated code, however, and should only be used temporarily during
-the transition to a new message signature.
+inspecting the return values of `dbus::MessageReader::Pop...` to determine which
+arguments are present or missing).
+
+If you're using `chromeos-dbus-bindings`, you can add an annotation to a
+`<method>` element requesting that the generated handler method receive a
+`dbus::MethodCall*` instead of individual arguments, allowing you to handle
+missing arguments using `dbus::MessageReader`:
+
+``` xml
+<annotation name="org.chromium.DBus.Method.Kind" value="raw"/>
+```
+
+Handling multiple signatures for a method results in fragile, complicated code,
+and should only be used temporarily during the transition to a new message
+signature.
 
 If you need to make more dramatic changes to a method's signature and are unable
 to use the above approach, you can:
