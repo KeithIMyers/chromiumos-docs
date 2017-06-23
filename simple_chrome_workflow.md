@@ -39,7 +39,7 @@ In order to sign in to your Chromebook you must have Google API keys:
   src-internal in your .gclient file the official API keys will be set up
   automatically.
 
-## Run `croschrome-sdk`
+## Run `cros chrome-sdk`
 
 Run this from within your Chromium checkout (not the Chromium OS chroot):
 
@@ -149,7 +149,7 @@ picked up your Chromebook).
 
 Non-Googlers: Download a test image from the URL
 `https://storage.cloud.google.com/chromeos-image-archive/$BOARD-release/<version>/chromiumos_test_image.tar.xz`
-where $BOARD and version come from your SDK prompt. For example (`sdk lumpy
+where $BOARD and <version> come from your SDK prompt. For example (`sdk lumpy
 R27-3789.0.0`) is the lumpy board using version R27-3789.0.0)
 
 Googlers: Download an unsigned test image from
@@ -443,7 +443,7 @@ USB for you. It's very convenient, but for now it requires a full Chrome OS
 checkout and must be run inside the Chrome OS chroot. ([issue 437877])
 
 ```
-chroot> cros flash usb:// xbuddy://remote/$BOARD/<version>/test
+(chroot) cros flash usb:// xbuddy://remote/$BOARD/<version>/test
 ```
 
 Replace `$BOARD` and `<version>` with the right values. Both can be seen in your
