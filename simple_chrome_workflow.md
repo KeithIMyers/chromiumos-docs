@@ -1,4 +1,4 @@
-# Building Chromium for Chromium OS (Simple Chrome)
+# Building Chrome for Chrome OS (Simple Chrome)
 
 This workflow allows you to quickly build/deploy Chromium to any Chromium OS
 device without needing a Chromium OS checkout or chroot. It's useful for trying
@@ -15,14 +15,14 @@ fetches the necessary SDK components (CrOS toolchain, sysroot, etc.).
 
 | Label         | Paths, files, and commands                             |
 |---------------|--------------------------------------------------------|
-|  (outside)    | on your build machine, outside the ch  root            |
+|  (outside)    | on your build machine, outside the chroot            |
 |  (inside)     | inside the `chrome-sdk` shell on your build machine (1)|
 |  (device)     | on your Chromium OS device                             |
 |  (chroot)     | inside the `cros-sdk` crhoot                           |
 
 (1) Note: This is not the same thing as the `cros-sdk` chroot.
 
-## Checkout Chromium
+## Check out Chromium
 
 First off make sure all preconditions are met:
 
@@ -35,17 +35,17 @@ In order to sign in to your Chromebook you must have Google API keys:
 
 * External contributors, see http://www.chromium.org/developers/how-tos/api-keys
   You'll need to put them in your `out_board/Release/args.gn file`, see below.
-* Googlers, see go/building-chrome to get internal source. If you have
-  src-internal in your .gclient file the official API keys will be set up
+* Googlers, see http://go/building-chrome to get internal source. If you have
+  `src-internal` in your `.gclient` file the official API keys will be set up
   automatically.
 
 ## Run `cros chrome-sdk`
 
 Run this from within your Chromium checkout (not the Chromium OS chroot):
 
-**Have you setup gsutil yet?**
+**Have you set up gsutil yet?**
 
-> Steps below may run slow and fail with "Login Required" from gsutil. Use
+> Steps below may run slowly and fail with "Login Required" from gsutil. Use
 > depot_tools/gsutil.py and run `gsutil config` (outside) to set the authentication
 > token. (If you are a Googler, use your @google.com account)
 >
@@ -58,7 +58,7 @@ Note: Replace `$BOARD` with a [Chromium OS board name]
 
 
 `cros chrome-sdk` will fetch the latest Chrome OS SDK for building Chrome, and
-put you in a shell (with a command prompt starting with (sdk BOARD VERSION).
+put you in a shell with a command prompt starting with `(sdk BOARD VERSION)`.
 
 `cros chrome-sdk` will also automatically install and start the Goma server,
 with the active server port stored in the `$SDK_GOMA_PORT` (inside) environment
@@ -81,9 +81,9 @@ option.
 (outside) cros chrome-sdk --board=$BOARD --chroot=/path/to/chromiumos/chroot
 ```
 
-### Build Chromium
+## Build Chromium
 
-**Configure a build directory**
+### Configure a build directory
 
 Create a GN build directory. Run the following inside the chrome-sdk shell:
 
@@ -94,7 +94,7 @@ Create a GN build directory. Run the following inside the chrome-sdk shell:
 This will generate `out_$SDK_BOARD/Release/args.gn`.
 
 * You must specify `--args`, otherwise your build will not work on the device.
-* You only need to run 'gn gen' once within the same `cros chrome-sdk` session.
+* You only need to run `gn gen` once within the same `cros chrome-sdk` session.
 * However, if you exit the session or sync/update chrome the `$GN_ARGS` might
   change and you need to `gn gen` again.
 * `GYP` is no longer supported. You don't need `gclient runhooks` any more.
@@ -106,10 +106,10 @@ You can edit the args with:
 ```
 
 You can replace Release with Debug (or something else) for different
-configurations. See "Debug build" below.
+configurations. See **Debug build** section below.
 
 [GN build configuration] discusses various GN build configurations. For more
-info on GN, run gn help on the command line or read the [quick start guide].
+info on GN, run `gn help` on the command line or read the [quick start guide].
 
 To build Chrome, run:
 
@@ -119,7 +119,7 @@ To build Chrome, run:
 
 This runs Goma with 500 concurrent jobs and a maximum load of 10. You can tweak
 this number to achieve optimal build performance. To watch the build progress,
-find out the Goma port (`$ echo $SDK_GOMA_PORT`) and open
+find the Goma port (`$ echo $SDK_GOMA_PORT`) and open
 http://localhost:<port_number> in a browser.
 
 **IMPORTANT**: Do not attempt to build targets other than **chrome, chrome_sandbox,
@@ -163,18 +163,17 @@ have "test" somewhere in the file name), extract the image by running:
 (outside) tar xf chromiumos_test_image.tar.xz
 ```
 
-Copy the image to your drive using cros flash
+Copy the image to your drive using `cros flash`:
 
 ```
 (inside) cros flash usb:// chromiumos_test_image.bin
 ```
 
-If cros flash does not work you can do it the old fashioned way using dd. Where
-the X in sdX is the path to your usb key, and you can use dmesg to figure out
-the right path (it'll show when you plug it in). `bs` stands for block size, and
-was set to one gigabyte here. With the default value, the operation can be very
-slow. Make sure that the USB stick is not mounted before running this. You might
-have to turn of automounting in your operating system.
+If `cros flash` does not work you can do it the old-fashioned way using `dd`.
+In the below command, the X in sdX is the path to your usb key, and you can use
+dmesg to figure out the right path (it'll show when you plug it in). Make sure
+that the USB stick is not mounted before running this. You might have to turn
+off automounting in your operating system.
 
 ```
 (inside) sudo dd if=chromiumos_test_image.bin of=/dev/sdX bs=1G
@@ -182,7 +181,7 @@ have to turn of automounting in your operating system.
 
 ### Put your Chrome OS device in dev mode
 
-Follow the device-specific instructions to
+Follow the [device-specific instructions] to:
 
 1. Put your device into dev mode.
 2. Enable booting from USB.
@@ -190,37 +189,37 @@ Follow the device-specific instructions to
 ### Install the test image onto your device
 
 1. Plug the USB stick into the machine and reboot.
-2. At the dev-mode warning screen, press Ctrl-U to boot from the USB.
-3. Switch to terminal, Ctrl-Alt-F2 (Ctrl-Alt-NavigateForward)
-4. Login as chronos, password `test0000`.
+2. At the dev-mode warning screen, press Ctrl-U to boot from the USB stick.
+3. Switch to terminal by pressing Ctrl-Alt-F2 (Ctrl-Alt-Forward)
+4. Login as user `chronos`, password `test0000`.
 5. `sudo /usr/sbin/chromeos-install` (device)
 
 **IMPORTANT NOTES:**
 
 * Installing Chromium OS onto your hard disk will **WIPE YOUR HARD DISK CLEAN**.
 * *DO NOT* log into this test image with a username and password you care
-  about. The root password is PUBLIC ("test0000"), so anyone with ssh access could
-  compromise the device.
+  about. **The root password is public** ("test0000"), so anyone with SSH
+  access could compromise the device.
 
 ### Connect device to corp network
 
-To do this you will need a USB-to-ethernet dongle (you can find these at the
-techstop).
+To do this you will need a USB-to-Ethernet dongle (you can find these at the
+Techstop).
 
 ## Deploying Chrome to the device
 
-To deploy the build to a device, you will need direct ssh access to it from your
+To deploy the build to a device, you will need direct SSH access to it from your
 computer. The scripts below handle everything else.
 
 ### Checking the IP address
 
 1. Click the status area in the lower-right corner
 2. Click the network icon
-3. Click the circled i symbol in the lower-right corner
+3. Click the circled `i` symbol in the lower-right corner
 4. A small window pops up that shows the IP address
 
-This also works both before and after login. Another option is to run 'ifconfig'
-from the shell (Ctrl-Alt-t -> shell) after guest login.
+This also works both before and after login. Another option is to run `ifconfig`
+from `crosh` (Ctrl-Alt-t) after guest login.
 
 ### Using deploy_chrome
 
@@ -255,26 +254,27 @@ output files.
 
 ## Debugging
 
-### Logfiles
+### Log files
 
-Other than the normal system output in `/var/log/messages` (device), you can
-find the output of Chrome itself in `/var/log/ui/ui.LATEST` (device). This is
-where vmodule output and such ends up.
+Chrome-related logs are written to several locations on the device:
 
-### Commandline Flags and Envvars
+* `/var/log/ui/ui.LATEST` contains messages written to stderr by Chrome
+  before its log file has been initialized.
+* `/var/log/chrome/chrome` contains messages logged by Chrome before a
+  user has logged in.
+* `/home/chronos/user/log/chrome` contains messages logged by Chrome
+  after a user has logged in.
+* `/var/log/messages` contains messages logged by `session_manager`
+  (which is responsible for starting Chrome), in addition to kernel
+  messages when a Chrome process crashes.
+
+### Command-line flags and environment variables
 
 If you want to tweak the command line of Chrome or its environment, you have to
 do this on the device itself.
 
-### R37 (and newer)
-
 Edit the `/etc/chrome_dev.conf` (device) file. Instructions on using it are in
 the file itself.
-
-### R36 (and older)
-
-Edit the `/sbin/session_manager_setup.sh` (device) script. If you go to the end,
-you'll see where Chrome is invoked and where you can tweak the flags/env.
 
 ### Debug build
 
@@ -291,7 +291,7 @@ with `--args="$GN_ARGS dcheck_always_on=true"`.
 You need to add `--nostrip` to `deploy_chrome` because otherwise it will strip
 symbols even from a debug build.  The rootfs will probably not be big enough to
 hold all the binaries so you need to put it on the stateful partition and bind
-mount over the real directory. Create the directory /usr/local/chrome on your
+mount over the real directory. Create the directory `/usr/local/chrome` on your
 device and run:
 
 ```
@@ -328,11 +328,11 @@ Notes:
 
 ### Remote GDB
 
-Core dumps are disabled by defaul.t See [additional debugging tips] for how to
+Core dumps are disabled by default. See [additional debugging tips] for how to
 enable core files.
 
 On the target machine, open up a port for the gdb server to listen on, and
-attach the gdb server to the running chrome process.
+attach the gdb server to the top-level Chrome process.
 
 ```
 (device) sudo /sbin/iptables -A INPUT -p tcp --dport 1234 -j ACCEPT
@@ -385,7 +385,7 @@ checkout and re-run `cros chrome-sdk`.
   regularly. Instructions for updating your Chrome OS image are above in
   [Set Up the Chromium OS device].
 * Don't forget to re-configure your build directories (See
-  [Configure a build directory])
+  **Configure a build directory** section above)
 
 ### Specifying the version of the Chrome OS SDK to use
 
@@ -431,7 +431,7 @@ In order to add/remove a file from the installed list:
    (e-mail chromium-os-dev@ if you can't find anyone)
 5. Merge the change into Chromium OS via gerrit
 6. Update the DEPS file in Chromium to use the new chromite sha1
-7 Check in the Chromium change like normal
+7. Check in the Chromium change like normal
 8. Once everything has settled, then go back and remove the `optional=True`
    from the file list<br>
    Unless the file is actually optional, then keep it
@@ -455,7 +455,7 @@ See the [Cros Flash page] for more details.
 ### Setting a custom prompt (optional)
 
 By default, cros chrome-sdk prepends something like '`(sdk link R52-8315.0.0)`'
-to the prompt (with the version of the chromeos prebuilt being used).
+to the prompt (with the version of the prebuilt system being used).
 
 If you prefer to colorize the prompt, you can set `PS1` in
 `~/.chromite/chrome_sdk.bashrc`, e.g. to prepend a yellow '`(sdk link 8315.0.0)`'
@@ -472,6 +472,7 @@ NOTE: Currently the release version (e.g. 52) is not available as an environment
 [Chromium OS board name]: http://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices
 [GN build configuration]: http://www.chromium.org/developers/gn-build-configuration
 [quick start guide]: https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/quick_start.md
+[device-specific instructions]: https://www.chromium.org/chromium-os/poking-around-your-chrome-os-device
 [rootfs has been removed]: https://www.chromium.org/chromium-os/poking-around-your-chrome-os-device#TOC-Making-changes-to-the-filesystem
 [remounted as read-write]: http://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips#TOC-Setting-up-the-device
 [additional debugging tips]: http://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips#TOC-Enabling-core-dumps
