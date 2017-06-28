@@ -20,6 +20,25 @@ using the same techniques that you'd use for any other repositories in the
 project. Feel free to bypass the commit queue and commit changes immediately
 after they are reviewed.
 
+## Making changes without repo
+
+You can also make changes to this repository without using the [repo] tool. This
+comes in handy when you don't have a Chromium OS checkout:
+
+```
+git clone https://chromium.googlesource.com/chromiumos/docs
+curl -Lo .git/hooks/commit-msg https://gerrit-review.googlesource.com/tools/hooks/commit-msg
+chmod +x .git/hooks/commit-msg
+cd docs
+git checkout -b changes
+(make some changes)
+git commit -a
+git push origin HEAD:refs/for/master
+```
+
+The above steps will upload a patch to [chromium-review.googlesource.com] where
+you can get your patch reviewed, and submit.
+
 ## Previewing changes
 
 You can preview your local changes using [md_browser]:
@@ -42,4 +61,5 @@ To review someone else's changes, apply them locally first, or just click the
 [Chromium documentation best practices]: https://chromium.googlesource.com/chromium/src/+/master/docs/documentation_best_practices.md
 [style guide]: https://github.com/google/styleguide/tree/gh-pages/docguide
 [repo]: https://source.android.com/source/using-repo
+[chromium-review.googlesource.com]: https://chromium-review.googlesource.com/
 [md_browser]: https://chromium.googlesource.com/chromium/src/tools/md_browser/+/master/
