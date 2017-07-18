@@ -281,7 +281,7 @@ the file itself.
 For cros chrome-sdk GN configurations, Release is the default. A debug build of
 Chrome will include useful tools like DCHECK and debug logs like DVLOG. For a
 Debug configuration, specify
-`--args="$GN_ARGS is_debug=true is_component_build false"` (inside).
+`--args="$GN_ARGS is_debug=true is_component_build=false"` (inside).
 
 Alternately, you can just turn on DCHECKs for a release build. You can do this
 with `--args="$GN_ARGS dcheck_always_on=true"`.
