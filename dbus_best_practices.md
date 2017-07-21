@@ -257,7 +257,7 @@ If you're using `chromeos-dbus-bindings`, you can add an annotation to a
 `dbus::MethodCall*` instead of individual arguments, allowing you to handle
 missing arguments using `dbus::MessageReader`:
 
-``` xml
+```xml
 <annotation name="org.chromium.DBus.Method.Kind" value="raw"/>
 ```
 
@@ -320,7 +320,8 @@ buffers: see `dbus::MessageWriter::AppendProtoAsArrayOfBytes()` and
 `dbus::MessageReader::PopArrayOfBytesAsProto()`.
 
 The only downside of using protocol buffers over D-Bus is that they make it
-impossible to visually inspect signal arguments using `dbus-monitor`.
+more challenging to visually inspect signal arguments using `dbus-monitor`
+(since the encoded message will be displayed as a byte array).
 
 ## Always send a reply or error after receiving a method call.
 
@@ -351,6 +352,34 @@ support for dependencies). D-Bus activation is currently used for short-lived
 processes that need to run with a UID different from the process that starts
 them. Start your services via Upstart unless there are compelling reasons to use
 D-Bus activation.
+
+## Know how to dig deeper.
+
+Running `dbus-monitor --system` as the `root` user dumps live D-Bus traffic. By
+default, only signals are included. To let `dbus-monitor` also see method calls,
+create a file named `/etc/dbus-1/system.d/eavesdrop.conf` with the following
+contents and reboot the system:
+
+```xml
+<!DOCTYPE busconfig PUBLIC
+ "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+<busconfig>
+  <policy user="root">
+    <allow eavesdrop="true"/>
+  </policy>
+</busconfig>
+```
+
+The `dbus-send` program sends D-Bus messages. For example, the following command
+makes a method call to the `powerd` process asking it to suspend the system:
+
+```shell
+dbus-send --system --print-reply --type=method_call \
+  --dest=org.chromium.PowerManager \
+  /org/chromium/PowerManager \
+  org.chromium.PowerManager.RequestSuspend
+```
 
 [D-Bus]: https://www.freedesktop.org/wiki/Software/dbus/
 [libchrome package]: https://android.googlesource.com/platform/external/libchrome/+/master/dbus/
