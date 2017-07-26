@@ -335,12 +335,20 @@ method callback.
 
 ## Configure permissions correctly.
 
-XML files in `/etc/dbus-1` are used to configure the D-Bus security policy.  The
+XML files in `/etc/dbus-1` are used to configure the D-Bus security policy. The
 toplevel `/etc/dbus-1/system.conf` file disallows all name ownership requests
 and method calls by default on the system bus. Per-service files in the
-`/etc/dbus-1/system.d` directory are used to add exceptions.  Since the default
+`/etc/dbus-1/system.d` directory (or `/opt/google/chrome/dbus`, in the case of
+services exported by Chrome) are used to add exceptions. Since the default
 policy denies name requests and method calls, `<allow>` directives (rather than
 `<deny>`) should appear in these per-service files.
+
+It is advisable to use both `send_destination` and `send_interface` in `<allow>`
+directives that grant permission to invoke method calls on a given service.
+Unintuitively, `send_destination="org.example.Service"` matches all calls to
+*any* service exported by the client that owns the `org.example.Service` name,
+so additionally specifying `send_interface="org.example.ServiceInterface"`
+ensures that only those handled by the intended service will be permitted.
 
 ## Limit use of D-Bus to start services on-demand.
 
