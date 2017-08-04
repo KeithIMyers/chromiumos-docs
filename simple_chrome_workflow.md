@@ -147,14 +147,14 @@ test image loaded on it.
 You will need a 4GiB USB stick (you can get one at the ChromeStop where you
 picked up your Chromebook).
 
-Non-Googlers: Download a test image from the URL
+Download a test image from the URL
 `https://storage.cloud.google.com/chromeos-image-archive/$BOARD-release/<version>/chromiumos_test_image.tar.xz`
-where $BOARD and <version> come from your SDK prompt. For example (`sdk lumpy
-R27-3789.0.0`) is the lumpy board using version R27-3789.0.0)
+where $BOARD and <version> come from your SDK prompt. For example (`sdk link
+R62-9800.0.0`) is the board "link" using version R62-9800.0.0)
 
-Googlers: Download an unsigned test image from
-https://cros-goldeneye.corp.google.com/console/listRelease. The latest dev
-channel is a good choice.
+Googlers: Prefer the above link for public boards. Images for non-public boards
+are available on go/goldeneye.
+
 
 After you download the compressed tarball containing the test image (it should
 have "test" somewhere in the file name), extract the image by running:
