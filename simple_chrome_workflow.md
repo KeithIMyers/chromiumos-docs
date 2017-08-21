@@ -18,16 +18,19 @@ fetches the necessary SDK components (CrOS toolchain, sysroot, etc.).
 |  (outside)    | on your build machine, outside the chroot            |
 |  (inside)     | inside the `chrome-sdk` shell on your build machine (1)|
 |  (device)     | on your Chromium OS device                             |
-|  (chroot)     | inside the `cros-sdk` crhoot                           |
+|  (chroot)     | inside the `cros_sdk` crhoot                           |
 
-(1) Note: This is not the same thing as the `cros-sdk` chroot.
+(1) Note: This is not the same thing as the `cros_sdk` chroot.
 
-## Check out Chromium
+## Getting started
 
-First off make sure all preconditions are met:
+First make sure you have a:
 
-1. You have a [local copy of the Chromium source code].
-2. You have a [local copy of depot_tools].
+1. [Local copy of the Chromium source code and depot_tools]
+2. USB flash drive 4 GB or larger (for example, a Sandisk Extreme USB 3.0)
+3. USB to Ethernet adapter
+
+Googlers: Chromestop has the hardware.
 
 ### Get Google API keys
 
@@ -54,7 +57,7 @@ Run this from within your Chromium checkout (not the Chromium OS chroot):
 ```
 (outside) cros chrome-sdk --board=$BOARD
 ```
-Note: Replace `$BOARD` with a [Chromium OS board name]
+Note: Replace `$BOARD` with a [Chromium OS board name], for example "link".
 
 
 `cros chrome-sdk` will fetch the latest Chrome OS SDK for building Chrome, and
@@ -71,15 +74,7 @@ by default. To build the official Chrome, run with the `--internal` flag.
 to use the generic or create your own local build. Star http://crbug.com/360342
 for updates.
 
-### Using a custom Chromium OS build from your Chromium OS chroot (optional)
-
-If you are making changes to Chromium OS and have a Chromium OS build inside a
-chroot that you want to build against, run `cros chrome-sdk` with the `--chroot`
-option.
-
-```
-(outside) cros chrome-sdk --board=$BOARD --chroot=/path/to/chromiumos/chroot
-```
+**Note:** See below if you want to use a custom OS build.
 
 ## Build Chromium
 
@@ -97,7 +92,6 @@ This will generate `out_$SDK_BOARD/Release/args.gn`.
 * You only need to run `gn gen` once within the same `cros chrome-sdk` session.
 * However, if you exit the session or sync/update chrome the `$GN_ARGS` might
   change and you need to `gn gen` again.
-* `GYP` is no longer supported. You don't need `gclient runhooks` any more.
 
 You can edit the args with:
 
@@ -144,17 +138,13 @@ test image loaded on it.
 
 ### Create a bootable USB stick
 
-You will need a 4GiB USB stick (you can get one at the ChromeStop where you
-picked up your Chromebook).
-
 Download a test image from the URL
 `https://storage.cloud.google.com/chromeos-image-archive/$BOARD-release/<version>/chromiumos_test_image.tar.xz`
 where $BOARD and <version> come from your SDK prompt. For example (`sdk link
-R62-9800.0.0`) is the board "link" using version R62-9800.0.0)
+R62-9800.0.0`) is the board `link` using version `R62-9800.0.0`).
 
 Googlers: Prefer the above link for public boards. Images for non-public boards
 are available on go/goldeneye.
-
 
 After you download the compressed tarball containing the test image (it should
 have "test" somewhere in the file name), extract the image by running:
@@ -170,14 +160,7 @@ Copy the image to your drive using `cros flash`:
 ```
 
 If `cros flash` does not work you can do it the old-fashioned way using `dd`.
-In the below command, the X in sdX is the path to your usb key, and you can use
-dmesg to figure out the right path (it'll show when you plug it in). Make sure
-that the USB stick is not mounted before running this. You might have to turn
-off automounting in your operating system.
-
-```
-(inside) sudo dd if=chromiumos_test_image.bin of=/dev/sdX bs=1G
-```
+See below.
 
 ### Put your Chrome OS device in dev mode
 
@@ -201,10 +184,15 @@ Follow the [device-specific instructions] to:
   about. **The root password is public** ("test0000"), so anyone with SSH
   access could compromise the device.
 
-### Connect device to corp network
+You only need to use the USB stick the first time. For future updates you can
+use `cros flash` over the network.
 
-To do this you will need a USB-to-Ethernet dongle (you can find these at the
-Techstop).
+### Connect device to Ethernet
+
+Use your USB-to-Ethernet adapter to connect to a network.
+
+Googlers: You can use a corp Ethernet jack, which will place you on a special
+restricted network.
 
 ## Deploying Chrome to the device
 
@@ -251,6 +239,22 @@ deploy_chrome to look for files in the correct place.  If you do not have
 `GYP_CHROMIUM_NO_ACTION=1` set or if you do but have build chrome with gyp, you
 can set `USE="gn"` or `USE=""` to indicate where deploy_chrome should look for
 output files.
+
+## Updating the OS image
+
+Every ~2 weeks you should update the Chrome OS image on the device so that
+Chrome and Chrome OS don't get out of sync. You don't need a USB flash drive to
+do this.
+
+1. Exit the `cros chrome-sdk` shell, then re-enter it
+2. The prompt should have a new version number (e.g. R63-9999.0.0)
+3. Download the latest test image as described above
+4. Use `cros flash` to deploy the image to the device over the network
+
+```
+(inside) cros flash $DEVICE_IP chromiumos_test_image.bin
+```
+Then `deploy_chrome` as usual.
 
 ## Debugging
 
@@ -436,6 +440,29 @@ In order to add/remove a file from the installed list:
    from the file list<br>
    Unless the file is actually optional, then keep it
 
+### Using a custom Chromium OS build from your Chromium OS chroot (optional)
+
+If you are making changes to Chromium OS and have a Chromium OS build inside a
+chroot that you want to build against, run `cros chrome-sdk` with the `--chroot`
+option.
+
+```
+(outside) cros chrome-sdk --board=$BOARD --chroot=/path/to/chromiumos/chroot
+```
+
+### Flashing an image to USB using dd
+
+In the below command, the X in sdX is the path to your usb key, and you can use
+dmesg to figure out the right path (it'll show when you plug it in). Make sure
+that the USB stick is not mounted before running this. You might have to turn
+off automounting in your operating system.
+
+```
+(inside) sudo dd if=chromiumos_test_image.bin of=/dev/sdX bs=1G
+```
+
+Be careful - you don't want to have `dd` write over your root partition!
+
 ### Using cros flash with xbuddy to download images
 
 `cros flash` with `xbuddy` will automatically download an image and write it to
@@ -466,9 +493,13 @@ PS1='\[\033[01;33m\](sdk ${SDK_BOARD} ${SDK_VERSION})\[\033[00m\] \w \[\033[01;3
 ```
 NOTE: Currently the release version (e.g. 52) is not available as an environment variable.
 
+### GYP
+
+The legacy `GYP` build system is no longer supported. You don't need
+`gclient runhooks` any more.
+
 [instructions in the development guide]: https://www.chromium.org/chromium-os/developer-guide#TOC-Making-changes-to-the-Chromium-web-
-[local copy of the Chromium source code]: http://www.chromium.org/developers/how-tos/get-the-code
-[local copy of depot_tools]: http://www.chromium.org/developers/how-tos/install-depot-tools
+[Local copy of the Chromium source code and depot_tools]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md
 [Chromium OS board name]: http://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices
 [GN build configuration]: http://www.chromium.org/developers/gn-build-configuration
 [quick start guide]: https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/quick_start.md
