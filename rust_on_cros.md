@@ -7,6 +7,8 @@ OS SDK. All commands and paths given are from within the SDK's chroot.
 
 ## Install
 
+> **WARNING**: Manual installation instructions are only needed until Rust gets included in the SDK.
+
 The following will install the Rust toolchain along with [Cargo], a combination build system and
 package manager used by nearly all Rust projects.
 
@@ -23,6 +25,20 @@ linker = "armv7a-cros-linux-gnueabi-gcc"
 
 [target.aarch64-cros-linux-gnu]
 linker = "aarch64-cros-linux-gnu-gcc"
+
+[target.x86_64-cros-linux-gnu]
+linker = "x86_64-cros-linux-gnu-gcc"
+```
+
+Append the following to
+`~/trunk/src/third_party/chromiumos-overlay/profiles/targets/chromeos/package.provided` to tell the
+portage system that `rust` and `cargo` do not need to be built for each board, as they are already
+usable for all boards:
+
+```
+# Rust compiler, and package manager/build tool.
+dev-lang/rust-1.16.0
+dev-util/cargo-0.17.0
 ```
 
 The particular flavor of Rust that is installed is targetable to `x86_64`, `armv7a`, and `aarch64`.
@@ -132,7 +148,14 @@ The toolchain that is installed by default is targetable to the following triple
 When building Rust projects for development, a non-default target can be selected as follows:
 
 ```shell
-cargo build --target=<target_triple> -C --linker=<target_triple>
+cargo build --target=<target_triple>
+```
+
+If a specific board is being targeted, that board's sysroot can be used for compiling and linking
+purposes by setting the `SYSROOT` environment variable as follows:
+
+```shell
+export SYSROOT="/build/<board>"
 ```
 
 [Rust]: https://www.rust-lang.org
