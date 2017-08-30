@@ -11,6 +11,8 @@ C++ unit tests are written using [Google Test] and typically live in files with
 `_unittest.cc` or `_test.cc` suffixes (e.g. the unit tests for a source file
 named `foo/bar.cc` should live in `foo/bar_unittest.cc`).
 
+The [unit testing document] has more details about how unit tests are executed.
+
 [TOC]
 
 ## Prefer unit tests to functional tests
@@ -665,6 +667,7 @@ Blog] also include more information about different types of test objects.
 
 [Unit tests]: https://en.wikipedia.org/wiki/Unit_testing
 [Google Test]: https://github.com/google/googletest
+[unit testing document]: https://www.chromium.org/chromium-os/testing/adding-unit-tests-to-the-build
 [Functional tests]: https://en.wikipedia.org/wiki/Functional_testing
 [Autotest]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md
 [commit queue]: https://www.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/commit-queue-overview

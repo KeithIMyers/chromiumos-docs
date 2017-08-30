@@ -117,19 +117,8 @@ framework) to test C++ code. [Why Google C++ Testing Framework?] and the
 [Google Test FAQ] are good introductions, and the [unit testing document] has
 more details about how unit tests get run.
 
-Note that although GoogleMock is permitted, there are some pitfalls:
-
-*   When creating partial mocks of classes, it's easy to accidentally call
-    production code within unit tests.
-*   GoogleMock often produces spammy, hard-to-read output when a test calls
-    unimportant methods that haven't been mocked.
-*   On the other hand, it's tedious to maintain long lists of expectations for
-    methods that you don't actually care about.
-
-GoogleMock can help verify complex interactions like multiple objects' methods
-being called in a specific order, but for simpler cases it's often cleaner to
-define interfaces for the tested class's dependencies and write your own
-[stub or fake] implementations.
+See the [Best practices for writing Chrome OS unit tests] document for more
+guidance on writing good unit tests.
 
 ### Autotest
 
@@ -239,7 +228,7 @@ and mailing lists rather than the internal versions.
 [Why Google C++ Testing Framework?]: https://github.com/google/googletest/blob/master/googletest/docs/Primer.md
 [Google Test FAQ]: https://github.com/google/googletest/blob/master/googletest/docs/FAQ.md
 [unit testing document]: https://www.chromium.org/chromium-os/testing/adding-unit-tests-to-the-build
-[stub or fake]: https://martinfowler.com/articles/mocksArentStubs.html#TheDifferenceBetweenMocksAndStubs
+[Best practices for writing Chrome OS unit tests]: unit_tests.md
 [Autotest]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md
 [Chromium code review policy]: https://chromium.googlesource.com/chromium/src/+/master/docs/code_reviews.md
 [Developer Guide's code review instructions]: https://www.chromium.org/chromium-os/developer-guide#TOC-Upload-your-changes-and-get-a-code-review
