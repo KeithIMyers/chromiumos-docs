@@ -184,9 +184,6 @@ Follow the [device-specific instructions] to:
   about. **The root password is public** ("test0000"), so anyone with SSH
   access could compromise the device.
 
-You only need to use the USB stick the first time. For future updates you can
-use `cros flash` over the network.
-
 ### Connect device to Ethernet
 
 Use your USB-to-Ethernet adapter to connect to a network.
@@ -242,19 +239,10 @@ output files.
 
 ## Updating the OS image
 
-Every ~2 weeks you should update the Chrome OS image on the device so that
-Chrome and Chrome OS don't get out of sync. You don't need a USB flash drive to
-do this.
-
-1. Exit the `cros chrome-sdk` shell, then re-enter it
-2. The prompt should have a new version number (e.g. R63-9999.0.0)
-3. Download the latest test image as described above
-4. Use `cros flash` to deploy the image to the device over the network
-
-```
-(inside) cros flash $DEVICE_IP chromiumos_test_image.bin
-```
-Then `deploy_chrome` as usual.
+Every week you should update the Chrome OS image on the device so that
+Chrome and Chrome OS don't get out of sync. Follow the above instructions.
+(When http://crbug.com/761102 is fixed you'll be able to do this over the
+network with `cros flash`.)
 
 ## Debugging
 
