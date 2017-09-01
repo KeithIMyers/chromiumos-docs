@@ -7,10 +7,15 @@ OS SDK. All commands and paths given are from within the SDK's chroot.
 
 ## Install
 
-> **WARNING**: Manual installation instructions are only needed until Rust gets included in the SDK.
+> **NOTE**: Manual installation instructions are only needed until Rust gets included in the SDK.
+
 
 The following will install the Rust toolchain along with [Cargo], a combination build system and
 package manager used by nearly all Rust projects.
+
+> **WARNING**: If you encounter failures during `emerge`, do a full `repo sync` followed by
+> `~/trunk/src/scripts/update_chroot`. The current Rust package requires a fairly recent toolchain
+> to build it.
 
 ```shell
 sudo emerge rust
@@ -37,8 +42,8 @@ usable for all boards:
 
 ```
 # Rust compiler, and package manager/build tool.
-dev-lang/rust-1.16.0
-dev-util/cargo-0.17.0
+dev-lang/rust-1.20.0
+dev-util/cargo-0.20.0
 ```
 
 The particular flavor of Rust that is installed is targetable to `x86_64`, `armv7a`, and `aarch64`.
