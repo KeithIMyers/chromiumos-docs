@@ -140,7 +140,7 @@ test image loaded on it.
 
 Download a test image from the URL
 `https://storage.cloud.google.com/chromeos-image-archive/$BOARD-release/<version>/chromiumos_test_image.tar.xz`
-where $BOARD and <version> come from your SDK prompt. For example (`sdk link
+where `$BOARD` and `<version>` come from your SDK prompt. For example (`sdk link
 R62-9800.0.0`) is the board `link` using version `R62-9800.0.0`).
 
 Googlers: Prefer the above link for public boards. Images for non-public boards
