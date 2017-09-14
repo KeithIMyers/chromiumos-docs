@@ -11,13 +11,15 @@ OS SDK. All commands and paths given are from within the SDK's chroot.
 
 
 The following will install the Rust toolchain along with [Cargo], a combination build system and
-package manager used by nearly all Rust projects.
+package manager used by nearly all Rust projects. The first line is there to ensure there is a
+toolchain installed for each of the supported target triples.
 
 > **WARNING**: If you encounter failures during `emerge`, do a full `repo sync` followed by
 > `~/trunk/src/scripts/update_chroot`. The current Rust package requires a fairly recent toolchain
 > to build it.
 
 ```shell
+sudo $(which cros_setup_toolchains) --targets=boards --include-boards=kevin,lumpy
 sudo emerge rust
 sudo emerge cargo
 ```
