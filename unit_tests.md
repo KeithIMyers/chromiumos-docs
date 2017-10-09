@@ -248,7 +248,7 @@ class RealDelegate : public PowerManager::Delegate {
 
 int main(int argc, char** argv) {
   ...
-  PowerManager manager(base::MakeUnique<RealDelegate>());
+  PowerManager manager(std::make_unique<RealDelegate>());
   ...
 }
 ```
