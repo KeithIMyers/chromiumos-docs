@@ -7,7 +7,8 @@ bus via `/var/run/dbus/system_bus_socket` and use it to communicate with each
 other.
 
 This document describes best practices for using D-Bus within Chrome OS system
-daemons.
+daemons. For more information about using D-Bus within Chrome, see the [D-Bus
+Usage in Chrome] document.
 
 [TOC]
 
@@ -390,6 +391,7 @@ dbus-send --system --print-reply --type=method_call \
 ```
 
 [D-Bus]: https://www.freedesktop.org/wiki/Software/dbus/
+[D-Bus Usage in Chrome]: dbus_in_chrome.md
 [libchrome package]: https://android.googlesource.com/platform/external/libchrome/+/master/dbus/
 [libbrillo]: https://android.googlesource.com/platform/external/libbrillo/+/master/brillo/dbus/
 [DBusDaemon and DBusServiceDaemon classes]: https://android.googlesource.com/platform/external/libbrillo/+/master/brillo/daemons/dbus_daemon.h
