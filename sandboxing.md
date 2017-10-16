@@ -85,15 +85,16 @@ The user (devbroker in this example) needs to be added to the system using the
 user eclass, as in this CL (for a different user):
 https://crrev.com/c/242551
 
-There's a test in the CQ that keeps track of the users present on the system,
-so the test has to be updated at the same time the user is added, with another
-CL (e.g. https://crrev.com/c/242552) that needs to land at the same time. You
-can use CQ-DEPEND for this
+There's a test in the CQ that keeps track of the users present on the system
+that request additional access (e.g. listing more than one user in a group).
+If your user does that, the test baseline has to be updated at the same time
+the accounts are added with another CL (e.g. https://crrev.com/c/242552).
+If you're unsure whether you need this, the PreCQ/CQ will reject your CL when
+the test fails, so if the tests pass, you should be good to go!
+
+You can use CQ-DEPEND to land the CLs together
 (http://www.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/commit-queue-overview,
 "How do I specify the dependencies of a change?").
-
-If you're only adding a new user or group, though, and not adding the new user
-to any existing groups, the CQ will still pass.
 
 # Capabilities
 
