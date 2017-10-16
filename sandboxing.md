@@ -45,9 +45,11 @@ consider further restricting their privileges (see section Minijail wrappers).
 
 # Just tell me what I need to do
 
-* Create a new user for your service: https://chromium-review.googlesource.com/#/c/225257/
-* Optionally, create a new group to control access to a resource and add the new user to that group: https://chromium-review.googlesource.com/#/c/242551/
-* Use Minijail to run your service as the user (and group) created in the previous step. In your init script:
+* Create a new user for your service: https://crrev.com/c/225257
+* Optionally, create a new group to control access to a resource and add the
+  new user to that group: https://crrev.com/c/242551
+* Use Minijail to run your service as the user (and group) created in the
+  previous step. In your init script:
   * `exec minijail0 -u <user> /full/path/to/binary`
   * See section User ids.
 * If your service fails, you might need to grant it capabilities. See section Capabilities.
@@ -81,12 +83,12 @@ user. This is equivalent of doing `sudo -u devbroker`.
 
 The user (devbroker in this example) needs to be added to the system using the
 user eclass, as in this CL (for a different user):
-https://chromium-review.googlesource.com/#/c/242551/
+https://crrev.com/c/242551
 
 There's a test in the CQ that keeps track of the users present on the system,
 so the test has to be updated at the same time the user is added, with another
-CL (e.g. https://chromium-review.googlesource.com/#/c/242552/) that needs to
-land at the same time. You can use CQ-DEPEND for this
+CL (e.g. https://crrev.com/c/242552) that needs to land at the same time. You
+can use CQ-DEPEND for this
 (http://www.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/commit-queue-overview,
 "How do I specify the dependencies of a change?").
 
