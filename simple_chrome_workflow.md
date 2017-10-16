@@ -169,6 +169,8 @@ Follow the [device-specific instructions] to:
 1. Put your device into dev mode.
 2. Enable booting from USB.
 
+(Most recent devices can use the [generic instructions].)
+
 ### Install the test image onto your device
 
 1. Plug the USB stick into the machine and reboot.
@@ -491,7 +493,8 @@ The legacy `GYP` build system is no longer supported. You don't need
 [Chromium OS board name]: http://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices
 [GN build configuration]: http://www.chromium.org/developers/gn-build-configuration
 [quick start guide]: https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/quick_start.md
-[device-specific instructions]: https://www.chromium.org/chromium-os/poking-around-your-chrome-os-device
+[device-specific instructions]: https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices
+[generic instructions]: https://www.chromium.org/a/chromium.org/dev/chromium-os/developer-information-for-chrome-os-devices/generic
 [rootfs has been removed]: https://www.chromium.org/chromium-os/poking-around-your-chrome-os-device#TOC-Making-changes-to-the-filesystem
 [remounted as read-write]: http://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips#TOC-Setting-up-the-device
 [additional debugging tips]: http://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips#TOC-Enabling-core-dumps
