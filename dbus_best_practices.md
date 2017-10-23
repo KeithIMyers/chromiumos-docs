@@ -3,7 +3,7 @@
 Chrome OS uses [D-Bus] for inter-process communication. At a high level, D-Bus
 consists of a **system bus** that is managed by a `dbus-daemon` process.
 **Clients** (typically either system daemons or Chrome) connect to the system
-bus via `/var/run/dbus/system_bus_socket` and use it to communicate with each
+bus via `/run/dbus/system_bus_socket` and use it to communicate with each
 other.
 
 This document describes best practices for using D-Bus within Chrome OS system

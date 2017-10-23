@@ -306,7 +306,7 @@ Notes:
 * You may hit `DCHECKs` during startup time, or when you login, which eventually
   may reboot the device. Please check log files in `/var/log/chrome` or
   `/home/chronos/user/log`.
-     * You may create `/var/run/disable_chrome_restart` to prevent restart
+     * You may create `/run/disable_chrome_restart` to prevent restart
        loop and investigate.
      * You can temporarily disable these `DCHECKs` to proceed, but please
        file a bug for such `DCHECK` because it's most likely a bug.
