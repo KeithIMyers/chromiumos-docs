@@ -7,21 +7,13 @@ OS SDK. All commands and paths given are from within the SDK's chroot.
 
 ## Install
 
-> **NOTE**: Manual installation instructions are only needed until Rust gets included in the SDK.
-
-
-The following will install the Rust toolchain along with [Cargo], a combination build system and
-package manager used by nearly all Rust projects. The first line is there to ensure there is a
-toolchain installed for each of the supported target triples.
-
-> **WARNING**: If you encounter failures during `emerge`, do a full `repo sync` followed by
-> `~/trunk/src/scripts/update_chroot`. The current Rust package requires a fairly recent toolchain
-> to build it.
+Rust and Cargo is already installed in all current SDKs. The particular flavor of Rust that is
+installed is targetable to `x86_64`, `armv7a`, and `aarch64`, but requires the installation of
+cross-compiling toolchains on chroots that haven't already setup boards for each target
+architecture. To quickly install the extra toolchains, run the following:
 
 ```shell
 sudo $(which cros_setup_toolchains) --targets=boards --include-boards=kevin,lumpy
-sudo emerge rust
-sudo emerge cargo
 ```
 
 Place the following contents into `~/.cargo/config` to enable cross-compiling:
@@ -37,18 +29,6 @@ linker = "aarch64-cros-linux-gnu-gcc"
 linker = "x86_64-cros-linux-gnu-gcc"
 ```
 
-Append the following to
-`~/trunk/src/third_party/chromiumos-overlay/profiles/targets/chromeos/package.provided` to tell the
-portage system that `rust` and `cargo` do not need to be built for each board, as they are already
-usable for all boards:
-
-```
-# Rust compiler, and package manager/build tool.
-dev-lang/rust-1.20.0
-dev-util/cargo-0.20.0
-```
-
-The particular flavor of Rust that is installed is targetable to `x86_64`, `armv7a`, and `aarch64`.
 The toolchain is configured to use the system allocator (malloc) in resulting binaries instead of
 the usual jemalloc. This is to avoid putting a copy of the jemalloc routines in every binary, which
 is a significant source of Rust binary bloat.
