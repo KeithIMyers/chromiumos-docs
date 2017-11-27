@@ -12,7 +12,7 @@ daemons.
 
 ## Sharing constants
 
-The [system_api] repository contains C++ constants and Protocol Buffer `.proto`
+The [system_api] repository contains C++ constants and protocol buffer `.proto`
 files that are shared between Chrome and Chrome OS system daemons. This includes
 D-Bus service names, paths, and interfaces, signal and method names, and enum
 values that are passed as D-Bus arguments.
@@ -100,7 +100,8 @@ present.
 Ideally, client classes should only connect to signals, call methods, and
 serialize and deserialize D-Bus message arguments. The real implementations of
 client interfaces aren't exercised by unit tests, so keep your actual logic in
-the class that uses the client, where it can be tested using the fake client.
+the class that uses the client interface, where it can be tested using the fake
+client implementation.
 
 More concretely, a `Client` interface should expose public methods with the same
 names as the corresponding D-Bus methods and optionally define a nested
@@ -108,6 +109,13 @@ names as the corresponding D-Bus methods and optionally define a nested
 `FakeClientImpl` can additionally expose setters that specify canned values to
 be returned by methods and `NotifyObserversAboutSomeSignal` methods that call a
 method on all observers to simulate the receipt of a signal.
+
+If a D-Bus method takes a serialized protocol buffer as an argument, the client
+class's corresponding method should take a const reference to that protobuf as
+its argument (rather than individual args corresponding to the protobuf's
+fields). Observer interfaces and method callbacks should also take protobuf args
+when possible. Search for "complex messages" in [D-Bus Best Practices] for
+additional information.
 
 ### Method calls must be asynchronous
 
