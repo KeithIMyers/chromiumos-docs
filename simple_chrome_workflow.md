@@ -44,43 +44,59 @@ In order to sign in to your Chromebook you must have Google API keys:
 
 ## Run `cros chrome-sdk`
 
-Run this from within your Chromium checkout (not the Chromium OS chroot):
-
-**Have you set up gsutil yet?**
-
+> **Have you set up gsutil yet?**
+>
 > Steps below may run slowly and fail with "Login Required" from gsutil. Use
 > depot_tools/gsutil.py and run `gsutil config` (outside) to set the authentication
 > token. (If you are a Googler, use your @google.com account)
 >
 > **NOTE: When prompted for a project ID, enter 134157665460 as your project ID (this is the Chrome OS project ID).**
 
+Run this from within your Chromium checkout (not the Chromium OS chroot):
+
 ```
-(outside) cros chrome-sdk --board=$BOARD
+(outside) cros chrome-sdk --board=$BOARD --gn-gen
 ```
-Note: Replace `$BOARD` with a [Chromium OS board name], for example "link".
+**Note**: Replace `$BOARD` with a [Chromium OS board name], for example "link".
 
 
 `cros chrome-sdk` will fetch the latest Chrome OS SDK for building Chrome, and
-put you in a shell with a command prompt starting with `(sdk BOARD VERSION)`.
+put you in a shell with a command prompt starting with `(sdk $BOARD $VERSION)`.
 
 `cros chrome-sdk` will also automatically install and start the Goma server,
 with the active server port stored in the `$SDK_GOMA_PORT` (inside) environment
 variable.
 
-**Tip:** `cros chrome-sdk` will set up the environment to build external Chromium
-by default. To build the official Chrome, run with the `--internal` flag.
+**Note:** There are no public builders yet for non-generic boards, so you will
+need to use a generic board (e.g. amd64-generic)  or create your own local
+build. Star http://crbug.com/360342 for updates.
 
-**Note:** There are no public builders yet for non-generic boards, so you'll have
-to use the generic or create your own local build. Star http://crbug.com/360342
-for updates.
+### cros chrome-sdk options:
 
-**Note:** See below if you want to use a custom OS build.
+* `--gn-gen` causes Simple Chrome to run 'gn gen' automatically (see below).
+* `--nogn-gen` Do not run 'gn gen' automatically (nogn-gen is currently the
+  default but that may change).
+* `--gn-extra-args = 'extra_arg = foo other_extra_arg = bar'` For setting
+  extra gn args, e.g. 'dcheck_always_on = true'.
+* `--internal` Sets up Simple Chrome to build and deploy the official *Chrome*
+  instead of *Chromium*.
+* `--log-level=info` Set the log level to 'info' or 'debug' (default is 'warn').
 
-## Build Chromium
+**Note:** See below if you want to use a custom Chrome OS build.
 
-### Configure a build directory
+> **Important:** If the Chromium checkout is updated, the Chrome OS build
+> number may have changed (src/chromeos/CHROMEOS_LKGM) in which case it may
+> be necessary to exit and re-enter the Simple Chrome environment to
+> successfully build and deploy Chromium.
 
-Create a GN build directory. Run the following inside the chrome-sdk shell:
+
+## Build Chrome
+
+### Configure a build directory (optional)
+
+If you run `cros chrome-sdk` with `--gn-gen`, this step is not necessary.
+
+To create a GN build directory, run the following inside the chrome-sdk shell:
 
 ```
 (inside) gn gen out_$SDK_BOARD/Release --args="$GN_ARGS"
@@ -104,6 +120,8 @@ configurations. See **Debug build** section below.
 
 [GN build configuration] discusses various GN build configurations. For more
 info on GN, run `gn help` on the command line or read the [quick start guide].
+
+### Build Chrome
 
 To build Chrome, run:
 
