@@ -31,10 +31,12 @@ Download QEMU from [go/cros-qemu], and extract the files.
 ```bash
 (shell) $ cd ~ && tar xvf ~/Downloads/qemu.tar.gz
 ```
-You can now specify the qemu path when running cros_vm --start
+You can now specify the qemu path and qemu bios path when running
+`cros_vm --start`
 ```bash
 (sdk) .../chrome/src $ cros_vm --start \
---qemu-path ~/qemu/bin/qemu-system-x86_64
+--qemu-path ~/qemu/bin/qemu-system-x86_64 \
+--qemu-bios-path ~/qemu/share
 ```
 
 Alternatively, you can use the qemu in the chromeos [chroot], if you have it:
