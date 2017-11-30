@@ -73,6 +73,17 @@ From within the [Simple Chrome] environment:
 (sdk) .../chrome/src $ cros_vm --start
 ```
 
+To view the VM in a window, you may need to launch ```vncviewer```:
+```bash
+(shell) vncviewer localhost:5900 &
+```
+
+To install ```vncviewer```:
+```bash
+(shell) sudo apt-get install vncviewer
+```
+
+
 ### Stop the VM
 
 ```bash
