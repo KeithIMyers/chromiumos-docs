@@ -10,11 +10,19 @@ and run various tests.
 
 1.  [depot_tools installed]
 2.  [Linux Chromium checkout]
-3.  [qemu-kvm downloaded]
-4.  [Virtualization enabled]: To check if kvm is already enabled: `sudo kvm-ok`.
-    For Goobuntu, interrupt the BIOS bootup with Esc for Options, F10 for
-    Computer Setup, in the Security menu, System Security tab,
-    Enable Virtualization Technology in the overlay.
+3.  [Virtualization enabled]
+
+### Virtualization check
+To check if kvm is already enabled:
+```bash
+(shell) sudo kvm-ok
+```
+If `kvm-ok` is not found, check the [Virtualization enabled] doc  for alternate
+instructions.
+
+For Goobuntu HP Zx20, interrupt the BIOS bootup with Esc for Options, F10 for
+Computer Setup, in the Security menu, System Security tab,
+Enable Virtualization Technology in the overlay.
 
 ## Typography conventions
 
@@ -26,29 +34,10 @@ and run various tests.
 |  (vm)         | inside the VM ssh session                              |
 
 
-## Install QEMU
-Download QEMU from [go/cros-qemu], and extract the files.
-```bash
-(shell) $ cd ~ && tar xvf ~/Downloads/qemu.tar.gz
-```
-You can now specify the qemu path and qemu bios path when running
-`cros_vm --start`
-```bash
-(sdk) .../chrome/src $ cros_vm --start \
---qemu-path ~/qemu/bin/qemu-system-x86_64 \
---qemu-bios-path ~/qemu/share
-```
-
-Alternatively, you can use the qemu in the chromeos [chroot], if you have it:
-```bash
-(sdk) .../chrome/src $ cros_vm --start \
---qemu-path <cros_code_dir>/chroot/usr/bin/qemu-system-x86_64
-```
-
 ## Download the VM
 
-cd to your Chromium repository, and enter the [Simple Chrome] environment with
-`--download-vm`:
+cd to your Chromium repository, and enter the [Simple Chrome] SDK environment
+with `--download-vm`:
 ```bash
 (shell) .../chrome/src $ cros chrome-sdk --board=amd64-generic \
 --download-vm --clear-sdk-cache --log-level info
@@ -59,7 +48,7 @@ cd to your Chromium repository, and enter the [Simple Chrome] environment with
 *   `--download-vm` downloads a pre-packaged VM (takes a few minutes).
 *   `--clear-sdk-cache` recommended, clears the cache.
 *   `--debug` for debug output.
-*   `--board=betty` will download an ARC-enabled VM (Googler-only at the moment)
+*   `--board=betty` will download an ARC-enabled VM (Googler-only).
 *   `--internal` will set $GN_ARGS to build and deploy an internal Chrome build.
 *   `--version` to download a non-LKGM version, eg 10070.0.0.
 
@@ -73,24 +62,45 @@ From within the [Simple Chrome] environment:
 (sdk) .../chrome/src $ cros_vm --start
 ```
 
-To view the VM in a window, you may need to launch ```vncviewer```:
+If your system QEMU is too old, you can install a newer one.
+
+### Install QEMU
+If you have a Chrome OS [chroot], you can use the QEMU installed there:
+```bash
+(sdk) .../chrome/src $ cros_vm --start \
+--qemu-path <cros_code_dir>/chroot/usr/bin/qemu-system-x86_64
+```
+
+Otherwise, download QEMU from [go/cros-qemu], and extract the files.
+```bash
+(shell) $ cd ~ && tar xvf ~/Downloads/qemu.tar.gz
+```
+You can now specify the QEMU path and QEMU BIOS path when running
+`cros_vm --start`
+```bash
+(sdk) .../chrome/src $ cros_vm --start \
+--qemu-path ~/qemu/bin/qemu-system-x86_64 \
+--qemu-bios-path ~/qemu/share
+```
+
+### Viewing the VM
+To view the VM in a window, you may need to launch `vncviewer`:
 ```bash
 (shell) vncviewer localhost:5900 &
 ```
 
-To install ```vncviewer```:
+To install `vncviewer`:
 ```bash
 (shell) sudo apt-get install vncviewer
 ```
-
+If this package is not available on your system, any other VNC Viewer should
+work as well.
 
 ### Stop the VM
 
 ```bash
 (sdk) .../chrome/src $ cros_vm --stop
 ```
-Note that the window size of the VM is a bit small so the OOBE screen is cut
-off. There’s also no [mouse cursor].
 
 ## Remotely run a sanity test in the VM
 
@@ -98,10 +108,9 @@ off. There’s also no [mouse cursor].
 (sdk) .../chrome/src $ cros_vm --cmd -- /usr/local/autotest/bin/vm_sanity.py
 ```
 The command output on the VM will be output to the console after the command
-completes. Other commands run within an ssh session below can also run with
-`--cmd`, e.g. `run_tests`.
+completes. Other commands run within an ssh session can also run with `--cmd`.
 
-> Note that the CrOS test private RSA key cannot be world readable, so you may
+Note that the CrOS test private RSA key cannot be world readable, so you may
 need to do:
 ```bash
 (shell) .../chrome/src $ chmod 600 ./third_party/chromite/ssh_keys/testing_rsa
@@ -110,44 +119,44 @@ need to do:
 ## SSH into the VM
 
 ```bash
-(sdk) .../chrome/src $  ssh root@localhost -p 9222
+(shell) .../chrome/src $  ssh root@localhost -p 9222
 ```
 > Password is `test0000`
 
 To avoid having to type a password and skip the RSA key warning:
 ```bash
-(sdk) .../chrome/src $ ssh -o UserKnownHostsFile=/dev/null -o \
+(shell) .../chrome/src $ ssh -o UserKnownHostsFile=/dev/null -o \
 StrictHostKeyChecking=no -i ./third_party/chromite/ssh_keys/testing_rsa \
 root@localhost -p 9222
 ```
 
-## Run a local sanity test in the VM
+### Run a local sanity test in the VM
 
 ```
 (vm) localhost ~ # /usr/local/autotest/bin/vm_sanity.py
 ```
 
-## Run telemetry unit tests in the VM
+## Run telemetry unit tests
 
-SSH into the VM:
-```bash
-(vm) localhost ~ # python \
-/usr/local/telemetry/src/third_party/catapult/telemetry/bin/run_tests [test]
-```
-Or from your workstation:
 ```bash
 (shell) .../chrome/src $ ./third_party/catapult/telemetry/bin/run_tests \
 --browser=cros-chrome --remote=localhost --remote-ssh-port=9222 [test]
 ```
 Catapult developers can run this from their catapult checkout.
 
+Alternatively, SSH into the VM as above, then invoke `run_tests`:
+```bash
+(vm) localhost ~ # python \
+/usr/local/telemetry/src/third_party/catapult/telemetry/bin/run_tests [test]
+```
+
 ## Update Chrome in the VM
 
 ### Build Chrome
 
-For testing local Chrome changes in a Chrome OS environment, use the [Simple
-Chrome] flow to build Chrome (after entering the Simple Chrome environment as
-described above):
+For testing local Chrome changes on Chrome OS, use the [Simple Chrome] flow to
+build Chrome (after entering the Simple Chrome SDK environment as described
+above):
 ```bash
 (sdk) .../chrome/src $ gn gen out_$SDK_BOARD/Release --args="$GN_ARGS"
 (sdk) .../chrome/src $ ninja -C out_$SDK_BOARD/Release/ -j 1000 -l 20 \
@@ -207,10 +216,9 @@ Launch a VM from within the [Simple Chrome] environment:
 ```bash
 (sdk) .../chrome/src $ cros_vm --start \
 --image-path  ~/Downloads/chromiumos_qemu_image.bin
-
 ```
 
-## Launch a locally built VM
+## Launch a locally built VM from within the chroot
 
 Follow instructions to [build Chromium OS] and a VM image. In the [chroot]:
 ```bash
@@ -220,12 +228,8 @@ Follow instructions to [build Chromium OS] and a VM image. In the [chroot]:
 (chroot) ~/trunk/src/scripts $ ./build_image \
 --noenable_rootfs_verification test --board=$BOARD
 (chroot) ~/trunk/src/scripts $ ./image_to_vm.sh --test_image
-```
-From the [Simple Chrome] environment:
-```bash
-(sdk) .../chrome/src $ cros_vm  --start \
---image-path \
-<cros_code_dir>/src/build/images/$SDK_BOARD/latest/chromiumos_qemu_image.bin
+(chroot) ~/trunk/src/script $ cros_vm --start --image-path \
+../build/images/$BOARD/latest/chromiumos_qemu_image.bin
 ```
 
 ## Start a VM and run a basic set of tests
@@ -236,18 +240,22 @@ This is intended for use by a builder:
 ```
 This doc is at [go/cros-vm]. Please send feedback to [achuith@chromium.org].
 
-[depot_tools installed]: https://www.chromium.org/developers/how-tos/install-depot-tools
-[qemu-kvm downloaded]:
-https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md#install-qemu
+[depot_tools installed]:
+https://www.chromium.org/developers/how-tos/install-depot-tools
 [go/cros-qemu]:
 https://storage.cloud.google.com/achuith-cloud.google.com.a.appspot.com/qemu.tar.gz
-[Linux Chromium checkout]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md
-[Virtualization enabled]: https://g3doc.corp.google.com/tools/android/x20/crow/g3doc/enable_kvm.md?cl=head
-[Simple Chrome]: https://chromium.googlesource.com/chromiumos/docs/+/master/simple_chrome_workflow.md
-[mouse cursor]: https://bugs.chromium.org/p/chromium/issues/detail?id=604922
+[Linux Chromium checkout]:
+https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md
+[Virtualization enabled]:
+https://g3doc.corp.google.com/tools/android/g3doc/development/crow/enable_kvm.md
+[Simple Chrome]:
+https://chromium.googlesource.com/chromiumos/docs/+/master/simple_chrome_workflow.md
 [chroot]: https://www.chromium.org/chromium-os/developer-guide
-[amd64-generic-tot-chromium-pfq-informational]: https://build.chromium.org/p/chromiumos.chromium/builders/amd64-generic-tot-chromium-pfq-informational
-[amd64-generic-chromium-pfq]: https://uberchromegw.corp.google.com/i/chromeos/builders/amd64-generic-chromium-pfq
+[amd64-generic-tot-chromium-pfq-informational]:
+https://build.chromium.org/p/chromiumos.chromium/builders/amd64-generic-tot-chromium-pfq-informational
+[amd64-generic-chromium-pfq]:
+https://uberchromegw.corp.google.com/i/chromeos/builders/amd64-generic-chromium-pfq
 [build Chromium OS]: https://www.chromium.org/chromium-os/developer-guide
-[go/cros-vm]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md
+[go/cros-vm]:
+https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md
 [achuith@chromium.org]: mailto:achuith@chromium.org
