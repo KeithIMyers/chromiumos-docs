@@ -262,6 +262,13 @@ missing arguments using `dbus::MessageReader`:
 <annotation name="org.chromium.DBus.Method.Kind" value="raw"/>
 ```
 
+The generated method's signature will look like this:
+
+```c++
+void MethodName(dbus::MethodCall* method_call,
+                brillo::dbus_utils::ResponseSender sender);
+```
+
 Handling multiple signatures for a method results in fragile, complicated code,
 and should only be used temporarily during the transition to a new message
 signature.
