@@ -182,12 +182,24 @@ See below.
 
 ### Put your Chrome OS device in dev mode
 
-Follow the [device-specific instructions] to:
+Most recent devices can use the [generic instructions]. To summarize:
 
-1. Put your device into dev mode.
-2. Enable booting from USB.
+1. With the device on, hit Esc + Refresh (F2 or F3) + power button
+2. Wait for the scary "recovery screen"
+3. Hit Ctrl-D to switch to developer mode (there's no prompt)
+4. Press enter to confirm
 
-(Most recent devices can use the [generic instructions].)
+From this point on you'll always see the scary screen when you turn on
+the device. Press Ctrl-D to continue boot.
+
+Older devices may have [device-specific instructions].
+
+### Enable booting from USB
+
+1. Start the device
+2. Press Ctrl-Alt-F2 to get a terminal
+3. Login as `chronos` (no password or `test0000`)
+4. `sudo enable_dev_usb_boot`
 
 ### Install the test image onto your device
 
