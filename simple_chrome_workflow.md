@@ -42,23 +42,28 @@ In order to sign in to your Chromebook you must have Google API keys:
   `src-internal` in your `.gclient` file the official API keys will be set up
   automatically.
 
-## Run `cros chrome-sdk`
+## Set up gsutil
 
-> **Have you set up gsutil yet?**
->
-> Steps below may run slowly and fail with "Login Required" from gsutil. Use
-> depot_tools/gsutil.py and run `gsutil config` (outside) to set the authentication
-> token. (If you are a Googler, use your @google.com account)
->
-> **NOTE: When prompted for a project ID, enter 134157665460 as your project ID (this is the Chrome OS project ID).**
+Steps below may run slowly and fail with "Login Required" from gsutil. Use
+depot_tools/gsutil.py and run `gsutil config` (outside) to set the
+authentication token. (Googlers: Use your @google.com account.)
+
+**NOTE: When prompted for a project ID, enter 134157665460 as your project ID (this is the Chrome OS project ID).**
+
+## Fetch the Chrome OS toolchain and SDK for building Chrome
+
+Toolchains are customized for each Chromebook model (or "board"). Look up your
+[Chromium OS board name] by navigating to the URL `about:version` on the device.
+For example: `Platform 10176.47.0 (Official Build) beta-channel samus`
+has board `samus`.
 
 Run this from within your Chromium checkout (not the Chromium OS chroot):
 
 ```
-(outside) cros chrome-sdk --board=$BOARD --gn-gen
+(outside) cd /path/to/chrome/src
+(outside) export BOARD=samus  # or your board name
+(outside) cros chrome-sdk --board=$BOARD --gn-gen --log-level=info
 ```
-**Note**: Replace `$BOARD` with a [Chromium OS board name], for example "link".
-
 
 `cros chrome-sdk` will fetch the latest Chrome OS SDK for building Chrome, and
 put you in a shell with a command prompt starting with `(sdk $BOARD $VERSION)`.
@@ -126,12 +131,11 @@ info on GN, run `gn help` on the command line or read the [quick start guide].
 To build Chrome, run:
 
 ```
-(inside) ninja -C out_${SDK_BOARD}/Release -j500 -l 10 chrome chrome_sandbox nacl_helper
+(inside) autoninja -C out_${SDK_BOARD}/Release chrome chrome_sandbox nacl_helper
 ```
 
-This runs Goma with 500 concurrent jobs and a maximum load of 10. You can tweak
-this number to achieve optimal build performance. To watch the build progress,
-find the Goma port (`$ echo $SDK_GOMA_PORT`) and open
+This runs Goma with a large number of concurrent jobs.  To watch the build
+progress, find the Goma port (`$ echo $SDK_GOMA_PORT`) and open
 http://localhost:<port_number> in a browser.
 
 **IMPORTANT**: Do not attempt to build targets other than **chrome, chrome_sandbox,
@@ -144,7 +148,7 @@ Once you've built Chromium the first time, you can build incrementally just
 using ninja, e.g.:
 
 ```
-(inside) ninja -C out_${SDK_BOARD}/Release -j500 -l 10 chrome
+(inside) autoninja -C out_${SDK_BOARD}/Release chrome
 ```
 
 **Tip:** The default extensions will be installed by the test image you use below.
@@ -152,11 +156,12 @@ using ninja, e.g.:
 ## Set up the Chromium OS device
 
 Before you can deploy your build of Chromium to the device, it needs to have a
-test image loaded on it.
+"test" OS image loaded on it. A test image has tools like rsync that are not part
+of the end-user image.
 
 ### Create a bootable USB stick
 
-Download a test image from the URL
+Use your browser to download a test image from the URL
 `https://storage.cloud.google.com/chromeos-image-archive/$BOARD-release/<version>/chromiumos_test_image.tar.xz`
 where `$BOARD` and `<version>` come from your SDK prompt. For example (`sdk link
 R62-9800.0.0`) is the board `link` using version `R62-9800.0.0`).
@@ -168,7 +173,7 @@ After you download the compressed tarball containing the test image (it should
 have "test" somewhere in the file name), extract the image by running:
 
 ```
-(outside) tar xf chromiumos_test_image.tar.xz
+(outside) tar xf ~/Downloads/<image-you-downloaded>
 ```
 
 Copy the image to your drive using `cros flash`:
@@ -188,37 +193,50 @@ Most recent devices can use the [generic instructions]. To summarize:
 2. Wait for the scary "recovery screen"
 3. Hit Ctrl-D to switch to developer mode (there's no prompt)
 4. Press enter to confirm
+5. Once it is done, hit Ctrl-D again to boot, then wait
 
 From this point on you'll always see the scary screen when you turn on
-the device. Press Ctrl-D to continue boot.
+the device. Press Ctrl-D to boot.
 
 Older devices may have [device-specific instructions].
 
+Googlers: If the device asks you to "enterprise enroll" it, click the X
+in the top-right of the dialog to skip it. Trying to use your google.com
+credentials will result in an error.
+
 ### Enable booting from USB
 
+By default Chromebooks will not boot off a USB stick for security reasons.
+You need to turn that on.
+
 1. Start the device
-2. Press Ctrl-Alt-F2 to get a terminal
-3. Login as `chronos` (no password or `test0000`)
-4. `sudo enable_dev_usb_boot`
+2. Press Ctrl-Alt-F2 to get a terminal. (You can use Ctrl-Alt-F1 to switch
+back if you need to.)
+3. Login as `root` (no password yet, there will be one later)
+4. `enable_dev_usb_boot`
 
 ### Install the test image onto your device
 
-1. Plug the USB stick into the machine and reboot.
-2. At the dev-mode warning screen, press Ctrl-U to boot from the USB stick.
-3. Switch to terminal by pressing Ctrl-Alt-F2 (Ctrl-Alt-Forward)
-4. Login as user `chronos`, password `test0000`.
-5. `sudo /usr/sbin/chromeos-install` (device)
-
-**IMPORTANT NOTES:**
+**NOTE:**
 
 * Installing Chromium OS onto your hard disk will **WIPE YOUR HARD DISK CLEAN**.
 * *DO NOT* log into this test image with a username and password you care
   about. **The root password is public** ("test0000"), so anyone with SSH
   access could compromise the device.
 
+1. Plug the USB stick into the machine and reboot.
+2. At the dev-mode warning screen, press Ctrl-U to boot from the USB stick.
+3. Switch to terminal by pressing Ctrl-Alt-F2
+4. Login as user `chronos`, password `test0000`.
+5. `/usr/sbin/chromeos-install`
+6. Wait for it to copy the image
+7. `shutdown -h now`
+
+You can now unplug the USB stick.
+
 ### Connect device to Ethernet
 
-Use your USB-to-Ethernet adapter to connect to a network.
+Use your USB-to-Ethernet adapter to connect the device to a network.
 
 Googlers: You can use a corp Ethernet jack, which will place you on a special
 restricted network.
@@ -237,6 +255,8 @@ computer. The scripts below handle everything else.
 
 This also works both before and after login. Another option is to run `ifconfig`
 from `crosh` (Ctrl-Alt-t) after guest login.
+
+Try pinging that IP address from your Linux workstation.
 
 ### Using deploy_chrome
 
