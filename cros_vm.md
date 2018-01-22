@@ -45,7 +45,7 @@ with `--download-vm`:
 
 ### chrome-sdk options
 
-*   `--download-vm` downloads a pre-packaged VM (takes a few minutes).
+*   `--download-vm` downloads a pre-packaged VM and QEMU (takes a few minutes).
 *   `--clear-sdk-cache` recommended, clears the cache.
 *   `--debug` for debug output.
 *   `--board=betty` will download an ARC-enabled VM (Googler-only).
@@ -60,27 +60,6 @@ internal only) are recommended.
 From within the [Simple Chrome] environment:
 ```bash
 (sdk) .../chrome/src $ cros_vm --start
-```
-
-If your system QEMU is too old, you can install a newer one.
-
-### Install QEMU
-If you have a Chrome OS [chroot], you can use the QEMU installed there:
-```bash
-(sdk) .../chrome/src $ cros_vm --start \
---qemu-path <cros_code_dir>/chroot/usr/bin/qemu-system-x86_64
-```
-
-Otherwise, download QEMU from [go/cros-qemu], and extract the files.
-```bash
-(shell) $ cd ~ && tar xvf ~/Downloads/qemu.tar.gz
-```
-You can now specify the QEMU path and QEMU BIOS path when running
-`cros_vm --start`
-```bash
-(sdk) .../chrome/src $ cros_vm --start \
---qemu-path ~/qemu/bin/qemu-system-x86_64 \
---qemu-bios-path ~/qemu/share
 ```
 
 ### Viewing the VM
