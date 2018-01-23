@@ -1,12 +1,12 @@
 # Building Chrome for Chrome OS (Simple Chrome)
 
 This workflow allows you to quickly build/deploy Chromium to any Chromium OS
-device without needing a Chromium OS checkout or chroot. It's useful for trying
-out your changes on a real device while you're doing Chromium development. If
-you want your Chromium changes to be included when building a full Chromium OS
-image, see the [instructions in the development guide].
+device without needing a Chromium OS source checkout or chroot. It's useful for
+trying out your changes on a real device while you're doing Chromium
+development. If you have an OS checkout and want your local Chromium changes to
+be included when building a full OS image, see the [OS development guide].
 
-At its core is the `chrome-sdk` shell which sets up the shell environment, and
+At its core is the `chrome-sdk` shell which sets up the shell environment and
 fetches the necessary SDK components (CrOS toolchain, sysroot, etc.).
 
 [TOC]
@@ -28,7 +28,7 @@ First make sure you have a:
 
 1. [Local copy of the Chromium source code and depot_tools]
 2. USB flash drive 4 GB or larger (for example, a Sandisk Extreme USB 3.0)
-3. USB to Ethernet adapter
+3. USB to Gigabit Ethernet adapter
 
 Googlers: Chromestop has the hardware.
 
@@ -44,11 +44,12 @@ In order to sign in to your Chromebook you must have Google API keys:
 
 ## Set up gsutil
 
-Steps below may run slowly and fail with "Login Required" from gsutil. Use
-depot_tools/gsutil.py and run `gsutil config` (outside) to set the
-authentication token. (Googlers: Use your @google.com account.)
+Use depot_tools/gsutil.py and run `gsutil.py config` to set the authentication
+token. (Googlers: Use your @google.com account.) Otherwise steps below may run
+slowly and fail with "Login Required" from gsutil.
 
-**NOTE: When prompted for a project ID, enter 134157665460 as your project ID (this is the Chrome OS project ID).**
+When prompted for a project ID, enter `134157665460` (this is the Chrome OS
+project ID).
 
 ## Fetch the Chrome OS toolchain and SDK for building Chrome
 
@@ -62,26 +63,25 @@ Run this from within your Chromium checkout (not the Chromium OS chroot):
 ```
 (outside) cd /path/to/chrome/src
 (outside) export BOARD=samus  # or your board name
-(outside) cros chrome-sdk --board=$BOARD --gn-gen --log-level=info
+(outside) cros chrome-sdk --board=$BOARD --log-level=info
 ```
 
-`cros chrome-sdk` will fetch the latest Chrome OS SDK for building Chrome, and
-put you in a shell with a command prompt starting with `(sdk $BOARD $VERSION)`.
+`cros chrome-sdk` will fetch the latest Chrome OS SDK for building Chrome, make
+an output directory, create a custom args.gn file and put you in a shell with a
+command prompt starting with `(sdk $BOARD $VERSION)`.
 
 `cros chrome-sdk` will also automatically install and start the Goma server,
 with the active server port stored in the `$SDK_GOMA_PORT` (inside) environment
 variable.
 
-**Note:** There are no public builders yet for non-generic boards, so you will
-need to use a generic board (e.g. amd64-generic)  or create your own local
+Non-Googlers: Only generic boards have publicly available SDK downloads, so you
+will need to use a generic board (e.g. amd64-generic) or create your own local
 build. Star http://crbug.com/360342 for updates.
 
 ### cros chrome-sdk options:
 
-* `--gn-gen` causes Simple Chrome to run 'gn gen' automatically (see below).
-* `--nogn-gen` Do not run 'gn gen' automatically (nogn-gen is currently the
-  default but that may change).
-* `--gn-extra-args = 'extra_arg = foo other_extra_arg = bar'` For setting
+* `--nogn-gen` Do not run 'gn gen' automatically.
+* `--gn-extra-args='extra_arg=foo other_extra_arg=bar'` For setting
   extra gn args, e.g. 'dcheck_always_on = true'.
 * `--internal` Sets up Simple Chrome to build and deploy the official *Chrome*
   instead of *Chromium*.
@@ -89,44 +89,13 @@ build. Star http://crbug.com/360342 for updates.
 
 **Note:** See below if you want to use a custom Chrome OS build.
 
-> **Important:** If the Chromium checkout is updated, the Chrome OS build
-> number may have changed (src/chromeos/CHROMEOS_LKGM) in which case it may
-> be necessary to exit and re-enter the Simple Chrome environment to
-> successfully build and deploy Chromium.
+**Note:** When you sync/update your Chromium source, the Chrome OS SDK build
+number may change (src/chromeos/CHROMEOS_LKGM). When the SDK version changes
+you may have to exit and re-enter the Simple Chrome environment to
+successfully build and deploy Chromium.
 
 
 ## Build Chrome
-
-### Configure a build directory (optional)
-
-If you run `cros chrome-sdk` with `--gn-gen`, this step is not necessary.
-
-To create a GN build directory, run the following inside the chrome-sdk shell:
-
-```
-(inside) gn gen out_$SDK_BOARD/Release --args="$GN_ARGS"
-```
-
-This will generate `out_$SDK_BOARD/Release/args.gn`.
-
-* You must specify `--args`, otherwise your build will not work on the device.
-* You only need to run `gn gen` once within the same `cros chrome-sdk` session.
-* However, if you exit the session or sync/update chrome the `$GN_ARGS` might
-  change and you need to `gn gen` again.
-
-You can edit the args with:
-
-```
-(inside) gn args out_$SDK_BOARD/Release
-```
-
-You can replace Release with Debug (or something else) for different
-configurations. See **Debug build** section below.
-
-[GN build configuration] discusses various GN build configurations. For more
-info on GN, run `gn help` on the command line or read the [quick start guide].
-
-### Build Chrome
 
 To build Chrome, run:
 
@@ -144,8 +113,7 @@ likely fail.
 
 Congratulations, you've now built Chromium for Chromium OS!
 
-Once you've built Chromium the first time, you can build incrementally just
-using ninja, e.g.:
+Once you've built everything the first time, you can build incrementally:
 
 ```
 (inside) autoninja -C out_${SDK_BOARD}/Release chrome
@@ -161,7 +129,7 @@ of the end-user image.
 
 ### Create a bootable USB stick
 
-Use your browser to download a test image from the URL
+Use your workstation browser to download a test image from the URL
 `https://storage.cloud.google.com/chromeos-image-archive/$BOARD-release/<version>/chromiumos_test_image.tar.xz`
 where `$BOARD` and `<version>` come from your SDK prompt. For example (`sdk link
 R62-9800.0.0`) is the board `link` using version `R62-9800.0.0`).
@@ -173,7 +141,7 @@ After you download the compressed tarball containing the test image (it should
 have "test" somewhere in the file name), extract the image by running:
 
 ```
-(outside) tar xf ~/Downloads/<image-you-downloaded>
+(inside) tar xf ~/Downloads/<image-you-downloaded>
 ```
 
 Copy the image to your drive using `cros flash`:
@@ -187,15 +155,18 @@ See below.
 
 ### Put your Chrome OS device in dev mode
 
+**Note:** Switching to dev mode wipes all data from the device (for security
+reasons).
+
 Most recent devices can use the [generic instructions]. To summarize:
 
 1. With the device on, hit Esc + Refresh (F2 or F3) + power button
-2. Wait for the scary "recovery screen"
+2. Wait for the white "recovery screen"
 3. Hit Ctrl-D to switch to developer mode (there's no prompt)
 4. Press enter to confirm
 5. Once it is done, hit Ctrl-D again to boot, then wait
 
-From this point on you'll always see the scary screen when you turn on
+From this point on you'll always see the white screen when you turn on
 the device. Press Ctrl-D to boot.
 
 Older devices may have [device-specific instructions].
@@ -207,30 +178,27 @@ credentials will result in an error.
 ### Enable booting from USB
 
 By default Chromebooks will not boot off a USB stick for security reasons.
-You need to turn that on.
+You need to enable it.
 
 1. Start the device
 2. Press Ctrl-Alt-F2 to get a terminal. (You can use Ctrl-Alt-F1 to switch
 back if you need to.)
 3. Login as `root` (no password yet, there will be one later)
-4. `enable_dev_usb_boot`
+4. Run `enable_dev_usb_boot`
 
 ### Install the test image onto your device
 
-**NOTE:**
-
-* Installing Chromium OS onto your hard disk will **WIPE YOUR HARD DISK CLEAN**.
-* *DO NOT* log into this test image with a username and password you care
-  about. **The root password is public** ("test0000"), so anyone with SSH
-  access could compromise the device.
+**Note:** Do not log into this test image with a username and password you care
+about. The root password is public ("test0000"), so anyone with SSH
+access could compromise the device. Create a test Gmail account and use that.
 
 1. Plug the USB stick into the machine and reboot.
 2. At the dev-mode warning screen, press Ctrl-U to boot from the USB stick.
 3. Switch to terminal by pressing Ctrl-Alt-F2
 4. Login as user `chronos`, password `test0000`.
-5. `/usr/sbin/chromeos-install`
+5. Run `/usr/sbin/chromeos-install`
 6. Wait for it to copy the image
-7. `shutdown -h now`
+7. Run `poweroff`
 
 You can now unplug the USB stick.
 
@@ -269,7 +237,7 @@ IP address of the target device (which must be ssh-able as user 'root') using
 
 ```
 (inside) cd %CHROME_DIR%/src
-(inside) deploy_chrome --build-dir=out_${SDK_BOARD}/Release --to=172.11.11.11
+(inside) deploy_chrome --build-dir=out_${SDK_BOARD}/Release --to=12.34.56.78
 ```
 
 **Tip:** `deploy_chrome` lives under
@@ -277,17 +245,9 @@ IP address of the target device (which must be ssh-able as user 'root') using
 of a `chrome-sdk` shell as well.
 
 **Tip:** Specify the `--target-dir` flag to deploy to a custom location on the
-target device.
+target device. See `deploy_chrome --help` for other useful options.
 
-**NOTE for GN**: The gn build outputs .so files (for component builds) and some
-test files in a different location than the gyp build. In order for
-`deploy_chrome` to successfully locate these files, it needs to know that chrome
-was built using gn. Currently cros chrome-sdk looks for
-`GYP_CHROMIUM_NO_ACTION=1` as a hint to set `USE="gn"` which will cause
-deploy_chrome to look for files in the correct place.  If you do not have
-`GYP_CHROMIUM_NO_ACTION=1` set or if you do but have build chrome with gyp, you
-can set `USE="gn"` or `USE=""` to indicate where deploy_chrome should look for
-output files.
+Congratulations, you're now running your own Chromium build on your device!
 
 ## Updating the OS image
 
@@ -319,6 +279,35 @@ do this on the device itself.
 
 Edit the `/etc/chrome_dev.conf` (device) file. Instructions on using it are in
 the file itself.
+
+### Custom build directories
+
+This step is only necessary if you run `cros chrome-sdk` with `--nogn-gen`.
+
+To create a GN build directory, run the following inside the chrome-sdk shell:
+
+```
+(inside) gn gen out_$SDK_BOARD/Release --args="$GN_ARGS"
+```
+
+This will generate `out_$SDK_BOARD/Release/args.gn`.
+
+* You must specify `--args`, otherwise your build will not work on the device.
+* You only need to run `gn gen` once within the same `cros chrome-sdk` session.
+* However, if you exit the session or sync/update chrome the `$GN_ARGS` might
+  change and you need to `gn gen` again.
+
+You can edit the args with:
+
+```
+(inside) gn args out_$SDK_BOARD/Release
+```
+
+You can replace `Release` with `Debug` (or something else) for different
+configurations. See **Debug build** section below.
+
+[GN build configuration] discusses various GN build configurations. For more
+info on GN, run `gn help` on the command line or read the [quick start guide].
 
 ### Debug build
 
@@ -394,8 +383,9 @@ Reading symbols from /usr/local/google2/chromium2/src/out_link/Release/chrome...
 >>>
 ```
 
-**Note: These instructions are for targeting an x86_64 device.  For now, to target
-an ARM device, you need to run the cross-compiled gdb from within a chroot.**
+**Note:** These instructions are for targeting an x86_64 device.  For now, to
+target an ARM device, you need to run the cross-compiled gdb from within a
+chroot.
 
 Then from within the Python interpreter, run these commands:
 
@@ -428,8 +418,8 @@ checkout and re-run `cros chrome-sdk`.
   can cause unexpected problems, so it is important to update your image
   regularly. Instructions for updating your Chrome OS image are above in
   [Set Up the Chromium OS device].
-* Don't forget to re-configure your build directories (See
-  **Configure a build directory** section above)
+* Don't forget to re-configure your custom build directories if you have them
+  (see **Custom build directories** below).
 
 ### Specifying the version of the Chrome OS SDK to use
 
@@ -535,10 +525,9 @@ NOTE: Currently the release version (e.g. 52) is not available as an environment
 
 ### GYP
 
-The legacy `GYP` build system is no longer supported. You don't need
-`gclient runhooks` any more.
+The legacy `GYP` build system is no longer supported.
 
-[instructions in the development guide]: https://www.chromium.org/chromium-os/developer-guide#TOC-Making-changes-to-the-Chromium-web-
+[OS development guide]: https://www.chromium.org/chromium-os/developer-guide#TOC-Making-changes-to-the-Chromium-web-
 [Local copy of the Chromium source code and depot_tools]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md
 [Chromium OS board name]: http://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices
 [GN build configuration]: http://www.chromium.org/developers/gn-build-configuration
