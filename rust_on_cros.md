@@ -144,6 +144,12 @@ purposes by setting the `SYSROOT` environment variable as follows:
 ```shell
 export SYSROOT="/build/<board>"
 ```
+If C files are getting compiled with a build script that uses the `cc` or `gcc` crates, you may
+also need to set the `TARGET_CC` environment variable to point at the appropriate C compiler.
+
+```shell
+export TARGET_CC="<target_triple>-clang"
+```
 
 [Rust]: https://www.rust-lang.org
 [Cargo]: https://crates.io/
