@@ -488,7 +488,7 @@ that the USB stick is not mounted before running this. You might have to turn
 off automounting in your operating system.
 
 ```
-(inside) sudo dd if=chromiumos_test_image.bin of=/dev/sdX bs=1G
+(inside) sudo dd if=chromiumos_test_image.bin of=/dev/sdX bs=1G iflag=fullblock oflag=sync
 ```
 
 Be careful - you don't want to have `dd` write over your root partition!
