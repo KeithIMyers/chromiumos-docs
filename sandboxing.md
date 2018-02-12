@@ -62,7 +62,7 @@ own user id, different from the `root` user, which allows us to restrict what
 files and directories the service can access, and also removes a big chunk of
 system functionality that's only available to the root user. Using the
 permission_broker service as an example, here's its Upstart config file (lives
-in /etc/init):
+in `/etc/init`):
 
 `permission_broker.conf`
 ```bash
@@ -88,7 +88,7 @@ https://crrev.com/c/242551
 There's a test in the CQ that keeps track of the users present on the system
 that request additional access (e.g. listing more than one user in a group).
 If your user does that, the test baseline has to be updated at the same time
-the accounts are added with another CL (e.g. https://crrev.com/c/242552).
+the accounts are added with another CL (e.g. https://crrev.com/c/894192).
 If you're unsure whether you need this, the PreCQ/CQ will reject your CL when
 the test fails, so if the tests pass, you should be good to go!
 
