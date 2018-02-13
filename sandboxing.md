@@ -1,5 +1,7 @@
 # Sandboxing Chrome OS system services
 
+[TOC]
+
 In Chrome OS, OS-level functionality (such as configuring network interfaces)
 is implemented by a collection of system services, and provided to Chrome over
 D-Bus. These system services have greater system and hardware access than
@@ -204,6 +206,36 @@ option:
 exec minijail0 -u mtp -g mtp -G -n -S /opt/google/mtpd/mtpd-seccomp.policy -- \
         /opt/google/mtpd/mtpd -minloglevel="${MTPD_MINLOGLEVEL}"
 ```
+
+## Detailed instructions for generating a seccomp policy
+
+* Generate the syscall log:
+  `strace -f <cmd> 2>strace.log`
+  Note: `strace -f -o` generates output that `generate_seccomp_policy.py` cannot yet parse.
+* Cut off everything before the following for a smaller filter that can be used with LD_PRELOAD:
+```
+futex(<uaddr>, FUTEX_WAKE_PRIVATE, 1) = 0
+futex(<uaddr>, FUTEX_WAIT_BITSET_PRIVATE|FUTEX_CLOCK_REALTIME, 1, NULL, <uaddr2>) = -1
+rt_sigaction(SIGRTMIN, {<sa_handler>, [], SA_RESTORER|SA_SIGINFO, <sa_restorer>}, NULL, 8) = 0
+rt_sigaction(SIGRT_1, {<sa_handler>, [], SA_RESTORER|SA_RESTART|SA_SIGINFO, <sa_restorer>}, NULL, 8) = 0
+rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
+getrlimit(RLIMIT_STACK, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+brk(0)                                  = 0x7f8a0656e000
+brk(<addr>)                             = <addr>
+```
+* Run the policy generation script:
+  `~/chromiumos/src/aosp/external/minijail/tools/generate_seccomp_policy.py strace.log > seccomp.policy`
+* Test the policy:
+  `minijail0 -S seccomp.policy -L <cmd>`
+* To find a failing syscall without having seccomp logs available:
+  `dmesg | grep "syscall="`
+  for something similar to:
+```
+NOTICE kernel: [  586.706239] audit: type=1326 audit(1484586246.124:6): ... comm="<executable>" exe="/path/to/executable" sig=31 syscall=130 compat=0 ip=0x7f4f214881d6 code=0x0
+```
+* Then do:
+  `minijail0 -H | grep <nr>`
+  where `<nr>` is the `syscall=` number above.
 
 # Minijail wrappers
 
