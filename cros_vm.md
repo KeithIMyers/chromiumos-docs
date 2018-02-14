@@ -117,16 +117,20 @@ root@localhost -p 9222
 
 ## Run telemetry unit tests
 
+To run telemetry unit tests, or perf unit tests:
 ```bash
-(shell) .../chrome/src $ ./third_party/catapult/telemetry/bin/run_tests \
+(shell) .../chrome/src $ third_party/catapult/telemetry/bin/run_tests \
+--browser=cros-chrome --remote=localhost --remote-ssh-port=9222 [test]
+(shell) .../chrome/src $ tools/perf/run_tests \
 --browser=cros-chrome --remote=localhost --remote-ssh-port=9222 [test]
 ```
-Catapult developers can run this from their catapult checkout.
 
-Alternatively, SSH into the VM as above, then invoke `run_tests`:
+Alternatively, to run these tests in local mode instead of remote mode, SSH into
+the VM as above, then invoke `run_tests`:
 ```bash
 (vm) localhost ~ # python \
 /usr/local/telemetry/src/third_party/catapult/telemetry/bin/run_tests [test]
+(vm) localhost ~ # python /usr/local/telemetry/src/tools/perf/run_tests [test]
 ```
 
 ## Update Chrome in the VM
@@ -206,16 +210,69 @@ Follow instructions to [build Chromium OS] and a VM image. In the [chroot]:
 (chroot) ~/trunk/src/scripts $ ./build_image \
 --noenable_rootfs_verification test --board=$BOARD
 (chroot) ~/trunk/src/scripts $ ./image_to_vm.sh --test_image
-(chroot) ~/trunk/src/script $ cros_vm --start --image-path \
-../build/images/$BOARD/latest/chromiumos_qemu_image.bin
 ```
 
-## Start a VM and run a basic set of tests
+You can either specify the image path or the board:
+```bash
+(chroot) ~/trunk/src/scripts $ cros_vm --start --image-path \
+../build/images/$BOARD/latest/chromiumos_qemu_image.bin
+(chroot) ~/trunk/src/scripts $ cros_vm --start --board $BOARD
+```
 
-This is intended for use by a builder:
+You can also launch the VM from anywhere within your chromeos source tree:
+```bash
+(shell) .../chromeos $ chromite/bin/cros_vm --start --board $BOARD
+```
+
+## cros_run_vm_test
+
+`cros_run_vm_test` runs various tests in a VM. It can use an existing VM or
+launch a new one.
+
+To launch a VM and run a sanity test:
 ```bash
 (sdk) .../chrome/src $ cros_run_vm_test
 ```
+
+To build chrome, deploy chrome, or both, prior to running tests:
+```bash
+(sdk) .../chrome/src $ cros_run_vm_test --build --deploy --build-dir \
+out_$SDK_BOARD/Release
+```
+
+To run a tast test:
+```bash
+(sdk) .../chrome/src $ cros_run_vm_test \
+--cmd -- local_test_runner ui.ChromeSanity
+```
+
+To run an arbitrary test (for e.g. base_unittests), you would need to first
+build base_unittests, copy the dependencies (the .so files) to the VM, and run
+the test in the correct working directory:
+```bash
+(sdk) .../chrome/src $ autoninja -C out_$SDK_BOARD/Release base_unittests
+(sdk) .../chrome/src $ ls out_$SDK_BOARD/Release/base_unittests \
+out_$SDK_BOARD/Release/*.so > /tmp/files.txt
+(sdk) .../chrome/src $ cros_run_vm_test --files-from /tmp/files.txt \
+--cwd out_$SDK_BOARD/Release --cmd -- ./base_unittests
+```
+The set of files to transfer to the VM is specified via `--files` or
+`--files-from`, a working directory via `--cwd` and the test command to run
+via `--cmd`.
+
+To run an individual autotest from within the chroot:
+```bash
+(chroot) ~/trunk/src/scripts $ cros_run_vm_test --board $BOARD \
+--autotest test_LoginCryptohome
+```
+
+To run the autotest smoke suite:
+```bash
+(chroot) ~/trunk/src/scripts $ mkdir /tmp/results
+(chroot) ~/trunk/src/scripts $ cros_run_vm_test --board $BOARD \
+--results-dir=/tmp/results --autotest suite:smoke
+```
+
 This doc is at [go/cros-vm]. Please send feedback to [achuith@chromium.org].
 
 [depot_tools installed]:
