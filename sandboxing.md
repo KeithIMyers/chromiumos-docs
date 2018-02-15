@@ -18,7 +18,7 @@ performing pre-determined actions on them.
 Chrome OS uses a few different mechanisms to isolate system services from Chrome
 and from each other. We use a helper program called Minijail (executable
 `minijail0`). In most cases, Minijail is used in the service's init script.
-In other cases, Minijail wrappers are used if a service wants to apply
+In other cases, [Minijail wrappers] are used if a service wants to apply
 restrictions to the programs that it launches, or to itself.
 
 ## Best practices for writing secure system services
@@ -43,7 +43,7 @@ Don't (ab)use shell scripts, shell script logic is harder to reason about and
 [shell command-injection bugs](http://en.wikipedia.org/wiki/Code_injection#Shell_injection)
 are easy to miss. If you need functionality separated from your main service,
 use normal C++ binaries, not shell scripts. Moreover, when you execute them,
-consider further restricting their privileges (see section Minijail wrappers).
+consider further restricting their privileges (see section [Minijail wrappers]).
 
 # Just tell me what I need to do
 
@@ -53,9 +53,10 @@ consider further restricting their privileges (see section Minijail wrappers).
 * Use Minijail to run your service as the user (and group) created in the
   previous step. In your init script:
   * `exec minijail0 -u <user> /full/path/to/binary`
-  * See section User ids.
-* If your service fails, you might need to grant it capabilities. See section Capabilities.
-* Consider sandboxing your service using Seccomp-BPF, see section Seccomp-BPF.
+  * See section [User ids].
+* If your service fails, you might need to grant it capabilities. See section
+  [Capabilities].
+* Consider sandboxing your service using Seccomp-BPF, see section [Seccomp-BPF].
 
 # User ids
 
@@ -66,7 +67,7 @@ system functionality that's only available to the root user. Using the
 permission_broker service as an example, here's its Upstart config file (lives
 in `/etc/init`):
 
-`permission_broker.conf`
+[`permission_broker.conf`](https://chromium.googlesource.com/chromiumos/platform2/+/master/permission_broker/permission_broker.conf)
 ```bash
 env PERMISSION_BROKER_GRANT_GROUP=devbroker-access
 
@@ -95,13 +96,14 @@ If you're unsure whether you need this, the PreCQ/CQ will reject your CL when
 the test fails, so if the tests pass, you should be good to go!
 
 You can use CQ-DEPEND to land the CLs together
-(http://www.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/commit-queue-overview,
-"How do I specify the dependencies of a change?").
+(see [How do I specify the dependencies of a change?](http://www.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/commit-queue-overview)).
 
 # Capabilities
 
 Some programs, however, require some of the system access usually granted only
-to the root user. We use capabilities for this. Capabilities allow us to grant
+to the root user. We use
+[capabilities](http://man7.org/linux/man-pages/man7/capabilities.7.html)
+for this. Capabilities allow us to grant
 a specific subset of root's privileges to an otherwise unprivileged process.
 The link above has the full list of capabilities that can be granted to a
 process. Some of them are equivalent to root, so we avoid granting those. In
@@ -110,7 +112,7 @@ access raw sockets, or performing specific file operations. Capabilities are
 passed to Minijail using the `-c` switch. permission_broker, for example, needs
 capabilities to be able to chown() device nodes.
 
-`permission_broker.conf`
+[`permission_broker.conf`](https://chromium.googlesource.com/chromiumos/platform2/+/master/permission_broker/permission_broker.conf)
 ```bash
 env PERMISSION_BROKER_GRANT_GROUP=devbroker-access
 
@@ -125,8 +127,9 @@ exec minijail0 -u devbroker -c 0009 /usr/bin/permission_broker \
 ```
 
 Capabilities are expressed using a capabilities mask, calculated from the
-index of the capability in capability.h, and changed to a mask as in
-CAP_TO_MASK:
+index of the capability in
+[capability.h](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/linux/capability.h),
+and changed to a mask as in `CAP_TO_MASK`:
 
 ```c
 #define CAP_TO_MASK(x)      (1 << ((x) & 31)) /* mask for indexed __u32 */
@@ -141,12 +144,16 @@ kernel therefore exposes a huge attack surface to non-root processes, and we
 would like to restrict what kernel functionality is available for sandboxed
 processes.
 
-The mechanism we use is called Seccomp-BPF. Minijail can take a policy file
+The mechanism we use is called
+[Seccomp-BPF](https://www.kernel.org/doc/Documentation/prctl/seccomp_filter.txt).
+Minijail can take a policy file
 that describes what syscalls will be allowed, what syscalls will be denied,
 and what syscalls will only be allowed with specific arguments. The full
-description of the policy file language can be found in the source.
+description of the policy file language can be found in the
+[source](https://chromium.googlesource.com/aosp/platform/external/minijail/+/master/syscall_filter.c).
 
-Abridged policy for mtpd on amd64 platforms:
+Abridged policy for
+[mtpd on amd64 platforms](https://chromium.googlesource.com/chromiumos/platform2/+/master/mtpd/mtpd-seccomp-amd64.policy):
 
 ```
 # Copyright (c) 2012 The Chromium OS Authors. All rights reserved.
@@ -190,7 +197,7 @@ policy, and then use `-L` if you notice your program is still crashing.
 The policy file needs to be installed in the system, so we need to add it to
 the ebuild file:
 
-`mtpd-9999.ebuild`
+[`mtpd-9999.ebuild`](https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/chromeos-base/mtpd/mtpd-9999.ebuild)
 ```bash
 # Install seccomp policy file.
 insinto /opt/google/mtpd
@@ -200,7 +207,7 @@ newins "mtpd-seccomp-${ARCH}.policy" mtpd-seccomp.policy
 And finally, the policy file has to be passed to Minijail, using the `-S`
 option:
 
-`mtpd.conf`
+[`mtpd.conf`](https://chromium.googlesource.com/chromiumos/platform2/+/master/mtpd/mtpd.conf)
 ```bash
 # use minijail (drop root, set no_new_privs, set seccomp filter)
 exec minijail0 -u mtp -g mtp -G -n -S /opt/google/mtpd/mtpd-seccomp.policy -- \
@@ -240,3 +247,8 @@ NOTICE kernel: [  586.706239] audit: type=1326 audit(1484586246.124:6): ... comm
 # Minijail wrappers
 
 TODO(jorgelo)
+
+[Minijail wrappers]: #Minijail-wrappers
+[User ids]: #User-ids
+[Capabilities]: #Capabilities
+[Seccomp-BPF]: #Seccomp_BPF
