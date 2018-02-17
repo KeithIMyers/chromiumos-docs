@@ -20,7 +20,8 @@ To submit a feedback report, type Alt+Shift+i or click `Report an issue...`
 within the `Help` submenu while logged in. Feedback reports include selected
 system logs if the `Send system and app information, and metrics` checkbox is
 checked. You can click the links within the checkbox text to see the information
-that will be attached to the report.
+that will be attached to the report. See the [official feedback documentation]
+for more information.
 
 ## Public issue tracker
 
@@ -54,11 +55,11 @@ you may want to either:
 
 Screenshots are extremely helpful when debugging UI-related issues. To capture a
 screenshot on a Chrome OS device, hold Ctrl and hit the Switch Window (a.k.a. `[
-]]]`) key. The screenshot will be written to your Downloads folder if you're
-logged in or to `/tmp` (which can be accessed by browsing to `file:///tmp` after
-logging in) if captured at the login screen. To take a screenshot of a limited
-region of the screen, use Ctrl+Shift+Switch Window and drag a rectangle using
-the touchpad.
+]]]`) key (or F5 if you're using a non-Chrome-OS keyboard). The screenshot will
+be written to your Downloads folder if you're logged in or to `/tmp` (which can
+be accessed by browsing to `file:///tmp` after logging in) if captured at the
+login screen. To take a screenshot of a limited region of the screen, use
+Ctrl+Shift+Switch Window and drag a rectangle using the touchpad.
 
 ## Crash reports
 
@@ -132,6 +133,7 @@ If you think you've identified a bug in Chrome OS, please do the following:
 
 
 [Chromebook Central Help Forum]: https://productforums.google.com/forum/#!forum/chromebook-central
+[official feedback documentation]: https://support.google.com/chromebook/answer/2982029
 [public issue tracker]: https://bugs.chromium.org/p/chromium/issues/list
 [new.crbug.com]: https://new.crbug.com/
 [crbug.com/new]: https://crbug.com/new
