@@ -56,6 +56,7 @@ consider further restricting their privileges (see section [Minijail wrappers]).
   * See section [User ids].
 * If your service fails, you might need to grant it capabilities. See section
   [Capabilities].
+* Use as many namespaces as possible. See section [Namespaces].
 * Consider sandboxing your service using Seccomp-BPF, see section [Seccomp-BPF].
 
 # User ids
@@ -134,6 +135,39 @@ and changed to a mask as in `CAP_TO_MASK`:
 ```c
 #define CAP_TO_MASK(x)      (1 << ((x) & 31)) /* mask for indexed __u32 */
 ```
+
+# Namespaces
+
+Many resources in the Linux world can be isolated now such that a process has
+its own view of things. For example, it has its own list of mount points, and
+any changes it makes (unmounting, mounting more devices, etc...) are only
+visible to it. This helps keep a broken process from messing up the settings
+of other processes.
+
+For more in-depth details, see the
+[namespaces overview](http://man7.org/linux/man-pages/man7/namespaces.7.html).
+
+In Chromium OS, we like to see every process/daemon run under as many unique
+namespaces as possible. Many are easy to enable/rationalize about: if you don't
+use a particular resource, then isolating it is straightforward. If you do
+rely on it though, it can take more effort.
+
+Here's a quick overview. Use the command line option if the description below
+matches your service (or if you don't know what functionality it's talking
+about -- most likely you aren't using it!).
+
+* `--uts`: Just always turn this on
+* `-e`: If your process doesn't need network access (including UNIX or netlink
+  sockets)
+* `-p -r`: If your process doesn't need to access other processes in the system
+* `-v`: If your process doesn't need access to user mounts
+* `-l`: If your process doesn't use SysV shared memory or IPC
+
+This option does not work on Linux 3.8 systems.  So only enable it if you know
+your service will run on a newer kernel version.
+
+* `-N`: If your process doesn't need to modify common
+  [control groups settings](http://man7.org/linux/man-pages/man7/cgroups.7.html)
 
 # Seccomp-BPF
 
@@ -251,4 +285,5 @@ TODO(jorgelo)
 [Minijail wrappers]: #Minijail-wrappers
 [User ids]: #User-ids
 [Capabilities]: #Capabilities
+[Namespaces]: #Namespaces
 [Seccomp-BPF]: #Seccomp_BPF
