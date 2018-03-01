@@ -137,8 +137,7 @@ For testing local Chrome changes on Chrome OS, use the [Simple Chrome] flow to
 build Chrome (after entering the Simple Chrome SDK environment as described
 above):
 ```bash
-(sdk) .../chrome/src $ gn gen out_$SDK_BOARD/Release --args="$GN_ARGS"
-(sdk) .../chrome/src $ ninja -C out_$SDK_BOARD/Release/ -j 1000 -l 20 \
+(sdk) .../chrome/src $ autoninja -C out_$SDK_BOARD/Release/ \
 chrome chrome_sandbox nacl_helper
 ```
 
