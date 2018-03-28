@@ -369,6 +369,45 @@ processes that need to run with a UID different from the process that starts
 them. Start your services via Upstart unless there are compelling reasons to use
 D-Bus activation.
 
+If D-Bus activation still seems like the best tool (e.g. you're writing a
+[sandboxed] daemon for a rarely-used feature), consider using Upstart to manage
+your daemon and using D-Bus activation to start the Upstart job when it's
+needed. This approach lets you use Upstart to do things like terminate your
+daemon when the user logs out (via `stop on stopping ui` in its Upstart config
+file).
+
+For example, for a service named `org.chromium.MyService`, create a
+`/usr/share/dbus-1/system-services/org.chromium.MyService.service` file:
+
+```ini
+[D-BUS Service]
+Name=org.chromium.MyService
+Exec=/sbin/start myservice
+User=root
+```
+
+Then add an `/etc/init/myservice.conf` file that defines your Upstart job
+without including a `start on` clause:
+
+```sh
+...
+
+# This is started by D-Bus service activation through
+# org.chromium.MyService.service.
+stop on stopping ui
+respawn
+
+...
+
+post-start exec minijail0 -u myservice -g myservice /usr/bin/gdbus \
+    wait --system --timeout 15 org.chromium.MyService
+```
+
+The `post-start` line ensures that `start myservice` will wait for the D-Bus
+service to be available before returning.
+
+This technique is used in [this smbproviderd change].
+
 ## Know how to dig deeper.
 
 Running `dbus-monitor --system` as the `root` user dumps live D-Bus traffic. By
@@ -415,3 +454,5 @@ dbus-send --system --print-reply --type=method_call \
 [difficult-to-track-down bug]: https://crbug.com/208247
 [start a service]: https://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-starting-services
 [Upstart]: http://upstart.ubuntu.com/
+[sandboxed]: sandboxing.md
+[this smbproviderd change]: https://crrev.com/c/982404
