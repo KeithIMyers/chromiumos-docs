@@ -32,7 +32,7 @@ days, in accordance with Google's general
 [vulnerability disclosure recommendations], or [faster (7 days)],
 if there is evidence of active exploitation.
 
-A common type of critical vulnerability on Chrome OS is
+A typical type of critical vulnerability on Chrome OS is
 an exploit chain comprising individual bugs that allows
 persistent root access on a machine, even on guest mode ([766253]).
 
