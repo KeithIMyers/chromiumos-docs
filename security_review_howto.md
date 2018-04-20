@@ -1,5 +1,78 @@
 # Chrome OS security review HOWTO
 
+## The security review process
+
+Chrome OS development is structured around six-week cycles called *milestones*.
+Every six weeks a new release branch is created, based off our main development
+branch (also known as *trunk* or *tip-of-tree*). Accordingly, a new milestone is
+pushed to Chrome OS devices every six weeks. It takes seven to eight weeks from
+the time a branch is cut to the time a new software image built from that
+branch is pushed to devices on the stable channel.
+
+A feature targeting a given milestone will be reviewed during that milestone's
+development cycle, or shortly after the branch is cut. The Chrome OS security
+team tracks features by looking at *Launch bugs* filed in [crbug.com], which are
+also mirrored in [chromefeatures.googleplex.com]. **As long as your feature has
+an associated launch bug, the security team will track it**. Make sure that the
+launch bug links to a design doc that includes a section covering the security
+implications of the feature. **The rest of this document describes what
+questions such a "Security implications" section should answer and what
+concerns it should address**.
+
+Launch bugs include a set of cross-functional review flags, one of which is the
+security flag. The security team will flip this flag after the feature owner
+has successfully engaged the security team to understand the security
+implications of the feature. **Don't think of the security review process as an
+arbitrary bar set by the security team that you have to pass no matter what**.
+Instead, think of it as the process by which you take ownership of the security
+implications of your feature, so that you are shipping something that doesn't
+detract from the overall security posture of the product.
+
+Even if you consider that your feature is trivial, or has no security
+implications, **please refrain from flipping the security flag in the launch bug
+yourself**. In most cases, features are not as trivial as they initially
+appear. More importantly, the security team uses these flags to track features
+and work on our side. We will flip the security flag when the feature is ready.
+
+If your feature is big or complex, or if you find yourself implementing
+something that needs to go against the recommendations in this document, please
+reach out to the security team as soon as possible. Send email to
+[chromeos-security@google.com], and try to include a design doc, even if it's
+just an early draft. **When in doubt, just reach out**. We are always happy to
+discuss feature design.
+
+The Chrome OS security team will normally not look at the implementation details
+of a feature -- there is just not enough time to read through thousands of lines
+of code each milestone. Instead, we prefer to focus on ensuring that the design
+of the feature is contributing to, rather than detracting from, the overall
+security posture of the system. The reason for this is two-fold: first, the time
+constraints mentioned before. Second is the fact that even with careful review
+bugs will likely slip through, and a sound, defensive design will ensure that
+these bugs don't end up being catastrophic. For particularly risky code we can
+always contract out a security audit.
+
+**The expectation is that your feature will be security-complete (e.g. your new
+system service will be fully sandboxed) by the time the branch is cut**. Merging
+CLs that implement security features to release branches is risky, so we avoid
+it.
+
+If your feature is enabled by default, the security flag in the launch bug
+tracking the feature must be flipped before the milestone containing the feature
+is promoted to the **beta channel**. This means that all the relevant
+information (e.g. a design doc with a "Security considerations" section) must be
+available before the milestone reaches the beta channel. Ideally, however, the
+design doc will be finalized before the branch point.
+
+If your feature is kept behind a flag, the security bit in the launch bug must
+be flipped before the flag is enabled by default. This means that the feature
+must be security-complete by the time the flag is enabled by default. Even in
+this case we strongly recommend tackling security work earlier rather than
+later. It's normally not possible to address security concerns in a feature
+that's complete without requiring costly refactoring or rearchitecting.
+
+In general, a feature that properly addresses the questions and recommendations
+in this document can expect to have its security flag flipped by branch point.
+
 ## Things to look at
 
 ### Security boundaries
@@ -83,3 +156,6 @@ going forward.
     doc as part of the feature.
 
 [sandboxing]: https://chromium.googlesource.com/chromiumos/docs/+/master/sandboxing.md
+[crbug.com]: https://crbug.com
+[chromefeatures.googleplex.com]: https://chromefeatures.googleplex.com
+[chromeos-security@google.com]: mailto:chromeos-security@google.com
