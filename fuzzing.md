@@ -253,9 +253,12 @@ The steps will tell you where these differences are.
 4.  Build and test your new fuzz target locally.
 
     To build your new fuzzer, once you have updated the ebuild file, it should
-    be sufficient to emerge it with `USE="asan fuzzer"`:
+    be sufficient to build it with `USE="asan fuzzer"`:
 
     ```bash
+    # Run build_packages to build the package and its dependencies.
+    $ USE="asan fuzzer" ./build_packages --board=${BOARD} <your-package>
+    # If you make more changes to your fuzzer or build, you can rebuild the package by:
     $ USE="asan fuzzer" emerge-${BOARD} <your-package>
     ```
 
@@ -472,9 +475,12 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
 4.  Build and test your new fuzz target locally.
 
     To build your new fuzzer, once you have updated the ebuild file, it should
-    be sufficient to emerge it with `USE="fuzzer"`:
+    be sufficient to build it with `USE="asan fuzzer"`:
 
     ```bash
+    # Run build_packages to build the package and its dependencies.
+    $ USE="asan fuzzer" ./build_packages --board=${BOARD} <your-package>
+    # If you make any changes to your fuzzer or build, you can rebuild the package by:
     $ USE="asan fuzzer" emerge-${BOARD} <your-package>
     ```
 
@@ -569,9 +575,9 @@ will try to help you figure this out.
 
 [USE flags: fuzzer]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/chromeos-base/libchrome/libchrome-395517.ebuild?q=IUSE+fuzzer+package:%5Echromeos_public$&dr=C
 
-[bsdiff fuzzer]: https://android.googlesource.com/platform/external/bsdiff/+/master
+[bsdiff fuzzer]: https://android.googlesource.com/platform/external/bsdiff/+/master/bspatch_fuzzer.cc
 
-[puffin_fuzzer]: https://android.googlesource.com/platform/external/puffin/+/master
+[puffin_fuzzer]: https://android.googlesource.com/platform/external/puffin/+/master/src/fuzzer.cc
 
 [this fuzzer]: https://chromium.googlesource.com/chromium/src/+/master/url/gurl_fuzzer.cc
 
