@@ -2,7 +2,7 @@
 
 The target audience for this document are developers in Chrome OS who work on
 packages.  It explains how to write a fuzz test target for a package, which
-will then be automatically picked up and run regularly by libfuzzer.  It
+will then be automatically picked up and run regularly by ClusterFuzz.  It
 assumes some basic familiarity with the Chrome OS development environment.
 
 [TOC]
@@ -84,7 +84,8 @@ signature:
 
 That's it!  The continuously running fuzzer builder on the Chrome OS waterfall
 will automatically detect your new fuzz target, build it and upload it to
-ClusterFuzz, which will start fuzzing it.
+ClusterFuzz, which will start fuzzing it. For more details on what you can do
+with ClusterFuzz, see the [Using ClusterFuzz] section.
 
 ## More Detailed Instructions
 
@@ -521,13 +522,36 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
 ## Getting Help with Modifying Ebuild Files
 
 Some ebuild files are more complex or confusing than others.  There are
-several links in the "References" section of this document that might help you
+several links in the [References] section of this document that might help you
 with understanding/editing your ebuild file.  If you are still having
 difficulties editing your ebuild file and need more help, please file a bug in
 crosbug, and assign it to the "Tools>ChromeOS-Toolchain" component, and  send
 an email to
 [chromeos-toolchain@google.com](mailto:chromeos-toolchain@google.com).  We
 will try to help you figure this out.
+
+## Using ClusterFuzz
+
+As already mentioned, ClusterFuzz will pick up any fuzzer written using the
+above steps, run the fuzzer, and file bugs for any crashes found. ClusterFuzz
+runs fuzzers as soon as the [builder] completes a build and uploads it to the
+Google Cloud Storage bucket
+(`gs://chromeos-fuzzing-artifacts/libfuzzer-asan/amd64-generic-fuzzer/`).
+
+ClusterFuzz has many features such as statistics reporting that you may find
+useful. Below are links to some of the more important ones:
+
+[comment]: <> (TODO(metzman): Replace links with evergreen ones (once available)
+* [Fuzzer Statistics] - Statistics from fuzzer runs, updated daily. Ignore the
+  columns "edge_cov", "func_cov", and "cov_report" as these are not supported
+  for ChromeOS. Statistics can be viewed for specific time periods and graphs of
+  stats can viewed by changing the "Group by" drop down (and specifying the
+  fuzzer you are interested in, rather than "libFuzzer").
+* [Crash Statistics] - Statistics on recent crashes.
+* [Fuzzer Logs] - Logs output by your fuzzer each time ClusterFuzz runs it. This
+  is usually a good place to debug issues with your fuzzer.
+* [Fuzzer Corpus] - Testcases produced by the fuzzer that libFuzzer has deemed
+  "interesting." Usually this means it causes unique program behavior.
 
 ## See also:
 
@@ -575,6 +599,8 @@ will try to help you figure this out.
 
 [USE flags: fuzzer]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/chromeos-base/libchrome/libchrome-395517.ebuild?q=IUSE+fuzzer+package:%5Echromeos_public$&dr=C
 
+[Using ClusterFuzz]: #using-clusterfuzz
+
 [bsdiff fuzzer]: https://android.googlesource.com/platform/external/bsdiff/+/master/bspatch_fuzzer.cc
 
 [puffin_fuzzer]: https://android.googlesource.com/platform/external/puffin/+/master/src/fuzzer.cc
@@ -584,3 +610,15 @@ will try to help you figure this out.
 [this example]: https://chromium.googlesource.com/chromiumos/platform2/+/master/midis/midis.gyp
 
 [this ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/dev-util/puffin/puffin-9999.ebuild
+
+[References]: #References
+
+[builder]: https://build.chromium.org/p/chromiumos/builders/amd64-generic-fuzzer
+
+[Fuzzer Statistics]: https://clusterfuzz.com/v2/fuzzer-stats/by-fuzzer/2018-05-01/2018-05-01/fuzzer/libFuzzer/job/libfuzzer_asan_chromeos
+
+[Crash Statistics]: https://clusterfuzz.com/v2/crash-stats?block=day&days=7&end=423713&fuzzer=libFuzzer&group=platform&job=libfuzzer_asan_chromeos&number=count&sort=total_count
+
+[Fuzzer Logs]: https://console.cloud.google.com/storage/browser/chromeos-libfuzzer-logs/libfuzzer
+
+[Fuzzer Corpus]: https://console.cloud.google.com/storage/browser/chromeos-libfuzzer-logs
