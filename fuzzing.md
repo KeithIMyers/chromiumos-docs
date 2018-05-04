@@ -542,16 +542,16 @@ ClusterFuzz has many features such as statistics reporting that you may find
 useful. Below are links to some of the more important ones:
 
 [comment]: <> (TODO(metzman): Replace links with evergreen ones (once available)
-* [Fuzzer Statistics] - Statistics from fuzzer runs, updated daily. Ignore the
-  columns "edge_cov", "func_cov", and "cov_report" as these are not supported
-  for ChromeOS. Statistics can be viewed for specific time periods and graphs of
-  stats can viewed by changing the "Group by" drop down (and specifying the
-  fuzzer you are interested in, rather than "libFuzzer").
-* [Crash Statistics] - Statistics on recent crashes.
-* [Fuzzer Logs] - Logs output by your fuzzer each time ClusterFuzz runs it. This
-  is usually a good place to debug issues with your fuzzer.
-* [Fuzzer Corpus] - Testcases produced by the fuzzer that libFuzzer has deemed
-  "interesting." Usually this means it causes unique program behavior.
+*   [Fuzzer Statistics] - Statistics from fuzzer runs, updated daily. Ignore the
+    columns `edge_cov`, `func_cov`, and `cov_report` as these are not supported
+    for ChromeOS. Statistics can be viewed for specific time periods and graphs
+    of stats can viewed by changing the "Group by" drop down (and specifying the
+    fuzzer you are interested in, rather than "libFuzzer").
+*   [Crash Statistics] - Statistics on recent crashes.
+*   [Fuzzer Logs] - Logs output by your fuzzer each time ClusterFuzz runs
+    it. This is usually a good place to debug issues with your fuzzer.
+*   [Fuzzer Corpus] - Testcases produced by the fuzzer that libFuzzer has deemed
+    "interesting." Usually this means it causes unique program behavior.
 
 ## See also:
 
