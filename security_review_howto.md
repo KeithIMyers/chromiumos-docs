@@ -73,7 +73,54 @@ that's complete without requiring costly refactoring or rearchitecting.
 In general, a feature that properly addresses the questions and recommendations
 in this document can expect to have its security flag flipped by branch point.
 
-## Things to look at
+## Life of a security review
+
+Chrome OS security team members will use the following process when handling a
+feature launch bug for the upcoming milestone:
+
+1.  Look at the launch bug. Is there a design doc? If there's not, ask for one.
+    If the design doc doesn't have a *Security Considerations* section, ask for
+    one. Offer a link to the [review framework] as a guide for how to write that
+    section.
+2.  Use the [review framework] to evaluate if the feature is respecting security
+    boundaries, handles sensitive data appropriately, etc. It's often also a
+    good idea to consider existing features, in particular their security design
+    and trade-off decisions made in previous reviews. Flip the launch flag to
+    *Launch-Security-Started*.
+3.  If any security-relevant aspects are unclear or if there are concerns,
+    communicate this back to the feature owner via design doc comments and
+    comment on the launch bug to clarify the security review status.
+4.  Surface controversial design/implementation choices or aspects you're unsure
+    about in the weekly Chrome OS security team meeting. Rely on the rest of the
+    team to suggest useful alternative angles and to provide historic context
+    and high-level guidance on Chrome OS security philosophy.
+5.  If necessary, iterate with the feature owner to resolve any questions or
+    concerns. Use whatever means of communication seems most appropriate to make
+    progress. For simple questions, document comments or email threads will
+    work. For in-depth discussion of product requirements, design choices, and
+    implications on security assessment, it's usually better to ask for a
+    meeting. Note that it is generally the responsibility of the feature owner
+    to drive the review process to a conclusion. However, the security reviewer
+    should strive for clear communication on what remains to be addressed at any
+    point in the process.
+6.  Once everything looks good, flip the review flag to *Launch-Security-Yes*.
+    Document conclusions and aspects that were specifically evaluated in the
+    security review in a bug comment. You can use the [review framework] to
+    structure this. The information in the comment is useful for future
+    reference when consulting previous security review decisions for guidance.
+    Also, in case aspects of a feature are later found to cause security issues,
+    it's useful to understand whether these aspects surfaced in the security
+    review and the reasoning behind review conclusions. Note that the purpose is
+    *not* to blame reviewers in case they have missed problems, but to help our
+    future selves understand how we can improve the process as needed (for
+    example by adding specific items to watch out for to the [review
+    framework]).
+    In case the review reaches an impasse, don't just mark *Launch-Security-No*
+    as we're committed to engage productively as much as we can. Instead,
+    surface the current state of things and bring in relevant leads to figure
+    out a way forward.
+
+## Review framework - things to look at
 
 ### Security boundaries
 
@@ -220,3 +267,4 @@ going forward.
 [BaseMessageLoop]: https://chromium.googlesource.com/aosp/platform/external/libbrillo/+/master/brillo/message_loops/base_message_loop.h
 [newer list of cryptographic right answers]: http://latacora.singles/2018/04/03/cryptographic-right-answers.html
 [older reference of cryptographic right answers]: https://www.daemonology.net/blog/2009-06-11-cryptographic-right-answers.html
+[review framework]: #review-framework-things-to-look-at
