@@ -172,7 +172,10 @@ The steps will tell you where these differences are.
 
 3.  Update your package ebuild file:
     1.  Update the ebuild file to build the new binary when the fuzzer
-        use-flag is being used:
+        use-flag is being used. For platform packages built with gyp files,
+        you should skip the build step and go directly to the next step
+        for installing the fuzzer binary.
+
         1.  Find the `src_compile()` function in your ebuild file.   If
             there isn't one, add one:
 
@@ -182,32 +185,25 @@ The steps will tell you where these differences are.
             ```
 
         2.  Add the call to actually build your fuzz target.
-            1.  Packages built with gyp files.
 
-                Your gyp file modifications take care of this, so you do not
-                need to do anything here.
+            Find the line in your `src_compile` function that actually builds
+            your package (the command will probably look like `emake` or `make`
+            or `cmake`).  This is the command that is meant by
+            'original build command' below.  Copy the original build command
+            and add whatever flags or arguments you need in
+            order to make it build just your fuzzer binary (see step 2 above).
+            Replace the original build command in the src_compile function with
+            a conditional statement similar to the one below, so that when
+            `USE="fuzzer"` is used to build the package, it will build your
+            fuzzer binary, otherwise it will build the package normally.
 
-            2.  Other packages.
-
-                Find the line in your `src_compile` function that actually
-                builds your package (the command will probably look like
-                `emake` or `make` or `cmake`).  This is the command that is
-                meant by 'original build command' below.  Copy the original
-                build command and add whatever flags or arguments you need in
-                order to make it build just your fuzzer binary (see step 2
-                above).  Replace the original build command in the src_compile
-                function with a conditional statement similar to the one
-                below, so that when `USE="fuzzer"` is used to build the
-                package, it will build your fuzzer binary, otherwise it will
-                build the package normally.
-
-                ```bash
-                if use fuzzer ; then
-                    <modified build command>
-                else
-                    <original build command>
-                fi
-                ```
+            ```bash
+            if use fuzzer ; then
+                 <modified build command>
+            else
+                 <original build command>
+            fi
+            ```
 
     2.  Install your binary in /usr/libexec/fuzzers/
 
@@ -258,7 +254,7 @@ The steps will tell you where these differences are.
 
     ```bash
     # Run build_packages to build the package and its dependencies.
-    $ USE="asan fuzzer" ./build_packages --board=${BOARD} <your-package>
+    $ USE="asan fuzzer" ./build_packages --board=${BOARD} --skip_chroot_upgrade <your-package>
     # If you make more changes to your fuzzer or build, you can rebuild the package by:
     $ USE="asan fuzzer" emerge-${BOARD} <your-package>
     ```
@@ -527,7 +523,7 @@ with understanding/editing your ebuild file.  If you are still having
 difficulties editing your ebuild file and need more help, please file a bug in
 crosbug, and assign it to the "Tools>ChromeOS-Toolchain" component, and  send
 an email to
-[chromeos-toolchain@google.com](mailto:chromeos-toolchain@google.com).  We
+[chromeos-fuzzing@google.com](mailto:chromeos-fuzzing@google.com).  We
 will try to help you figure this out.
 
 ## Using ClusterFuzz
@@ -541,7 +537,6 @@ Google Cloud Storage bucket
 ClusterFuzz has many features such as statistics reporting that you may find
 useful. Below are links to some of the more important ones:
 
-[comment]: <> (TODO(metzman): Replace links with evergreen ones (once available)
 *   [Fuzzer Statistics] - Statistics from fuzzer runs, updated daily. Ignore the
     columns `edge_cov`, `func_cov`, and `cov_report` as these are not supported
     for ChromeOS. Statistics can be viewed for specific time periods and graphs
@@ -556,6 +551,8 @@ useful. Below are links to some of the more important ones:
 ## See also:
 
 ### References
+
+[Setting up Fuzzing for ChromeOS](https://docs.google.com/document/d/1tvY4YV6q5RPVGK8hivkSKLPbNufebZ6BBozT0LqbGRA/edit?usp=sharing)
 
 "[Continuous in-process fuzzing for ChromeOS targets](https://docs.google.com/document/d/1sd1IejWzcbQgF7soVVKlqTMk3HZfvPGR7QYP5T6qBYU/edit#heading=h.5irk4csrpu0y)"
 
