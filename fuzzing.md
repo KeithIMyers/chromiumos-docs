@@ -287,7 +287,7 @@ The steps will tell you where these differences are.
     $ cd ~/trunk/src/third_party/chromiumos-overlay/virtual/chromium-os-fuzzers
     ```
 
-    Edit `chromium-os-fuzzers-1.ebuild`.  In that file, find the RDEPEND list
+    Edit `chromium-os-fuzzers-1.ebuild`.  In that file, find the `RDEPEND` list
     and add your package/fuzzer (you can look at the other packages there, to
     see how it's done). Don't forget to uprev the ebuild symlink.  Commit the
     change.
@@ -441,7 +441,7 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
 
         When building with libfuzzer and/or asan, it is **strongly
         recommended** that you also build any libraries on which your package
-        depends (see RDEPEND list in your ebuild file) with libfuzzer and
+        depends (see `RDEPEND` list in your ebuild file) with libfuzzer and
         asan.  This is because if those libraries are not built with these
         flags, then calls into those libraries won't get tested.  In addition,
         doing this helps avoid spurious errors when the library headers use
@@ -476,21 +476,21 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
 
     ```bash
     # Run build_packages to build the package and its dependencies.
-    $ USE="asan fuzzer" ./build_packages --board=${BOARD} <your-package>
-    # If you make any changes to your fuzzer or build, you can rebuild the package by:
+    $ USE="asan fuzzer" ./build_packages --board=${BOARD} --skip_chroot_upgrade <your-package>
+    # If you make more changes to your fuzzer or build, you can rebuild the package by:
     $ USE="asan fuzzer" emerge-${BOARD} <your-package>
     ```
 
     You should verify that your fuzzer was built and that it was installed in
     /usr/libexec/fuzzers (make sure the owners file was installed there as
-    well).  To run your fuzzer locally you first run this script (outside your
+    well).  To run your fuzzer locally, you first run this script (outside your
     chroot) to set up your environment properly:
 
     ```bash
     $ ./path-to-chroot/chromite/bin/cros_fuzz_test_env --chromeos_root=/path-to-chroot --board=${BOARD}
     ```
 
-    Then you run your fuzzer:
+    Then run your fuzzer:
 
     ```bash
     $ sudo chroot /path-to-chroot/chroot/build/${BOARD}
@@ -509,7 +509,7 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
     $ cd ~/trunk/src/third_party/chromiumos-overlay/virtual/chromium-os-fuzzers
     ```
 
-    Edit `chromium-os-fuzzers-1.ebuild`.  In that file, find the RDEPEND list
+    Edit `chromium-os-fuzzers-1.ebuild`.  In that file, find the `RDEPEND` list
     and add your package/fuzzer (you can look at the other packages there, to
     see how it's done).  Don't forget to uprev the ebuild symlink.  Commit the
     change.
@@ -539,22 +539,22 @@ useful. Below are links to some of the more important ones:
 
 *   [Fuzzer Statistics] - Statistics from fuzzer runs, updated daily. Ignore the
     columns `edge_cov`, `func_cov`, and `cov_report` as these are not supported
-    for ChromeOS. Statistics can be viewed for specific time periods and graphs
-    of stats can viewed by changing the "Group by" drop down (and specifying the
-    fuzzer you are interested in, rather than "libFuzzer").
+    for Chrome OS. Graphs of stats can viewed by changing the "Group by" drop
+    down to "Time" and specifying the fuzzer you are interested in, rather than
+    "libFuzzer".
 *   [Crash Statistics] - Statistics on recent crashes.
 *   [Fuzzer Logs] - Logs output by your fuzzer each time ClusterFuzz runs
     it. This is usually a good place to debug issues with your fuzzer.
 *   [Fuzzer Corpus] - Testcases produced by the fuzzer that libFuzzer has deemed
-    "interesting." Usually this means it causes unique program behavior.
+    "interesting" (meaning it causes unique program behavior).
 
 ## See also:
 
 ### References
 
-[Setting up Fuzzing for ChromeOS](https://docs.google.com/document/d/1tvY4YV6q5RPVGK8hivkSKLPbNufebZ6BBozT0LqbGRA/edit?usp=sharing)
+[Setting up Fuzzing for Chrome OS](https://docs.google.com/document/d/1tvY4YV6q5RPVGK8hivkSKLPbNufebZ6BBozT0LqbGRA/edit?usp=sharing)
 
-"[Continuous in-process fuzzing for ChromeOS targets](https://docs.google.com/document/d/1sd1IejWzcbQgF7soVVKlqTMk3HZfvPGR7QYP5T6qBYU/edit#heading=h.5irk4csrpu0y)"
+"[Continuous in-process fuzzing for Chrome OS targets](https://docs.google.com/document/d/1sd1IejWzcbQgF7soVVKlqTMk3HZfvPGR7QYP5T6qBYU/edit#heading=h.5irk4csrpu0y)"
 
 [libFuzzer - a library for coverage-guided fuzz testing.](https://llvm.org/docs/LibFuzzer.html)
 
