@@ -618,7 +618,7 @@ useful. Below are links to some of the more important ones:
 
 [builder]: https://build.chromium.org/p/chromiumos/builders/amd64-generic-fuzzer
 
-[Fuzzer Statistics]: https://clusterfuzz.com/v2/fuzzer-stats/by-fuzzer/2018-05-01/2018-05-01/fuzzer/libFuzzer/job/libfuzzer_asan_chromeos
+[Fuzzer Statistics]: https://clusterfuzz.com/v2/fuzzer-stats/by-fuzzer/fuzzer/libFuzzer/job/libfuzzer_asan_chromeos
 
 [Crash Statistics]: https://clusterfuzz.com/v2/crash-stats?block=day&days=7&end=423713&fuzzer=libFuzzer&group=platform&job=libfuzzer_asan_chromeos&number=count&sort=total_count
 
