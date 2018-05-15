@@ -7,14 +7,16 @@ assumes some basic familiarity with the Chrome OS development environment.
 
 [TOC]
 
-## What is fuzz testing and why would I want to do it?
+## What is fuzz testing?
 
-Fuzz testing (or "fuzzing") is the process of testing an application by
-feeding invalid, malformed or malicious test inputs to a target program in an
-attempt to crash it. It is particularly appropriate and useful for testing
-APIs. The input data is created by randomly mutating other inputs. Sometimes
-the initial inputs are provided by a user in what is known as a "seed corpus",
-otherwise the fuzzer will generate inputs from scratch. Coverage guided fuzz
+Fuzz testing (or "fuzzing") is the process of testing an application by feeding
+invalid, malformed, or malicious inputs to a target program in an attempt to
+crash it. It is particularly useful for testing APIs because it can play the
+part of an attacker sending malicious input to the API.
+
+The input data is created by randomly mutating other inputs. Sometimes the
+initial inputs are provided by the user in what is known as a *seed corpus*,
+otherwise the fuzzer will generate inputs from scratch. Coverage-guided fuzz
 testing is an extension of fuzz testing that explicitly attempts to increase
 code coverage when it generates new tests, adding the new tests to its test
 corpus when it finds tests that increase the coverage, i.e. when a new test
@@ -26,30 +28,27 @@ infrastructure, [ClusterFuzz], that works with libFuzzer and aids developers
 by providing an end-to-end pipeline that automatically picks up new (and
 existing) fuzz targets, runs the fuzzers on the tests, reports bugs (assigning
 them to appropriate owners) and even verifies fixes. Chromium on Linux and
-MacOS has been using [this system] for a while, and it has proved very useful,
-finding thousands of [security] and [non-security] bugs.
+MacOS has been using [libFuzzer and ClusterFuzz] for a while, and they have
+proved very useful, finding thousands of [security bugs] and
+[non-security bugs].
 
-We have now set up Chrome OS to allow developers to easily write fuzz targets
-for their packages. This document will walk you through the simple steps
-necessary to get your fuzz targets up and running on ClusterFuzz. Given the
-ease of writing fuzz tests, and the great benefits in terms of improved
-reliability and security, why would you not want to write fuzz tests for your
-package?
+Chrome OS has tooling to support writing fuzzers for Chrome OS packages. This
+document will walk you through the steps necessary to get your fuzz targets up
+and running on ClusterFuzz.
 
-## Quickstart Guide
+## Quickstart guide
 
-This section of the document gives the basic steps needed to write a fuzz test
+This section of the document describes the basic steps needed to write a fuzzer
 in Chrome OS and have ClusterFuzz pick it up and start testing. However, this
-section does not explain the steps in any detail. That is covered below in the
-"[More Detailed Instructions](#More-Detailed-Instructions)" part of this
+section does not explain the steps in detail. That is covered below in the
+[More detailed instructions](#More-detailed-instructions) part of this
 document.
 
-Note: If you are working on a platform package (one that is in the platform or
-platform2 source directory and whose ebuild inherits from the platform
+Note: If you are working on a platform package (one that is in the `platform` or
+`platform2` source directory and whose ebuild inherits from the platform
 eclass), some of the steps below have been streamlined for you (you might want
-to read
-"[Adding a Fuzz Target to a Platform Package](#Adding-a-Fuzz-Target-to-a-Platform-Package)"
-in the Detailed Instructions section).
+to read [Adding a fuzz target to a platform package](#Adding-a-fuzz-target-to-a-platform-package)
+in the *Detailed instructions* section).
 
 ### Steps to create a new fuzz target (fuzz test binary) in Chrome OS
 
@@ -64,7 +63,7 @@ signature:
     }
     ```
 
-    Be sure `LLVMFuzzerTestOneInput` calls the function you want to fuzz.
+    Ensure `LLVMFuzzerTestOneInput` calls the function you want to fuzz.
 
 *   Update the build system for your package to build your `*_fuzzer` binary and
     fix build flags.
@@ -87,20 +86,19 @@ will automatically detect your new fuzz target, build it and upload it to
 ClusterFuzz, which will start fuzzing it. For more details on what you can do
 with ClusterFuzz, see the [Using ClusterFuzz] section.
 
-## More Detailed Instructions
+## More detailed instructions
 
-This section goes over the steps mentioned in the Quickstart Guide in more
+This section goes over the steps mentioned in the Quickstart guide in more
 detail. Because many of the packages that are likely to benefit most from
-fuzz testing are Platform packages, some special scaffolding has been added to
+fuzz testing are platform packages, some special scaffolding has been added to
 streamline generating fuzz targets for platform packages. The streamlined
 steps are explained in
-"[Adding a Fuzz Target to a Platform Package](#Adding-a-Fuzz-Target-to-a-Platform-Package)".
+[Adding a fuzz target to a platform package](#Adding-a-fuzz-target-to-a-platform-package).
 If the package for which you want to create a fuzz test is not a platform
 package, please follow the steps in
-"[Adding a Fuzz Target to Any Other Package](#Adding-a-Fuzz-Target-to-Any-Other-Package)"
-(further down this document).
+[Adding a fuzz target to any other package](#Adding-a-fuzz-target-to-any-other-package).
 
-### Adding a Fuzz Target to a Platform Package
+### Adding a fuzz target to a platform package
 
 Below are the steps to create a new fuzz target (fuzz test binary) in Chrome
 OS, in a platform package. Note that there are slightly different steps
@@ -146,7 +144,7 @@ The steps will tell you where these differences are.
     Fix any build flags that need fixing.
     *   Packages that are built with gyp files.
 
-        Update your gyp file to build the fuzzer binary. See the
+        Update your GYP file to build the fuzzer binary. See the
         [midis GYP file] for how to update a gyp file to build a fuzzer.
         (If copying the example, replace the package and fuzzer name with your
         own).
@@ -276,7 +274,7 @@ The steps will tell you where these differences are.
     in by your changes to be instrumented, you can add a call to
     `filter_sanitizers` in the library's ebuild file.
 
-### Adding a Fuzz Target to Any Other Package
+### Adding a fuzz target to any other package
 
 Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
 
@@ -475,7 +473,7 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
     in by your changes to be instrumented, you can add a call to
     `filter_sanitizers` in the library's ebuild file.
 
-## Getting Help with Modifying Ebuild Files
+## Getting help with modifying ebuild files
 
 Some ebuild files are more complex or confusing than others. There are
 several links in the [References] section of this document that might help you
@@ -508,7 +506,7 @@ useful. Below are links to some of the more important ones:
 *   [Fuzzer Corpus] - Testcases produced by the fuzzer that libFuzzer has deemed
     "interesting" (meaning it causes unique program behavior).
 
-## See also:
+## See also
 
 ### References
 
@@ -544,11 +542,11 @@ useful. Below are links to some of the more important ones:
 
 [ClusterFuzz]: https://sites.google.com/corp/google.com/clusterfuzz/home
 
-[this system]: https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/README.md
+[libFuzzer and ClusterFuzz]: https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/README.md
 
-[security]: https://bugs.chromium.org/p/chromium/issues/list?can=1&q=reporter:clusterfuzz@chromium.org%20-status:duplicate%20-status:wontfix%20type=bug-security
+[security bugs]: https://bugs.chromium.org/p/chromium/issues/list?can=1&q=reporter:clusterfuzz@chromium.org%20-status:duplicate%20-status:wontfix%20type=bug-security
 
-[non-security]: https://bugs.chromium.org/p/chromium/issues/list?can=1&q=reporter%3Aclusterfuzz%40chromium.org+-status%3Aduplicate+-status%3Awontfix+-type%3Dbug-security&sort=modified
+[non-security bugs]: https://bugs.chromium.org/p/chromium/issues/list?can=1&q=reporter%3Aclusterfuzz%40chromium.org+-status%3Aduplicate+-status%3Awontfix+-type%3Dbug-security&sort=modified
 
 [Inherit flag-o-matic toolchain-funcs]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/chromeos-base/libchrome/libchrome-395517.ebuild?q=toolchain-funcs+package:%5Echromeos_public$&dr=C&l=15
 
