@@ -25,43 +25,38 @@ src/third_party/cros_system_api`.
 
 ## Creating Chrome D-Bus services
 
-Receiving method calls or emitting signals requires exporting a service. Chrome
-currently exports services using a variety of service names, including
-`org.chromium.DisplayService` and `org.chromium.NetworkProxyService`, among
-others.
-
-> Historically, Chrome exported a single `org.chromium.LibCrosService` service
-> in its browser process. (The name doesn't make any sense now, but there once
-> existed a `libcros.so` shared library that was loaded by Chrome.)
->
-> Chrome's browser process is currently being split into more processes as part
-> of the [mus+ash] project, but a D-Bus service must live within a single
-> process. A few methods still live in `org.chromium.LibCrosService`, but they
-> are being moved to their own dedicated services ([issue 692246]). During the
-> transition, methods may temporarily be exported by both new dedicated services
-> and `org.chromium.LibCrosService`. New methods should only go into dedicated
-> services, though.
+Receiving method calls or emitting signals requires registering a service.
+Chrome registers services using a variety of service names, including
+`org.chromium.DisplayService` and `org.chromium.NetworkProxyService`. Services
+implement the [chromeos::CrosDBusService::ServiceProviderInterface] interface.
 
 ### Code location
 
-Within the Chrome repository, service classes are defined in
-[chromeos/dbus/services]. These classes are all currently constructed by
-[chrome/browser/chromeos/chrome_browser_main_chromeos.cc], but this is likely to
-change as [mus+ash] progresses.
+The [mus+ash] project is separating Chrome's shell/window-management code (i.e.
+`//ash`) from its browser code (i.e. `//chrome`). If a service does not depend
+on any code under `//chrome`, its service provider class should live in
+[ash/dbus] and be instantiated by [ash_dbus_services.cc].
 
-Most of Chrome's D-Bus services currently still depend on the browser process.
-Since code under `chromeos/` isn't allowed to include headers from `chrome/`,
-these dependencies are handled using `Delegate` interfaces that are implemented
-by classes defined in [chrome/browser/chromeos/dbus].
+Services with implementations that depend on `//chrome` should be implemented
+within [chrome/browser/chromeos/dbus] and instantiated by
+[chrome_browser_main_chromeos.cc].
+
+Note that some existing services that depend on `//chrome` are implemented in
+[chromeos/dbus/services] and declare `Delegate` interfaces that are implemented
+by code in [chrome/browser/chromeos/dbus]. This pattern should not be used in
+new code. [Issue 843392] tracks updating existing services.
 
 ### Policy files
 
 In order for Chrome to be able to take ownership of a service name and for other
 processes to be able to call its methods, each service also needs a `.conf` XML
-policy file in [chromeos/dbus/services]. Policy files are loaded by
-`dbus-daemon` (which implements the system bus) and specify which Unix users can
-own service names or call services' methods. Chrome's policy files are installed
-to `/opt/google/chrome/dbus`, and must each be listed in [chromeos/BUILD.gn].
+policy file in [ash/dbus] or [chrome/browser/chromeos/dbus]. Policy files are
+loaded by `dbus-daemon` (which implements the system bus) and specify which Unix
+users can own service names or call services' methods. Chrome's policy files are
+installed to `/opt/google/chrome/dbus` and must each be listed in the
+`dbus_service_files` target in [ash/BUILD.gn] or
+[chrome/browser/chromeos/BUILD.gn]. (Per the old pattern described above, note
+that some policy files instead live in [chromeos/dbus/services].)
 
 See [D-Bus Best Practices] for more information about D-Bus permissions.
 
@@ -220,10 +215,14 @@ the correct initial state from the daemon.
 [D-Bus Best Practices]: dbus_best_practices.md
 [system_api]: https://chromium.googlesource.com/chromiumos/platform/system_api/+/master
 [src/DEPS]: https://chromium.googlesource.com/chromium/src/+/master/DEPS
-[issue 692246]: https://crbug.com/692246
 [mus+ash]: https://www.chromium.org/developers/mus-ash
+[chromeos::CrosDBusService::ServiceProviderInterface]: https://chromium.googlesource.com/chromium/src/+/master/chromeos/dbus/services/cros_dbus_service.h
+[ash/dbus]: https://chromium.googlesource.com/chromium/src/+/master/ash/dbus/
+[ash_dbus_services.cc]: https://chromium.googlesource.com/chromium/src/+/master/ash/dbus/ash_dbus_services.cc
+[chrome/browser/chromeos/dbus]: https://chromium.googlesource.com/chromium/src/+/master/chrome/browser/chromeos/dbus/
+[Issue 843392]: https://crbug.com/843392
+[chrome_browser_main_chromeos.cc]: https://chromium.googlesource.com/chromium/src/+/master/chrome/browser/chromeos/chrome_browser_main_chromeos.cc
 [chromeos/dbus/services]: https://chromium.googlesource.com/chromium/src/+/master/chromeos/dbus/services/
-[chrome/browser/chromeos/chrome_browser_main_chromeos.cc]: https://chromium.googlesource.com/chromium/src/+/master/chrome/browser/chromeos/chrome_browser_main_chromeos.cc
-[chromeos/BUILD.gn]: https://chromium.googlesource.com/chromium/src/+/master/chromeos/BUILD.gn
-[chrome/browser/chromeos/dbus]: https://chromium.googlesource.com/chromium/src/+/master/chrome/browser/chromeos/dbus
+[ash/BUILD.gn]: https://chromium.googlesource.com/chromium/src/+/master/ash/BUILD.gn
+[chrome/browser/chromeos/BUILD.gn]: https://chromium.googlesource.com/chromium/src/+/master/chrome/browser/chromeos/BUILD.gn
 [chromeos/dbus]: https://chromium.googlesource.com/chromium/src/+/master/chromeos/dbus
