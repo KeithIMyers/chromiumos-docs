@@ -51,9 +51,9 @@ to read
 "[Adding a Fuzz Target to a Platform Package](#Adding-a-Fuzz-Target-to-a-Platform-Package)"
 in the Detailed Instructions section).
 
-**Steps to create a new fuzz target (fuzz test binary) in Chrome OS:**
+### Steps to create a new fuzz target (fuzz test binary) in Chrome OS
 
-*   Write a new test program in your package, whose name ends in "_fuzzer" and
+*   Write a new test program in your package, whose name ends in `_fuzzer` and
 which defines a function `LLVMFuzzerTestOneInput` with the following
 signature:
 
@@ -66,7 +66,7 @@ signature:
 
     Be sure `LLVMFuzzerTestOneInput` calls the function you want to fuzz.
 
-*   Update the build system for your package to build your *_fuzzer binary and
+*   Update the build system for your package to build your `*_fuzzer` binary and
     fix build flags.
 *   Update your package ebuild file:
     1.  Add `asan` and `fuzzer` to `IUSE` flags list.
@@ -75,7 +75,7 @@ signature:
         1.  [Inherit flag-o-matic toolchain-funcs]
         2.  [Set up flags: call asan-setup-env & fuzzer-setup-env]
         3.  [USE flags: fuzzer]
-    3.  Install your binary in /usr/libexec/fuzzers/
+    3.  Install your binary in `/usr/libexec/fuzzers/`
     4.  Build the libraries your fuzzer depends on with the appropriate
         `-fsanitize` flags (optional).
 *   Build and test your new fuzz target locally. Commit your changes.
@@ -107,7 +107,7 @@ OS, in a platform package. Note that there are slightly different steps
 required, depending on whether or not your package builds with a gyp file.
 The steps will tell you where these differences are.
 
-1.  Write a new test program in your package, whose name ends in "_fuzzer" and
+1.  Write a new test program in your package, whose name ends in `_fuzzer` and
     which defines a function `LLVMFuzzerTestOneInput` with the signature
     below.
 
@@ -119,7 +119,7 @@ The steps will tell you where these differences are.
     ```
 
     The [bsdiff fuzzer] is a very simple example of how to write such a fuzz
-    test.  [puffin_fuzzer] is a slightly larger example. In general,
+    test. [puffin_fuzzer] is a slightly larger example. In general,
     individual fuzz tests are not very large or difficult to write. The most
     important piece is to have the function `LLVMFuzzerTestOneInput`, which
     calls the function you want  to fuzz, and which takes the `data` and
@@ -131,7 +131,7 @@ The steps will tell you where these differences are.
     *   It must tolerate any kind of input (empty, huge, malformed, etc).
         Note: In general this is true, but you can write your fuzz target to
         simply return 0, for example, on certain types of malformed input. See
-        [this fuzzer] for such an example.
+        the [GURL fuzzer] for such an example.
     *   It must not exit() on any input.
     *   It may use threads but ideally all threads should be joined at the end
         of the function.
@@ -141,16 +141,16 @@ The steps will tell you where these differences are.
         consumption.
     *   Ideally, it should not modify any global state (although that's not
         strict).
-
-2.  Update the build system for your package to build your *_fuzzer binary.
+2.  Update the build system for your package to build your `*_fuzzer` binary.
     Fix any build flags that need fixing.
-    1.  Packages that are built with gyp files.
+    *   Packages that are built with gyp files.
 
-        Update your gyp file to build the fuzzer binary. See [this example]
-        for how to update a gyp file to build a fuzzer.  (If copying the
-        example, replace the package and fuzzer name with your own).
+        Update your gyp file to build the fuzzer binary. See the
+        [midis GYP file] for how to update a gyp file to build a fuzzer.
+        (If copying the example, replace the package and fuzzer name with your
+        own).
 
-    2.  Packages that are built without gyp files.
+    *   Packages that are built without gyp files.
 
         If your package is not built with a gyp file, then you will need to
         update your Makefile (or whatever build system you use), in such a way
@@ -176,7 +176,7 @@ The steps will tell you where these differences are.
         you should skip the build step and go directly to the next step
         for installing the fuzzer binary.
 
-        1.  Find the `src_compile()` function in your ebuild file.   If
+        1.  Find the `src_compile()` function in your ebuild file. If
             there isn't one, add one:
 
             ```bash
@@ -205,7 +205,7 @@ The steps will tell you where these differences are.
             fi
             ```
 
-    2.  Install your binary in /usr/libexec/fuzzers/
+    2.  Install your binary in `/usr/libexec/fuzzers/`
 
         In your ebuild file, find the `src_install()` function. Add a
         statement to install your fuzzer target:
@@ -259,16 +259,22 @@ The steps will tell you where these differences are.
     $ USE="asan fuzzer" emerge-${BOARD} <your-package>
     ```
 
+    These flags work with `cros_workon_make` as well for a faster compile cycle:
+
+    ```bash
+    $ USE="asan fuzzer" cros_workon_make --board=$BOARD <your-package>
+    ```
+
     You should verify that your fuzzer was built and that it was installed in
-    /usr/libexec/fuzzers (make sure the owners file was installed there as
-    well). To run your fuzzer locally, you first run this script (outside your
-    chroot) to set up your environment properly:
+    `/usr/libexec/fuzzers/` (make sure the owners file was installed there as
+    well). To run your fuzzer locally, you first run this script *outside your
+    chroot* to set up your environment properly:
 
     ```bash
     $ ./path-to-chroot/chromite/bin/cros_fuzz_test_env --chromeos_root=/path-to-chroot --board=${BOARD}
     ```
 
-    Then run your fuzzer:
+    Then run your fuzzer, *outside of the chroot as well*:
 
     ```bash
     $ sudo chroot /path-to-chroot/chroot/build/${BOARD}
@@ -296,7 +302,7 @@ The steps will tell you where these differences are.
 
 Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
 
-1.  Write a new test program in your package, whose name ends in "_fuzzer" and
+1.  Write a new test program in your package, whose name ends in `_fuzzer` and
     which defines a function `LLVMFuzzerTestOneInput` with the signature
     below.
 
@@ -308,7 +314,7 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
     ```
 
     The [bsdiff fuzzer] is a very simple example of how to write such a fuzz
-    test.  [puffin_fuzzer] is a slightly larger example. In general,
+    test. [puffin_fuzzer] is a slightly larger example. In general,
     individual fuzz tests are not very large or difficulty to write. The most
     important piece is to have the function `LLVMFuzzerTestOneInput`, which
     calls the function you want to fuzz, and which takes the `data` and `size`
@@ -320,7 +326,7 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
     *   It must tolerate any kind of input (empty, huge, malformed, etc).
         Note: In general this is true, but you can write your fuzz target to
         simply return 0, for example, on certain types of malformed input. See
-        [this fuzzer] for such an example.
+        the [GURL fuzzer] for such an example.
     *   It must not exit() on any input.
     *   It may use threads but ideally all threads should be joined at the end
         of the function.
@@ -331,7 +337,7 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
     *   Ideally, it should not modify any global state (although that's not
         strict).
 
-2.  Update the build system for your package to build your *_fuzzer binary.
+2.  Update the build system for your package to build your `*_fuzzer` binary.
     Fix any build flags that need fixing.
 
     The exact instructions here are going to vary widely, depending on your
@@ -350,7 +356,7 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
 
     NOTE 2: `asan` and `fuzzer` *do not support* `-Wl,-z,-defs` or
     `--no-undefined`. Make sure you are not passing those flags to
-    the build of your fuzzer binary.  **IF YOUR BUILD SYSTEM EVER COMBINES
+    the build of your fuzzer binary. **IF YOUR BUILD SYSTEM EVER COMBINES
     *CFLAGS* AND *LDFLAGS* INTO A SINGLE FLAGS VARIABLE, MAKE SURE LDFLAGS
     COMES AFTER CFLAGS WHEN BUILDING YOUR FUZZER!!!**
 
@@ -366,7 +372,7 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
         IUSE="asan fuzzer"
         ```
 
-        See [this ebuild] for a good example.
+        See the [puffin ebuild] for a good example.
 
     2.  Update the ebuild file to build the new binary when the fuzzer
         use-flag is being used:
@@ -380,7 +386,7 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
             inherit flag-o-matic toolchain-funcs
             ```
 
-        2.  Find the `src_compile()` function in your ebuild file.   If
+        2.  Find the `src_compile()` function in your ebuild file. If
             there isn't one, add one:
 
             ```bash
@@ -395,7 +401,7 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
             src_compile() {
                 asan-setup-env
                 fuzzer-setup-env
-                …
+                ...
             }
             ```
 
@@ -418,7 +424,7 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
             fi
             ```
 
-    3.  Install your binary in /usr/libexec/fuzzers/
+    3.  Install your binary in `/usr/libexec/fuzzers/`
 
         In your ebuild file, find the `src_install()` function. Add a
         conditional statement to install your fuzzer target.:
@@ -482,15 +488,15 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
     ```
 
     You should verify that your fuzzer was built and that it was installed in
-    /usr/libexec/fuzzers (make sure the owners file was installed there as
-    well). To run your fuzzer locally, you first run this script (outside your
-    chroot) to set up your environment properly:
+    `/usr/libexec/fuzzers/` (make sure the owners file was installed there as
+    well). To run your fuzzer locally, you first run this script *outside your
+    chroot* to set up your environment properly:
 
     ```bash
     $ ./path-to-chroot/chromite/bin/cros_fuzz_test_env --chromeos_root=/path-to-chroot --board=${BOARD}
     ```
 
-    Then run your fuzzer:
+    Then run your fuzzer, *outside of the chroot as well*:
 
     ```bash
     $ sudo chroot /path-to-chroot/chroot/build/${BOARD}
@@ -602,11 +608,11 @@ useful. Below are links to some of the more important ones:
 
 [puffin_fuzzer]: https://android.googlesource.com/platform/external/puffin/+/master/src/fuzzer.cc
 
-[this fuzzer]: https://chromium.googlesource.com/chromium/src/+/master/url/gurl_fuzzer.cc
+[GURL fuzzer]: https://chromium.googlesource.com/chromium/src/+/master/url/gurl_fuzzer.cc
 
-[this example]: https://chromium.googlesource.com/chromiumos/platform2/+/master/midis/midis.gyp
+[midis GYP file]: https://chromium.googlesource.com/chromiumos/platform2/+/master/midis/midis.gyp#139
 
-[this ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/dev-util/puffin/puffin-9999.ebuild
+[puffing ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/dev-util/puffin/puffin-9999.ebuild
 
 [References]: #References
 
