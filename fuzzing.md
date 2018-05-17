@@ -141,6 +141,7 @@ The steps will tell you where these differences are.
         consumption.
     *   Ideally, it should not modify any global state (although that's not
         strict).
+
 2.  Update the build system for your package to build your `*_fuzzer` binary.
     Fix any build flags that need fixing.
     *   Packages that are built with gyp files.
@@ -163,12 +164,6 @@ The steps will tell you where these differences are.
         `-fsanitize=address -fsanitize=fuzzer` to your build. You will not
         need to pass these flags manually once you have updated the ebuild
         file.
-
-        NOTE: `asan` and `fuzzer` *do not support* `-Wl,-z,-defs` or
-        `--no-undefined`. Make sure you are not passing those flags to the
-        build of your fuzzer binary. **IF YOUR BUILD SYSTEM EVER COMBINES
-        *CFLAGS* AND *LDFLAGS* INTO A SINGLE FLAGS VARIABLE, MAKE SURE LDFLAGS
-        COMES AFTER CFLAGS WHEN BUILDING YOUR FUZZER!!!**
 
 3.  Update your package ebuild file:
     1.  Update the ebuild file to build the new binary when the fuzzer
@@ -214,39 +209,6 @@ The steps will tell you where these differences are.
         platform_fuzzer_install "${S}"/OWNERS "${OUT}"/<your_fuzzer>
         ```
 
-    3.  Build the libraries you fuzzer depends on with the appropriate
-        `-fsanitize` flags (optional).
-
-        When building with libfuzzer and/or asan, it is **strongly
-        recommended** that you also build any libraries on which your package
-        depends (see `RDEPEND` list in your ebuild file) with libfuzzer and
-        asan. This is because if those libraries are not built with these
-        flags, then calls into those libraries won't get tested. In addition,
-        doing this helps avoid spurious errors when the library headers use
-        the STL (Standard Template Library).
-
-        To get a complete list of the libraries your fuzzer depends on, use
-        the `ldd` command on your fuzzer binary.
-
-        ```bash
-        $ ldd <your_binary>
-        ```
-
-        This will give you a complete list of all the libraries, .so's, etc.
-        that your fuzzer depends on. You may not want to build all of these
-        with fuzzing enabled -- it is really for you to decide, based on how
-        your package interacts with the libraries, but when in doubt you
-        should probably instrument.
-
-        Note:  Running the fuzzer may reveal some signs that you should have
-        instrumented a library, such as if the coverage is very low (eg <100)
-        after running for more than a couple minutes or if ASAN detects
-        container overflows that you believe are spurious.
-
-        For every library that you decide you want to build with fuzzing
-        enabled, you will need to repeat steps 3a & 3b above (building the
-        whole library, rather than just a fuzz test).
-
 4.  Build and test your new fuzz target locally.
 
     To build your new fuzzer, once you have updated the ebuild file, it should
@@ -271,14 +233,14 @@ The steps will tell you where these differences are.
     chroot* to set up your environment properly:
 
     ```bash
-    $ ./path-to-chroot/chromite/bin/cros_fuzz_test_env --chromeos_root=/path-to-chroot --board=${BOARD}
+    $ path-to-chroot/chromite/bin/cros_fuzz_test_env --board=${BOARD}
     ```
 
     Then run your fuzzer, *outside of the chroot as well*:
 
     ```bash
     $ sudo chroot /path-to-chroot/chroot/build/${BOARD}
-    $ ASAN_OPTIONS="log_path=stderr" ./usr/libexec/fuzzers/<your_fuzzer>
+    $ ASAN_OPTIONS="log_path=stderr" /usr/libexec/fuzzers/<your_fuzzer>
     ```
 
     **NOTE**:  You should also verify that your package still builds correctly
@@ -296,7 +258,23 @@ The steps will tell you where these differences are.
     Edit `chromium-os-fuzzers-1.ebuild`. In that file, find the `RDEPEND` list
     and add your package/fuzzer (you can look at the other packages there, to
     see how it's done). Don't forget to uprev the ebuild symlink. Commit the
-    change.
+    changes and upload them for review.
+
+6.  Optional: Verify that the `amd64-generic-fuzzer` builder is happy with your
+    changes.
+
+    Submit a tryjob *outside of the chroot* as:
+    ```bash
+    $ cros tryjob -g 'CL1 CL2' amd64-generic-fuzzer-tryjob
+    ```
+
+    You should verify that your package is picked up by the builder by looking
+    at the `BuildPackages` stage logs.
+
+    **NOTE**: The builder builds the full system with address sanitizer and
+    libfuzzer instrumentation. If you do not want a particular library pulled
+    in by your changes to be instrumented, you can add a call to
+    `filter_sanitizers` in the library's ebuild file.
 
 ### Adding a Fuzz Target to Any Other Package
 
@@ -354,13 +332,7 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
     `-fsanitize=address -fsanitize=fuzzer` to your build. You will not need
     to pass these flags manually once you have updated the ebuild file.
 
-    NOTE 2: `asan` and `fuzzer` *do not support* `-Wl,-z,-defs` or
-    `--no-undefined`. Make sure you are not passing those flags to
-    the build of your fuzzer binary. **IF YOUR BUILD SYSTEM EVER COMBINES
-    *CFLAGS* AND *LDFLAGS* INTO A SINGLE FLAGS VARIABLE, MAKE SURE LDFLAGS
-    COMES AFTER CFLAGS WHEN BUILDING YOUR FUZZER!!!**
-
-1.  Update your package ebuild file:
+3.  Update your package ebuild file:
     1.  Add `asan` and `fuzzer` to `IUSE` flags list.
 
         In all probability your package ebuild already contains an IUSE
@@ -442,39 +414,6 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
         (The owners part above is so that ClusterFuzz knows to whom to assign
         the bugs generated by this fuzzer.)
 
-    4.  Build the libraries you fuzzer depends on with the appropriate
-        `-fsanitize` flags (optional).
-
-        When building with libfuzzer and/or asan, it is **strongly
-        recommended** that you also build any libraries on which your package
-        depends (see `RDEPEND` list in your ebuild file) with libfuzzer and
-        asan. This is because if those libraries are not built with these
-        flags, then calls into those libraries won't get tested. In addition,
-        doing this helps avoid spurious errors when the library headers use
-        the STL (Standard Template Library).
-
-        To get a complete list of the libraries your fuzzer depends on, use
-        the `ldd` command on your fuzzer binary.
-
-        ```bash
-        $ ldd <your_binary>
-        ```
-
-        This will give you a complete list of all the libraries, .so's, etc.
-        that your fuzzer depends on. You may not want to build all of these
-        with fuzzing enabled -- it is really for you to decide, based on how
-        your package interacts with the libraries, but when in doubt you
-        should probably instrument.
-
-        Note:  Running the fuzzer may reveal some signs that you should have
-        instrumented a library, such as if the coverage is very low (eg <100)
-        after running for more than a couple minutes or if ASAN detects
-        container overflows that you believe are spurious.
-
-        For every library that you decide you want to build with fuzzing
-        enabled, you will need to repeat steps 3a & 3b above (building the
-        whole library, rather than just a fuzz test).
-
 4.  Build and test your new fuzz target locally.
 
     To build your new fuzzer, once you have updated the ebuild file, it should
@@ -493,14 +432,14 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
     chroot* to set up your environment properly:
 
     ```bash
-    $ ./path-to-chroot/chromite/bin/cros_fuzz_test_env --chromeos_root=/path-to-chroot --board=${BOARD}
+    $ /path-to-chroot/chromite/bin/cros_fuzz_test_env --board=${BOARD}
     ```
 
     Then run your fuzzer, *outside of the chroot as well*:
 
     ```bash
     $ sudo chroot /path-to-chroot/chroot/build/${BOARD}
-    $ ASAN_OPTIONS="log_path=stderr" ./usr/libexec/fuzzers/<your_fuzzer>
+    $ ASAN_OPTIONS="log_path=stderr" /usr/libexec/fuzzers/<your_fuzzer>
     ```
 
     **NOTE:**  You should also verify that your package still builds correctly
@@ -518,8 +457,23 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
     Edit `chromium-os-fuzzers-1.ebuild`. In that file, find the `RDEPEND` list
     and add your package/fuzzer (you can look at the other packages there, to
     see how it's done). Don't forget to uprev the ebuild symlink. Commit the
-    change.
+    changes and upload for review.
 
+6.  Optional: Verify that the `amd64-generic-fuzzer` builder is happy with your
+    changes.
+
+    Submit a tryjob *outside of the chroot* as:
+    ```bash
+    $ cros tryjob -g 'CL1 CL2' amd64-generic-fuzzer-tryjob
+    ```
+
+    You should verify that your package is picked up by the builder by looking
+    at the `BuildPackages` stage logs.
+
+    **NOTE**: The builder builds the full system with address sanitizer and
+    libfuzzer instrumentation. If you do not want a particular library pulled
+    in by your changes to be instrumented, you can add a call to
+    `filter_sanitizers` in the library's ebuild file.
 
 ## Getting Help with Modifying Ebuild Files
 
@@ -612,7 +566,7 @@ useful. Below are links to some of the more important ones:
 
 [midis GYP file]: https://chromium.googlesource.com/chromiumos/platform2/+/master/midis/midis.gyp#139
 
-[puffing ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/dev-util/puffin/puffin-9999.ebuild
+[puffin ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/dev-util/puffin/puffin-9999.ebuild
 
 [References]: #References
 
