@@ -130,7 +130,8 @@ idea. Existing boundaries include:
 *   Chrome renderer process to Chrome browser process: this boundary is
     traversed only with Chrome IPC or Mojo. It should not be trivial for a
     Chrome renderer process to directly manipulate or control the Chrome
-    browser process.
+    browser process. For browser-specific guidelines, check out
+    [How To Do Chrome Security Reviews].
 *   Chrome browser process (running as user `chronos`) to system services: this
     boundary is traversed with D-Bus. It should not be possible for the Chrome
     browser process to directly manipulate a system service or directly access
@@ -181,7 +182,8 @@ going forward.
     is the same as in the previous case: hand-written IPC is brittle, and bugs
     in IPC mechanisms could allow a less privileged process to subvert the
     execution of a more privileged process, which is the definition of a
-    privilege escalation bug.
+    privilege escalation bug. Refer to the [Mojo IPC security guidelines] for
+    more details.
 *   Any code handling non-trivial untrusted data must be fuzzed to ensure its
     robustness. See our [fuzzing documentation] for more information.
 
@@ -268,3 +270,5 @@ going forward.
 [newer list of cryptographic right answers]: http://latacora.singles/2018/04/03/cryptographic-right-answers.html
 [older reference of cryptographic right answers]: https://www.daemonology.net/blog/2009-06-11-cryptographic-right-answers.html
 [review framework]: #review-framework-things-to-look-at
+[How To Do Chrome Security Reviews]: https://docs.google.com/document/d/1JDC411NquvDGTQjQbtQSzHtBaQyCFMDTAAQZGifdmuE/edit
+[Mojo IPC security guidelines]: https://chromium.googlesource.com/chromium/src/+/master/docs/security/mojo.md
