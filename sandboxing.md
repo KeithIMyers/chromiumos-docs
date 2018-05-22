@@ -156,12 +156,15 @@ Here's a quick overview. Use the command line option if the description below
 matches your service (or if you don't know what functionality it's talking
 about -- most likely you aren't using it!).
 
-* `--uts`: Just always turn this on
-* `-e`: If your process doesn't need network access (including UNIX or netlink
-  sockets)
-* `-p -r`: If your process doesn't need to access other processes in the system
-* `-v`: If your process doesn't need access to user mounts
-* `-l`: If your process doesn't use SysV shared memory or IPC
+*   `--profile=minimalistic-mountns`: This is a good first default that enables
+    mount and process namespaces. This only mounts `/proc` and creates a few
+    basic device nodes in `/dev`. If you need more things mounted, you can use
+    the `-b` (bind-mount) and `-k` (regular mount) flags.
+*   `--uts`: Just always turn this on. It makes changes to the host / domain
+    name not affect the rest of the system.
+*   `-e`: If your process doesn't need network access (including UNIX or netlink
+    sockets)
+*   `-l`: If your process doesn't use SysV shared memory or IPC
 
 This option does not work on Linux 3.8 systems.  So only enable it if you know
 your service will run on a newer kernel version.
@@ -251,8 +254,7 @@ exec minijail0 -u mtp -g mtp -G -n -S /opt/google/mtpd/mtpd-seccomp.policy -- \
 ## Detailed instructions for generating a seccomp policy
 
 * Generate the syscall log:
-  `strace -f <cmd> 2>strace.log`
-  Note: `strace -f -o` generates output that `generate_seccomp_policy.py` cannot yet parse.
+  `strace -f -o strace.log <cmd>`
 * Cut off everything before the following for a smaller filter that can be used with LD_PRELOAD:
 ```
 futex(<uaddr>, FUTEX_WAKE_PRIVATE, 1) = 0
