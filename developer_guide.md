@@ -37,16 +37,16 @@ the tasks in sequence. The tasks are grouped into the following sections:
 
 ### Typography conventions
 
-*   **Paths, files, and commands** are shown with different labels to indicate
-    whether they apply to (1) your build computer (the computer on which you're
-    doing development), (2) the chroot on your build computer, or (3) your
-    Chromium OS computer (the device on which you run the images you build):
+*   **Commands** are shown with different labels to indicate whether they apply
+    to (1) your build computer (the computer on which you're doing development),
+    (2) the chroot on your build computer, or (3) your Chromium OS computer (the
+    device on which you run the images you build):
 
-| Color         | Paths, files, and commands                             |
+| Label         | Commands                                               |
 |---------------|--------------------------------------------------------|
-|  green text   | on your build computer                                 |
-|  purple text  | inside the chroot on your build computer               |
-|  crimson text | your Chromium OS computer                              |
+|  (outside)    | on your build computer, outside the chroot             |
+|  (inside)     | inside the chroot on your build computer               |
+|  (device)     | your Chromium OS computer                              |
 
 *   **Notes** are shown using the following conventions:
     *   **IMPORTANT NOTE** describes required actions and critical information
@@ -56,17 +56,13 @@ the tasks in sequence. The tasks are grouped into the following sections:
 
 ### Modifying this document
 
-Only people with @chromium.org accounts can edit this document. Everyone else
-should post to the [Chromium OS dev group].
-
 If you're a Chromium OS developer, **YOU SHOULD UPDATE THIS DOCUMENT** and fix
-things as appropriate. There's a "Sign In" text button at the very bottom of
-this page.  Sign in (with your @chromium.org account, of course) and you'll get
-an "Edit" button at the top of the page.  Bias towards action:
+things as appropriate. See [README.md] for how to update this document. Bias
+towards action:
 
-*   If you see a red TODO and you know the right answer, fix it!
+*   If you see a TODO and you know the right answer, fix it!
 *   If you see something wrong, fix it.
-*   If you're not sure of the perfect answer, still fix it. Stick in a red TODO
+*   If you're not sure of the perfect answer, still fix it. Stick in a TODO
     noting your uncertainty if you aren't sure, but don't let anything you know
     to be wrong stick around.
 
@@ -153,6 +149,7 @@ Install the git revision control system, the curl download helper, and lvm
 tools. On Ubuntu, the magic incantation to do this is (all on one line):
 
 ```shell
+(outside)
 sudo apt-get install git-core gitk git-gui curl lvm2 thin-provisioning-tools
      python-pkg-resources python-virtualenv python-oauth2client
 ```
@@ -177,6 +174,7 @@ Setup git now. If you don't do this, you may run into errors/issues
 later. Replace `you@example.com` and `Your Name` with your information:
 
 ```shell
+(outside)
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
 ```
@@ -197,7 +195,7 @@ account(s) and machine access credentials for the source repos. Remember a
 Run the following command:
 
 ```shell
-uname -m
+(outside) uname -m
 ```
 
 You should see the result: `x86_64`
@@ -215,15 +213,16 @@ for instance, does not. It is essential to put the following line into your
 `~/.bashrc` file before you checkout or sync your sources.
 
 ```shell
-umask 022
+(outside) umask 022
 ```
 
 You can verify that this works by creating any file and checking if its
 permissions are correct.
 
 ```shell
-$ touch ~/foo
-$ ls -la ~/foo
+(outside)
+touch ~/foo
+ls -la ~/foo
 -rw-r--r-- 1 user group 0 2012-08-30 23:09 /home/user/foo
 ```
 
@@ -239,7 +238,7 @@ note that **all commands in this document assume that your source code is in**
 Create the directory for your source code with this command:
 
 ```shell
-mkdir -p ${HOME}/chromiumos
+(outside) mkdir -p ${HOME}/chromiumos
 ```
 
 **IMPORTANT NOTE:** If your home directory is on NFS, you **must** place your
@@ -250,7 +249,8 @@ doesn't have access to your NFS mount, unless your NFS server has the
 symbolic link to it from your home directory (this is suggested), like so:
 
 ```shell
-mkdir -p` /usr/local/path/to/source/chromiumo
+(outside)
+mkdir -p /usr/local/path/to/source/chromiumos
 ln -s /usr/local/path/to/source/chromiumos ${HOME}/chromiumos
 ```
 
@@ -269,6 +269,7 @@ amount of source code. This isn't a particularly well tested configuration and
 has been known to break from time-to-time, so we usually recommend against it.)
 
 ```shell
+(outside)
 cd ${HOME}/chromiumos
 # Note: Add the "-g minilayout" option to do a minilayout checkout.
 repo init -u https://chromium.googlesource.com/chromiumos/manifest.git --repo-url https://chromium.googlesource.com/external/repo.git [-g minilayout]
@@ -315,7 +316,7 @@ need to create this chroot. Assuming you're already in `${HOME}/chromiumos` (or
 wherever your source lives), the command to download and install the chroot is:
 
 ```shell
-cros_sdk
+(outside) cros_sdk
 ```
 
 If this does not work, make sure you've added the depot_tools directory to your
@@ -358,7 +359,7 @@ Most of the commands that Chromium OS developers use on a day-to-day basis
 within the chroot. You can enter the chroot by calling:
 
 ```shell
-cros_sdk
+(outside) cros_sdk
 ```
 
 This is the same command used to create the chroot, but if the chroot already
@@ -452,7 +453,7 @@ commands below into your terminal program. Enter the following inside your
 chroot (note: change `amd64-generic` to whatever board you want to build for):
 
 ```shell
-export BOARD=amd64-generic
+(inside) export BOARD=amd64-generic
 ```
 
 This setting only holds while you stay in the chroot. If you leave and come
@@ -473,7 +474,7 @@ To start building for a given board, issue the following command inside your
 chroot (you should be in the `~/trunk/src/scripts` directory):
 
 ```shell
-./setup_board --board=${BOARD}
+(inside) ./setup_board --board=${BOARD}
 ```
 
 This command sets up the board target with a default sysroot of
@@ -504,7 +505,7 @@ through the `sudo` command) by logging in with the shared user account
 command below from inside the `~/trunk/src/scripts` directory:
 
 ```shell
-./set_shared_user_password.sh
+(inside) ./set_shared_user_password.sh
 ```
 
 You will be prompted for a password, which will be stored in encrypted form in
@@ -529,7 +530,7 @@ To build all the packages for your board, run the following command from inside
 the `~/trunk/src/scripts` directory:
 
 ```shell
-./build_packages` --board=${BOARD}
+(inside) ./build_packages --board=${BOARD}
 ```
 
 This step is the rough equivalent of `make all` in a standard Makefile
@@ -571,7 +572,7 @@ developer image by running the command below from inside the
 `~/trunk/src/scripts` directory:
 
 ```shell
-./build_image --board=${BOARD} --noenable_rootfs_verification test
+(inside) ./build_image --board=${BOARD} --noenable_rootfs_verification test
 ```
 
 The args for build_image specify what type of build you want (test in the
@@ -599,12 +600,12 @@ will be symlinked to `~/trunk/src/build/images/${BOARD}/latest`.
 need. Every time you run `build_image`, the command creates files that take up
 **over 4GB of space(!)**.
 
-
 ### Look at your disk image (optional)
 
 The preferred way to mount the image you just built to look at its contents is:
 
 ```shell
+(inside)
 ./mount_gpt_image.sh --board=${BOARD} --safe -f $(./get_latest_image.sh --board=${BOARD})
 ```
 
@@ -616,13 +617,14 @@ The `--safe` option ensures you do not make accidental changes to the Root FS.
 Again, don't forget to unmount the root filesystem when you're done:
 
 ```shell
-./mount_gpt_image.sh --board=${BOARD} -u
+(inside) ./mount_gpt_image.sh --board=${BOARD} -u
 ```
 
 Optionally, you can unpack the partition as separate files and mount them
 directly:
 
 ```shell
+(inside)
 cd ~/trunk/src/build/images/${BOARD}/latest
 ./unpack_partitions.sh chromiumos_image.bin
 mkdir -p rootfs
@@ -639,7 +641,7 @@ If you built an x86 Chromium OS image, you can probably even try chrooting into
 the image:
 
 ```shell
-sudo chroot` ~/trunk/src/build/images/${BOARD}/latest/rootfs
+(inside) sudo chroot ~/trunk/src/build/images/${BOARD}/latest/rootfs
 ```
 
 This is a little hacky (the Chromium OS rootfs isn't really designed to be a
@@ -649,7 +651,7 @@ chroot for your host machine), but it seems to work pretty well. Don't forget to
 When you're done, unmount the root filesystem:
 
 ```shell
-sudo umount ~/trunk/src/build/images/${BOARD}/latest/rootfs
+(inside) sudo umount ~/trunk/src/build/images/${BOARD}/latest/rootfs
 ```
 
 ## Installing Chromium OS on your Device
@@ -664,7 +666,7 @@ make sure it doesn't have anything important on it**. Wait ~10 seconds for the
 USB disk to register, then type the following command:
 
 ```shell
-cros flash usb:// ${BOARD}/latest
+(inside) cros flash usb:// ${BOARD}/latest
 ```
 
 For more details on using this tool, see the [Cros Flash page]. Note that
@@ -714,13 +716,13 @@ Then you should set your system to boot from USB. Let it boot, login and open a
 shell (or switch to terminal 2 via Ctrl+Alt+F2). Run the following command:
 
 ```shell
-sudo crossystem
+(device) sudo crossystem
 ```
 
 You should see `"dev_boot_usb"` equal to 0. Set it to 1 to enable USB boot:
 
 ```shell
-sudo crossystem `dev_boot_usb=1`
+(device) sudo crossystem dev_boot_usb=1
 ```
 
 Now reboot. In the white screen (developer mode enabled) screen, plug-in the USB
@@ -736,7 +738,7 @@ install your Chromium OS image to the hard disk on your computer with this
 command:
 
 ```shell
-/usr/sbin/chromeos-install
+(device) /usr/sbin/chromeos-install
 ```
 
 **IMPORTANT NOTE:** Installing Chromium OS onto your hard disk will **WIPE YOUR
@@ -764,7 +766,6 @@ to get to. To use this alternate shell:
     enter the `chronos` password here, though you will still need the password
     if you want to use the `sudo` command.
 
-
 ### Building an image to run in a virtual machine
 
 Many times it is easier to simply run Chromium OS in a virtual machine like
@@ -773,7 +774,7 @@ by `kvm` (which uses qemu images) by entering this command from the
 `~/trunk/src/scripts` directory:
 
 ```shell
-./image_to_vm.sh --board=${BOARD}
+(inside) ./image_to_vm.sh --board=${BOARD}
 ```
 
 This command creates the file
@@ -846,7 +847,7 @@ You can see a list of all such packages by running the following command from
 inside the `~/trunk/src/scripts` directory:
 
 ```shell
-cros_workon --board=${BOARD} --all list
+(inside) cros_workon --board=${BOARD} --all list
 ```
 
 ### Run cros_workon start
@@ -855,7 +856,7 @@ The first thing you need to do is to mark the package as active. Use the command
 below, replacing `${PACKAGE_NAME}` with your package name (e.g., `chromeos-wm`):
 
 ```shell
-cros_workon --board=${BOARD} start ${PACKAGE_NAME}
+(inside) cros_workon --board=${BOARD} start ${PACKAGE_NAME}
 ```
 
 This command:
@@ -887,14 +888,14 @@ directory. You can view a full list of ebuilds and directories using the
 following command:
 
 ```shell
-cros_workon --board=${BOARD} --all info
+(inside) cros_workon --board=${BOARD} --all info
 ```
 
 If you want to find out which ebuilds use source code from a specific directory,
 you can use grep to find them. For example:
 
 ```shell
-cros_workon --board=${BOARD} --all info | grep platform/ec
+(inside) cros_workon --board=${BOARD} --all info | grep platform/ec
 ```
 
 This returns the following output:
@@ -915,7 +916,7 @@ grepping for the ebuild name in the list.
 To find out where the ebuild lives:
 
 ```shell
-equery-${BOARD} which ${PACKAGE_NAME}
+(inside) equery-${BOARD} which ${PACKAGE_NAME}
 ```
 
 As an example, for `PACKAGE_NAME=ec-utils`, the above command might display:
@@ -960,7 +961,7 @@ You should be able to make your changes to the source code now. To incrementally
 compile your changes, use
 
 ```shell
-cros_workon_make --board=${BOARD} ${PACKAGE_NAME}
+(inside) cros_workon_make --board=${BOARD} ${PACKAGE_NAME}
 ```
 
 This will build your package inside your source directory. Change a single file,
@@ -968,7 +969,7 @@ and it will rebuild only that file and re-link. If your package contains test
 binaries, using
 
 ```shell
-`cros_workon_make --board=${BOARD} ${PACKAGE_NAME} --test
+(inside) cros_workon_make --board=${BOARD} ${PACKAGE_NAME} --test
 ```
 
 will build and run those binaries as well. Call `cros_workon_make --help` to see
@@ -978,7 +979,7 @@ You probably want to get your changes onto your device now. You need to install
 the changes you made by using
 
 ```shell
-cros_workon_make --board=${BOARD} ${PACKAGE_NAME} --install
+(inside) cros_workon_make --board=${BOARD} ${PACKAGE_NAME} --install
 ```
 
 You can then rebuild an image with `build_image` and reimage your device, but
@@ -1217,7 +1218,7 @@ important thing to do is to tell `cros_workon` that you're done by running the
 following command:
 
 ```shell
-cros_workon --board=${BOARD} stop ${PACKAGE_NAME}
+(inside) cros_workon --board=${BOARD} stop ${PACKAGE_NAME}
 ```
 
 This command tells `cros_workon` to stop forcing the `-9999.ebuild` and to stop
@@ -1322,7 +1323,7 @@ use `emerge-${BOARD}`.
 For example, if you want to build dash to test on your device:
 
 ```shell
-emerge-${BOARD} dash
+(inside) emerge-${BOARD} dash
 ```
 
 To install the package to the device, see [cros deploy].
@@ -1338,20 +1339,20 @@ OS image, set the `--chrome_root` flag appropriately when entering the chroot,
 e.g.
 
 ```shell
-cros_sdk --chrome_root=${HOME}/chrome
+(outside) cros_sdk --chrome_root=${HOME}/chrome
 ```
 
 Within the chroot, you'll also need to either start working on the
 `chromeos-chrome` package:
 
 ```shell
-cros_workon --board=${BOARD} start chromeos-chrome
+(inside) cros_workon --board=${BOARD} start chromeos-chrome
 ```
 
 or set the `CHROME_ORIGIN` environment variable appropriately:
 
 ```shell
-export CHROME_ORIGIN=LOCAL_SOURCE
+(inside) export CHROME_ORIGIN=LOCAL_SOURCE
 ```
 
 See
@@ -1408,7 +1409,10 @@ to be careful not to overwrite existing `CFLAGS` or `CXXFLAGS`. Here's an
 example:
 
 ```shell
-(cr) $ CFLAGS="$(portageq-$board envvar CFLAGS) -clang" CXXFLAGS="$(portageq-$board envvar CXXFLAG) -clang" emerge-$board chromeos-chrome
+(inside)
+$ CFLAGS="$(portageq-$board envvar CFLAGS) -clang" \
+  CXXFLAGS="$(portageq-$board envvar CXXFLAG) -clang" \
+  emerge-$board chromeos-chrome
 ```
 
 After your package builds cleanly with Clang, you can add `-clang` to your
@@ -1430,9 +1434,9 @@ It should already be installed in your chroot. If you do not have the script,
 update your repository to get the latest changes, then re-build your packages:
 
 ```shell
-repo sync`
+repo sync
 
-./build_packages --board=...
+(inside) ./build_packages --board=...
 ```
 
 This should install `gdb-${BOARD}` in the `/usr/local/bin` directory inside the
@@ -1477,6 +1481,7 @@ see this in the example below, where gdb-daisy does not actually stop at the
 breakpoint it appears to set, although it does correctly execute the program.
 
 ```shell
+(inside)
 (cr) $ gdb-daisy -h
 
 usage: cros_gdb [-h]
@@ -1533,11 +1538,12 @@ and source file(s) to the appropriate sysroot and then start gdb with that
 binary (using the correct libraries, etc).
 
 ```shell
+(inside)
 (cr) $ cd /build/lumpy/tmp/portage
 (cr) $ mkdir shill-test
 (cr) $ cd shill-test
 (cr) $ cp <path-to-binary>/shill_unittest .
-`(cr) $ cp <path-to-src>/shill_unittest.cc .
+(cr) $ cp <path-to-src>/shill_unittest.cc .
 (cr) $ gdb-lumpy
 (gdb-lumpy) directory /tmp/portage/shill-test # Tell gdb to add /tmp/portage/shill-test to the paths it searches for source files
 (gdb-lumpy) file ./shill_unittest
@@ -1565,7 +1571,7 @@ changes, then re-build your packages:
 ```shell
 repo sync
 
-./build_packages --board=...
+(inside) ./build_packages --board=...
 ```
 
 This should install `gdb_remote` in the `/usr/bin` directory inside the
@@ -1599,7 +1605,7 @@ give the name of the binary, followed by any arguments for the binary, at the
 end of the command line:
 
 ```shell
-$ gdb-daisy --remote=123.45.67.809 /bin/grep "test" /tmp/myfile
+(inside) $ gdb-daisy --remote=123.45.67.809 /bin/grep "test" /tmp/myfile
 ```
 
 When doing remote debugging you \*must\* use the `--pid` or the `--attach`
@@ -1662,6 +1668,7 @@ running in a VM on the user's desktop. For debugging the VM, you can use either
 Example 1:
 
 ```shell
+(inside)
 $ gdb-lumpy --remote=123.45.67.809 --attach=gpu-process
 
 14:50:07: INFO: RunCommand: ping -c 1 -w 20 123.45.67.809
@@ -1689,6 +1696,7 @@ Reading symbols from /build/lumpy/opt/google/chrome/chrome...Reading symbols fro
 Example 2:
 
 ```shell
+(inside)
 $ gdb-daisy --pid=626 --remote=123.45.98.765
 14:50:07: INFO: RunCommand: ping -c 1 -w 20 123.45.98.765
 14:50:09: INFO: RunCommand: file /build/daisy/usr/sbin/cryptohomed
@@ -1700,6 +1708,7 @@ Reading symbols from /build/daisy/usr/sbin/cryptohomed...Reading symbols from/bu
 Example 3:
 
 ```shell
+(inside)
 $ gdb-lumpy --remote=:vm: --attach=browser
 15:18:28: INFO: RunCommand: ping -c 1 -w 20 localhost
 15:18:31: INFO: RunCommand: file /build/lumpy/opt/google/chrome/chrome
@@ -1760,7 +1769,7 @@ If you wish to produce a VM image instead, you should omit the --test flag to
 build_image and let `./image_to_vm.sh` produce the test image:
 
 ```shell
-./image_to_vm.sh --board=${BOARD}` --test_image
+(inside) ./image_to_vm.sh --board=${BOARD}` --test_image
 ```
 
 Note: this difference between `cros flash` and `./image_to_vm.sh` arises because
@@ -1785,6 +1794,7 @@ After building a test image using ./build_image test as described above, you may
 wish to encapsulate it within a recovery image:
 
 ```shell
+(inside)
 ./mod_image_for_recovery.sh \
     --board=${BOARD} \
     --nominimize_image \
@@ -1798,6 +1808,7 @@ ${RECOVERY_KERNEL}`.
 You can write this recovery image out to the USB device like so:
 
 ```shell
+(inside)
 cros flash usb:// ~/trunk/src/build/images/${BOARD}/latest/recovery_test_image.bin
 ```
 
@@ -1908,6 +1919,7 @@ Below are a few links to external sites that you might also find helpful
 
 
 [quick-start guide]: https://sites.google.com/a/chromium.org/dev/chromium-os/quick-start-guide
+[README.md]: README.md
 [Prerequisites]: #Prerequisites
 [Getting the source code]: #Getting-the-source-code
 [Building Chromium OS]: #Building-Chromium-OS
@@ -1920,7 +1932,6 @@ Below are a few links to external sites that you might also find helpful
 [Troubleshooting]: #Troubleshooting
 [Running Tests]: #Running-Tests
 [Additional information]: #Additional-information
-[Chromium OS dev group]: http://groups.google.com/a/chromium.org/group/chromium-os-dev
 [Attribution requirements]: #Attribution-requirements
 [Ubuntu]: http://www.ubuntu.com/
 [RAM-thread]: https://groups.google.com/a/chromium.org/d/topic/chromium-os-dev/ZcbP-33Smiw/discussion
