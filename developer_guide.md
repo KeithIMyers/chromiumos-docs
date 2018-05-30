@@ -1629,7 +1629,7 @@ If you want to edit code and debug it on the DUT you can follow this procedure
 $ CFLAGS="-ggdb" FEATURES="noclean" emerge-${BOARD} -v sys-apps/mosys
 $ cros deploy --board=${BOARD} ${IP} sys-apps/mosys
 $ gdb-${BOARD} --cgdb --remote "${IP}" \
-  -g "--eval-command=directory /build/${BUILD}/tmp/portage/sys-apps/mosys-9999/work/" \
+  -g "--eval-command=directory /build/${BOARD}/tmp/portage/sys-apps/mosys-9999/work/" \
   /usr/sbin/mosys -V
 ```
 
