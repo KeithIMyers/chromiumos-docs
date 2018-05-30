@@ -19,42 +19,46 @@ initial inputs are provided by the user in what is known as a *seed corpus*,
 otherwise the fuzzer will generate inputs from scratch. Coverage-guided fuzz
 testing is an extension of fuzz testing that explicitly attempts to increase
 code coverage when it generates new tests, adding the new tests to its test
-corpus when it finds tests that increase the coverage, i.e. when a new test
-executes a new code path in the target program.
+corpus when it finds tests that increase coverage, i.e. when a new test executes
+a new code path in the target program.
 
 LLVM has a built-in fuzzing engine, [libFuzzer], that is provided as part of
 LLVM's sanitizer instrumentation. Google has a cross-platform fuzzing
 infrastructure, [ClusterFuzz], that works with libFuzzer and aids developers
 by providing an end-to-end pipeline that automatically picks up new (and
-existing) fuzz targets, runs the fuzzers on the tests, reports bugs (assigning
-them to appropriate owners) and even verifies fixes. Chromium on Linux and
-MacOS has been using [libFuzzer and ClusterFuzz] for a while, and they have
-proved very useful, finding thousands of [security bugs] and
+existing) fuzz targets, runs fuzz testing on these targets, reports bugs
+(assigning them to appropriate owners), and even verifies fixes. Chromium on
+Linux and MacOS has been using [libFuzzer and ClusterFuzz] for a while, and
+they have proved very useful, finding thousands of [security bugs] and
 [non-security bugs].
 
+A fuzz test target is nothing more than a piece of code that can take a chunk
+of bytes and do something with them by calling the code to be tested. For the
+remainder of this document we will use the word *fuzzer* to refer to a fuzz test
+target that gets linked against libFuzzer to produce an executable that
+exercises the code under test. This is what ClusterFuzz will run.
+
 Chrome OS has tooling to support writing fuzzers for Chrome OS packages. This
-document will walk you through the steps necessary to get your fuzz targets up
-and running on ClusterFuzz.
+document will walk you through the steps necessary to get your fuzzers up and
+running on ClusterFuzz.
 
 ## Quickstart guide
 
 This section of the document describes the basic steps needed to write a fuzzer
-in Chrome OS and have ClusterFuzz pick it up and start testing. However, this
-section does not explain the steps in detail. That is covered below in the
-[More detailed instructions](#More-detailed-instructions) part of this
-document.
+in Chrome OS and have ClusterFuzz pick it up. For more detailed instructions,
+see the [Detailed instructions](#Detailed-instructions) section.
 
-Note: If you are working on a platform package (one that is in the `platform` or
-`platform2` source directory and whose ebuild inherits from the platform
-eclass), some of the steps below have been streamlined for you (you might want
-to read [Adding a fuzz target to a platform package](#Adding-a-fuzz-target-to-a-platform-package)
-in the *Detailed instructions* section).
+If you are working on a platform package (one that is in the `platform` or
+`platform2` source directory and whose ebuild inherits from the `platform`
+eclass), see the
+[Build a fuzzer for a platform package](#Build-a-fuzzer-for-a-platform-package)
+section.
 
-### Steps to create a new fuzz target (fuzz test binary) in Chrome OS
+### Steps to create a new fuzzer in Chrome OS
 
 *   Write a new test program in your package, whose name ends in `_fuzzer` and
-which defines a function `LLVMFuzzerTestOneInput` with the following
-signature:
+    which defines a function `LLVMFuzzerTestOneInput` with the following
+    signature:
 
     ```c
     extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
@@ -65,10 +69,9 @@ signature:
 
     Ensure `LLVMFuzzerTestOneInput` calls the function you want to fuzz.
 
-*   Update the build system for your package to build your `*_fuzzer` binary and
-    fix build flags.
-*   Update your package ebuild file:
-    1.  Add `asan` and `fuzzer` to `IUSE` flags list.
+*   Update the build system for your package to build your `*_fuzzer` binary.
+*   Update your package's ebuild file:
+    1.  Add `asan` and `fuzzer` to the `IUSE` flags list.
     2.  Build you new fuzzer (conditioned on `use fuzzer`), with the
         appropriate flags:
         1.  [Inherit flag-o-matic toolchain-funcs]
@@ -77,97 +80,100 @@ signature:
     3.  Install your binary in `/usr/libexec/fuzzers/`
     4.  Build the libraries your fuzzer depends on with the appropriate
         `-fsanitize` flags (optional).
-*   Build and test your new fuzz target locally. Commit your changes.
-*   Add the package dependency to the chromium-os-fuzzers ebuild, and commit
+*   Build and test your new fuzzer locally. Commit your changes.
+*   Add the package dependency to the `chromium-os-fuzzers` ebuild, and commit
     the change.
 
-That's it! The continuously running fuzzer builder on the Chrome OS waterfall
-will automatically detect your new fuzz target, build it and upload it to
-ClusterFuzz, which will start fuzzing it. For more details on what you can do
-with ClusterFuzz, see the [Using ClusterFuzz] section.
+That's it! The continuously running [fuzzer builder] on the Chrome OS waterfall
+will automatically detect your new fuzzer, build it and upload it to
+ClusterFuzz, which will start running it. For more details on what you can do
+with ClusterFuzz, see the [Using ClusterFuzz](#Using-ClusterFuzz) section.
 
-## More detailed instructions
+## Detailed instructions
 
-This section goes over the steps mentioned in the Quickstart guide in more
-detail. Because many of the packages that are likely to benefit most from
-fuzz testing are platform packages, some special scaffolding has been added to
-streamline generating fuzz targets for platform packages. The streamlined
-steps are explained in
-[Adding a fuzz target to a platform package](#Adding-a-fuzz-target-to-a-platform-package).
-If the package for which you want to create a fuzz test is not a platform
-package, please follow the steps in
-[Adding a fuzz target to any other package](#Adding-a-fuzz-target-to-any-other-package).
+This section goes over the steps mentioned in the
+[Quickstart guide](#Quickstart-guide) in more detail. If you're working on a
+platform package, read
+[Build a fuzzer for a platform package](#Build-a-fuzzer-for-a-platform-package).
+Otherwise, read
+[Build a fuzzer for any other package](#Build-a-fuzzer-for-any-other-package).
 
-### Adding a fuzz target to a platform package
+### Build a fuzzer
 
-Below are the steps to create a new fuzz target (fuzz test binary) in Chrome
-OS, in a platform package. Note that there are slightly different steps
-required, depending on whether or not your package builds with a gyp file.
-The steps will tell you where these differences are.
+It might be counterintuitive to start by building a fuzzer before one is even
+written, but the process of actually writing the fuzzer will be easier with
+a fast compile-test cycle, for which we need to be able to compile the fuzzer.
 
-1.  Write a new test program in your package, whose name ends in `_fuzzer` and
-    which defines a function `LLVMFuzzerTestOneInput` with the signature
-    below.
+Start with a dummy fuzzer:
 
-    ```c
-    extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
-        <your test code goes here>
-        return 0;
-    }
-    ```
+```cpp
+// Copyright 2018 The Chromium OS Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
-    The [bsdiff fuzzer] is a very simple example of how to write such a fuzz
-    test. [puffin_fuzzer] is a slightly larger example. In general,
-    individual fuzz tests are not very large or difficult to write. The most
-    important piece is to have the function `LLVMFuzzerTestOneInput`, which
-    calls the function you want  to fuzz, and which takes the `data` and
-    `size` arguments and passes them  to your function. Some important things
-    to remember about fuzz targets:
+struct Environment {
+  Environment() {
+    // Set-up code.
+  }
+};
 
-    *   The fuzz target will be executed many times with different inputs in
-        the same process.
-    *   It must tolerate any kind of input (empty, huge, malformed, etc).
-        Note: In general this is true, but you can write your fuzz target to
-        simply return 0, for example, on certain types of malformed input. See
-        the [GURL fuzzer] for such an example.
-    *   It must not exit() on any input.
-    *   It may use threads but ideally all threads should be joined at the end
-        of the function.
-    *   It must be as deterministic as possible. Non-determinism (e.g. random
-        decisions not based on the input bytes) will make fuzzing inefficient.
-    *   It must be fast. Avoid >= cubic complexity, logging, high memory
-        consumption.
-    *   Ideally, it should not modify any global state (although that's not
-        strict).
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static Environment env;
+  // Fuzzing code. Empty for now.
+  return 0;
+}
+```
 
-2.  Update the build system for your package to build your `*_fuzzer` binary.
-    Fix any build flags that need fixing.
-    *   Packages that are built with gyp files.
+#### Build a fuzzer for a platform package
 
-        Update your GYP file to build the fuzzer binary. See the
-        [midis GYP file] for how to update a gyp file to build a fuzzer.
-        (If copying the example, replace the package and fuzzer name with your
-        own).
+These steps assume that you have at least a dummy fuzzer to compile. Check out
+the previous section for an example.
 
-    *   Packages that are built without gyp files.
+1.  Update the build system for your package to build your `*_fuzzer` binary.
+    *   For packages that are built with GYP files, update your GYP file to
+        build the fuzzer binary:
 
-        If your package is not built with a gyp file, then you will need to
+        ```
+        # Fuzzer target.
+        ['USE_fuzzer == 1', {
+          'targets': [
+            {
+              'target_name': 'my_fuzzer',
+              'type': 'executable',
+              'includes': [
+                '../common-mk/common_fuzzer.gypi',
+              ],
+              'dependencies': [
+                # This could be an intermediate static library target in your
+                # package.
+              ],
+              'sources': [
+                'my_fuzzer.cc',
+              ],
+            },
+          ],
+        }],
+        ```
+
+        See the [midis GYP file] for a complete example.
+
+    *   If your package is not built with a GYP file, then you will need to
         update your Makefile (or whatever build system you use), in such a way
         that your fuzzer binary gets built when a special flag or argument is
         passed to the normal build command.
 
-        NOTE 1: If testing this by hand (without the ebuild file changes in
-        step 3 below), you will need to manually pass the compiler flags
+        If testing this by hand (without the ebuild file changes in step 2
+        below), you will need to manually pass the compiler flags
         `-fsanitize=address -fsanitize=fuzzer-no-link` and the linker flags
         `-fsanitize=address -fsanitize=fuzzer` to your build. You will not
         need to pass these flags manually once you have updated the ebuild
         file.
 
-3.  Update your package ebuild file:
+2.  Update your package's ebuild file:
     1.  Update the ebuild file to build the new binary when the fuzzer
-        use-flag is being used. For platform packages built with gyp files,
-        you should skip the build step and go directly to the next step
-        for installing the fuzzer binary.
+        USE flag is being used. For platform packages built with GYP files,
+        you should skip this step and go directly to the next step for
+        installing the fuzzer binary.
 
         1.  Find the `src_compile()` function in your ebuild file. If
             there isn't one, add one:
@@ -177,16 +183,16 @@ The steps will tell you where these differences are.
             }
             ```
 
-        2.  Add the call to actually build your fuzz target.
+        2.  Add the call to actually build your fuzzer.
 
             Find the line in your `src_compile` function that actually builds
             your package (the command will probably look like `emake` or `make`
             or `cmake`). This is the command that is meant by
-            'original build command' below. Copy the original build command
-            and add whatever flags or arguments you need in
-            order to make it build just your fuzzer binary (see step 2 above).
-            Replace the original build command in the src_compile function with
-            a conditional statement similar to the one below, so that when
+            *original build command* below. Copy the original build command
+            and add whatever flags or arguments you need in order to make it
+            build just your fuzzer binary (see step 1 above).
+            Replace the original build command in the `src_compile` function
+            with a conditional statement similar to the one below, so that when
             `USE="fuzzer"` is used to build the package, it will build your
             fuzzer binary, otherwise it will build the package normally.
 
@@ -201,21 +207,21 @@ The steps will tell you where these differences are.
     2.  Install your binary in `/usr/libexec/fuzzers/`
 
         In your ebuild file, find the `src_install()` function. Add a
-        statement to install your fuzzer target:
+        statement to install your fuzzer:
 
         ```bash
         platform_fuzzer_install "${S}"/OWNERS "${OUT}"/<your_fuzzer>
         ```
 
-4.  Build and test your new fuzz target locally.
+3.  Build and test your new fuzzer locally.
 
     To build your new fuzzer, once you have updated the ebuild file, it should
-    be sufficient to build it with `USE="asan fuzzer"`:
+    be sufficient to build it with `USE="asan fuzzer"`.
 
     ```bash
     # Run build_packages to build the package and its dependencies.
     $ USE="asan fuzzer" ./build_packages --board=${BOARD} --skip_chroot_upgrade <your-package>
-    # If you make more changes to your fuzzer or build, you can rebuild the package by:
+    # If you make more changes to your fuzzer or build, you can rebuild the package with:
     $ USE="asan fuzzer" emerge-${BOARD} <your-package>
     ```
 
@@ -241,12 +247,12 @@ The steps will tell you where these differences are.
     $ ASAN_OPTIONS="log_path=stderr" /usr/libexec/fuzzers/<your_fuzzer>
     ```
 
-    **NOTE**:  You should also verify that your package still builds correctly
-    without `USE="fuzzer"`.
+    You should also verify that your package still builds correctly without
+    `USE="fuzzer"`.
 
-    Once you are happy with your new fuzz target, commit your changes.
+    Once you are happy with your new fuzzer, commit your changes.
 
-5.  Add the package dependency to the chromium-os-fuzzers ebuild. Inside your
+4.  Add the package dependency to the `chromium-os-fuzzers` ebuild. Inside your
     chroot:
 
     ```bash
@@ -258,80 +264,43 @@ The steps will tell you where these differences are.
     see how it's done). Don't forget to uprev the ebuild symlink. Commit the
     changes and upload them for review.
 
-6.  Optional: Verify that the `amd64-generic-fuzzer` builder is happy with your
+5.  Optional: Verify that the `amd64-generic-fuzzer` builder is happy with your
     changes.
 
-    Submit a tryjob *outside of the chroot* as:
+    Submit a tryjob *outside of the chroot*:
     ```bash
     $ cros tryjob -g 'CL1 CL2' amd64-generic-fuzzer-tryjob
     ```
+    Replace *CL1* and *CL2* with the actual CL numbers.
 
     You should verify that your package is picked up by the builder by looking
     at the `BuildPackages` stage logs.
 
-    **NOTE**: The builder builds the full system with address sanitizer and
-    libfuzzer instrumentation. If you do not want a particular library pulled
-    in by your changes to be instrumented, you can add a call to
-    `filter_sanitizers` in the library's ebuild file.
+    The builder builds the full system with AddressSanitizer and libFuzzer
+    instrumentation. If you do not want a particular library pulled in by your
+    changes to be instrumented, you can add a call to `filter_sanitizers` in
+    the library's ebuild file.
 
-### Adding a fuzz target to any other package
+#### Build a fuzzer for any other package
 
-Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
-
-1.  Write a new test program in your package, whose name ends in `_fuzzer` and
-    which defines a function `LLVMFuzzerTestOneInput` with the signature
-    below.
-
-    ```c
-    extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
-        <your test code goes here>
-        return 0;
-    }
-    ```
-
-    The [bsdiff fuzzer] is a very simple example of how to write such a fuzz
-    test. [puffin_fuzzer] is a slightly larger example. In general,
-    individual fuzz tests are not very large or difficulty to write. The most
-    important piece is to have the function `LLVMFuzzerTestOneInput`, which
-    calls the function you want to fuzz, and which takes the `data` and `size`
-    arguments and passes them to your function. Some important things to
-    remember about fuzz targets:
-
-    *   The fuzz target will be executed many times with different inputs in
-        the same process.
-    *   It must tolerate any kind of input (empty, huge, malformed, etc).
-        Note: In general this is true, but you can write your fuzz target to
-        simply return 0, for example, on certain types of malformed input. See
-        the [GURL fuzzer] for such an example.
-    *   It must not exit() on any input.
-    *   It may use threads but ideally all threads should be joined at the end
-        of the function.
-    *   It must be as deterministic as possible. Non-determinism (e.g. random
-        decisions not based on the input bytes) will make fuzzing inefficient.
-    *   It must be fast. Avoid >= cubic complexity, logging, high memory
-        consumption.
-    *   Ideally, it should not modify any global state (although that's not
-        strict).
-
-2.  Update the build system for your package to build your `*_fuzzer` binary.
-    Fix any build flags that need fixing.
+1.  Update the build system for your package to build your `*_fuzzer` binary.
 
     The exact instructions here are going to vary widely, depending on your
-    package and the build system in your package (make, ninja, scons, etc.).
+    package and the build system in your package (Make, Ninja, SCons, etc.).
     In general, you will need to be able to invoke your normal build
     command, passing a special flag or argument or environment variable, so
     that it will build your fuzzer binary and only your fuzzer binary. This
-    will involve updating gyp files or Makefiles or whatever other build files
+    will involve updating GYP files or Makefiles or whatever other build files
     your package uses.
 
-    NOTE 1: If testing this by hand (without the ebuild file changes in step 3
-    below), you will need to manually pass the compiler flags
+    If testing this by hand (without the ebuild file changes in step 3 below),
+    you will need to manually pass the compiler flags
     `-fsanitize=address -fsanitize=fuzzer-no-link` and the linker flags
     `-fsanitize=address -fsanitize=fuzzer` to your build. You will not need
     to pass these flags manually once you have updated the ebuild file.
 
-3.  Update your package ebuild file:
-    1.  Add `asan` and `fuzzer` to `IUSE` flags list.
+3.  Update your package's ebuild file:
+    1.  Add `asan` and `fuzzer` to the `IUSE` flags list.
 
         In all probability your package ebuild already contains an IUSE
         definition. Look for a line starting `IUSE="..."`, and add `asan` and
@@ -345,10 +314,10 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
         See the [puffin ebuild] for a good example.
 
     2.  Update the ebuild file to build the new binary when the fuzzer
-        use-flag is being used:
+        USE flag is being used:
         1.  Find the `inherit` line in  your ebuild (near the top of the
-            file). Make sure that flag-o-matic and toolchain-funcs are in the
-            inherit list. If your file does not have a line that starts with
+            file). Make sure that `flag-o-matic` and `toolchain-funcs` are in
+            the inherit list. If your file does not have a line that starts with
             `inherit `, add one near the top (after the `EAPI` line and before
             the `KEYWORDS` line):
 
@@ -377,11 +346,11 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
 
         4.  Find the line in your `src_compile` function that actually builds
             your package (the command will probably look like `emake` or
-            `make` or `cmake`). This is the command that is meant by 'original
-            build command' below. Copy the original build command and add
+            `make` or `cmake`). This is the command that is meant by *original
+            build command* below. Copy the original build command and add
             whatever flags or arguments you need in order to make it build
-            just your fuzzer binary (see step 2 above). Replace the original
-            build command in the src_compile function with a conditional
+            just your fuzzer binary (see step 1 above). Replace the original
+            build command in the `src_compile` function with a conditional
             statement similar to the one below, so that when `USE="fuzzer"` is
             used to build the package, it will build your fuzzer binary,
             otherwise it will build the package normally.
@@ -397,7 +366,7 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
     3.  Install your binary in `/usr/libexec/fuzzers/`
 
         In your ebuild file, find the `src_install()` function. Add a
-        conditional statement to install your fuzzer target.:
+        conditional statement to install your fuzzer:
 
         ```base
         if use fuzzer; then
@@ -412,7 +381,7 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
         (The owners part above is so that ClusterFuzz knows to whom to assign
         the bugs generated by this fuzzer.)
 
-4.  Build and test your new fuzz target locally.
+4.  Build and test your new fuzzer locally.
 
     To build your new fuzzer, once you have updated the ebuild file, it should
     be sufficient to build it with `USE="asan fuzzer"`:
@@ -440,12 +409,12 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
     $ ASAN_OPTIONS="log_path=stderr" /usr/libexec/fuzzers/<your_fuzzer>
     ```
 
-    **NOTE:**  You should also verify that your package still builds correctly
-    without `USE="fuzzer"`.
+    You should also verify that your package still builds correctly without
+    `USE="fuzzer"`.
 
-    Once you are happy with your new fuzz target, commit your changes.
+    Once you are happy with your new fuzzer, commit your changes.
 
-5.  Add the package dependency to the chromium-os-fuzzers ebuild. Inside your
+5.  Add the package dependency to the `chromium-os-fuzzers` ebuild. Inside your
     chroot:
 
     ```bash
@@ -464,46 +433,77 @@ Steps to create a new fuzz target (fuzz test binary) in Chrome OS:
     ```bash
     $ cros tryjob -g 'CL1 CL2' amd64-generic-fuzzer-tryjob
     ```
+    Replace *CL1* and *CL2* with the actual CL numbers.
 
     You should verify that your package is picked up by the builder by looking
     at the `BuildPackages` stage logs.
 
-    **NOTE**: The builder builds the full system with address sanitizer and
-    libfuzzer instrumentation. If you do not want a particular library pulled
-    in by your changes to be instrumented, you can add a call to
-    `filter_sanitizers` in the library's ebuild file.
+    The builder builds the full system with AddressSanitizer and libFuzzer
+    instrumentation. If you do not want a particular library pulled in by your
+    changes to be instrumented, you can add a call to `filter_sanitizers` in
+    the library's ebuild file.
 
-## Getting help with modifying ebuild files
+### Write a fuzzer
+
+Now that you can build and execute your fuzzer, you can start working on getting
+it to actually test things. If the function you want to test takes a chunk of
+bytes and a length, then you're done: that's what the fuzzing scaffolding will
+provide in the `LLVMFuzzerTestOneInput` function. Just pass that to your
+function:
+
+```cpp
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  // Call your function here.
+  return 0;
+}
+```
+
+Some things to keep in mind:
+
+*   The fuzz target will be executed many times with different inputs in the
+    same process.
+*   It must tolerate any kind of input (empty, huge, malformed, etc). You can
+    write your fuzz target to simply return 0 on certain types of malformed
+    input. See the [GURL fuzzer] for such an example.
+*   It must not `exit()` on any input.
+*   It may use threads but ideally all threads should be joined at the end of
+    the function.
+*   It must be as deterministic as possible. Non-determinism (e.g. random
+    decisions not based on the input bytes) will make fuzzing inefficient.
+*   It must be fast. Avoid >= cubic complexity, logging, high memory
+    consumption.
+*   Ideally, it should not modify any global state (although that's not strict).
+
+### Getting help with modifying ebuild files
 
 Some ebuild files are more complex or confusing than others. There are
-several links in the [References] section of this document that might help you
-with understanding/editing your ebuild file. If you are still having
-difficulties editing your ebuild file and need more help, please file a bug in
-crosbug, and assign it to the "Tools>ChromeOS-Toolchain" component, and  send
-an email to
-[chromeos-fuzzing@google.com](mailto:chromeos-fuzzing@google.com). We
-will try to help you figure this out.
+several links in the [References](#References) section of this document that
+can help you with understanding/editing your ebuild file. If you are still
+having difficulties editing your ebuild file and need more help, please file a
+bug in the [Chromium issue tracker], assign it to the
+*Tools>ChromeOS-Toolchain* component, and send an email to
+[chromeos-fuzzing@google.com]. We will try to help you figure this out.
 
-## Using ClusterFuzz
+### Using ClusterFuzz
 
 As already mentioned, ClusterFuzz will pick up any fuzzer written using the
 above steps, run the fuzzer, and file bugs for any crashes found. ClusterFuzz
-runs fuzzers as soon as the [builder] completes a build and uploads it to the
-Google Cloud Storage bucket
+runs fuzzers as soon as the [fuzzer builder] completes a build and uploads it
+to the Google Cloud Storage bucket
 (`gs://chromeos-fuzzing-artifacts/libfuzzer-asan/amd64-generic-fuzzer/`).
 
 ClusterFuzz has many features such as statistics reporting that you may find
 useful. Below are links to some of the more important ones:
 
-*   [Fuzzer Statistics] - Statistics from fuzzer runs, updated daily. Ignore the
+*   [Fuzzer statistics] - Statistics from fuzzer runs, updated daily. Ignore the
     columns `edge_cov`, `func_cov`, and `cov_report` as these are not supported
     for Chrome OS. Graphs of stats can viewed by changing the "Group by" drop
     down to "Time" and specifying the fuzzer you are interested in, rather than
     "libFuzzer".
-*   [Crash Statistics] - Statistics on recent crashes.
-*   [Fuzzer Logs] - Logs output by your fuzzer each time ClusterFuzz runs
+*   [Crash statistics] - Statistics on recent crashes.
+*   [Fuzzer logs] - Logs output by your fuzzer each time ClusterFuzz runs
     it. This is usually a good place to debug issues with your fuzzer.
-*   [Fuzzer Corpus] - Testcases produced by the fuzzer that libFuzzer has deemed
+*   [Fuzzer corpus] - Testcases produced by the fuzzer that libFuzzer has deemed
     "interesting" (meaning it causes unique program behavior).
 
 ## See also
@@ -528,7 +528,7 @@ useful. Below are links to some of the more important ones:
 
 [Gentoo Ebuild Writing Developers Manual](https://devmanual.gentoo.org/ebuild-writing/index.html)
 
-### Useful "go" links
+### Useful go links
 
 [go/ClusterFuzz](https://sites.google.com/corp/google.com/clusterfuzz/home)
 
@@ -566,14 +566,16 @@ useful. Below are links to some of the more important ones:
 
 [puffin ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/dev-util/puffin/puffin-9999.ebuild
 
-[References]: #References
+[Chromium issue tracker]: https://crbug.com
 
-[builder]: https://build.chromium.org/p/chromiumos/builders/amd64-generic-fuzzer
+[fuzzer builder]: https://build.chromium.org/p/chromiumos/builders/amd64-generic-fuzzer
 
-[Fuzzer Statistics]: https://clusterfuzz.com/v2/fuzzer-stats/by-fuzzer/fuzzer/libFuzzer/job/libfuzzer_asan_chromeos
+[chromeos-fuzzing@google.com]: mailto:chromeos-fuzzing@google.com
 
-[Crash Statistics]: https://clusterfuzz.com/v2/crash-stats?block=day&days=7&end=423713&fuzzer=libFuzzer&group=platform&job=libfuzzer_asan_chromeos&number=count&sort=total_count
+[Fuzzer statistics]: https://clusterfuzz.com/v2/fuzzer-stats/by-fuzzer/fuzzer/libFuzzer/job/libfuzzer_asan_chromeos
 
-[Fuzzer Logs]: https://console.cloud.google.com/storage/browser/chromeos-libfuzzer-logs/libfuzzer
+[Crash statistics]: https://clusterfuzz.com/v2/crash-stats?block=day&days=7&end=423713&fuzzer=libFuzzer&group=platform&job=libfuzzer_asan_chromeos&number=count&sort=total_count
 
-[Fuzzer Corpus]: https://console.cloud.google.com/storage/browser/chromeos-libfuzzer-logs
+[Fuzzer logs]: https://console.cloud.google.com/storage/browser/chromeos-libfuzzer-logs/libfuzzer
+
+[Fuzzer corpus]: https://console.cloud.google.com/storage/browser/chromeos-libfuzzer-logs
