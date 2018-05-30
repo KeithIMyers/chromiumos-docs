@@ -290,6 +290,30 @@ going forward.
     [older reference of cryptographic right answers]; but remember to reach out
     to the security team to validate your design.
 
+### Metrics
+
+For features that are security-sensitive, strive to add metrics that allow
+tracking whether the feature is functioning as expected. You should be able to
+answer whether the expectations you had regarding the state or behavior of
+devices in the field were correct or not. For example:
+
+*   If you're adding a feature that verifies signatures or hashes, either from
+    the network or on disk, report the result of the verification.
+*   More generally, if you're adding a feature that needs to check the validity
+    of data, consider reporting when you encounter malformed data.
+*   If you're adding a feature that depends on device state, like converting
+    a file on disk to an updated format, consider reporting both the state
+    before the feature, as well as the result of the operation.
+
+The objective of this reporting is to identify blind spots in our security
+posture in the field. If a security-sensitive feature is failing, we should know
+about it. It's possible that we could learn about individual instances of the
+failure, maybe via bug reports, but without metrics we cannot find out about
+the *extent* of the problem.
+
+[UMA] is the metrics infrastructure used in Chrome and Chrome OS. You can report
+metrics both from the Chrome browser and from system services.
+
 [sandboxing guide]: https://chromium.googlesource.com/chromiumos/docs/+/master/sandboxing.md
 [crbug.com]: https://crbug.com
 [chromefeatures.googleplex.com]: https://chromefeatures.googleplex.com
@@ -301,3 +325,4 @@ going forward.
 [review framework]: #review-framework-things-to-look-at
 [How To Do Chrome Security Reviews]: https://docs.google.com/document/d/1JDC411NquvDGTQjQbtQSzHtBaQyCFMDTAAQZGifdmuE/edit
 [Mojo IPC security guidelines]: https://chromium.googlesource.com/chromium/src/+/master/docs/security/mojo.md
+[UMA]: https://g3doc.corp.google.com/analysis/uma/g3doc/home/index.md
