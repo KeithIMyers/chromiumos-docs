@@ -474,6 +474,174 @@ Some things to keep in mind:
     consumption.
 *   Ideally, it should not modify any global state (although that's not strict).
 
+In particular, if you're fuzzing code that's using the logging primitives from
+`<base/logging.h>`, you should disable logging:
+
+```cpp
+#include "base/logging.h"
+
+struct Environment {
+Environment() {
+  logging::SetMinLogLevel(logging::LOG_FATAL);  // <- DISABLE LOGGING.
+}
+};
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static Environment env;
+  // Fuzzing code.
+  return 0;
+}
+```
+
+### What if my code doesn't simply consume a chunk of bytes?
+
+Odds are that the code that you want to test *doesn't* just take a chunk of
+bytes and a length. You might want to fuzz an API where functions take integers
+and strings. There might be useful state to set up before hitting parsing code,
+or you might want to test a state machine where some calls need to happen in a
+certain order to avoid erroring out of functions early.
+
+Don't despair! This is actually very common. Most fuzzers end up extracting some
+structure out of the random data received in order to better exercise the code
+under test.
+
+Consider the interface of the `permission_broker` [firewall implementation]:
+
+```cpp
+bool AddAcceptRules(ProtocolEnum protocol,
+                    uint16_t port,
+                    const std::string& interface);
+bool DeleteAcceptRules(ProtocolEnum protocol,
+                       uint16_t port,
+                       const std::string& interface);
+```
+It's not really straightforward to feed a chunk of bytes to this API. To address
+this, we can use code provided by [libchrome]: [FuzzedDataProvider].
+
+`FuzzedDataProvider` will consume fuzzing input and allow extracting structure
+out of it:
+
+```cpp
+class FuzzedDataProvider {
+...
+
+std::string ConsumeBytes(size_t num_bytes);
+
+std::string ConsumeRemainingBytes();
+
+std::string ConsumeRandomLengthString(size_t max_length);
+
+uint32_t ConsumeUint32InRange(uint32_t min, uint32_t max);
+int ConsumeInt32InRange(int min, int max);
+
+bool ConsumeBool();
+
+uint8_t ConsumeUint8();
+
+uint16_t ConsumeUint16();
+
+...
+}
+```
+
+Using this API, we can obtain integers and strings to pass to the above API, and
+also use booleans to decide how to call the API:
+
+[firewall_fuzzer]
+
+```cpp
+// Copyright 2018 The Chromium OS Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include <set>
+
+#include "base/logging.h"
+#include "base/test/fuzzed_data_provider.h"
+
+#include "permission_broker/firewall.h"
+
+...
+
+struct Environment {
+  Environment() {
+    logging::SetMinLogLevel(logging::LOG_FATAL);
+  }
+};
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static Environment env;
+
+  permission_broker::FakeFirewall fake_firewall;  // <- Mocks out system calls.
+  base::FuzzedDataProvider data_provider(data, size);
+
+  std::set<uint16_t> tcp_ports;
+  std::set<uint16_t> udp_ports;
+
+  // How many ports should we try?
+  uint8_t num_ports = data_provider.ConsumeUint8();
+  for (size_t i = 0; i < num_ports; i++) {
+    bool is_tcp = data_provider.ConsumeBool();
+    uint16_t port = data_provider.ConsumeUint16();
+
+    if (!is_tcp && port == 0) {
+      // Did we run out of data? Consume another bool to check.
+      if (!data_provider.ConsumeBool())
+        break;
+    }
+
+    bool do_add = true;
+
+    if ((is_tcp && tcp_ports.count(port) == 0) ||
+        (!is_tcp && udp_ports.count(port) == 0)) {
+      // Port does not exist.
+      // With small probability, hit the error case: delete a port that doesn't
+      // exist.
+      do_add = data_provider.ConsumeUint8() < 0xFF;
+    } else {
+      // Port exists.
+      // With small probability, hit the error case: add a port that already
+      // exists.
+      do_add = data_provider.ConsumeUint8() == 0xFF;
+    }
+
+    if (do_add) {
+      fake_firewall.AddAcceptRules(is_tcp ? permission_broker::kProtocolTcp
+                                          : permission_broker::kProtocolUdp,
+                                   port, "iface");
+    } else {
+      fake_firewall.DeleteAcceptRules(is_tcp ? permission_broker::kProtocolTcp
+                                             : permission_broker::kProtocolUdp,
+                                      port, "iface");
+    }
+  }
+  return 0;
+}
+```
+
+The fuzzer is using its input to decide what to do and which functions to call.
+As long as the `FuzzedDataProvider` object is initialized with the same input,
+its functions will return the same values and the results will be deterministic.
+
+Note that in this particular case we could have chosen to also pass a fuzzed
+string for the `interface` argument. However, the check for that argument
+happens very early in the code, so fuzzing that argument ends up being
+counterproductive because it prevents the rest of the code from being reached.
+When writing your fuzzer, take this into account. If random input is unlikely to
+make it past an initial check consider using a boolean value to decide whether
+or not to test that argument, or forgo testing that argument altogether.
+
+Running the fuzzer locally will continuously print a measure of coverage that
+can be used (in relative terms) to understand whether skipping an argument
+allows the fuzzer to reach more code:
+
+`#3268  NEW    cov: 218`
+
+The `cov` value will increase (unsurprisingly) with increased coverage. In the
+current example, avoiding random strings for the `interface` argument
+significantly increased coverage because both API functions were no longer
+erroring out early.
+
 ### Getting help with modifying ebuild files
 
 Some ebuild files are more complex or confusing than others. There are
@@ -571,6 +739,14 @@ useful. Below are links to some of the more important ones:
 [fuzzer builder]: https://build.chromium.org/p/chromiumos/builders/amd64-generic-fuzzer
 
 [chromeos-fuzzing@google.com]: mailto:chromeos-fuzzing@google.com
+
+[firewall implementation]: https://chromium.googlesource.com/chromiumos/platform2/+/master/permission_broker/firewall.h#33
+
+[libchrome]: https://chromium.googlesource.com/aosp/platform/external/libchrome/+/master
+
+[FuzzedDataProvider]: https://chromium.googlesource.com/aosp/platform/external/libchrome/+/master/base/test/fuzzed_data_provider.h
+
+[firewall_fuzzer]: https://chromium.googlesource.com/chromiumos/platform2/+/master/permission_broker/firewall_fuzzer.cc
 
 [Fuzzer statistics]: https://clusterfuzz.com/v2/fuzzer-stats/by-fuzzer/fuzzer/libFuzzer/job/libfuzzer_asan_chromeos
 
