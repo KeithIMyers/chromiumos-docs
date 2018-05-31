@@ -127,8 +127,9 @@ talks to individual processes (each of which are heavily sandboxed).
 ### User Data In The Container
 
 With the shift to cloud services, current security thinking highlights the fact
-that getting account credentials (e.g. your Google/Facebook passwords) is way
-more interesting than attacking your desktop/laptop.
+that getting account credentials
+(e.g. [your Google/Facebook passwords](https://xkcd.com/1200/))
+is way more interesting than attacking your desktop/laptop.
 They are not wrong.
 The current [VM]/container Chrome OS solution does not currently improve on
 this.
