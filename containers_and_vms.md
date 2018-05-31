@@ -37,13 +37,20 @@ Many of the programs/tools are custom here.
 In hindsight, we might not have named it one letter off from "Terminal", but so
 it goes.
 
+[Concierge] is a daemon that runs in Chrome OS which handles lifecycle
+management of VMs and containers and uses gRPC over vsock to communicate with
+a daemon in the VM.
+
 [Maitred] is our init and service/container manager inside of the [VM], and is
-responsible for communicating with concierge (which runs outside of the [VM]).
+responsible for communicating with [Concierge] (which runs outside of the [VM]).
 [Concierge] sends it requests and [Maitred] is responsible for carrying those
 out.
 
+[Cicerone] is a daemon that runs in Chrome OS which handles all communication
+directly with the container using gRPC over IP.
+
 [Garcon] runs inside the container and provides integration with
-[Concierge]/Chrome for more convenient/natural behavior.
+[Cicerone]/Chrome for more convenient/natural behavior.
 For example, if the container wants to open a URL, [Garcon] takes care of
 plumbing that request back out.
 
@@ -225,6 +232,7 @@ You will need a CPU that has hardware virtualization support.
     Had random compatibility issues.
 *   **ARC++** (Android Runtime for Chrome \[plus plus\]): The current method for
     booting Android in a container under Chrome OS.
+*   **[Cicerone]**: Chrome OS daemon that communicates with containers.
 *   **[Concierge]**: Chrome OS daemon that manages [VM]/container life cycles.
 *   **Container**: A package (tarball/filesystem image/etc...) full of programs
     ready to be executed with some levels of isolation.
@@ -234,7 +242,7 @@ You will need a CPU that has hardware virtualization support.
     run Linux apps.
 *   **[crosvm]**: The Chrome OS Virtual Machine Monitor (akin to [QEMU]).
 *   **[Garcon]**: Daemon in the container for passing requests between the
-    container and Chrome via concierge.
+    container and Chrome via [Cicerone].
 *   **[KVM]** (Kernel Virtual Machine): The Linux interface for managing virtual
     machines.
 *   **[kvmtool]**: A simple/fast virtualization tool.
@@ -676,6 +684,7 @@ At which point, there will be no knob for unmanaged devices.
 
 [alt syscall]: https://chromium.googlesource.com/chromiumos/third_party/kernel/+/HEAD/security/chromiumos/alt-syscall.c
 [Android Studio]: https://developer.android.com/topic/arc/studio
+[Cicerone]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/cicerone/
 [component]: https://chromium.googlesource.com/chromium/src/+/lkgr/components/component_updater/README.md
 [Concierge]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/concierge/
 [cros-container-guest-tools]: https://chromium.googlesource.com/chromiumos/containers/cros-container-guest-tools/
