@@ -366,6 +366,17 @@ We're looking into [supporting FUSE](https://crbug.com/841787) though.
 (*): Technically you can mount a few limited pseudo filesystems (like
 memory-backed tmpfs), but most people aren't interested in those.
 
+### Can I use loop devices?
+
+Currently, no.
+See the previous question about mounting filesystems.
+
+Specifically, we're referring to `losetup` and `mount -o loop` which use
+`/dev/loop-control` and nodes like `/dev/loop0` via the `loop` kernel module.
+
+If you have a use case that wouldn't be solved by supporting
+[FUSE](https://crbug.com/841787), please [file a bug][new-bug] for us.
+
 ### Can I run a VM inside the VM?
 
 Currently, no, nested [KVM] is not supported.
