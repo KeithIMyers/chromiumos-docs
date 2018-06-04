@@ -314,6 +314,52 @@ the *extent* of the problem.
 [UMA] is the metrics infrastructure used in Chrome and Chrome OS. You can report
 metrics both from the Chrome browser and from system services.
 
+### Philosophy
+
+Overall Chrome OS security architecture is inspired by a set of principles that
+help us make consistent decisions. They guide us towards solutions that achieve
+security trade-offs which make sense in the world our users live in. As part of
+the security review process, we evaluate whether new features strike the right
+balance with respect to our principles. This is not exact science - we often
+need to balance legit interest to add a new feature with slight deterioration of
+Chrome OS's overall adherence to the principles. In case of obvious conflicts,
+it is important though to explore whether the feature in question can be
+implemented in an alternative way that is more in line with the principles. If a
+better design is identified, please do make the effort to seriously consider it.
+Design improvements are a triple win: The feature team produces a shinier
+feature, users get something that works better, and the security team has fewer
+things to worry about.
+
+These are our security principles:
+
+*   *Secure by default*: All Chrome OS features should offer adequate security
+    without requiring the user to take further action. We don't ever want to end
+    up in a situation where people seriously follow "10 absolutely essential
+    Chrome OS security tweaks" guide documents on the internet.
+*   *Don't scapegoat the user*: Pushing security decisions on the user is
+    sometimes unavoidable, in particular where there is no viable secure default
+    that works for everyone. We want to avoid asking the user security-relevant
+    questions as much as possible though and just figure out based on the
+    situation what is the correct security choice for them. Are there other
+    settings or decisions that have already been taken that can guide the
+    decision? Can we identify relevant user segments automatically?
+*   *Defense in depth*: Layered security defenses are industry standard now. All
+    features must be evaluated under the assumption that one more more security
+    boundaries are broken by attackers. What would be the correct system
+    behavior under that scenario?
+*   *The perfect is the enemy of the good*: There's always room for improvement
+    when it comes to security features. Striving for ideal security is not only
+    impossible in general, but often prevents or delays security improvements
+    that are meaningful but do leave gaps in practice, so we need to strike a
+    balance. When in doubt, evaluate choices against attack scenarios to
+    determine how worthwhile a given security defense is.
+*   *Protect user data, be transparent*: Our ultimate goal is to protect our
+    users' data. Security features help with that, but we must acknowledge that
+    user behavior will always be part of the equation. In the light of that, we
+    aim to be transparent so users are aware when they share their data or
+    otherwise open it up to additional exposure. There is tension here to
+    "secure by default" and *don't scapegoat the user* - this is intentional :-D
+
 [sandboxing guide]: https://chromium.googlesource.com/chromiumos/docs/+/master/sandboxing.md
 [crbug.com]: https://crbug.com
 [chromefeatures.googleplex.com]: https://chromefeatures.googleplex.com
