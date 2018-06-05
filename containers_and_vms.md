@@ -247,6 +247,20 @@ Yes, normally this CPU includes VMX, but the variant in Chromebooks does not.
 * swanky
 * winky
 
+### Old Kernels
+
+There are no plans to support devices running Linux 3.10 or older.
+
+* butterfly
+* lumpy
+* parrot
+* stumpy
+* x86-alex
+* x86-alex_he
+* x86-mario
+* x86-zgb
+* x86-zgb_he
+
 ## Glossary
 
 *   **ARC** (App Runtime for Chrome): The old/deprecated method of running
