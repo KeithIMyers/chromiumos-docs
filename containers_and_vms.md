@@ -225,6 +225,28 @@ but certainly the more you have of each, the better the system will perform.
 
 You will need a CPU that has hardware virtualization support.
 
+#### BayTrail Systems
+
+Chromebooks using Intel’s BayTrail do not include VMX.
+Yes, normally this CPU includes VMX, but the variant in Chromebooks does not.
+
+* banjo
+* candy
+* clapper
+* enguarde
+* expresso
+* glimmer
+* gnawty
+* heli
+* kip
+* ninja
+* orco
+* quawks
+* squawks
+* sumo
+* swanky
+* winky
+
 ## Glossary
 
 *   **ARC** (App Runtime for Chrome): The old/deprecated method of running
