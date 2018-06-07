@@ -78,8 +78,8 @@ In this flow, the [VM] is named `termina` and the container is `penguin`.
 Here's a quick run down of how to get started.
 *   Buy a [Google Pixelbook](https://store.google.com/product/google_pixelbook).
     It is our objectively biased opinion that it's a nice piece of hardware.
-*   Switch to the
-    [dev channel](https://support.google.com/chromebook/answer/1086915).
+*   Switch to the [dev channel].
+    *   You do **not** need to put it into developer mode.
 *   Enable support.
     *   Go to Chrome OS settings (chrome://settings).
     *   Scroll down to "Linux (Beta)".
@@ -338,6 +338,16 @@ Feedback about any part of Chrome OS can be filed with "Alt-Shift-i".
 
 If you still want to file a bug with the developers, use [this link][new-bug] to
 route to the right people.
+
+### Do I need to enable developer mode?
+
+There is no need to enable developer mode (where you see the scary screen at
+boot about OS verification being turned off).
+These features are all designed to run securely while your system is running
+in normal/verified mode.
+
+For some devices you might have to switch to the [dev channel], but that is
+entirely unrelated to developer mode.
 
 ### Can I boot another OS like Windows, macOS, Linux, *BSD, etc...?
 
@@ -721,6 +731,7 @@ settings, but the long-term plan is to remove this knob so things work
 on-demand.
 At which point, there will be no knob for unmanaged devices.
 
+[dev channel]: https://support.google.com/chromebook/answer/1086915
 [feedback-report]: https://support.google.com/chromebook/answer/2982029
 [known-bugs]: https://bugs.chromium.org/p/chromium/issues/list?can=1&q=component:OS>Systems>Containers
 [new-bug]: https://bugs.chromium.org/p/chromium/issues/entry?comment=Chrome%20version%3A%20(copy%20from%20chrome%3A%2F%2Fversion)%0AOS%3A%20Chrome%0A%0ARepro%20steps%3A%0A1.%20%0A2.%20%0A3.%20%0A%0AExpected%3A%20%0AActual%3A%20&status=Untriaged&labels=Pri-2%2COS-Chrome%2CType-Bug%2CProj-Containers&components=OS%3ESystem%3EContainers
