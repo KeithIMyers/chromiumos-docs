@@ -273,6 +273,30 @@ You can look up the board name in our public [device list].
 * x86-zgb
 * x86-zgb_he
 
+### 32-bit ARM CPUs
+
+Getting virtual machines working under 32-bit ARM cpus is difficult,
+non-standard, and requires coordination with the firmware.
+Unfortunately, Chrome OS firmware tended to not configure the extensions.
+We do not plan on supporting these systems,
+especially since they all tended to have smaller amounts of storage & RAM.
+
+You can look up the board name in our public [device list].
+
+* daisy
+* daisy_skate
+* daisy_spring
+* peach_pi
+* peach_pit
+* veyron_fievel
+* veyron_jaq
+* veyron_jerry
+* veyron_mickey
+* veyron_mighty
+* veyron_minnie
+* veyron_speedy
+* veyron_tiger
+
 ## Glossary
 
 *   **[AMD-V]** (AMD Virtualization): AMD's marketing name for hardware
