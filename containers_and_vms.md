@@ -223,12 +223,21 @@ The initial platform is the Google Pixelbook (eve) running an Intel processor
 We are not planning on requiring a minimum amount of RAM, storage, or CPU speed,
 but certainly the more you have of each, the better the system will perform.
 
-You will need a CPU that has hardware virtualization support.
+You will need a CPU that supports
+[hardware virtualization](https://en.wikipedia.org/wiki/Hardware_virtualization).
+
+On x86 platforms, this has
+[many names](https://en.wikipedia.org/wiki/X86_virtualization).
+Intel refers to it as [VT-x] & [VMX].
+AMD refers to it [AMD-V] & [SVM].
 
 #### BayTrail Systems
 
-Chromebooks using Intel’s BayTrail do not include VMX.
-Yes, normally this CPU includes VMX, but the variant in Chromebooks does not.
+Chromebooks using Intel’s BayTrail do not include [VT-x].
+Yes, normally this CPU includes [VMX], but the variant in Chromebooks does not.
+Thus, unfortunately, they'll never be supported.
+
+You can look up the board name in our public [device list].
 
 * banjo
 * candy
@@ -251,6 +260,8 @@ Yes, normally this CPU includes VMX, but the variant in Chromebooks does not.
 
 There are no plans to support devices running Linux 3.10 or older.
 
+You can look up the board name in our public [device list].
+
 * butterfly
 * lumpy
 * parrot
@@ -263,6 +274,8 @@ There are no plans to support devices running Linux 3.10 or older.
 
 ## Glossary
 
+*   **[AMD-V]** (AMD Virtualization): AMD's marketing name for hardware
+    virtualization extensions.
 *   **ARC** (App Runtime for Chrome): The old/deprecated method of running
     Android apps in a Chrome [NaCl] (Native Client) sandbox.
     Had random compatibility issues.
@@ -288,6 +301,7 @@ There are no plans to support devices running Linux 3.10 or older.
 *   **[Sommelier]**: [Wayland] proxy compositor in the container that provides
     seamless forwarding of contents, input events, clipboard data, etc...
     between Linux apps and Chrome, and seamless [X] integration.
+*   **[SVM]** (Secure Virtual Machine): AMD's short name for [AMD-V].
 *   **[Termina]**: Codename for the custom [VM] that we boot.
 *   **[Terminal]**: Public name for getting a full Linux command line
     environment and running [Crostini].
@@ -295,7 +309,10 @@ There are no plans to support devices running Linux 3.10 or older.
     strongly isolated environment.
 *   **[vmc]**: [crosh] command to manually manage custom [VM] instances via
     [Concierge].
+*   **[VMX]** (Virtual Machine Extensions): Intel's short name for [VT-x].
 *   **[vsh]**: Shell that runs inside the [VM] (not inside of the container).
+*   **[VT-x]** (Virtualization Extensions): Intel's marketing name for hardware
+    virtualization extensions.
 *   **[Wayland]**: The new graphics stack in the Linux world.
 *   **[WM]** (Window Manager): Program responsible for managing windows that
     other programs create.  e.g. window borders, maximizing/minimizing, etc...
@@ -453,8 +470,7 @@ have.
 If you don't know what device you have, you can find this out in two different
 ways:
 *   Open chrome://settings/help/details and look at the Platform,
-    then match the board name with our
-    [public device list](http://dev.chromium.org/chromium-os/developer-information-for-chrome-os-devices).
+    then match the board name with our public [device list].
     Look at the "User ABI" field to see what kind of CPU you have.
 *   Open up [crosh] and run `uname -m`.
     This will print the architecture of your current device.
@@ -732,6 +748,7 @@ on-demand.
 At which point, there will be no knob for unmanaged devices.
 
 [dev channel]: https://support.google.com/chromebook/answer/1086915
+[device list]: http://dev.chromium.org/chromium-os/developer-information-for-chrome-os-devices
 [feedback-report]: https://support.google.com/chromebook/answer/2982029
 [known-bugs]: https://bugs.chromium.org/p/chromium/issues/list?can=1&q=component:OS>Systems>Containers
 [new-bug]: https://bugs.chromium.org/p/chromium/issues/entry?comment=Chrome%20version%3A%20(copy%20from%20chrome%3A%2F%2Fversion)%0AOS%3A%20Chrome%0A%0ARepro%20steps%3A%0A1.%20%0A2.%20%0A3.%20%0A%0AExpected%3A%20%0AActual%3A%20&status=Untriaged&labels=Pri-2%2COS-Chrome%2CType-Bug%2CProj-Containers&components=OS%3ESystem%3EContainers
@@ -740,6 +757,7 @@ At which point, there will be no knob for unmanaged devices.
 
 [Security]: #Security
 
+[AMD-V]: https://en.wikipedia.org/wiki/AMD-V
 [alt syscall]: https://chromium.googlesource.com/chromiumos/third_party/kernel/+/HEAD/security/chromiumos/alt-syscall.c
 [Android Studio]: https://developer.android.com/topic/arc/studio
 [Cicerone]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/cicerone/
@@ -768,13 +786,16 @@ At which point, there will be no knob for unmanaged devices.
 [Sommelier]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/sommelier/
 [SquashFS]: https://en.wikipedia.org/wiki/SquashFS
 [Steam]: https://store.steampowered.com/linux
+[SVM]: https://en.wikipedia.org/wiki/AMD-V
 [Termina]: https://chromium.googlesource.com/chromiumos/overlays/board-overlays/+/master/project-termina/
 [Terminal]: #Terminal
 [user namespaces]: http://man7.org/linux/man-pages/man7/user_namespaces.7.html
 [virtio]: http://docs.oasis-open.org/virtio/virtio/v1.0/virtio-v1.0.html
 [VM]: https://en.wikipedia.org/wiki/Virtual_machine
 [vmc]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/concierge/
+[VMX]: https://en.wikipedia.org/wiki/Intel%20VT-x
 [vsh]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/vsh/
+[VT-x]: https://en.wikipedia.org/wiki/Intel%20VT-x
 [Wayland]: https://wayland.freedesktop.org/
 [WINE]: https://www.winehq.org/
 [WM]: https://en.wikipedia.org/wiki/X_window_manager
