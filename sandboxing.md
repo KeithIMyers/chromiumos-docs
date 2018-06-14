@@ -85,9 +85,16 @@ Minijail's `-u` argument forces the target program (in this case
 `permission_broker`) to be executed as the devbroker user, instead of the root
 user. This is equivalent of doing `sudo -u devbroker`.
 
-The user (devbroker in this example) needs to be added to the system using the
-user eclass, as in this CL (for a different user):
-https://crrev.com/c/242551
+The user (`devbroker` in this example) needs to first be added to the build
+system database. An example of this (for a different user) can be found in the
+following CL:
+https://crrev.com/c/361830
+
+Next, the user needs to be *installed* on the system. An example of this (again
+for a different user) can be found in the following CL:
+https://crrev.com/c/383076
+
+See the [Chrome OS user accounts README] for more details.
 
 There's a test in the CQ that keeps track of the users present on the system
 that request additional access (e.g. listing more than one user in a group).
@@ -297,6 +304,7 @@ TODO(jorgelo)
 [libchrome]: http://www.chromium.org/chromium-os/packages/libchrome
 [libbrillo]: http://www.chromium.org/chromium-os/packages/libchromeos
 [shell command-injection bugs]: http://en.wikipedia.org/wiki/Code_injection#Shell_injection
+[Chrome OS user accounts README]: https://chromium.googlesource.com/chromiumos/overlays/eclass-overlay/+/master/profiles/base/accounts/README.md
 [How do I specify the dependencies of a change?]: http://www.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/commit-queue-overview
 [Linux capabilities]: http://man7.org/linux/man-pages/man7/capabilities.7.html
 [capability.h]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/linux/capability.h
