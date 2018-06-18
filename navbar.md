@@ -8,5 +8,6 @@
 * [Developer Guide](./developer_guide.md)
 * [Contact](https://groups.google.com/a/chromium.org/forum/#!forum/chromium-os-dev)
 * [Bugs](https://crbug.com/)
-* [Style Guide](https://github.com/google/styleguide/tree/gh-pages/docguide)
+* [Style Guide (Markdown)](https://github.com/google/styleguide/tree/gh-pages/docguide)
+* [Gitiles (Markdown Format)](https://gerrit.googlesource.com/gitiles/+/master/Documentation/markdown.md)
 * [Old Docs](https://www.chromium.org/chromium-os)
