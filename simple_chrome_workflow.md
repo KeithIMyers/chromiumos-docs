@@ -27,8 +27,9 @@ fetches the necessary SDK components (CrOS toolchain, sysroot, etc.).
 First make sure you have a:
 
 1. [Local copy of the Chromium source code and depot_tools]
-2. USB flash drive 4 GB or larger (for example, a Sandisk Extreme USB 3.0)
-3. USB to Gigabit Ethernet adapter
+1. [Updated .gclient configuration] which contains `target_os=["chromeos"]`
+1. USB flash drive 4 GB or larger (for example, a Sandisk Extreme USB 3.0)
+1. USB to Gigabit Ethernet adapter
 
 Googlers: Chromestop has the hardware.
 
@@ -529,6 +530,7 @@ The legacy `GYP` build system is no longer supported.
 
 [OS development guide]: https://www.chromium.org/chromium-os/developer-guide#TOC-Making-changes-to-the-Chromium-web-
 [Local copy of the Chromium source code and depot_tools]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md
+[Updated .gclient configuration]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/chromeos_build_instructions.md#updating-your-gclient-config
 [Chromium OS board name]: http://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices
 [GN build configuration]: http://www.chromium.org/developers/gn-build-configuration
 [quick start guide]: https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/quick_start.md
