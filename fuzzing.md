@@ -677,7 +677,10 @@ useful. Below are links to some of the more important ones:
 ## Improving fuzzer effectiveness
 
 Below are some optional things you can do to improve the effectiveness of your
-fuzzer.
+fuzzer. Note that these instructions primarily explain how to make these
+improvements for ClusterFuzz to use. Using them locally is explained at the end
+of each section.
+
 
 ### Adding a seed corpus
 
@@ -746,6 +749,11 @@ You can follow the [instructions to set up the `gsutil` tool]. Note that
 `gsutil` must be connected to your `@google.com` account to have access to the
 corpus.
 
+To use a corpus in local fuzzing, pass the directory to your fuzzer, like so:
+
+```bash
+$ ./<your_fuzzer> <corpus_directory>
+```
 
 ### Adding a dictionary
 
@@ -768,7 +776,7 @@ Here is an example from the libFuzzer documentation:
 ```
 
 Once you have decided the content of your dictionary, add it to a file called
-`<your_fuzzer>.dict` and then edit your ebuild to install the dictionary like
+`<your_fuzzer>.dict` and then edit your ebuild to install the dictionary, like
 so:
 
 ```bash
@@ -781,6 +789,12 @@ dictionary].
 
 There are many [dictionaries in the Chromium code base], you may be able to
 reuse one if your fuzzer's format is also fuzzed in Chrome.
+
+To use a dictionary in local fuzzing, use the `-dict=` option, like so:
+
+```bash
+$ ./<your_fuzzer> -dict=/path/to/your/dictionary
+```
 
 ### Adding an options file
 
@@ -865,6 +879,45 @@ trouble passing some check.
     other tools such as libprotobuf-mutator that allow you to specify a format
     for libFuzzer to mutate, which you then convert into raw bytes. It is not
     yet supported in Chrome OS (follow [issue 853017] for updates).
+
+## Reproducing crashes from ClusterFuzz
+
+This section explains how to reproduce bugs found by ClusterFuzz. No knowledge
+of fuzzing is assumed and it summarizes info from elsewhere in this document.
+
+1.  Set up a board (eg: amd64-generic) and build the package containing the
+    fuzzer:
+
+    ```bash
+    $ ./setup_board --board=${BOARD}
+    $ USE="asan fuzzer" ./build_packages --board=${BOARD} --skip_chroot_upgrade <your-package>
+    ```
+
+    Note that your fuzzer will not begin with the prefix `libFuzzer_chromeos_`.
+
+2.  Download the reproducer testcase from the link on the bug report, and copy
+    it to the build root.
+
+    ```bash
+    $ cp ~/Downloads/<testcase-name> /path/to/chromiumos-checkout/chroot/build/${BOARD}/tmp/
+    ```
+
+3. Prepare the build chroot for running the fuzzer. Do this outside of the
+   chroot but in the chromiumos checkout.
+
+    ```bash
+    $ /path-to-chromiumos-checkout/chromite/bin/cros_fuzz_test_env --board=${BOARD}
+    ```
+
+4. Chroot into the build and run the fuzzer on the testcase:
+
+    ```bash
+    $ sudo chroot /path-to-chromiumos-checkout/chroot/build/${BOARD}
+    $ ASAN_OPTIONS="log_path=stderr" /usr/libexec/fuzzers/<your_fuzzer> /tmp/<testcase-name>
+    ```
+
+Feel free to send an email to [chromeos-fuzzing@google.com] if you get stuck, or
+to ask questions.
 
 ## See also
 
