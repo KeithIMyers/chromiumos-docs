@@ -108,6 +108,7 @@ There's a lot of low-hanging fruit we're working on fleshing out.
 * [Accelerated graphics](https://crbug.com/837209).
 * Video hardware decoding.
 * [IMEs](https://crbug.com/826614).
+* [Timezone syncing](https://crbug.com/829934).
 
 There are more things we're thinking about, but we're being very
 careful/cautious in rolling out features as we want to make sure we aren't
@@ -536,6 +537,24 @@ There are no plans to change this.
 
 If you want to back things up, you'll need to do so by hand.
 
+### Why is the time inside the VM/container out of sync?
+
+The clock inside of the [VM] (and by extension, the containers) are
+automatically kept in sync with Chrome OS's clock.
+So you do not have to run time keeping services yourself (e.g. ntp).
+
+However, the timezone in the [VM] and containers are based off of [UTC],
+and most people do not configure Chrome OS to use that.
+So the time might appear to be wrong at a glance.
+
+You should be able to change the timezone in the container yourself using
+[timedatectl](https://www.freedesktop.org/software/systemd/man/timedatectl.html),
+but this won't automatically update if Chrome OS's timezone changes.
+
+We're working on a way to keep these in sync, so feel free to star
+https://crbug.com/829934 to keep track.
+It's more complicated than you might think!
+
 ### Do I have to manage VM updates?
 
 Nope!
@@ -790,6 +809,7 @@ At which point, there will be no knob for unmanaged devices.
 [Termina]: https://chromium.googlesource.com/chromiumos/overlays/board-overlays/+/master/project-termina/
 [Terminal]: #Terminal
 [user namespaces]: http://man7.org/linux/man-pages/man7/user_namespaces.7.html
+[UTC]: https://en.wikipedia.org/wiki/Coordinated_Universal_Time
 [virtio]: http://docs.oasis-open.org/virtio/virtio/v1.0/virtio-v1.0.html
 [VM]: https://en.wikipedia.org/wiki/Virtual_machine
 [vmc]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/concierge/
