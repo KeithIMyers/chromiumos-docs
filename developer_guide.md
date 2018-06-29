@@ -1724,6 +1724,10 @@ If you find problems with the board-specific gdb scripts, please file a bug
 ([crbug.com/new]) and add 'build-toolchain' as one of the labels in the
 bug.
 
+## Building Chrome for Chromium OS
+
+See [Simple Chrome Workflow].
+
 ## Troubleshooting
 
 ### I lost my developer tools on the stateful partition, can I get them back?
@@ -1967,6 +1971,7 @@ Below are a few links to external sites that you might also find helpful
 [Remote Debugging in Chromium OS]: http://www.chromium.org/chromium-os/how-tos-and-troubleshooting/remote-debugging
 [cdgb]: https://cgdb.github.io/
 [crbug.com/new]: https://crbug.com/new
+[Simple Chrome Workflow]: simple_chrome_workflow.md
 [Autotest User Documentation]: https://sites.google.com/a/chromium.org/dev/chromium-os/testing/autotest-user-doc
 [Creating a new test]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md#Writing-and-developing-tests
 [Running Smoke Suite On a VM Image]: https://sites.google.com/a/chromium.org/dev/chromium-os/testing/running-smoke-suite-on-a-vm-image
