@@ -150,7 +150,7 @@ tools. On Ubuntu, the magic incantation to do this is (all on one line):
 
 ```shell
 (outside)
-sudo apt-get install git-core gitk git-gui curl lvm2 thin-provisioning-tools
+sudo apt-get install git-core gitk git-gui curl lvm2 thin-provisioning-tools \
      python-pkg-resources python-virtualenv python-oauth2client
 ```
 
