@@ -579,6 +579,26 @@ We're working on a way to keep these in sync, so feel free to star
 https://crbug.com/829934 to keep track.
 It's more complicated than you might think!
 
+### What copy & paste formats are supported?
+
+Currently, only `text/plain` content is supported.
+We plan on adding more formats soon
+(e.g. [`image/png`](https://crbug.com/789824) and
+[`text/rtf`](https://crbug.com/809898)).
+
+You can see the current supported list in [exo/data_source.cc].
+
+While [X]/[Wayland] support an arbitrary number of [MIME] formats,
+our ultimate goal is to only support all the formats that Chrome itself does.
+See the [clipboard_constants.cc] file for that list.
+
+Note that we're only talking about constraints on data stored in the clipboard.
+[Wayland] apps are still free to transfer data directly between themselves in
+whatever arbitrary format they like.
+
+[exo/data_source.cc]: https://chromium.googlesource.com/chromium/src/+/master/components/exo/data_source.cc
+[clipboard_constants.cc]: https://chromium.googlesource.com/chromium/src/+/master/ui/base/clipboard/clipboard_constants.cc
+
 ### Do I have to manage VM updates?
 
 Nope!
@@ -820,6 +840,7 @@ At which point, there will be no knob for unmanaged devices.
 [kvmtool]: https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/
 [LXC]: https://linuxcontainers.org/lxc/introduction/
 [Maitred]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/maitred/
+[MIME]: https://en.wikipedia.org/wiki/MIME
 [NaCl]: https://developer.chrome.com/native-client
 [namespaces]: http://man7.org/linux/man-pages/man7/namespaces.7.html
 [QEMU]: https://www.qemu.org/
