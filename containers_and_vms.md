@@ -264,8 +264,11 @@ There are no plans to support devices running Linux 3.10 or older.
 You can look up the board name in our public [device list].
 
 * butterfly
+* link
 * lumpy
 * parrot
+* parrot_ivb
+* stout
 * stumpy
 * x86-alex
 * x86-alex_he
