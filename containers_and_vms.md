@@ -432,13 +432,16 @@ If you're running your own container or [VM], then no.
 
 ### How do I share files between Chrome OS & the container?
 
-Using [Secure Shell], you can set up a SFTP mount to the remote container and
-then browse via the Files app.
-Work is on going to automate this step by default.
+The default Crostini container's storage is accessible under "Linux Files" in
+the Chrome OS Files app.
+Using [Secure Shell], you can set up a SFTP mount to the other remote
+containers and then browse via the Files app as well.
 
 ### Can I access files when the container isn't running?
 
 Currently, the container must be running in order to access its content.
+The default Crostini container will be started automatically when "Linux Files"
+is accessed from the Files app.
 
 ### Can I install custom kernel modules?
 
