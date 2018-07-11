@@ -560,6 +560,17 @@ You're responsible for any data going into the containers.
 
 We hope to improve this situation greatly.
 
+### How can I backup a VM?
+
+If you want to back up an individual container, you can use the standard [LXC]
+commands.
+This is the preferred method for saving the state of Crostini.
+
+The `vmc export` command can be used to export an entire VM manually.
+It will dump the qcow2 disk image to the Downloads folder by default.
+Note that there isn't yet a way to import a VM, so this is only useful for
+diagnostics or using another system to extract files.
+
 ### Can I access the VM/container files directly (e.g. via the Files app)?
 
 Currently, no, there is no way to access the image files used by the [VM].
