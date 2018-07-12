@@ -618,7 +618,13 @@ You can also connect to a [VM] via [vsh] and run `cat /etc/lsb-release`.
 
 ### Do I have to manage container updates?
 
-Currently, yes.
+The Google provided packages in the container that communicate with Chrome OS
+or are required for Chrome OS intergration will be automatically updated on a
+regular basis.
+This will install any necessary dependencies automatically.
+
+There is no automatic upgrading of other installed packages in the container.
+We'd rather avoid updating packages that might break programs already installed.
 The container is like any other Linux distro out there, so you'll need to update
 it from time to time if you want newer software.
 
