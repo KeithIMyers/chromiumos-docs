@@ -292,6 +292,73 @@ NOTICE kernel: [  586.706239] audit: type=1326 audit(1484586246.124:6): ... comm
     *   `minijail0 -H | grep <nr>`, where `<nr>` is the `syscall=` number
         above, to find the name of the failing syscall.
 
+## Securely mounting cryptohome daemon store folders
+
+Some daemons store user data on the user's cryptohome under
+`/home/.shadow/<user_hash>/mount/root/<daemon_name>` or equivalently
+`/home/root/<user_hash>/<daemon_name>`. For instance, Session Manager stores
+user policy under `/home/root/<user_hash>/session_manager/policy`. This is
+useful if the data should be protected from other users since the user's
+cryptohome is only mounted (and therefore decrypted) when the user logs in. If
+the user is not logged in, it is encrypted with the user's password.
+
+However, if a daemon is already running inside a mount namespace (`minijail0 -v
+...`) when the user's cryptohome is mounted, it does not see the mount since
+mount events do not propagate into mount namespaces by default. This propagation
+can be achieved, though, by making the parent mount a shared mount and the
+corresponding mount inside the namespace a shared or slave mount, see the
+[shared subtrees] doc.
+
+To set up a cryptohome daemon store folder that propagates into your daemon's
+mount namespace, add this code to the src_install section of your daemon's
+ebuild:
+
+```bash
+local daemon_store="/etc/daemon-store/<daemon_name>"
+dodir "${daemon_store}"
+fperms 0700 "${daemon_store}"
+fowners <daemon_user>:<daemon_group> "${daemon_store}"
+```
+
+This directory is never used directly. It merely serves as a secure template for
+the chromeos_startup script, which picks it up and creates
+`/run/daemon-store/<daemon_name>` as a shared mount.
+
+In your daemon's init script, mount that folder as slave in your mount
+namespace. Be sure not to mount all of `/run` if possible.
+
+```bash
+minijail0 -Kslave \
+          -k 'tmpfs,/run,tmpfs,MS_NOSUID|MS_NODEV|MS_NOEXEC' \
+          -b /run/daemon-store/<daemon_name> \
+          ...
+```
+
+During sign-in, when the user's cryptohome is mounted, Cryptohome creates
+`/home/.shadow/<user_hash>/mount/root/<daemon_name>`, bind-mounts it to
+`/run/daemon-store/<daemon_name>/<user_hash>` and copies ownership and mode from
+`/etc/daemon-store/<daemon_name>` to the bind target. Since
+`/run/daemon-store/<daemon_name>` is a shared mount outside of the mount
+namespace and a slave mount inside, the mount event propagates into the daemon.
+
+Your daemon can now use `/run/daemon-store/<daemon_name>/<user_hash>` to store
+user data once the user's cryptohome is mounted. Note that even though
+`/run/daemon-store` is on a tmpfs, your data is actually stored on disk and not
+lost on reboot.
+
+**Be sure not to write to the folder before cryptohome is mounted**. Consider
+listening to Session Manager's `SessionStateChanged` signal or similar to detect
+mount events. Note that `/run/daemon-store/<daemon_name>/<user_hash>` might
+exist even though cryptohome is not mounted, so testing existence is not enough
+(it only works the first time).
+
+The `<user_hash>` can be retrieved with Cryptohome's `GetSanitizedUsername`
+D-Bus method.
+
+The following diagram illustrates the mount event propagation:
+
+![Mount propagation diagram](images/sandboxing_daemon_store.png "Mount propagation diagram")
+
 ## Minijail wrappers
 
 TODO(jorgelo)
@@ -315,3 +382,4 @@ TODO(jorgelo)
 [Seccomp-BPF]: https://www.kernel.org/doc/Documentation/prctl/seccomp_filter.txt
 [`syscall_filter.c` source]: https://chromium.googlesource.com/aosp/platform/external/minijail/+/master/syscall_filter.c#239
 [generate_syscall_policy.py script]: https://chromium.googlesource.com/aosp/platform/external/minijail/+/master/tools/generate_seccomp_policy.py
+[shared subtrees]: https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt
