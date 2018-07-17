@@ -15,10 +15,10 @@ and run various tests.
 ### Virtualization check
 To check if kvm is already enabled:
 ```bash
-(shell) sudo kvm-ok
+(shell) if [[ -e /dev/kvm ]] && grep '^flags' /proc/cpuinfo | grep -qE 'vmx|svm'; then
+echo 'KVM is working'; else echo 'KVM not working'; fi
 ```
-If `kvm-ok` is not found, check the [Virtualization enabled] doc  for alternate
-instructions.
+If this fails, check the [Virtualization enabled] doc for instructions.
 
 For Goobuntu HP Zx20, interrupt the BIOS bootup with Esc for Options, F10 for
 Computer Setup, in the Security menu, System Security tab,
