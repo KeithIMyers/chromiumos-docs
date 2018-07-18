@@ -291,6 +291,9 @@ You can look up the board name in our public [device list].
 * daisy_spring
 * peach_pi
 * peach_pit
+* nyan_big
+* nyan_blaze
+* nyan_kitty
 * veyron_fievel
 * veyron_jaq
 * veyron_jerry
