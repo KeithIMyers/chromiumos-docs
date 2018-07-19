@@ -41,7 +41,14 @@ you can get your patch reviewed, and submit.
 
 ## Previewing changes
 
-You can preview your local changes using [md_browser]:
+You can preview your local changes using `scripts/preview_docs`:
+
+```bash
+scripts/preview_docs README.md
+```
+
+You can also use [md_browser], which is entirely local and does not require
+refs/sandbox/ push permission, but has somewhat inaccurate rendering:
 
 ```bash
 # at top of Chromium OS checkout
