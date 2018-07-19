@@ -74,7 +74,7 @@ section.
     1.  Add `asan` and `fuzzer` to the `IUSE` flags list.
     2.  Build you new fuzzer (conditioned on `use fuzzer`), with the
         appropriate flags:
-        1.  [Inherit flag-o-matic toolchain-funcs]
+        1.  [Inherit cros-fuzzer]
         2.  [Set up flags: call asan-setup-env & fuzzer-setup-env]
         3.  [USE flags: fuzzer]
     3.  Install your binary in `/usr/libexec/fuzzers/`
@@ -316,13 +316,12 @@ the previous section for an example.
     2.  Update the ebuild file to build the new binary when the fuzzer
         USE flag is being used:
         1.  Find the `inherit` line in  your ebuild (near the top of the
-            file). Make sure that `flag-o-matic` and `toolchain-funcs` are in
-            the inherit list. If your file does not have a line that starts with
-            `inherit `, add one near the top (after the `EAPI` line and before
-            the `KEYWORDS` line):
+            file). Make sure that `cros-fuzzer` is in the inherit list. If your
+            file does not have a line that starts with `inherit `, add one near
+            the top (after the `EAPI` line and before the `KEYWORDS` line):
 
             ```bash
-            inherit flag-o-matic toolchain-funcs
+            inherit cros-fuzzer
             ```
 
         2.  Find the `src_compile()` function in your ebuild file. If
@@ -961,7 +960,7 @@ to ask questions.
 
 [non-security bugs]: https://bugs.chromium.org/p/chromium/issues/list?can=1&q=reporter%3Aclusterfuzz%40chromium.org+-status%3Aduplicate+-status%3Awontfix+-type%3Dbug-security&sort=modified
 
-[Inherit flag-o-matic toolchain-funcs]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/chromeos-base/libchrome/libchrome-395517.ebuild?q=toolchain-funcs+package:%5Echromeos_public$&dr=C&l=15
+[Inherit cros-fuzzer]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/chromeos-base/libchrome/libchrome-395517.ebuild#15
 
 [Set up flags: call asan-setup-env & fuzzer-setup-env]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/chromeos-base/libchrome/libchrome-395517.ebuild?q=asan-setup-env+package:%5Echromeos_public$&dr=C
 
