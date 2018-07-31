@@ -182,6 +182,17 @@ Run a cheets autotest from within your [chroot]:
 cheets_ContainerMount
 ```
 
+## Run a Chrome GTest binary in the VM
+
+The following will create a wrapper script at out_$SDK_BOARD/Release/bin/ that
+can be used to launch a VM, push the test dependencies, and run the GTest. See
+the [chromeos-amd64-generic-rel] builder on Chromium's main waterfall for the
+list of GTests currently running in VMs (eg: base_unittests, ozone_unittests).
+```bash
+(sdk) .../chrome/src $ autoninja -C out_$SDK_BOARD/Release/ $TEST
+(sdk) .../chrome/src $ ./out_$SDK_BOARD/Release/bin/run_$TEST
+```
+
 ## Launch a VM built by a waterfall bot
 
 Find a waterfall bot of interest, such as
@@ -294,3 +305,5 @@ https://uberchromegw.corp.google.com/i/chromeos/builders/amd64-generic-chromium-
 [go/cros-vm]:
 https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md
 [achuith@chromium.org]: mailto:achuith@chromium.org
+[chromeos-amd64-generic-rel]:
+https://ci.chromium.org/p/chromium/builders/luci.chromium.ci/chromeos-amd64-generic-rel
