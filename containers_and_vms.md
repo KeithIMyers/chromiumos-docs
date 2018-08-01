@@ -78,6 +78,7 @@ In this flow, the [VM] is named `termina` and the container is `penguin`.
 Here's a quick run down of how to get started.
 *   Buy a [Google Pixelbook](https://store.google.com/product/google_pixelbook).
     It is our objectively biased opinion that it's a nice piece of hardware.
+    *   Or see the [Supported Now](#Supported Now) section below.
 *   Switch to the [dev channel].
     *   You do **not** need to put it into developer mode.
 *   Enable support.
@@ -216,8 +217,22 @@ We don't want to compromise system stability and security here.
 
 ### Supported Now
 
-The initial platform is the Google Pixelbook (eve) running an Intel processor
-(x86_64) with Linux 4.4.
+These are the initial set of boards that we're supporting.
+They're a mix of x86_64 and aarch64 kernels.
+
+You can look up the board name in our public [device list].
+
+* bob
+* coral
+* eve
+* fizz
+* kevin
+* nautilus
+* pyro
+* reef
+* sand
+* snappy
+* soraka
 
 ### Hardware Requirements
 
