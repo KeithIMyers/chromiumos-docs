@@ -326,17 +326,27 @@ For example:
 You can look up the board name in our public [device list].
 
 * butterfly
+* falco
+* falco_li
+* leon
 * link
 * lumpy
+* mccloud
+* monroe
+* panther
 * parrot
 * parrot_ivb
+* peppy
 * stout
 * stumpy
+* tricky
+* wolf
 * x86-alex
 * x86-alex_he
 * x86-mario
 * x86-zgb
 * x86-zgb_he
+* zako
 
 ### 32-bit ARM CPUs
 
