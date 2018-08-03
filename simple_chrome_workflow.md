@@ -264,31 +264,33 @@ IP address of the target device (which must be ssh-able as user 'root') using
 ### Deploying Chrome to the user partition
 
 It is also possible to deploy Chrome to the user partition of the device and
-set up a temporary mount from `/opt/google/chrome`. This is useful when
-deploying a binary that will not otherwise fit on the device, e.g.:
+set up a temporary mount from `/opt/google/chrome` using the option `--mount`.
+This is useful when deploying a binary that will not otherwise fit on the
+device, e.g.:
 
 *   When using `--nostrip` to provide symbols for backtraces.
 *   When using other compile options that produce a significantly larger image.
 
-To deploy Chrome this way, you need to specify both `--target-dir` and
-`--mount-dir`.
-
 ```
-(inside) deploy_chrome --build-dir=out_$BOARD/Release --to=$IP_ADDR \
-         --target-dir=/usr/local/chrome --mount-dir=/opt/google/chrome
+(inside) deploy_chrome --build-dir=out_$BOARD/Release --to=$IP_ADDR --mount \
+         [--nostrip]
 ```
 
-> **Note:** This also prompts to remmove rootfs verifivation so that
+> **Note:** This also prompts to remove rootfs verification so that
 > /etc/chrome_dev.conf can be modified (see [Command-line flags and
 > environment variables]). You can skip that by adding
 > `--noremove-rootfs-verification`.
 
 #### Additional Notes:
 
-*   The remount from `/usr/local/chrome` to `/opt/google/chrome` is transient,
-    so you need to remount after reboot. The simplest way is to ensure this is
-    to always run the same deploy_chrome command after reboot (it will only
-    redeploy binaries if there is a change).
+*   The mount is transient and does not survive a reboot. The easiest way to
+    reinstate the mount is to run the same deploy_chrome command after reboot.
+    It will only redeploy binaries if there is a change. To verify that the
+    mount is active, run `findmnt /opt/google/chrome`. The output should be:
+```
+TARGET             SOURCE                                      FSTYPE OPTIONS
+/opt/google/chrome /dev/sda1[/deploy_rootfs/opt/google/chrome] ext4   rw,nodev,noatime,resgid=20119,commit=600,data=ordered
+```
 *   If startup needs to be tested (i.e. before deploy_chrome can be run), a
     symbolic link will need to be created instead:
     *   ssh to device
