@@ -172,8 +172,9 @@ about -- most likely you aren't using it!).
     sockets).
 *   `-l`: If your process doesn't use SysV shared memory or IPC.
 
-This option does not work on Linux 3.8 systems. So only enable it if you know
-your service will run on a newer kernel version.
+The `-N` option does not work on Linux 3.8 systems. So only enable it if you know
+your service will run on a newer kernel version otherwise minijail will abort
+for the older kernels ([Chromium bug 729690](https://crbug.com/729690)).
 
 *   `-N`: If your process doesn't need to modify common
     [control groups settings].
