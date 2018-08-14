@@ -853,6 +853,12 @@ allows users to freely experiment without worry.
 
 Also, [we love turtles](https://en.wikipedia.org/wiki/Turtles_all_the_way_down).
 
+### Is Foreshadow (a.k.a. L1TF / CVE-2018-3646) handled?
+
+Yes.
+For more details, see our
+[public documentation](https://dev.chromium.org/chromium-os/containers-update).
+
 ### Can I delete containers I no longer want?
 
 Sure, feel free to delete whatever you want.
