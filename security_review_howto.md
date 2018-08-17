@@ -154,6 +154,15 @@ scheduling a meeting specifically to that effect.
 
 ### Assigning reviews to other team members
 
+Each feature review is assigned to a specific security team member. We track
+assignment using *SECURITY-${username}* labels in [crbug.com]. This bookkeeping
+information helps the security review lead to keep the big picture and is useful
+for future reference in case the feature review becomes relevant for future
+reviews, bugs, etc. You can add the *SECURITY* field as a column to show for the
+search list page to get a quick overview of what feature is assigned to which
+team member for review, and more importantly which features are pending
+assignment.
+
 Consider team members' expertise in the different aspects of Chrome OS when
 assigning security reviews. Work with Chrome OS security leads to validate and
 confirm assignments, and make sure that folks know which features are assigned
