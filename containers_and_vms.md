@@ -728,6 +728,26 @@ This can lead to blurry results.
 You can adjust the resolution of your display, or tweak things via [Sommelier]
 (see above for more details).
 
+### Will synergy work?
+
+[Synergy](https://symless.com/synergy) will not work (as a client or server).
+It requires capturing and spoofing inputs (e.g. mouse/keyboard) for all windows.
+Since we're built on top of [Wayland], by design, one client cannot get access
+to any other client on the system.
+This is a strong security boundary between clients as we don't want arbitrary
+code running inside of a container being able to break out and attack other
+clients (like the browser) and sending arbitrary keystrokes.
+
+There are no plans to ever enable this kind of control from the container.
+This isn't to say a synergy-like solution will never happen in Chrome OS
+(e.g. something like [CRD](https://support.google.com/chrome/answer/1649523)),
+just that the solution won't be synergy or any other tool in a container.
+
+*** aside
+You can run synergy, and probably get it to convey input events for the single
+window that it's running under, but that's as close as you'll get.
+***
+
 ### Can I run Windows programs?
 
 Sure, give [WINE] a try.
