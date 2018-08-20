@@ -274,7 +274,13 @@ You can look up the board name in our public [device list].
 
 ### Old Kernels
 
-There are no plans to support devices running Linux 3.10 or older.
+There are no plans to support Linux 3.14 or older.
+
+These require backports of new features that are extensive and often invasive.
+For example:
+* [vsock](https://crbug.com/763970)
+* [aarch64 kvm](https://crbug.com/846515)
+* [Foreshadow/L1TF](https://crbug.com/875512)
 
 You can look up the board name in our public [device list].
 
