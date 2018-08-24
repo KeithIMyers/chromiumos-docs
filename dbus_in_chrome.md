@@ -41,11 +41,6 @@ Services with implementations that depend on `//chrome` should be implemented
 within [chrome/browser/chromeos/dbus] and instantiated by
 [chrome_browser_main_chromeos.cc].
 
-Note that some existing services that depend on `//chrome` are implemented in
-[chromeos/dbus/services] and declare `Delegate` interfaces that are implemented
-by code in [chrome/browser/chromeos/dbus]. This pattern should not be used in
-new code. [Issue 843392] tracks updating existing services.
-
 ### Policy files
 
 In order for Chrome to be able to take ownership of a service name and for other
@@ -220,7 +215,6 @@ the correct initial state from the daemon.
 [ash/dbus]: https://chromium.googlesource.com/chromium/src/+/master/ash/dbus/
 [ash_dbus_services.cc]: https://chromium.googlesource.com/chromium/src/+/master/ash/dbus/ash_dbus_services.cc
 [chrome/browser/chromeos/dbus]: https://chromium.googlesource.com/chromium/src/+/master/chrome/browser/chromeos/dbus/
-[Issue 843392]: https://crbug.com/843392
 [chrome_browser_main_chromeos.cc]: https://chromium.googlesource.com/chromium/src/+/master/chrome/browser/chromeos/chrome_browser_main_chromeos.cc
 [chromeos/dbus/services]: https://chromium.googlesource.com/chromium/src/+/master/chromeos/dbus/services/
 [ash/BUILD.gn]: https://chromium.googlesource.com/chromium/src/+/master/ash/BUILD.gn
