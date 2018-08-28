@@ -71,11 +71,11 @@ section.
 
 *   Update the build system for your package to build your `*_fuzzer` binary.
 *   Update your package's ebuild file:
-    1.  Add `asan` and `fuzzer` to the `IUSE` flags list.
+    1.  Add `fuzzer` to the `IUSE` flags list.
     2.  Build you new fuzzer (conditioned on `use fuzzer`), with the
         appropriate flags:
-        1.  [Inherit cros-fuzzer]
-        2.  [Set up flags: call asan-setup-env & fuzzer-setup-env]
+        1.  [Inherit cros-fuzzer and cros-sanitizers eclasses]
+        2.  [Set up flags: call sanitizers-setup-env in src_configure]
         3.  [USE flags: fuzzer]
     3.  Install your binary in `/usr/libexec/fuzzers/`
     4.  Build the libraries your fuzzer depends on with the appropriate
@@ -218,6 +218,9 @@ the previous section for an example.
     To build your new fuzzer, once you have updated the ebuild file, it should
     be sufficient to build it with `USE="asan fuzzer"`.
 
+    Note: Fuzzing using undefined behavior sanitizer (ubsan) is also supported.
+    To use ubsan, simply replace `asan` with `ubsan` in the commands below.
+
     ```bash
     # Run build_packages to build the package and its dependencies.
     $ USE="asan fuzzer" ./build_packages --board=${BOARD} --skip_chroot_upgrade <your-package>
@@ -300,15 +303,15 @@ the previous section for an example.
     to pass these flags manually once you have updated the ebuild file.
 
 3.  Update your package's ebuild file:
-    1.  Add `asan` and `fuzzer` to the `IUSE` flags list.
+    1.  Add `fuzzer` to the `IUSE` flags list.
 
         In all probability your package ebuild already contains an IUSE
-        definition. Look for a line starting `IUSE="..."`, and add `asan` and
-        `fuzzer` to the list. If your file does not already contain such a
-        line, add one near the top:
+        definition. Look for a line starting `IUSE="..."`, and add `fuzzer`
+        to the list. If your file does not already contain such a line, add
+        one near the top:
 
         ```bash
-        IUSE="asan fuzzer"
+        IUSE="fuzzer"
         ```
 
         See the [puffin ebuild] for a good example.
@@ -316,29 +319,29 @@ the previous section for an example.
     2.  Update the ebuild file to build the new binary when the fuzzer
         USE flag is being used:
         1.  Find the `inherit` line in  your ebuild (near the top of the
-            file). Make sure that `cros-fuzzer` is in the inherit list. If your
-            file does not have a line that starts with `inherit `, add one near
-            the top (after the `EAPI` line and before the `KEYWORDS` line):
+            file). Make sure that `cros-fuzzer and cros-sanitizers` are in the
+            inherit list. If your file does not have a line that starts with
+           `inherit `, add one near the top (after the `EAPI` line and before
+            the `KEYWORDS` line):
 
             ```bash
-            inherit cros-fuzzer
+            inherit cros-fuzzer cros-sanitizers
             ```
 
-        2.  Find the `src_compile()` function in your ebuild file. If
+        2.  Find the `src_configure()` function in your ebuild file. If
             there isn't one, add one:
 
             ```bash
-            src_compile() {
+            src_configure() {
             }
             ```
 
-        3.  Add calls `asan-setup-env` and `fuzzer-setup-env`, near the top of
-            `src_compile`, to set the appropriate compiler/linker flags:
+        3.  Add calls `sanitizers-setup-env`, near the top of
+            `src_configure`, to set the appropriate compiler/linker flags:
 
             ```bash
-            src_compile() {
-                asan-setup-env
-                fuzzer-setup-env
+            src_configure() {
+                sanitizers-setup-env
                 ...
             }
             ```
@@ -384,6 +387,9 @@ the previous section for an example.
 
     To build your new fuzzer, once you have updated the ebuild file, it should
     be sufficient to build it with `USE="asan fuzzer"`:
+
+    Note: Fuzzing using undefined behavior sanitizer (ubsan) is also supported.
+    To use ubsan, simply replace `asan` with `ubsan` in the commands below.
 
     ```bash
     # Run build_packages to build the package and its dependencies.
@@ -960,11 +966,11 @@ to ask questions.
 
 [non-security bugs]: https://bugs.chromium.org/p/chromium/issues/list?can=1&q=reporter%3Aclusterfuzz%40chromium.org+-status%3Aduplicate+-status%3Awontfix+-type%3Dbug-security&sort=modified
 
-[Inherit cros-fuzzer]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/chromeos-base/libchrome/libchrome-395517.ebuild#15
+[Inherit cros-fuzzer and cros-sanitizers eclasses]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/645c52be0d4388eb8200f8ef07cc60875dcc5b10/media-libs/virglrenderer/virglrenderer-9999.ebuild#6
 
-[Set up flags: call asan-setup-env & fuzzer-setup-env]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/chromeos-base/libchrome/libchrome-395517.ebuild?q=asan-setup-env+package:%5Echromeos_public$&dr=C
+[Set up flags: call sanitizers-setup-env in src_configure]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/645c52be0d4388eb8200f8ef07cc60875dcc5b10/media-libs/virglrenderer/virglrenderer-9999.ebuild#47
 
-[USE flags: fuzzer]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/chromeos-base/libchrome/libchrome-395517.ebuild?q=IUSE+fuzzer+package:%5Echromeos_public$&dr=C
+[USE flags: fuzzer]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/07580574deb4409eec940ed582d6139b26094c07/dev-util/puffin/puffin-9999.ebuild#29
 
 [Using ClusterFuzz]: #using-clusterfuzz
 
@@ -980,7 +986,7 @@ to ask questions.
 
 [Chromium issue tracker]: https://crbug.com
 
-[fuzzer builder]: https://build.chromium.org/p/chromiumos/builders/amd64-generic-fuzzer
+[fuzzer builder]: https://cros-goldeneye.corp.google.com/chromeos/legoland/builderHistory?buildConfig=amd64-generic-fuzzer&buildBranch=master
 
 [chromeos-fuzzing@google.com]: mailto:chromeos-fuzzing@google.com
 
