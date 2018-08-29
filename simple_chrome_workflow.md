@@ -1,48 +1,40 @@
 # Building Chrome for Chrome OS (Simple Chrome)
 
-This workflow allows you to quickly build/deploy Chromium to any Chromium OS
-device without needing a Chromium OS source checkout or chroot. It's useful for
-trying out your changes on a real device while you're doing Chromium
-development. If you have an OS checkout and want your local Chromium changes to
+This workflow allows you to quickly build/deploy Chrome to a Chrome OS
+VM or device without needing a Chrome OS source checkout or chroot. It's useful
+for trying out your changes on Chrome OS while you're doing Chrome
+development. If you have an OS checkout and want your local Chrome changes to
 be included when building a full OS image, see the [OS development guide].
 
 At its core is the `chrome-sdk` shell which sets up the shell environment and
-fetches the necessary SDK components (CrOS toolchain, sysroot, etc.).
+fetches the necessary SDK components (Chrome OS toolchain, sysroot, VM, etc.).
 
 [TOC]
 
 ## Typography conventions
 
-| Label         | Paths, files, and commands                             |
-|---------------|--------------------------------------------------------|
-|  (outside)    | on your build machine, outside the chroot              |
-|  (inside)     | inside the `chrome-sdk` shell on your build machine (1)|
-|  (device)     | on your Chromium OS device                             |
-|  (chroot)     | inside the `cros_sdk` crhoot                           |
+| Label         | Paths, files, and commands                            |
+|---------------|-------------------------------------------------------|
+|  (shell)      | outside the chroot and SDK shell on your workstation  |
+|  (sdk)        | inside the `chrome-sdk` SDK shell on your workstation |
+|  (chroot)     | inside the `cros_sdk` chroot on your workstation      |
+|  (device)     | in your VM or Chrome OS device                        |
 
-(1) Note: This is not the same thing as the `cros_sdk` chroot.
 
 ## Getting started
 
-First make sure you have the following:
-
-1.  [Local copy of the Chromium source code and depot_tools].
-    Be certain to [update .gclient] to include `target_os = ["chromeos"]`.
-1.  USB flash drive 4 GB or larger (for example, a Sandisk Extreme USB 3.0)
-1.  USB to Gigabit Ethernet adapter
-
-*Googlers*: Chromestop has the hardware.
+Check out a copy of the [Chrome source code and depot_tools].
+Be certain to [update .gclient] to include `target_os = ["chromeos"]`.
 
 ### Get the Google API keys
 
-In order to sign in to your Chromebook you must have Google API keys:
+In order to sign in to Chrome OS you must have Google API keys:
 
-*   External contributors, see
-    [api-keys](https://www.chromium.org/developers/how-tos/api-keys).
-    You'll need to put them in your `out_board/Release/args.gn file`, see below.
-*   *Googlers*: see [go/building-chrome](https://go/building-chrome) to get
-    internal source. If you have `src-internal` in your `.gclient` file the
-    official API keys will be set up automatically.
+*   External contributors: See [api-keys]. You'll need to put them in your
+    `out_$BOARD/Release/args.gn file`, see below.
+*   *Googlers*: See [go/chrome-build-instructions] to get the internal source.
+    If you have `src-internal` in your `.gclient` file the official API keys
+    will be set up automatically.
 
 ### Set up gsutil
 
@@ -53,22 +45,30 @@ slowly and fail with "Login Required" from gsutil.
 When prompted for a project ID, enter `134157665460` (this is the Chrome OS
 project ID).
 
+### VM versus Device
+
+The easiest way to develop on Chrome OS is to use a VM. If you're interested
+in hardware-specific features such as graphics acceleration, bluetooth, etc, you
+may also use a physical device (Googlers: Chromestop has the hardware). See
+[Set up the Chrome OS device] for details.
+
 ---
 
 ## Enter the Simple Chrome environment
 
 Building Chrome for Chrome OS requires a toolchain customized for each
-Chromebook model (or "board"). Look up your [Chromium OS board name] by
+Chromebook model (or "board"). For the Chrome OS VM, and non-Googlers, use
+`amd64-generic`. For a physical device, look up the [Chrome OS board name] by
 navigating to the URL `about:version` on the device. For example:
 `Platform 10176.47.0 (Official Build) beta-channel samus` has board `samus`.
 
-To enter the Simple Chrome environment, run this from within your Chromium
-checkout (not the Chromium OS chroot):
+To enter the Simple Chrome environment, run these from within your Chrome
+checkout:
 
 ```
-(outside) cd /path/to/chrome/src
-(outside) export BOARD=samus  # or your board name
-(outside) cros chrome-sdk --board=$BOARD --log-level=info
+(shell) cd /path/to/chrome/src
+(shell) export BOARD=amd64-generic
+(shell) cros chrome-sdk --board=$BOARD --log-level=info [--download-vm]
 ```
 
 The command prompt will change to look like `(sdk $BOARD $VERSION)`.
@@ -77,13 +77,15 @@ Entering the Simple Chrome environment does the following:
 
 1.  Fetches the Chrome OS toolchain and sysroot (SDK) for building Chrome.
 1.  Creates out_$BOARD/Release and generates or updates args.gn.
-1.  Installs and starts [Goma](https://sites.google.com/a/google.com/goma/).
-    (*Non-Googlers* may need to disable this with --nogoma).
+1.  Installs and starts [Goma].
+    (*Non-Googlers* may need to disable this with `--nogoma`).
+1.  `--download-vm` will download a Chrome OS VM and a QEMU binary.
+
 
 *Non-Googlers*: Only generic boards have publicly available SDK downloads, so
-you will need to use a generic board (e.g. amd64-generic) or your own Chrome OS
-build (see [Using a custom Chromium OS build]). For more info and updates star
-[crbug.com/360342](https://crbug.com/360342).
+you will need to use a generic board (e.g. amd64-generic) or your own
+Chrome OS build (see [Using a custom Chrome OS build]). For more info and
+updates star [crbug.com/360342].
 
 ### cros chrome-sdk options:
 
@@ -95,12 +97,12 @@ build (see [Using a custom Chromium OS build]). For more info and updates star
 *   `--log-level=info` Sets the log level to 'info' or 'debug' (default is
     'warn').
 
-> **Important:** When you sync/update your Chromium source, the Chrome OS SDK
+> **Important:** When you sync/update your Chrome source, the Chrome OS SDK
 > version (src/chromeos/CHROMEOS_LKGM) may change. When the SDK version changes
 > you may need to exit and re-enter the Simple Chrome environment to
-> successfully build and deploy Chromium.
+> successfully build and deploy Chrome.
 
-> **Note**: See also [Using a custom Chromium OS build].
+> **Note**: See also [Using a custom Chrome OS build].
 
 ---
 
@@ -109,71 +111,78 @@ build (see [Using a custom Chromium OS build]). For more info and updates star
 To build Chrome, run:
 
 ```
-(inside) autoninja -C out_${SDK_BOARD}/Release chrome chrome_sandbox nacl_helper
+(sdk) autoninja -C out_${SDK_BOARD}/Release chrome chrome_sandbox nacl_helper
 ```
 
-> **Note**: Targets other than **chrome, chrome_sandbox, nacl_helper**, or
+> **Note**: Targets other than **chrome, chrome_sandbox, nacl_helper** or
 > (optionally) **chromiumos_preflight** are not supported in Simple Chrome and
-> will likely fail. unit_tests and browser_tests should be run outside the
-> Simple Chrome environment.
+> will likely fail. browser_tests should be run outside the Simple Chrome
+> environment. Some unit_tests may be built in the Simple Chrome environment and
+> run in the Chrome OS VM. For details, see
+> [Running a Chrome Google Test binary in the VM].
 
-> **Note**: Simple Chrome uses Goma. To watch the build progress, find the Goma
-> port (`$ echo $SDK_GOMA_PORT`) and open http://localhost:<port_number> in a
-> browser.
+> **Note**: Simple Chrome uses [Goma]. To watch the build progress, find the
+> Goma port (`$ echo $SDK_GOMA_PORT`) and open http://localhost:<port_number>
+> in a browser.
 
 > **Note:** The default extensions will be installed by the test image you use
 > below.
 
 ---
 
-## Set up the Chromium OS device
+## Set up the Chrome OS device
 
-Before you can deploy your build of Chromium to the device, it needs to have a
+### Getting started
+
+You need the following:
+1.  USB flash drive 4 GB or larger (for example, a Sandisk Extreme USB 3.0)
+1.  USB to Gigabit Ethernet adapter
+
+Before you can deploy your build of Chrome to the device, it needs to have a
 "test" OS image loaded on it. A test image has tools like rsync that are not
 part of the end-user image.
 
-Chromium should be deployed to a recent Chromium OS test image, ideally the
-version shown in your SDK prompt (or `(inside) echo $SDK_VERSION`).
+Chrome should be deployed to a recent Chrome OS test image, ideally the
+version shown in your SDK prompt (or `(sdk) echo $SDK_VERSION`).
 
 ### Create a bootable USB stick
 
-**Googlers**: Images for all boards are available on go/goldeneye:
+**Googlers**: Images for all boards are available on [go/goldeneye]:
 
-1.  Find the matching Chrome OS version and click on the column for 'Canary' or
-    'Dev'.
+1.  Find the matching Chrome OS version and click on the column for 'Canary'
+    or 'Dev'.
 1.  Click on the dropdown icon in the 'Images' column and click on 'Unsigned
     test image'.
 
 **Non-Googlers**: The build infrastructure is currently in flux. See
-[crbug.com/360342](https://crbug.com/360342) for more details. You may need to
-build your own Chromium OS image.
+[crbug.com/360342] for more details. You may need to build your own Chrome OS
+image.
 
 After you download the compressed tarball containing the test image (it should
 have "test" somewhere in the file name), extract the image by running:
 
 ```
-(inside) tar xf ~/Downloads/<image-you-downloaded>
+(sdk) tar xvf ~/Downloads/<image-you-downloaded>
 ```
 
 Copy the image to your USB stick using `cros flash`:
 
 ```
-(inside) cros flash usb:// chromiumos_test_image.bin
+(sdk) cros flash usb:// chromiumos_test_image.bin
 ```
 
-> **Tip:** If you have a chromiumos checkout, the following can be used to
+> **Tip:** If you have a Chrome OS checkout, the following can be used to
 update a device that already has a test image installed. Star
-[crbug.com/403086](https://crbug.com/403086) for updates on a proposal to
-support this without a chromiumos checkout.
+[crbug.com/403086] for updates on a proposal to support this without a
+Chrome OS checkout.
 
 ```
 .../chromeos/src $ cros flash $IP_ADDR chromiumos_test_image.bin
 ```
 
-If `cros flash` does not work you can also create an image using `dd`.
-See [Flashing an image to USB using dd].
-
 ### Put your Chrome OS device in dev mode
+
+You can skip this section if you're using a VM.
 
 > **Note:** Switching to dev mode wipes all data from the device (for security
 > reasons).
@@ -222,13 +231,6 @@ You need to enable it.
 
 You can now unplug the USB stick.
 
----
-
-## Deploying Chrome to the device
-
-To deploy the build to a device, you will need direct SSH access to it from your
-computer. The scripts below handle everything else.
-
 ### Connect device to Ethernet
 
 Use your USB-to-Ethernet adapter to connect the device to a network.
@@ -245,16 +247,31 @@ restricted network.
 
 You can also run `ifconfig` from the terminal (Ctrl-Alt-F2).
 
+---
+
+## Deploying Chrome to the device
+
+To deploy the build to a device/VM, you will need direct SSH access to it from
+your computer. The scripts below handle everything else.
+
 ### Using deploy_chrome
 
-The `deploy_chrome` script uses rsync to incrementally deploy to the device.
+The `deploy_chrome` script uses rsync to incrementally deploy Chrome to the
+device/VM.
 
-Specify the build output directory to deploy from using `--build-dir`, and the
-IP address of the target device (which must be ssh-able as user 'root') using
-`--to`:
+Specify the build output directory to deploy from using `--build-dir`. For the
+VM:
 
 ```
-(inside) deploy_chrome --build-dir=out_${SDK_BOARD}/Release --to=$IP_ADDR
+(sdk) deploy_chrome --build-dir=out_${SDK_BOARD}/Release \
+      --to=localhost --port=9222
+```
+
+For a physical device, which must be ssh-able as user 'root', you must specify
+the IP address using `--to`:
+
+```
+(sdk) deploy_chrome --build-dir=out_${SDK_BOARD}/Release --to=$IP_ADDR
 ```
 
 > **Note:** The first time you run this you will be prompted to remove rootfs
@@ -272,8 +289,8 @@ device, e.g.:
 *   When using other compile options that produce a significantly larger image.
 
 ```
-(inside) deploy_chrome --build-dir=out_$BOARD/Release --to=$IP_ADDR --mount \
-         [--nostrip]
+(sdk) deploy_chrome --build-dir=out_$SDK_BOARD/Release --to=$IP_ADDR --mount \
+      [--nostrip]
 ```
 
 > **Note:** This also prompts to remove rootfs verification so that
@@ -308,7 +325,7 @@ TARGET             SOURCE                                      FSTYPE OPTIONS
 
 In order to keep Chrome and Chrome OS in sync, the Chrome OS test image
 should be updated weekly. See [Create a bootable USB stick] for a tip on
-updating an existing test device if you have a chromiumos checkout.
+updating an existing test device if you have a Chrome OS checkout.
 
 ---
 
@@ -343,7 +360,7 @@ This step is only necessary if you run `cros chrome-sdk` with `--nogn-gen`.
 To create a GN build directory, run the following inside the chrome-sdk shell:
 
 ```
-(inside) gn gen out_$SDK_BOARD/Release --args="$GN_ARGS"
+(sdk) gn gen out_$SDK_BOARD/Release --args="$GN_ARGS"
 ```
 
 This will generate `out_$SDK_BOARD/Release/args.gn`.
@@ -357,7 +374,7 @@ This will generate `out_$SDK_BOARD/Release/args.gn`.
 You can edit the args with:
 
 ```
-(inside) gn args out_$SDK_BOARD/Release
+(sdk) gn args out_$SDK_BOARD/Release
 ```
 
 You can replace `Release` with `Debug` (or something else) for different
@@ -371,7 +388,7 @@ info on GN, run `gn help` on the command line or read the [quick start guide].
 For cros chrome-sdk GN configurations, Release is the default. A debug build of
 Chrome will include useful tools like DCHECK and debug logs like DVLOG. For a
 Debug configuration, specify
-`--args="$GN_ARGS is_debug=true is_component_build=false"` (inside).
+`--args="$GN_ARGS is_debug=true is_component_build=false"`.
 
 Alternately, you can just turn on DCHECKs for a release build. You can do this
 with `--args="$GN_ARGS dcheck_always_on=true"`.
@@ -404,16 +421,17 @@ attach the gdb server to the top-level Chrome process.
 
 ```
 (device) sudo /sbin/iptables -A INPUT -p tcp --dport 1234 -j ACCEPT
-(device) sudo gdbserver --attach :1234 $(pgrep chrome -P $(pgrep session_manager))
+(device) sudo gdbserver \
+         --attach :1234 $(pgrep chrome -P $(pgrep session_manager))
 ```
 
 On your host machine (inside the chrome-sdk shell), run gdb and start the Python
 interpreter:
 
 ```
-(inside) cd %CHROME_DIR%/src
-(inside) gdb out_${SDK_BOARD}/Release/chrome
-Reading symbols from /usr/local/google2/chromium2/src/out_link/Release/chrome...
+(sdk) cd %CHROME_DIR%/src
+(sdk) gdb out_${SDK_BOARD}/Release/chrome
+Reading symbols from /usr/local/google2/chromium2/src/out_amd64-generic/Release/chrome...
 (gdb) pi
 >>>
 ```
@@ -427,17 +445,18 @@ Then from within the Python interpreter, run these commands:
 ```python
 import os
 sysroot = os.environ['SYSROOT']
+board = os.environ['SDK_BOARD']
 gdb.execute('set sysroot %s' % sysroot)
 gdb.execute('set solib-absolute-prefix %s' % sysroot)
 gdb.execute('set debug-file-directory %s/usr/lib/debug' % sysroot)
-gdb.execute('set solib-search-path out_%s/Release/lib' % os.environ['SDK_BOARD'])  # Or "Debug" for a debug build
+# "Debug" for a debug build
+gdb.execute('set solib-search-path out_%s/Release/lib' % board)
 gdb.execute('target remote $IP_ADDR:1234')
 ```
 
 If you wish, after you connect, you can Ctrl-D out of the Python shell.
 
-Extra debugging instructions are located at
-[debugging tips](https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips).
+Extra debugging instructions are located at [debugging tips].
 
 ---
 
@@ -451,11 +470,12 @@ checkout and re-run `cros chrome-sdk`.
 
 **IMPORTANT NOTES:**
 
-*   Every time that you update Chrome or the Chrome OS SDK, it is possible that
-    Chrome may start depending on new features from a new Chrome OS image. This
-    can cause unexpected problems, so it is important to update your image
-    regularly. Instructions for updating your Chrome OS image are above in
-    [Set Up the Chromium OS device].
+*   Every time that you update Chrome or the Chrome OS SDK, it is possible
+    that Chrome may start depending on new features from a new Chrome OS
+    image. This can cause unexpected problems, so it is important to update
+    your image regularly. Instructions for updating your Chrome OS image are
+    above in [Set up the Chrome OS device]. This is not a concern for a
+    downloaded VM.
 *   Don't forget to re-configure your custom build directories if you have them
     (see [Custom build directories]).
 
@@ -465,22 +485,23 @@ You can specify a version of Chrome OS to build against. This is handy for
 tracking down when a particular bug was introduced.
 
 ```
-(outside) cros chrome-sdk --board=$BOARD --version=3680.0.0
+(shell) cros chrome-sdk --board=$BOARD --version=11005.0.0
 ```
 
-Once you are finished testing the old version of the chrome-sdk, you can always start a new shell with the latest version again. Here's an example:
+Once you are finished testing the old version of the chrome-sdk, you can
+always start a new shell with the latest version again. Here's an example:
 
 ```
-(outside) cros chrome-sdk --board=$BOARD
+(shell) cros chrome-sdk --board=$BOARD --clear-sdk-cache
 ```
 
 ### Updating Chrome
 
 ```
-(inside) exit
-(outside) git checkout master && git pull   # (or if you prefer, git rebase-update)
-(outside) gclient sync
-(outside) cros chrome-sdk --board=$BOARD --log-level=info
+(sdk) exit
+(shell) git checkout master && git pull   # (or if you prefer, git rebase-update)
+(shell) gclient sync
+(shell) cros chrome-sdk --board=$BOARD --log-level=info
 ```
 
 > **Tip:** If you update Chrome inside the chrome-sdk, you may then be using an
@@ -501,28 +522,15 @@ When updating the list:
 1.  Changes to chromite will not affect Simple Chrome until a chromite roll
     occurs.
 
-### Using a custom Chromium OS build
+### Using a custom Chrome OS build
 
-If you are making changes to Chromium OS and have a Chromium OS build inside a
+If you are making changes to Chrome OS and have a Chrome OS build inside a
 chroot that you want to build against, run `cros chrome-sdk` with the `--chroot`
 option:
 
 ```
-(outside) cros chrome-sdk --board=$BOARD --chroot=/path/to/chromiumos/chroot
+(shell) cros chrome-sdk --board=$BOARD --chroot=/path/to/chromiumos/chroot
 ```
-
-### Flashing an image to USB using dd
-
-In the below command, the X in sdX is the path to your usb key, and you can use
-dmesg to figure out the right path (it'll show when you plug it in). Make sure
-that the USB stick is not mounted before running this. You might have to turn
-off automounting in your operating system.
-
-```
-(inside) sudo dd if=chromiumos_test_image.bin of=/dev/sdX bs=1G iflag=fullblock oflag=sync
-```
-
-Be careful - you don't want to have `dd` write over your root partition!
 
 ### Using cros flash with xbuddy to download images
 
@@ -546,8 +554,8 @@ By default, cros chrome-sdk prepends something like '`(sdk link R52-8315.0.0)`'
 to the prompt (with the version of the prebuilt system being used).
 
 If you prefer to colorize the prompt, you can set `PS1` in
-`~/.chromite/chrome_sdk.bashrc`, e.g. to prepend a yellow '`(sdk link 8315.0.0)`'
-to the prompt:
+`~/.chromite/chrome_sdk.bashrc`, e.g. to prepend a yellow
+'`(sdk link 8315.0.0)`' to the prompt:
 
 ```
 PS1='\[\033[01;33m\](sdk ${SDK_BOARD} ${SDK_VERSION})\[\033[00m\] \w \[\033[01;36m\]$(__git_ps1 "(%s)")\[\033[00m\] \$ '
@@ -559,27 +567,33 @@ environment variable.
 
 The legacy `GYP` build system is no longer supported.
 
-[Custom build directories]: #Custom-build-directories
-[Updating the version of the Chrome OS SDK]: #Updating-the-version-of-the-Chrome-OS-SDK
-[Using a custom Chromium OS build]: #Using-a-custom-Chromium-OS-build
-[Flashing an image to USB using dd]: #Flashing-an-image-to-USB-using-dd
-[Command-line flags and environment variables]: #Command-line-flags-and-environment-variables
-[Deploying Chrome to the user partition]: #Deploying-Chrome-to-the-user-partition
-[Debug builds]: #Debug-builds
-[Create a bootable USB stick]: #Create-a-bootable-USB-stick
-
-[OS development guide]: https://www.chromium.org/chromium-os/developer-guide#TOC-Making-changes-to-the-Chromium-web-
-[Local copy of the Chromium source code and depot_tools]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md
+[Custom build directories]: #custom-build-directories
+[Updating the version of the Chrome OS SDK]: #updating-the-version-of-the-chrome-os-sdk
+[Using a custom Chrome OS build]: #using-a-custom-chrome-os-build
+[Command-line flags and environment variables]: #command-line-flags-and-environment-variables
+[Deploying Chrome to the user partition]: #deploying-chrome-to-the-user-partition
+[Debug builds]: #debug-builds
+[Create a bootable USB stick]: #create-a-bootable-usb-stick
+[Set up the Chrome OS device]: #set-up-the-chrome-os-device
+[OS development guide]: https://chromium.googlesource.com/chromiumos/docs/+/master/developer_guide.md
+[Chrome source code and depot_tools]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md
 [update .gclient]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/chromeos_build_instructions.md#updating-your-gclient-config
-[Chromium OS board name]: https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices
+[Chrome OS board name]: https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices
 [GN build configuration]: https://www.chromium.org/developers/gn-build-configuration
-[quick start guide]: https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/quick_start.md
+[quick start guide]: https://gn.googlesource.com/gn/+/master/docs/quick_start.md
 [device-specific instructions]: https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices
 [generic instructions]: https://www.chromium.org/a/chromium.org/dev/chromium-os/developer-information-for-chrome-os-devices/generic
 [rootfs has been removed]: https://www.chromium.org/chromium-os/poking-around-your-chrome-os-device#TOC-Making-changes-to-the-filesystem
 [remounted as read-write]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips#TOC-Setting-up-the-device
 [additional debugging tips]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips#TOC-Enabling-core-dumps
-[Set Up the Chromium OS device]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/building-chromium-browser#TOC-Set-up-the-Chromium-OS-device
 [chromite repo]: https://chromium.googlesource.com/chromiumos/chromite/
 [issue 437877]: https://bugs.chromium.org/p/chromium/issues/detail?id=403086
 [Cros Flash page]: https://www.chromium.org/chromium-os/build/cros-flash
+[Running a Chrome Google Test binary in the VM]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md#Run-a-Chrome-GTest-binary-in-the-VM
+[go/goldeneye]: https://cros-goldeneye.corp.google.com/chromeos/console/listBuild
+[debugging tips]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips
+[go/chrome-build-instructions]: https://companydoc.corp.google.com/company/teams/chrome/chrome_build_instructions.md
+[api-keys]: https://www.chromium.org/developers/how-tos/api-keys
+[Goma]: https://sites.google.com/a/google.com/goma/
+[crbug.com/360342]: https://bugs.chromium.org/p/chromium/issues/detail?id=360342
+[crbug.com/403086]: https://bugs.chromium.org/p/chromium/issues/detail?id=403086
