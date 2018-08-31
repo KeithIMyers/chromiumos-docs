@@ -69,28 +69,36 @@ To upstream, create a remote to track upstream.
 
 For example the main kernel:
 
-`git remote add upstream git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+```
+git remote add upstream git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
 git fetch upstream
-git checkout -b send-upstream upstream/master`
+git checkout -b send-upstream upstream/master
+```
 
 You can then create a commit within this branch. This can be done either by
 cherry-picking the commit from another branch and perhaps changing the commit
 message:
 
-`git cherry-pick my-change
+```
+git cherry-pick my-change
 git commit --amend
-# edit the message and save`
+# edit the message and save
+```
 
 or using git am to turn a patch into a commit:
 
-`git am my-change.patch`
+```
+git am my-change.patch
+```
 
 or manually applying a patch, and then committing:
 
-`patch -p1 < my-change.patch`
-`git add ...`
-`git commit`
-`# create a suitable message`
+```
+patch -p1 < my-change.patch
+git add ...
+git commit
+# create a suitable message
+```
 
 ### Sending patches the easy way (patman)
 
@@ -102,17 +110,22 @@ U-Boot has it also.
 
 Amend your top commit to have the line:
 
-`Series-to: LKML <linux-kernel@vger.kernel.org>`
-
-`Series-cc: (anyone you want to Cc all patches in the series to)`
+```
+Series-to: LKML <linux-kernel@vger.kernel.org>
+Series-cc: (anyone you want to Cc all patches in the series to)
+```
 
 Then type:
 
-`patman -n`
+```
+patman -n
+```
 
 to generate patches, check that they will go to the right place, and send them. Or:
 
-`patman`
+```
+patman
+```
 
 to generate patches and send them.
 
@@ -128,16 +141,17 @@ Full documentation is available in the README (patman -h) or [here](http://git.d
 
 Like any kernel patch you should use checkpatch.pl to make sure it is clean
 (see below). Also see Documentation/SubmittingPatches in the kernel source tree
-for instructions. You can use '**git show HEAD**' to see your patch.
+for instructions. You can use `git show HEAD` to see your patch.
 
-To send upstream, you can create patch files with '**git format-patch**', and
+To send upstream, you can create patch files with `git format-patch`, and
 then email then. This creates a set of patch files named '000n-<something>'
 where 'n' is incremented starting from 1, and "something" comes from the first
 line of each change description.
 
-You can use **get\_maintainer.pl** to figure out who to send it to.
+You can use `get_maintainer.pl` to figure out who to send it to.
 
-`# turn top commit into a patch
+```
+# turn top commit into a patch
 git format-patch HEAD~
 
 # or perhaps you want to do the top 5 commits
@@ -145,39 +159,44 @@ git format-patch HEAD~5
 # edit patches if you like
 
 ./scripts/get_maintainer.pl 0001-mypatch.patch | \
-sed 's/ *([^)]*) *//g' | \
-sed 's/"//g' | \
-sed 's/^\(.*\)$/--cc="\1" /' | \
-tr -d '\n'
+  sed 's/ *([^)]*) *//g' | \
+  sed 's/"//g' | \
+  sed 's/^\(.*\)$/--cc="\1" /' | \
+  tr -d '\n'
 # spits out a list of --cc addresses
 
 # send out email, with subject prefix PATCH v5 (you can leave this out for default)
 git send-email --to=linux-arm-kernel@lists.infradead.org --cc=... --cc=... --signoff --subject-prefix="PATCH v5" --annotate 0001-my-change.patch
-# Edit the patch as required`
+# Edit the patch as required
+```
 
-> (**Note:** **git send-email** requires **git-email** to be installed on your host ('**sudo apt-get install git-email**'),
-> or you will get the message "**git: 'send-email' is not a git command. See 'git --help'.**".
-> You also need to configure .gitconfig to use your SMTP server)
+> (**Note:** `git send-email` requires `git-email` to be installed on your host (`sudo apt-get install git-email`),
+> or you will get the message "`git: 'send-email' is not a git command. See git --help.`".
+> You also need to configure `.gitconfig` to use your SMTP server)
 
 If you are sending a series of patches it is nice to include a cover letter.
-This turns up as patch zero in the series. Pass the **\--cover-letter** flag to
-'**git format-patch**' and it will create a 0000-subject file which you can
-edit to contain your cover letter. When you use '**git send-email'** you can
+This turns up as patch zero in the series. Pass the `--cover-letter` flag to
+`git format-patch` and it will create a 0000-subject file which you can
+edit to contain your cover letter. When you use `git send-email` you can
 send files 000\* to send the cover letter and all your patches as one email
 set.
 
 Another flow that might work is to send email directly, without going through
-'**git format-patch**'. For example you can email the top five commits to the
+`git format-patch`. For example you can email the top five commits to the
 mailing list with something like:
 
-`git send-email --to=... -cc=... --signoff --subject-prefix=... --annotate HEAD~5`
+```
+git send-email --to=... -cc=... --signoff --subject-prefix=... --annotate HEAD~5
+```
 
-The **\--annotate** lets you edit them before they go out, which is probably a good idea in this case!
+The `--annotate` lets you edit them before they go out, which is probably a good idea in this case!
 
 When replying to an email thread with an updated patch, use the something like
 the following to attach your email to the thread:
 
-`git send-email --thread --no-chain-reply-to --in-reply-to=<message id> --to=... --cc=... --signoff --subject-prefix=... --annotate 0002-...`
+```
+git send-email --thread --no-chain-reply-to --in-reply-to=<message id> --to=... --cc=... --signoff --subject-prefix=... --annotate 0002-...
+```
 
 You can find the message id under the label <Message-Id> in gmail in the 'Show
 Original' link in the drop down options for the email you want to reply to.
@@ -188,11 +207,11 @@ There is a video here:
 The patch flow throughout the video is:
 [](http://www.youtube.com/watch?v=LLBrBBImJt4)
 
-1.  **git diff**
-2.  **git commit**
-3.  **git show**
-4.  **git format-patch**
-5.  **git send-email**
+1.  `git diff`
+2.  `git commit`
+3.  `git show`
+4.  `git format-patch`
+5.  `git send-email`
 
 Patch checklist: (at 34:30 of the video)
 
@@ -213,35 +232,28 @@ The main reason for this is that there's no concept of "The Chromium OS
 Authors" outside of our project, since it refers to the AUTHORS file that isn't
 bundled with the kernel.
 
+```
 // SPDX-License-Identifier: GPL-2.0
-
 // Copyright 2018 Google LLC.
+```
 
-For reference, old drivers already existing in upstream might still have the full text format, which would look like below.
+For reference, old drivers already existing in upstream might still have the
+full text format, which would look like below.
 
-/\*
-
-\* Copyright 2018 Google LLC.
-
-\*
-
-\* This software is licensed under the terms of the GNU General Public
-
-\* License version 2, as published by the Free Software Foundation, and
-
-\* may be copied, distributed, and modified under those terms.
-
-\*
-
-\* This program is distributed in the hope that it will be useful,
-
-\* but WITHOUT ANY WARRANTY; without even the implied warranty of
-
-\* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-
-\* GNU General Public License for more details.
-
-\*/
+```
+/*
+ * Copyright 2018 Google LLC.
+ *
+ * This software is licensed under the terms of the GNU General Public
+ * License version 2, as published by the Free Software Foundation, and
+ * may be copied, distributed, and modified under those terms.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ */
+```
 
 ## How do I check my patches are correct?
 
@@ -272,12 +284,14 @@ the Linux Kernel guidelines.
 You should use this perl script to check that your patch conforms to the kernel
 coding standard. It is kept in the linux kernel tree.
 
-`git format-patch HEAD~`
-`scripts/checkpatch.pl 0001-my-change.patch`
-`# make improvements`
-`git add ...`
-`git commit --amend`
-`# rinse and repeat`
+```
+git format-patch HEAD~
+scripts/checkpatch.pl 0001-my-change.patch
+# make improvements
+git add ...
+git commit --amend
+# rinse and repeat
+```
 
 ### Automating the Compliance Checks
 
@@ -285,26 +299,28 @@ This script might be useful also, as it checks a series of patches, checks for
 Chrome OS-specific commit tags and prints a summary at the end. Put it in your
 path and run it from anywhere.
 
-`#! /bin/sh`
+```
+#! /bin/sh
 
-`KERNEL=./scripts/`
-`OUT=$(tempfile)`
-`while (( "$#" )); do`
-`ERRCP=`
-`ERR=`
-`"${KERNEL}/checkpatch.pl" $1 || ERRCP=1`
-`grep BUG= $1 && ERR="$ERR BUG"`
-`grep TEST= $1 && ERR="$ERR TEST"`
-`grep "Change-Id" $1 && ERR="$ERR Change-Id"`
-`grep "Review URL" $1 && ERR="$ERR Review URL"`
-`if [ -n "${ERR}" ]; then`
-`echo "Bad $1 ($ERR)" >>$OUT`
-`else`
-`echo "OK $1" >>$OUT`
-`fi`
-`shift`
-`done`
-`cat $OUT`
+KERNEL=./scripts/
+OUT=$(tempfile)
+while (( "$#" )); do
+ERRCP=
+ERR=
+"${KERNEL}/checkpatch.pl" $1 || ERRCP=1
+grep BUG= $1 && ERR="$ERR BUG"
+grep TEST= $1 && ERR="$ERR TEST"
+grep "Change-Id" $1 && ERR="$ERR Change-Id"
+grep "Review URL" $1 && ERR="$ERR Review URL"
+if [ -n "${ERR}" ]; then
+echo "Bad $1 ($ERR)" >>$OUT
+else
+echo "OK $1" >>$OUT
+fi
+shift
+done
+cat $OUT
+```
 
 ## How do I backport an upstream patch?
 
@@ -323,35 +339,38 @@ use](https://groups.google.com/a/chromium.org/forum/#!msg/chromium-os-reviews/S6
 
 Otherwise, the follow steps use `git cherry-pick -x` to do most of the work:
 
-`**NAME**`
+```
+NAME
+        git-cherry-pick - Apply the changes introduced by some existing commits
 
-`git-cherry-pick - Apply the changes introduced by some existing commits`
+SYNOPSIS
+        git cherry-pick [--edit] [-n] [-m parent-number] [-s] [-x] [--ff] <commit>...
 
-`**SYNOPSIS**`
+DESCRIPTION
+	Given one or more existing commits, apply the change each one
+	introduces, recording a new commit for each. This requires your working
+	tree to be clean (no modifications from the HEAD commit).
 
-`git cherry-pick [--edit] [-n] [-m parent-number] [-s] [-x] [--ff] <commit>...`
-
-`**DESCRIPTION**`
-
-`Given one or more existing commits, apply the change each one introduces, recording a new commit for each. This requires your working tree to be`
-
-`clean (no modifications from the HEAD commit).`
-
-`**OPTIONS**`
-
+OPTIONS
 ...
-
-`-x`
-
-`When recording the commit, append to the original commit message a note that indicates which commit this change was cherry-picked from. Append` the note only for cherry picks without conflicts. Do not use this option if you are cherry-picking from your private branch because the information is useless to the recipient. If on the other hand you are cherry-picking between two publicly visible branches (e.g. backporting a fix to a maintenance branch for an older release from a development branch), adding this information can be useful.
+    -x
+	When recording the commit, append to the original commit message a note
+	that indicates which commit this change was cherry-picked from. Append
+	the note only for cherry picks without conflicts. Do not use this
+	option if you are cherry-picking from your private branch because the
+	information is useless to the recipient. If on the other hand you are
+	cherry-picking between two publicly visible branches (e.g. backporting
+	a fix to a maintenance branch for an older release from a development
+        branch), adding this information can be useful.
+```
 
 First, add Linus's tree as a remote to the chromium-os kernel tree (assuming the chromium-os root is `~/chromiumos`):
 
-`cd ~/chromiumos/src/third_party/kernel`
-
-`git remote add linus git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git`
-
-`git remote update`
+```
+cd ~/chromiumos/src/third_party/kernel
+git remote add linus git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+git remote update
+```
 
 This will take a little while as git fetches all upstream commits. Luckily, git
 is smart and won't refetch commits already in the chromium-os tree.
@@ -360,21 +379,25 @@ Once the tree is updated, take a brief look at whats been happening upstream
 recently to a particular path (`--oneline` shows short-form upstream hashes and
 the brief commit message):
 
-`git log --oneline linus/master /path/of/interest`
+```
+git log --oneline linus/master /path/of/interest
+```
 
 We can view that juicy commit using its upstream hash:
 
-`git show` <upstream\_commit\_hash>
+```
+git show <upstream_commit_hash>
+```
 
 To backport the commit to the chromium-os tree, first start a new branch from
 the current Tip of Tree (ToT). Then cherry-pick with `-x` to preserve the
 original author and hash, and `-s` to sign-off-by the commit:
 
-`repo sync .`
-
-`repo start my_upstream_commit .`
-
-`git cherry-pick -x -s` `<``upstream_commit_hash>`
+```
+repo sync .
+repo start my_upstream_commit .
+git cherry-pick -x -s` `<``upstream_commit_hash>
+```
 
 Add TEST= and BUG= lines at the bottom of the patch description. Also, remember
 to keep the patch subject intact with only an addition of UPSTREAM: or
@@ -385,7 +408,9 @@ kernel version.
 Now, the upstream commit is on its own branch, let's upload it to gerrit, like
 usual:
 
-`repo upload .`
+```
+repo upload .
+```
 
 This will generate a gerrit change for review.
 
@@ -404,11 +429,11 @@ official release yet?
     forum. Please also include a link to the list the patch was obtained from.
     For example:
 
-> `FROMLIST: bibble: a patch to fix everything`
->
-> `...`
->
-> (am from https://patchwork.kernel.org/patch/0987654/)
+```
+FROMLIST: bibble: a patch to fix everything
+...
+(am from https://patchwork.kernel.org/patch/0987654/)
+```
 
 *   **UPSTREAM:** this tag should be used exclusively for patches that have
     actually landed in Linus' tree, not for cherry-picks from maintainer trees.
@@ -427,15 +452,12 @@ official release yet?
 *   When including patches from maintainer trees, be specific about your source
     tree and branch. For example:
 
-> > `FROMGIT: spi: mediatek: Only do dma for 4-byte aligned buffers`
-> >
-> >
-> >
-> > `...`
-> >
-> >
-> >
-> > `(cherry picked from commit 1ce24864bff40e11500a699789412115fdf244bf` `git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git topic/dma)`
+```
+FROMGIT: spi: mediatek: Only do dma for 4-byte aligned buffers
+...
+(cherry picked from commit 1ce24864bff40e11500a699789412115fdf244bf
+ git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git topic/dma)
+```
 
 *   **BACKPORT: FROMLIST:** or **BACKPORT: FROMGIT:** follow  the same rules as
     FROMLIST or FROMGIT, except that if you have to make changes to the patch,
@@ -468,11 +490,15 @@ and easier than the ways described below.
 
 Do an incremental build of the kernel:
 
-`(chroot) $ FEATURES="noclean" cros_workon_make --board=${BOARD} --install chromeos-kernel-[3_8|3_10|3_14|3_18|4_4]`
+```
+(chroot) $ FEATURES="noclean" cros_workon_make --board=${BOARD} --install chromeos-kernel-[3_8|3_10|3_14|3_18|4_4]
+```
 
 Update the kernel on the target:
 
-`(chroot) $ ~/trunk/src/scripts/update_kernel.sh --remote <ip of target>`
+```
+(chroot) $ ~/trunk/src/scripts/update_kernel.sh --remote <ip of target>
+```
 
 Note that using cros\_workon\_make leaves build artifacts in your source
 directory under the "build" directory. When you do a regular emerge of the
@@ -496,9 +522,10 @@ boots, this approach is no longer available. The system is generally
 recoverable by booting physical media (USB stick or SD card) and copying its
 kernel blob over your kernel partition:
 
-`# Assuming you boot physical media as sdb, and your local disk is sda,`
-
-`$ dd if=/dev/sdb2 of=/dev/sda2`
+```
+# Assuming you boot physical media as sdb, and your local disk is sda,
+$ dd if=/dev/sdb2 of=/dev/sda2
+```
 
 #### Dealing with partition corruption due to bad kernel recovery
 
@@ -512,9 +539,10 @@ hour or so, consultation with Bill showed that I really was booting the kernel
 from /dev/sda2, but the kernel found the matching GUID on sda before even
 looking at sdb. This was recovered with:
 
-`$ a=$(uuidgen)`
-
-`$ cgpt add -i 3 -u $a /dev/sda`
+```
+$ a=$(uuidgen)
+$ cgpt add -i 3 -u $a /dev/sda
+```
 
 which generates and installs a new GUID for sda3.
 
@@ -526,17 +554,20 @@ recently built image.
 
 First, to prepare for other steps:
 
-`# cd to the image directory
+```
+# cd to the image directory
 (chroot) $ cd ~/trunk/src/build/images/${BOARD}/latest
 
 # produce separate images for every partition
-(chroot) $ ./unpack_partitions.sh chromiumos_image.bin`
+(chroot) $ ./unpack_partitions.sh chromiumos_image.bin
+```
 
 ### SSHD keys
 
 If sshd on the target machine complains about missing keys:
 
-`# Mount stateful partition
+```
+# Mount stateful partition
 (chroot) $ sudo mount -o loop part_1 stateful_partition/
 
 (chroot) $ sudo mkdir -p stateful_partition/etc/ssh/
@@ -548,7 +579,8 @@ If sshd on the target machine complains about missing keys:
 (chroot) $ sudo ssh-keygen -t dsa -f stateful_partition/etc/ssh/ssh_host_dsa_key
 
 # Unmount the stateful partition
-(chroot) $ sudo umount stateful_partition`
+(chroot) $ sudo umount stateful_partition
+```
 
 ### Public key authorization
 
@@ -557,7 +589,8 @@ configuration, might not be present in your image. If that's the case, you will
 be prompted for password during script execution. To fix it, run the following
 commands in your image directory:
 
-`# Mount root filesystem
+```
+# Mount root filesystem
 (chroot) $ mkdir rootfs_dir/
 (chroot) $ sudo mount -o loop part_3 rootfs_dir/
 
@@ -565,7 +598,8 @@ commands in your image directory:
 (chroot) $ sudo cp ~/trunk/src/scripts/mod_for_test_scripts/ssh_keys/testing_rsa.pub rootfs_dir/root/.ssh/authorized_keys
 
 # Unmount root filesystem
-(chroot) $ sudo umount rootfs_dir/`
+(chroot) $ sudo umount rootfs_dir/
+```
 
 ### iptables configuration
 
@@ -593,7 +627,9 @@ unable to ssh to your target machine. If you encounter this problem, to fix it:
 To build new image after modifications to one or more of the partitions, simply
 run:
 
-`(chroot) $ ./pack_partitions.sh chromiumos_image.bin`
+```
+(chroot) $ ./pack_partitions.sh chromiumos_image.bin
+```
 
 ## How to test kernel modifications (the slow and not recommended way)
 
@@ -612,21 +648,25 @@ in case you used mini-layout). See the big picture and instructions in
 Guide](http://www.chromium.org/chromium-os/developer-guide), but as a quick
 reference you are expected to run the following inside `chroot`:
 
-`~/trunk/src/scripts $ cros_workon start --board=<your platform> chromeos-kernel`
-`~/trunk/src/scripts $ repo sync chromiumos/third_party/kernel`
+```
+~/trunk/src/scripts $ cros_workon start --board=<your platform> chromeos-kernel
+~/trunk/src/scripts $ repo sync chromiumos/third_party/kernel
+```
 
 Then, still inside `chroot`, run this:
 
-`~/trunk/src/scripts $ export BUILD_DIR=/tmp/kernel # pick any new directory you like
+```
+~/trunk/src/scripts $ export BUILD_DIR=/tmp/kernel # pick any new directory you like
 ~/trunk/src/scripts $ mkdir ${BUILD_DIR}
 ~/trunk/src/scripts $ cp /build/<your platform>/boot/config ${BUILD_DIR}/.config
 ~/trunk/src/scripts $ cd ../third_party/kernel/files
 ~/trunk/src/third_party/kernel/files $ ARCH=<your target arch> make oldconfig O=${BUILD_DIR}
 ~/trunk/src/third_party/kernel/files $ mv .git .git.bak
 ~/trunk/src/third_party/kernel/files $ CROSS_COMPILE=/usr/bin/<base_toolchain_name>- \
-ARCH=<your target arch> \
-make -j <num> <image_type> modules O=${BUILD_DIR}
-~/trunk/src/third_party/kernel/files $ mv .git.bak .git`
+    ARCH=<your target arch> \
+    make -j <num> <image_type> modules O=${BUILD_DIR}
+~/trunk/src/third_party/kernel/files $ mv .git.bak .git
+```
 
 Where
 
@@ -658,47 +698,48 @@ partition 12. The `/efi/boot/grub.cfg` file will look for the kernel called
 `vmlinuz`, but you can edit that config file to add a line to look for your
 test kernel too. For example, here's my USB key's partition 12:
 
-`blackadder$ mount | grep vfat`
-`/dev/sdc12 on /media/disk type vfat (rw,nosuid,nodev,uhelper=hal,shortname=mixed,uid=100135,utf8,umask=077,flush)`
+```
+blackadder$ mount | grep vfat
+/dev/sdc12 on /media/disk type vfat (rw,nosuid,nodev,uhelper=hal,shortname=mixed,uid=100135,utf8,umask=077,flush)
 
-`blackadder$ ls -l /media/disk/efi/boot/`
-`total 6600`
-`-rwx------ 1 wfrichar root 262656 Apr 21 10:21 bootx64.efi*`
-`-rwx------ 1 wfrichar root 2851056 Apr 21 10:12 bzImage*`
-`-rwx------ 1 wfrichar root 1040 Apr 21 08:51 grub.cfg*`
-`-rwx------ 1 wfrichar root 2821296 Apr 19 11:19 vmlinuz*`
+blackadder$ ls -l /media/disk/efi/boot/
+total 6600
+-rwx------ 1 wfrichar root 262656 Apr 21 10:21 bootx64.efi*
+-rwx------ 1 wfrichar root 2851056 Apr 21 10:12 bzImage*
+-rwx------ 1 wfrichar root 1040 Apr 21 08:51 grub.cfg*
+-rwx------ 1 wfrichar root 2821296 Apr 19 11:19 vmlinuz*
+blackadder$ cat /media/disk/efi/boot/grub.cfg
+set timeout=10
+set default=0
 
-`blackadder$ cat /media/disk/efi/boot/grub.cfg`
-`set timeout=10`
-`set default=0`
+menuentry "bzImage normal" {
+linux /efi/boot/bzImage quiet console=tty2 init=/sbin/init boot=local rootwait
+root=/dev/sda3 ro noresume noswap i915.modeset=1 loglevel=1
+}
 
-`menuentry "bzImage normal" {`
-`linux /efi/boot/bzImage quiet console=tty2 init=/sbin/init boot=local rootwait`
-`root=/dev/sda3 ro noresume noswap i915.modeset=1 loglevel=1`
-`}`
+menuentry "bzImage serial normal" {
+linux /efi/boot/bzImage earlyprintk=serial,ttyS0,115200 console=ttyS0,115200 i
+nit=/sbin/init boot=local rootwait root=/dev/sda3 ro noresume noswap i915.modese
+t=1 loglevel=7
+}
 
-`menuentry "bzImage serial normal" {`
-`linux /efi/boot/bzImage earlyprintk=serial,ttyS0,115200 console=ttyS0,115200 i`
-`nit=/sbin/init boot=local rootwait root=/dev/sda3 ro noresume noswap i915.modese`
-`t=1 loglevel=7`
-`}`
+menuentry "bzImage serial add_efi_memmap" {
+linux /efi/boot/bzImage add_efi_memmap earlyprintk=serial,ttyS0,115200 console
+=ttyS0,115200 init=/sbin/init boot=local rootwait root=/dev/sda3 ro noresume nos
+wap i915.modeset=1 loglevel=7
+}
 
-`menuentry "bzImage serial add_efi_memmap" {`
-`linux /efi/boot/bzImage add_efi_memmap earlyprintk=serial,ttyS0,115200 console`
-`=ttyS0,115200 init=/sbin/init boot=local rootwait root=/dev/sda3 ro noresume nos`
-`wap i915.modeset=1 loglevel=7`
-`}`
+menuentry "vmlinuz normal" {
+linux /efi/boot/vmlinuz quiet console=tty2 init=/sbin/init boot=local rootwait
+root=/dev/sda3 ro noresume noswap i915.modeset=1 loglevel=1
+}
 
-`menuentry "vmlinuz normal" {`
-`linux /efi/boot/vmlinuz quiet console=tty2 init=/sbin/init boot=local rootwait`
-`root=/dev/sda3 ro noresume noswap i915.modeset=1 loglevel=1`
-`}`
-
-`menuentry "vmlinuz serial debug" {`
-`linux /efi/boot/vmlinuz earlyprintk=serial,ttyS0,115200 console=ttyS0,115200 i`
-`nit=/sbin/init boot=local rootwait root=/dev/sda3 ro noresume noswap i915.modese`
-`t=1 loglevel=7`
-`}`
+menuentry "vmlinuz serial debug" {
+linux /efi/boot/vmlinuz earlyprintk=serial,ttyS0,115200 console=ttyS0,115200 i
+nit=/sbin/init boot=local rootwait root=/dev/sda3 ro noresume noswap i915.modese
+t=1 loglevel=7
+}
+```
 
 When the USB key boots, I'll see a menu that lets me select which boot path to use.
 
@@ -711,35 +752,37 @@ partition 3. The /boot/extlinux.conf file will look for the kernel called
 `vmlinuz`, but you can edit that config file to add a line to look for your
 test kernel too. For example, here's my USB key's partition 3:
 
-`blackadder$ mount | grep sdc3`
-`/dev/sdc3 on /media/C-KEYFOB type ext3 (rw,nosuid,nodev,uhelper=hal)`
+```
+blackadder$ mount | grep sdc3
+/dev/sdc3 on /media/C-KEYFOB type ext3 (rw,nosuid,nodev,uhelper=hal)
 
-`blackadder$ ls -l /media/C-KEYFOB/boot`
-`total 6940`
-`lrwxrwxrwx 1 root root 19 Apr 23 01:55 System.map -> System.map-2.6.32.9`
-`-rw-r--r-- 1 root root 1313402 Apr 23 00:12 System.map-2.6.32.9`
-`-rw-r----- 1 root root 2851056 Apr 26 10:30 bzImage`
-`lrwxrwxrwx 1 root root 15 Apr 23 01:55 config -> config-2.6.32.9`
-`-rw-r--r-- 1 root root 74534 Apr 23 00:12 config-2.6.32.9`
-`-rw-r--r-- 1 root root 409 Apr 23 01:53 extlinux.conf`
-`-r--r--r-- 1 root root 14336 Apr 23 01:53 extlinux.sys`
-`lrwxrwxrwx 1 root root 16 Apr 23 01:55 vmlinuz -> vmlinuz-2.6.32.9`
-`-rw-r--r-- 1 root root 2821296 Apr 23 00:12 vmlinuz-2.6.32.9`
+blackadder$ ls -l /media/C-KEYFOB/boot
+total 6940
+lrwxrwxrwx 1 root root 19 Apr 23 01:55 System.map -> System.map-2.6.32.9
+-rw-r--r-- 1 root root 1313402 Apr 23 00:12 System.map-2.6.32.9
+-rw-r----- 1 root root 2851056 Apr 26 10:30 bzImage
+lrwxrwxrwx 1 root root 15 Apr 23 01:55 config -> config-2.6.32.9
+-rw-r--r-- 1 root root 74534 Apr 23 00:12 config-2.6.32.9
+-rw-r--r-- 1 root root 409 Apr 23 01:53 extlinux.conf
+-r--r--r-- 1 root root 14336 Apr 23 01:53 extlinux.sys
+lrwxrwxrwx 1 root root 16 Apr 23 01:55 vmlinuz -> vmlinuz-2.6.32.9
+-rw-r--r-- 1 root root 2821296 Apr 23 00:12 vmlinuz-2.6.32.9
 
-`blackadder$ cat /media/C-KEYFOB/boot/extlinux.conf`
-`DEFAULT chromeos-usb`
-`PROMPT 1`
-`TIMEOUT 20`
+blackadder$ cat /media/C-KEYFOB/boot/extlinux.conf
+DEFAULT chromeos-usb
+PROMPT 1
+TIMEOUT 20
 
-`label chromeos-usb`
-`menu label chromeos-usb`
-`kernel vmlinuz`
-`append quiet console=tty2 init=/sbin/init boot=local rootwait root=/dev/sdb3 ro noresume noswap i915.modeset=1 loglevel=1`
+label chromeos-usb
+  menu label chromeos-usb
+  kernel vmlinuz
+  append quiet console=tty2 init=/sbin/init boot=local rootwait root=/dev/sdb3 ro noresume noswap i915.modeset=1 loglevel=1
 
-`label chromeos-test`
-`menu label chromeos-test`
-`kernel bzImage`
-`append console=tty1 init=/sbin/init boot=local rootwait root=/dev/sdb3 ro noresume noswap i915.modeset=1 loglevel=7`
+label chromeos-test
+  menu label chromeos-test
+  kernel bzImage
+  append console=tty1 init=/sbin/init boot=local rootwait root=/dev/sdb3 ro noresume noswap i915.modeset=1 loglevel=7
+```
 
 When the USB key boots, I can hit TAB to see the list of boot choices, and can
 pick the one I want by entering the label.
@@ -753,11 +796,15 @@ With either bootloader, you can debug early kernel failures by increasing the
 verbosity and location of kernel debug messages. You can modify the config
 files without rebuilding anything. The default boot args have this:
 
-`quiet console=tty2 loglevel=1`
+```
+quiet console=tty2 loglevel=1
+```
 
 Using args like these instead may be helpful:
 
-`console=tty1 loglevel=7`
+```
+console=tty1 loglevel=7
+```
 
 ## Working on several kernel issues
 
@@ -769,26 +816,30 @@ To create separate builds get per kernel git branch, while in the cloned kernel
 source tree root create a build directory for your current branch, for
 instance:
 
-`mkdir ../build/<branch_name>`
+```
+mkdir ../build/<branch_name>
+```
 
 and then just add `O=../../build/<branch_name>` to make invocations described
 above. Or use the following bash script to take care of all make command line
 parameters other than make targets:
 
-`kmake () {
-b=$(git branch 2>/dev/null | grep '^\*' | awk '{print $2}')
-if [ "${b}" == "" ]; then
-echo "not in a git tree"
-return
-fi
-build_dir="../build/${b}"
-if [ ! -d "${build_dir}" ]; then
-echo "build directory ${build_dir} does not exist"
-return
-fi
-make_jobs=$(expr 2 \* $(cat /proc/cpuinfo | grep -c '^processor'))
-make ARCH=i386 O=${build_dir} -j "${make_jobs}" $*
-}`
+```
+kmake () {
+  b=$(git branch 2>/dev/null | grep '^\*' | awk '{print $2}')
+  if [ "${b}" == "" ]; then
+    echo "not in a git tree"
+    return
+  fi
+  build_dir="../build/${b}"
+  if [ ! -d "${build_dir}" ]; then
+    echo "build directory ${build_dir} does not exist"
+    return
+  fi
+  make_jobs=$(expr 2 \* $(cat /proc/cpuinfo | grep -c '^processor'))
+  make ARCH=i386 O=${build_dir} -j "${make_jobs}" $*
+}
+```
 
 ### Modifying H2C Bios kernel command line
 
@@ -799,23 +850,27 @@ target or by dismantling `chromiumos_image.bin` generated by build\_image.
 Store the desired kernel command line in a file <new\_cmd\_line> and then use
 the following to change the kernel command line:
 
-`vbutil_kernel --repack <modified_kernel> --config <new_cmd_line> \`
-`--signprivate <path_to>/vboot_reference/``tests/devkeys/<key> \`
-`--oldblob <original_kernel>`
+```
+vbutil_kernel --repack <modified_kernel> --config <new_cmd_line> \
+  --signprivate <path_to>/vboot_reference/``tests/devkeys/<key> \
+  --oldblob <original_kernel>
+```
 
 where `<key>` is `kernel_data_key.vbprivk` for the main kernel or
-`recovery_kernel_data_key.``vbprivk` for the flash drive based recovery kernel
+`recovery_kernel_data_key.vbprivk` for the flash drive based recovery kernel
 The keys can be found in the [vboot\_reference repository](/). Then `dd` the
 `<modified_kernel>` file back to where `<original_kernel>` came from.
 
 The command line to boot a kernel with verified rootfs disabled can be obtain
 by editing the regular command line as follows:
 
-`vbutil_kernel --verify <original_kernel> --verbose | tail -1 | sed '`
-`s/dm_verity[^ ]\+//g`
-`s|verity /dev/sd%D%P /dev/sd%D%P ||`
-`s| root=/dev/dm-0 | root=/dev/sd%D%P |`
-`s/dm="[^"]\+" //' > new_cmd_line`
+```
+vbutil_kernel --verify <original_kernel> --verbose | tail -1 | sed '
+s/dm_verity[^ ]\+//g
+s|verity /dev/sd%D%P /dev/sd%D%P ||
+s| root=/dev/dm-0 | root=/dev/sd%D%P |
+s/dm="[^"]\+" //' > new_cmd_line
+```
 
 ## Installing onto SSD
 
@@ -831,7 +886,9 @@ one we want to use. Usually we stay with the current pair.
 To sign with the devkey as per the Disk Format doc
 [http://www.chromium.org/chromium-os/chromiumos-design-docs/disk-format#TOC-Quick-development](http://www.chromium.org/chromium-os/chromiumos-design-docs/disk-format#TOC-Quick-development):
 
-`vbutil_kernel --pack new_kern.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate <keys_path>/kernel_data_key.vbprivk --version 1 --config config.txt --bootloader /lib64/bootstub/bootstub.efi --vmlinuz vmlinuz`
+```
+vbutil_kernel --pack new_kern.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate <keys_path>/kernel_data_key.vbprivk --version 1 --config config.txt --bootloader /lib64/bootstub/bootstub.efi --vmlinuz vmlinuz
+```
 
 Transfer `new_kern.bin` to the target system. I prefer `scp`, but it can be
 placed on USB stick as well.
@@ -840,83 +897,60 @@ Identify the preferred kernel partition. This will be either `sda2` or `sda4`.
 `rootdev -s` will identify the root partition, and that can be used to identify
 the currently booted kernel partition.
 
-Kernel
-
-Root
-
-pair A
-
-`/dev/sda2`
-
-`/dev/sda3`
-
-pair B
-
-`/dev/sda4`
-
-`/dev/sda5`
+|         | Kernel      | Root        |
+|---------|-------------|-------------|
+| pair A  | `/dev/sda2` | `/dev/sda3` |
+| pair B  | `/dev/sda4` | `/dev/sda5` |
 
 Copy the image to the partition.
 
-`dd if=new_kern.bin of=/dev/sda2`
+```
+dd if=new_kern.bin of=/dev/sda2
+```
 
 `dev_debug_vboot` can be used to verify the kernel partition has a properly signed image. Indeed, it will actually tell you in what modes (ie, development, recovery, neither) your kernel will boot.
 
-`localhost ~ # dev_debug_vboot`
+```
+localhost ~ # dev_debug_vboot
+ :
+TEST: verify HD kernel B with firmware A key
+Key block:
+  Size:                0x4b8
+  Flags:               7  !DEV DEV !REC
+ :
+```
 
-`:`
+`cgpt` can be used as an alternative to `rootdev` above to find the currently
+preferred kernel partition.
 
-`TEST: verify HD kernel B with firmware A key`
-
-`Key block:`
-
-`Size: 0x4b8`
-
-`Flags: 7 !DEV DEV !REC`
-
-`:`
-
-`cgpt` can be used as an alternative to `rootdev` above to find the currently preferred kernel partition.
-
-`localhost ~ # cgpt show /dev/sda`
-
-`start size part contents`
-
-:
-
-4096 32768 2 Label: "KERN-A"
-
-`Type: ChromeOS kernel`
-
-`UUID: B87DAA9E-E82E-B449-B93A-5EB0BD81BCEC`
-
-`Attr: priority=3 tries=0 successful=1`
-
-:
-
-36864 32768 4 Label: "KERN-B"
-
-`Type: ChromeOS kernel`
-
-`UUID: 4581FC5C-58D1-8148-9FC4-E4B983C90782`
-
-`Attr: priority=0 tries=0 successful=0`
-
-`:`
+```
+localhost ~ # cgpt show /dev/sda
+     start      size    part  contents
+ :
+      4096     32768       2  Label: "KERN-A"
+                              Type: ChromeOS kernel
+                              UUID: B87DAA9E-E82E-B449-B93A-5EB0BD81BCEC
+                              Attr: priority=3 tries=0 successful=1
+ :
+     36864     32768       4  Label: "KERN-B"
+                              Type: ChromeOS kernel
+                              UUID: 4581FC5C-58D1-8148-9FC4-E4B983C90782
+                              Attr: priority=0 tries=0 successful=0
+ :
+```
 
 ## Getting a Kernel Trace
 
 Run the following commands on the target. This needs to be done just once after
 an install.
 
-`touch /var/lib/crash_sender_paused
-``touch /home/chronos/"Consent To Send Stats"`
-
-`chown chronos:chronos /var/lib/crash_sender_paused
-``chown chronos:chronos /home/chronos/"Consent To Send Stats"`
-
-`sync; sync; sync
-`
+```
+touch /var/lib/crash_sender_paused
+touch /home/chronos/"Consent To Send Stats"
+chown chronos:chronos /var/lib/crash_sender_paused
+chown chronos:chronos /home/chronos/"Consent To Send Stats"
+sync; sync; sync
+```
 
 The crashes will then appear in /var/spool/crash.
 
@@ -926,12 +960,16 @@ If you need to load kernel modules from a location other than the root
 filesystem, module locking must be disabled. Either a kernel command line
 option can be used:
 
-`lsm.module_locking=0`
+```
+lsm.module_locking=0
+```
 
 Or, on images with dm-verity disabled (--noenable\_rootfs\_verification), the
 restriction can be disabled via the exposed sysctl:
 
-`echo 0 >/proc/sys/kernel/chromiumos/module_locking`
+```
+echo 0 >/proc/sys/kernel/chromiumos/module_locking
+```
 
 ## Blacklisting Kernel modules for individual overlays
 
@@ -941,9 +979,10 @@ file.
 
 Add the following two lines to the end of the src\_install() function:
 
-`insinto "/etc/modprobe.d"`
-
-`doins "${FILESDIR}/<blacklist file>"`
+```
+insinto "/etc/modprobe.d"
+doins "${FILESDIR}/<blacklist file>"
+```
 
 The ${FILESDIR} variable points to the files/ directory within the
 chromeos-bsp-<name>/ directory. Within this directory, add your <blacklist
@@ -952,7 +991,9 @@ file> (ex cros-blacklist.conf).
 For each kernel module you wish to blacklist, add the following line to
 <blacklist file>:
 
-`blacklist <module name>`
+```
+blacklist <module name>
+```
 
 You can also use # comments within these files to explain why the kernel module
 needs to be blacklisted.
@@ -962,15 +1003,13 @@ needs to be blacklisted.
 If given target device is not building kernel-next, you can switch by unmerging
 the standard kernel and then building kernel-next normally:
 
-`cros_workon --board=${BOARD} stop sys-kernel/chromeos-kernel`
-
-`emerge-${BOARD} --unmerge sys-kernel/chromeos-kernel`
-
-cros\_workon --board=${BOARD} start sys-kernel/chromeos-kernel-next
-
-cros\_workon\_make --board=${BOARD} sys-kernel/chromeos-kernel-next --install
-
-~/trunk/src/scripts/update\_kernel.sh --board=${BOARD} --remote=hostname...
+```
+cros_workon --board=${BOARD} stop sys-kernel/chromeos-kernel
+emerge-${BOARD} --unmerge sys-kernel/chromeos-kernel
+cros_workon --board=${BOARD} start sys-kernel/chromeos-kernel-next
+cros_workon_make --board=${BOARD} sys-kernel/chromeos-kernel-next --install
+~/trunk/src/scripts/update_kernel.sh --board=${BOARD} --remote=hostname...
+```
 
 ## Debugging kernel crashes
 
@@ -991,51 +1030,31 @@ TODO: Add more details on this
 /sys/fs/pstore/console-ramoops. You may see some symbols preceded by question
 marks in the stack trace, something like the below.
 
-<0v5>\[ 25.801932\] Call Trace:
-
-<5>\[ 25.801947\] \[<ffffffffc008c064>\] ieee80211\_amsdu\_to\_8023s+0xec/0x2df \[cfg80211\]
-
-<5>\[ 25.801968\] \[<ffffffffc02af0f2>\] \_\_iwl7000\_ieee80211\_sta\_ps\_transition+0x154a/0x21dc \[iwl7000\_mac80211\]
-
-<5>\[ 25.801987\] \[<ffffffffc03154e4>\] ? iwl\_mvm\_send\_lq\_cmd+0x8e/0x9c \[iwlmvm\]
-
-<5>\[ 25.802003\] \[<ffffffffc0324409>\] ? iwl\_mvm\_rs\_tx\_status+0xf9c/0x1f5cd /4 \[iwlmvm\]
-
-<5>\[ 25.802023\] \[<ffffffffc02b06f2>\] \_\_iwl7000\_ieee80211\_mark\_rx\_ba\_filtered\_frames+0x96e/0xcb0 \[iwl7000\_mac80211\]
-
-<5>\[ 25.802041\] \[<ffffffff9e4ee0f0>\] ? kmem\_cache\_free+0x8a/0xc5
-
-<5>\[ 25.802059\] \[<ffffffffc02b08a1>\] \_\_iwl7000\_ieee80211\_mark\_rx\_ba\_filtered\_frames+0xb1d/0xcb0 \[iwl7000\_mac80211\]
-
-<5>\[ 25.802080\] \[<ffffffffc02b0dc6>\] \_\_iwl7000\_ieee80211\_rx\_napi+0x392/0x46a \[iwl7000\_mac80211\]
-
-<5>\[ 25.802098\] \[<ffffffffc0316578>\] iwl\_mvm\_rx\_rx\_mpdu+0x749/0x78b \[iwlmvm\]
-
-<5>\[ 25.802113\] \[<ffffffffc0310f16>\] iwl\_mvm\_enter\_d0i3+0x359/0xe7f \[iwlmvm\]
-
-<5>\[ 25.802128\] \[<ffffffffc023d504>\] iwl\_pci\_unregister\_driver+0xfdb/0x1439 \[iwlwifi\]
-
-<5>\[ 25.802143\] \[<ffffffffc023e883>\] iwl\_pcie\_irq\_handler+0x57d/0x7d1 \[iwlwifi\]
-
-<5>\[ 25.802157\] \[<ffffffff9e48c255>\] ? free\_irq+0x8a/0x8a
-
-<5>\[ 25.802168\] \[<ffffffff9e48c272>\] irq\_thread\_fn+0x1d/0x3c
-
-<5>\[ 25.802179\] \[<ffffffff9e48be1a>\] irq\_thread+0x117/0x21a
-
-<5>\[ 25.802191\] \[<ffffffff9e921dda>\] ? \_\_schedule+0x589/0x5d3
-
-<5>\[ 25.802202\] \[<ffffffff9e48b863>\] ? kzalloc.constprop.37+0x1c/0x1c
-
-<5>\[ 25.802214\] \[<ffffffff9e48bd03>\] ? irq\_thread\_check\_affinity+0x8f/0x8f
-
-<5>\[ 25.802227\] \[<ffffffff9e45183b>\] kthread+0xc0/0xc8
-
-<5>\[ 25.802238\] \[<ffffffff9e45177b>\] ? \_\_kthread\_parkme+0x6b/0x6b
-
-<5>\[ 25.802249\] \[<ffffffff9e92389c>\] ret\_from\_fork+0x7c/0xb0
-
-<5>\[ 25.802259\] \[<ffffffff9e45177b>\] ? \_\_kthread\_parkme+0x6b/0x6b
+```
+<5>[ 25.801932] Call Trace:
+<5>[ 25.801947] [<ffffffffc008c064>] ieee80211_amsdu_to_8023s+0xec/0x2df [cfg80211]
+<5>[ 25.801968] [<ffffffffc02af0f2>] __iwl7000_ieee80211_sta_ps_transition+0x154a/0x21dc [iwl7000_mac80211]
+<5>[ 25.801987] [<ffffffffc03154e4>] ? iwl_mvm_send_lq_cmd+0x8e/0x9c [iwlmvm]
+<5>[ 25.802003] [<ffffffffc0324409>] ? iwl_mvm_rs_tx_status+0xf9c/0x1f5cd /4 [iwlmvm]
+<5>[ 25.802023] [<ffffffffc02b06f2>] __iwl7000_ieee80211_mark_rx_ba_filtered_frames+0x96e/0xcb0 [iwl7000_mac80211]
+<5>[ 25.802041] [<ffffffff9e4ee0f0>] ? kmem_cache_free+0x8a/0xc5
+<5>[ 25.802059] [<ffffffffc02b08a1>] __iwl7000_ieee80211_mark_rx_ba_filtered_frames+0xb1d/0xcb0 [iwl7000_mac80211]
+<5>[ 25.802080] [<ffffffffc02b0dc6>] __iwl7000_ieee80211_rx_napi+0x392/0x46a [iwl7000_mac80211]
+<5>[ 25.802098] [<ffffffffc0316578>] iwl_mvm_rx_rx_mpdu+0x749/0x78b [iwlmvm]
+<5>[ 25.802113] [<ffffffffc0310f16>] iwl_mvm_enter_d0i3+0x359/0xe7f [iwlmvm]
+<5>[ 25.802128] [<ffffffffc023d504>] iwl_pci_unregister_driver+0xfdb/0x1439 [iwlwifi]
+<5>[ 25.802143] [<ffffffffc023e883>] iwl_pcie_irq_handler+0x57d/0x7d1 [iwlwifi]
+<5>[ 25.802157] [<ffffffff9e48c255>] ? free_irq+0x8a/0x8a
+<5>[ 25.802168] [<ffffffff9e48c272>] irq_thread_fn+0x1d/0x3c
+<5>[ 25.802179] [<ffffffff9e48be1a>] irq_thread+0x117/0x21a
+<5>[ 25.802191] [<ffffffff9e921dda>] ? __schedule+0x589/0x5d3
+<5>[ 25.802202] [<ffffffff9e48b863>] ? kzalloc.constprop.37+0x1c/0x1c
+<5>[ 25.802214] [<ffffffff9e48bd03>] ? irq_thread_check_affinity+0x8f/0x8f
+<5>[ 25.802227] [<ffffffff9e45183b>] kthread+0xc0/0xc8
+<5>[ 25.802238] [<ffffffff9e45177b>] ? __kthread_parkme+0x6b/0x6b
+<5>[ 25.802249] [<ffffffff9e92389c>] ret_from_fork+0x7c/0xb0
+<5>[ 25.802259] [<ffffffff9e45177b>] ? __kthread_parkme+0x6b/0x6b
+```
 
 There are a few ways you can resolve the "? some\_symbol + 0xoffset" format
 into a line of source code. For example, if you want to find what line of
@@ -1044,46 +1063,33 @@ cscope or something to know that this is defined in
 drivers/net/wireless-3.8/iwl7000/iwlwifi/mvm/utils.c. Next, enter the cros\_sdk
 chroot and load up the corresponding object file in gdb
 
-(cr) user@machine /build/samus $ ./usr/bin/gdb ./var/cache/portage/sys-kernel/chromeos-kernel-3\_14/drivers/net/wireless-3.8/iwl7000/iwlwifi/mvm/utils.o
-
+```
+(cr) user@machine /build/samus $ ./usr/bin/gdb ./var/cache/portage/sys-kernel/chromeos-kernel-3_14/drivers/net/wireless-3.8/iwl7000/iwlwifi/mvm/utils.o
 Reading symbols from
-./var/cache/portage/sys-kernel/chromeos-kernel-3\_14/drivers/net/wireless-3.8/iwl7000/iwlwifi/mvm/utils.o...done.
-
-(gdb) list \*( iwl\_mvm\_send\_lq\_cmd+0x8e)
-
-0x12b5 is in iwl\_mvm\_send\_lq\_cmd (/mnt/host/source/src/third\_party/kernel/v3.14/drivers/net/wireless-3.8/iwl7000/iwlwifi/mvm/utils.c:752).
-
+./var/cache/portage/sys-kernel/chromeos-kernel-3_14/drivers/net/wireless-3.8/iwl7000/iwlwifi/mvm/utils.o...done.
+(gdb) list *( iwl_mvm_send_lq_cmd+0x8e)
+0x12b5 is in iwl_mvm_send_lq_cmd (/mnt/host/source/src/third_party/kernel/v3.14/drivers/net/wireless-3.8/iwl7000/iwlwifi/mvm/utils.c:752).
 747  };
-
 748
-
-749  if (WARN\_ON(lq->sta\_id == IWL\_MVM\_STATION\_COUNT))
-
+749  if (WARN_ON(lq->sta_id == IWL_MVM_STATION_COUNT))
 750  return -EINVAL;
-
 751
-
-752  return iwl\_mvm\_send\_cmd(mvm, &cmd);
-
+752  return iwl_mvm_send_cmd(mvm, &cmd);
 753  }
-
 754
-
-755  /\*\*
-
-756  \* iwl\_mvm\_update\_smps - Get a request to change the SMPS mode
-
+755  /**
+756  * iwl_mvm_update_smps - Get a request to change the SMPS mode
 (gdb)
+```
 
 3\. A slightly more tedious way of getting symbols is to symbolize the whole kernel using objdump -
 
-cd /build/samus/var/cache/portage/sys-kernel/chromeos-kernel-3\_14
-
-\# Pick a proper output location - the resulting file is > 2GB in size!
-
+```
+cd /build/samus/var/cache/portage/sys-kernel/chromeos-kernel-3_14
+# Pick a proper output location - the resulting file is > 2GB in size!
 objdump -e vmlinux > /tmp/objdump-output.txt
-
-grep your\_kernel\_symbol /tmp/objdump-output.txt
+grep your_kernel_symbol /tmp/objdump-output.txt
+```
 
 More information [here](https://wiki.ubuntu.com/Kernel/KernelDebuggingTricks) and [here](http://www.linuxjournal.com/article/9252).
 
@@ -1095,39 +1101,32 @@ Please verify and remove the TODO.
 One way to do this is by function tracing for the functions/modules you are
 interested in the kernel.
 
+```shell
 cd /sys/kernel/debug/tracing
+# Sample output: blk function_graph function nop. These are valid values you can echo into current_tracer
+cat available_tracers
 
-\# Sample output: blk function\_graph function nop. These are valid values you can echo into current\_tracer
+# By default this should output 'nop'
+cat current_tracer
 
-cat available\_tracers
+# function_graph is useful too
+echo "function" > current_tracer
 
-\# By default this should output 'nop'
+# This should output "all functions enabled" by default
+cat set_ftrace_filter
 
-cat current\_tracer
+# You can also append with "echo *nl80211* >> set_ftrace_filter"
+echo *nl80211* > set_ftrace_filter
 
-\# function\_graph is useful too ..
+# Should be the number of functions enabled.
+wc -l set_ftrace_filter
 
-echo "function" > current\_tracer
+# Clear out the tracing pipe of the previous junk. You will need to Ctrl-C kill this after a while
+cat trace_pipe > /dev/null
 
-\# This should output "all functions enabled" by default
-
-cat set\_ftrace\_filter
-
-\# You can also append with "echo \*nl80211\* >> set\_ftrace\_filter"
-
-echo \*nl80211\* > set\_ftrace\_filter
-
-\# Should be the number of functions enabled.
-
-wc -l set\_ftrace\_filter
-
-\# Clear out the tracing pipe of the previous junk. You will need to Ctrl-C kill this after a while
-
-cat trace\_pipe > /dev/null
-
-\# You should see nothing, now start performing actions that will lead to your module/code being called.
-
-cat trace\_pipe
+# You should see nothing, now start performing actions that will lead to your module/code being called.
+cat trace_pipe
+```
 
 More information here: [https://lwn.net/Articles/370423/](https://lwn.net/Articles/370423/)
 
@@ -1138,11 +1137,9 @@ a local GDB instance on their development machine to debug the kernel on a
 remote test machine, using a serial connection. You can find some information
 here:
 
-[https://www.kernel.org/pub/linux/kernel/people/jwessel/kdb/](https://www.kernel.org/pub/linux/kernel/people/jwessel/kdb/)
-
-[http://elinux.org/Kgdb](http://elinux.org/Kgdb)
-
-[http://events.linuxfoundation.org/sites/events/files/slides/ELC-E%20Linux%20Awareness.pdf](http://events.linuxfoundation.org/sites/events/files/slides/ELC-E%20Linux%20Awareness.pdf)
+*   [https://www.kernel.org/pub/linux/kernel/people/jwessel/kdb/](https://www.kernel.org/pub/linux/kernel/people/jwessel/kdb/)
+*   [http://elinux.org/Kgdb](http://elinux.org/Kgdb)
+*   [http://events.linuxfoundation.org/sites/events/files/slides/ELC-E%20Linux%20Awareness.pdf](http://events.linuxfoundation.org/sites/events/files/slides/ELC-E%20Linux%20Awareness.pdf)
 
 To use KGDB with Chromium OS requires two steps for the test machine:
 
@@ -1151,7 +1148,9 @@ To use KGDB with Chromium OS requires two steps for the test machine:
 
 Step 1 can be done by building with `USE="kgdb"`:
 
-`USE="kgdb vtconsole" emerge-${BOARD} chromeos-kernel-${VER}`
+```
+USE="kgdb vtconsole" emerge-${BOARD} chromeos-kernel-${VER}
+```
 
 Step 2 can be done by adding `kgdboc=$TTY` to the kernel config.txt, where
 `$TTY` depends on the board -- for many systems, this should be `ttyS0`, but
@@ -1167,13 +1166,12 @@ docs](https://www.kernel.org/doc/html/latest/admin-guide/sysrq.html)); e.g.:
 
 then attach to the target console with your cross-targeted GDB:
 
-`${CROSS_ARCH}-gdb \`
-
-`/build/${BOARD}/usr/lib/debug/boot/vmlinux \`
-
-`-ex "set remotebaud 115200" \`
-
-`-ex "target remote $(dut-control cpu_uart_pty | cut -d: -f2)"`
+```
+${CROSS_ARCH}-gdb \
+         /build/${BOARD}/usr/lib/debug/boot/vmlinux \
+         -ex "set remotebaud 115200" \
+         -ex "target remote $(dut-control cpu_uart_pty | cut -d: -f2)"
+```
 
 Once attached, you can use standard GDB commands, though report has it that not
 everything works well (e.g., stepping and breakpoints) -- YMMV.
@@ -1181,13 +1179,12 @@ everything works well (e.g., stepping and breakpoints) -- YMMV.
 Besides basic GDB commands, you can make use of Linux-specific KDB commands via
 the `monitor` command. For more info, run this while attached:
 
-`(gdb) monitor help`
-
-`Command Usage Description`
-
-`----------------------------------------------------------`
-
-`[...]`
+```shell
+(gdb) monitor help
+Command Usage Description
+----------------------------------------------------------
+[...]
+```
 
 ### Other tips:
 
@@ -1196,59 +1193,68 @@ the `monitor` command. For more info, run this while attached:
 You can get a list of modules and addresses in kgdb with `monitor` `lsmod`.
 Then you can add symbol files using the base addresses found there:
 
-`add-symbol-file` `/build/${BOARD}/usr/lib/debug/lib/modules/3.8.11/kernel/drivers/net/wireless/mwifiex/mwifiex.ko.debug` `0xbf077000`
-
-`add-symbol-file` `/build/${BOARD}/usr/lib/debug/lib/modules/3.8.11/kernel/drivers/net/wireless/mwifiex/mwifiex_sdio.ko.debug` `0xbf0a0000`
+```
+add-symbol-file /build/${BOARD}/usr/lib/debug/lib/modules/3.8.11/kernel/drivers/net/wireless/mwifiex/mwifiex.ko.debug 0xbf077000
+add-symbol-file /build/${BOARD}/usr/lib/debug/lib/modules/3.8.11/kernel/drivers/net/wireless/mwifiex/mwifiex_sdio.ko.debug 0xbf0a0000
+```
 
 If you're in kgdb and want to get back to kdb:
 
-`maintenance packet 3`
-
-`Ctrl-Z`
-
-`kill -9 %`
+```
+maintenance packet 3
+Ctrl-Z
+kill -9 %
+```
 
 #### Multiplexing the console:
 
 If you want to use both KGDB and a standard serial console over the same serial
-port, you need to run a program like \`kdmx\` or \`agent-proxy\` to multiplex
-your connection. Both can be found at:
+port, you need to run a program like `kdmx` or `agent-proxy` to multiplex your
+connection. Both can be found at:
 
 [https://kernel.googlesource.com/pub/scm/utils/kernel/kgdb/agent-proxy/](https://kernel.googlesource.com/pub/scm/utils/kernel/kgdb/agent-proxy/)
 
 kdmx is probably easier to deal with. If your serial port is at `/dev/pts/80`,
 you can start it with:
 
-`agent-proxy/kdmx/kdmx -n -b 115200 -p` /dev/pts/80 -s /tmp/kdmx\_tty\_
+```
+agent-proxy/kdmx/kdmx -n -b 115200 -p /dev/pts/80 -s /tmp/kdmx_tty_
+```
 
-You can find the ttys to use for console in /tmp/kdmx\_tty\_trm and for gdb in
-/tmp/kdmx\_tty\_gdb. Thus connect to the terminal with:
+You can find the ttys to use for console in `/tmp/kdmx_tty_trm` and for gdb in
+`/tmp/kdmx_tty_gdb`. Thus connect to the terminal with:
 
-`cu --nostop -l $(cat /tmp/kdmx_tty_trm)`
+```
+cu --nostop -l $(cat /tmp/kdmx_tty_trm)
+```
 
 and attach gdb with:
 
-`${CROSS_ARCH}-gdb \`
-
-`/build/${BOARD}/usr/lib/debug/boot/vmlinux \`
-
-`-ex "target remote $(cat /tmp/kdmx_tty_gdb)"`
+```
+${CROSS_ARCH}-gdb \
+	/build/${BOARD}/usr/lib/debug/boot/vmlinux \
+	-ex "target remote $(cat /tmp/kdmx_tty_gdb)"
+```
 
 If telnet is more your style, use agent-proxy with:
 
-`agent-proxy 127.0.0.1:5510^127.0.0.1:5511 0 /dev/pts/80,115200`
+```
+agent-proxy 127.0.0.1:5510^127.0.0.1:5511 0 /dev/pts/80,115200
+```
 
 Then connect to the terminal with:
 
-`telnet localhost 5510`
+```
+telnet localhost 5510
+```
 
 and attach gdb with:
 
-`${CROSS_ARCH}-gdb \`
-
-`/build/${BOARD}/usr/lib/debug/boot/vmlinux \`
-
-`-ex "target remote localhost:5511"`
+```
+${CROSS_ARCH}-gdb \
+         /build/${BOARD}/usr/lib/debug/boot/vmlinux \
+         -ex "target remote localhost:5511"
+```
 
 #### Errata
 
