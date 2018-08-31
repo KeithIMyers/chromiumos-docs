@@ -220,7 +220,7 @@ Follow instructions to [build Chromium OS] and a VM image. In the [chroot]:
 (chroot) ~/trunk/src/scripts $ ./build_packages --board=$BOARD
 (chroot) ~/trunk/src/scripts $ ./build_image \
 --noenable_rootfs_verification test --board=$BOARD
-(chroot) ~/trunk/src/scripts $ ./image_to_vm.sh --test_image
+(chroot) ~/trunk/src/scripts $ ./image_to_vm.sh --test_image --board=$BOARD
 ```
 
 You can either specify the image path or the board:
