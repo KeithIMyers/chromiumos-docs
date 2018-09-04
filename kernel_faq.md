@@ -475,17 +475,6 @@ Kernel configuration in Chromium OS has an extra level of indirection from the
 normal .config file. So do the instructions - [see this page for more
 information](https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/kernel-configuration).
 
-## How to quickly test kernel modifications (the fastest way)
-
-**FIXME: The instructions the link leads to seem to apply only to ancient
-boards running U-Boot.**
-
-Please take a look at doc on [network-based
-development](http://dev.chromium.org/chromium-os/how-tos-and-troubleshooting/network-based-development).
-While setting up your environment might appear to be harder and more time
-consuming, in many cases it will allow to test kernel modifications much faster
-and easier than the ways described below.
-
 ## How to quickly test kernel modifications (the fast way)
 
 Do an incremental build of the kernel:
@@ -630,6 +619,17 @@ run:
 ```
 (chroot) $ ./pack_partitions.sh chromiumos_image.bin
 ```
+
+## How to quickly test kernel modifications (the fastest way, outdated)
+
+**FIXME: The instructions the link leads to seem to apply only to ancient
+boards running U-Boot.**
+
+Please take a look at doc on [network-based
+development](http://dev.chromium.org/chromium-os/how-tos-and-troubleshooting/network-based-development).
+While setting up your environment might appear to be harder and more time
+consuming, in many cases it will allow to test kernel modifications much faster
+and easier than the ways described below.
 
 ## How to test kernel modifications (the slow and not recommended way)
 
