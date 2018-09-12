@@ -78,7 +78,7 @@ In this flow, the [VM] is named `termina` and the container is `penguin`.
 Here's a quick run down of how to get started.
 *   Buy a [Google Pixelbook](https://store.google.com/product/google_pixelbook).
     It is our objectively biased opinion that it's a nice piece of hardware.
-    *   Or see the [Supported Now](#Supported Now) section below.
+    *   Or see the [Supported Now](#Supported-Now) section below.
 *   Switch to the [dev channel].
     *   You do **not** need to put it into developer mode.
 *   Enable support.
