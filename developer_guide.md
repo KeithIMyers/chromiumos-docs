@@ -660,18 +660,19 @@ When you're done, unmount the root filesystem:
 
 The easiest way to get your image running on your target computer is to put the
 image on a USB flash disk (sometimes called a USB key), and boot the target
-computer from the flash disk. The first step is to insert a USB flash disk (4GB
-or bigger) into your build computer. **This disk will be completely erased, so
-make sure it doesn't have anything important on it**. Wait ~10 seconds for the
-USB disk to register, then type the following command:
+computer from the flash disk.
+
+The first step is to disable auto-mounting of USB devices on your build computer
+as it may corrupt the disk image while it's being written. Next, insert a USB
+flash disk (4GB or bigger) into your build computer. **This disk will be
+completely erased, so make sure it doesn't have anything important on it**. Wait
+~10 seconds for the USB disk to register, then type the following command:
 
 ```shell
 (inside) cros flash usb:// ${BOARD}/latest
 ```
 
-For more details on using this tool, see the [Cros Flash page]. Note that
-auto-mounting of USB devices should be turned off as it may corrupt the disk
-image while it's being written.
+For more details on using this tool, see the [Cros Flash page].
 
 When the `cros flash` command finishes, you can simply unplug your USB key and
 it's ready to boot from.
