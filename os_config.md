@@ -46,6 +46,7 @@ If you want to add more fields, they should go in [os-release] instead.
 |   No   | `CHROMEOS_RELEASE_DESCRIPTION`      | Human readable description for this build | `11012.0.2018_08_28_1422 (Test Build - vapier) developer-build betty` |
 |   No   | `CHROMEOS_RELEASE_BUILD_TYPE`       | Human readable build type | `Official Build` `Test Build - vapier` |
 |   No   | `CHROMEOS_RELEASE_NAME`             | Human readable OS Product name | `Chrome OS` `Chromium OS` |
+|  Yes   | `CHROMEOS_RELEASE_UNIBUILD`         | Set to 1 for unified builds. | `1` |
 |  Yes   | `CHROMEOS_RELEASE_VERSION`          | The full OS version number | `11012.0.2018_08_28_1422` |
 |  Yes   | `GOOGLE_RELEASE`                    | The full OS version number | `11012.0.2018_08_28_1422` |
 |  Yes   | `CHROMEOS_AUSERVER`                 | URI used to get OS updates | `https://tools.google.com/service/update2` `http://vapier.cam.corp.google.com:8080/update` |
@@ -196,7 +197,7 @@ We'll document their alternatives.
 
 * `arch` (RO): Shell code could use `uname -a` to get the kernel architecture.
   Userland code generally shouldn't be changing behavior based on the arch.
-* `hwid` (RO): See the [board/model detection FAQ](#detect-model).
+* `hwid` (RO): See the [board/device detection FAQ](#detect-device).
 
 ### Examples
 
@@ -271,7 +272,7 @@ Briefly, you'll want to use `vpd_get_value <field>` in tools.
 ## chromeos-config
 
 The [chromeos-config project] (for unibuild configurations) takes care of
-storing and accessing model-specific details.
+storing and accessing device-specific details.
 Its homepage provides all the details on tools and fields.
 
 Briefly, you'll want to use the `cros_config` program and `libcros_config`
@@ -292,7 +293,7 @@ These flags can be passed to the runtime as well via [libchromeos-use-flags].
 This is explained in more detail in the [login_manager documentation].
 
 USE flags must not be used to set board names (e.g. `kevin` or `link`).
-See the [board/model behavior FAQ](#model-behavior) for alternatives.
+See the [board/device behavior FAQ](#device-behavior) for alternatives.
 
 [libchromeos-use-flags]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/chromeos-base/libchromeos-use-flags/
 
@@ -347,7 +348,7 @@ If you have a feature you want to keep testing in e.g. canary channel before
 releasing it in a newer version, then you should look into [Finch] instead.
 Among other things, it provides a kill switch in case something goes wrong.
 
-### How do I change behavior based on board/model? {#model-behavior}
+### How do I change behavior based on board/device? {#device-behavior}
 
 If the board is already unibuild-enabled, then you should always use that to
 change runtime behavior.
@@ -364,23 +365,22 @@ few options:
 
 * If a USE flag is already available, [key off of that](#use-flags).
 * Update the board's bsp ebuild to install custom init scripts or config files.
-* [Query the board name](#detect-model).
+* [Query the board name](#detect-device).
 
-### How do I find the current board/model? {#detect-model}
+### How do I find the current board/device? {#detect-device}
 
-Please see the previous question about changing behavior based on board/model.
-If you follow those guidelines, you usually shouldn't need the exact board/model
+Please see the previous question about changing behavior based on board/device.
+If you follow those guidelines, you usually shouldn't need the exact board/device
 name in the first place.
 
-Use `mosys platform model` to get the model name.
-The other subfields of `platform` might be interesting too.
+Use `cros_config / name` to get the device name.
 
-Put simply, a single board (e.g. coral) can be used across multiple models
+Put simply, a single board (e.g. coral) can be used across multiple devices
 (e.g. astronaut, nasher, robo, etc...).
-The model name is used to disambiguate at runtime in a single board image.
+The device name is used to disambiguate at runtime in a single board image.
 
 Do not use `crossystem hwid` or `CHROMEOS_RELEASE_BOARD` in `/etc/lsb-release`.
-These do not handle unibuild where a single board supports multiple models.
+These do not handle unibuild where a single board supports multiple devices.
 
 ### How do I pass different flags to Chrome (the browser)?
 
