@@ -1,7 +1,7 @@
 # Building Chrome for Chrome OS (Simple Chrome)
 
 This workflow allows you to quickly build/deploy Chrome to a Chrome OS
-VM or device without needing a Chrome OS source checkout or chroot. It's useful
+[VM] or device without needing a Chrome OS source checkout or chroot. It's useful
 for trying out your changes on Chrome OS while you're doing Chrome
 development. If you have an OS checkout and want your local Chrome changes to
 be included when building a full OS image, see the [OS development guide].
@@ -18,7 +18,7 @@ fetches the necessary SDK components (Chrome OS toolchain, sysroot, VM, etc.).
 |  (shell)      | outside the chroot and SDK shell on your workstation  |
 |  (sdk)        | inside the `chrome-sdk` SDK shell on your workstation |
 |  (chroot)     | inside the `cros_sdk` chroot on your workstation      |
-|  (device)     | in your VM or Chrome OS device                        |
+|  (device)     | in your [VM] or Chrome OS device                        |
 
 
 ## Getting started
@@ -47,17 +47,19 @@ project ID).
 
 ### VM versus Device
 
-The easiest way to develop on Chrome OS is to use a VM. If you're interested
-in hardware-specific features such as graphics acceleration, bluetooth, etc, you
-may also use a physical device (Googlers: Chromestop has the hardware). See
-[Set up the Chrome OS device] for details.
+The easiest way to develop on Chrome OS is to use a [VM].
+
+If you need to test hardware-specific features such as graphics acceleration,
+bluetooth, mouse or input events, etc, you may also use a physical device
+(Googlers: Chromestop has the hardware). See [Set up the Chrome OS device] for
+details.
 
 ---
 
 ## Enter the Simple Chrome environment
 
 Building Chrome for Chrome OS requires a toolchain customized for each
-Chromebook model (or "board"). For the Chrome OS VM, and non-Googlers, use
+Chromebook model (or "board"). For the Chrome OS [VM], and non-Googlers, use
 `amd64-generic`. For a physical device, look up the [Chrome OS board name] by
 navigating to the URL `about:version` on the device. For example:
 `Platform 10176.47.0 (Official Build) beta-channel samus` has board `samus`.
@@ -182,7 +184,7 @@ Chrome OS checkout.
 
 ### Put your Chrome OS device in dev mode
 
-You can skip this section if you're using a VM.
+You can skip this section if you're using a [VM].
 
 > **Note:** Switching to dev mode wipes all data from the device (for security
 > reasons).
@@ -260,7 +262,7 @@ The `deploy_chrome` script uses rsync to incrementally deploy Chrome to the
 device/VM.
 
 Specify the build output directory to deploy from using `--build-dir`. For the
-VM:
+[VM]:
 
 ```
 (sdk) deploy_chrome --build-dir=out_${SDK_BOARD}/Release \
@@ -589,6 +591,7 @@ The legacy `GYP` build system is no longer supported.
 [chromite repo]: https://chromium.googlesource.com/chromiumos/chromite/
 [issue 437877]: https://bugs.chromium.org/p/chromium/issues/detail?id=403086
 [Cros Flash page]: https://www.chromium.org/chromium-os/build/cros-flash
+[VM]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md
 [Running a Chrome Google Test binary in the VM]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md#Run-a-Chrome-GTest-binary-in-the-VM
 [go/goldeneye]: https://cros-goldeneye.corp.google.com/chromeos/console/listBuild
 [debugging tips]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips
