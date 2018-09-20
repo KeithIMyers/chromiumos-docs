@@ -166,7 +166,9 @@ Autotests only exist inside the chromeos checkout, so they require running
 
 From inside your [chroot]:
 ```bash
-(chroot) ~/trunk/src/scripts $ test_that localhost:9222 login_Cryptohome
+(chroot) ~/trunk/src/scripts $ ./build_packages --board=amd64-generic
+(chroot) ~/trunk/src/scripts $ test_that --board=amd64-generic localhost:9222 \
+login_Cryptohome
 ```
 
 ## Run an ARC++ test in the VM
@@ -182,7 +184,7 @@ vm_sanity will detect and run an ARC++ test:
 Run a cheets autotest from within your [chroot]:
 ```bash
 (chroot) ~/trunk/src/scripts $ ./build_packages --board=betty
-(chroot) ~/trunk/src/scripts $ test_that localhost:9222 \
+(chroot) ~/trunk/src/scripts $ test_that --board=betty localhost:9222 \
 cheets_ContainerMount
 ```
 
@@ -257,10 +259,10 @@ To build chrome, deploy chrome, or both, prior to running tests:
 out_$SDK_BOARD/Release
 ```
 
-To run a tast test:
+To run a Tast test:
 ```bash
 (sdk) .../chrome/src $ cros_run_vm_test \
---cmd -- local_test_runner ui.ChromeSanity
+--cmd -- local_test_runner ui.ChromeLogin
 ```
 
 To run an arbitrary test (for e.g. base_unittests), you would need to first
