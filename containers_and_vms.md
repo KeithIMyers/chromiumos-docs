@@ -79,7 +79,9 @@ Here's a quick run down of how to get started.
 *   Buy a [Google Pixelbook](https://store.google.com/product/google_pixelbook).
     It is our objectively biased opinion that it's a nice piece of hardware.
     *   Or see the [Supported Now](#Supported-Now) section below.
-*   Switch to the [dev channel].
+*   Make sure you're running at least R69.
+    *   Start a [system update] if need be and reboot.
+    *   This should work in the [stable channel].
     *   You do **not** need to put it into developer mode.
 *   Enable support.
     *   Go to Chrome OS settings (chrome://settings).
@@ -883,11 +885,14 @@ settings, but the long-term plan is to remove this knob so things work
 on-demand.
 At which point, there will be no knob for unmanaged devices.
 
+[stable channel]: https://support.google.com/chromebook/answer/1086915
+[beta channel]: https://support.google.com/chromebook/answer/1086915
 [dev channel]: https://support.google.com/chromebook/answer/1086915
 [device list]: http://dev.chromium.org/chromium-os/developer-information-for-chrome-os-devices
 [feedback-report]: https://support.google.com/chromebook/answer/2982029
 [known-bugs]: https://bugs.chromium.org/p/chromium/issues/list?can=1&q=component:OS>Systems>Containers
 [new-bug]: https://bugs.chromium.org/p/chromium/issues/entry?comment=Chrome%20version%3A%20(copy%20from%20chrome%3A%2F%2Fversion)%0AOS%3A%20Chrome%0A%0ARepro%20steps%3A%0A1.%20%0A2.%20%0A3.%20%0A%0AExpected%3A%20%0AActual%3A%20&status=Untriaged&labels=Pri-2%2COS-Chrome%2CType-Bug%2CProj-Containers&components=OS%3ESystem%3EContainers
+[system update]: https://support.google.com/chromebook/answer/177889
 
 [chromium-os-dev]: https://groups.google.com/a/chromium.org/forum/#!forum/chromium-os-dev
 
