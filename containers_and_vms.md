@@ -687,6 +687,11 @@ have Ethernet connections.
 We could support layer 2 between containers, but it's not clear how many people
 want this in order to justify the effort involved.
 
+### Do VPNs set up by CrOS/Android (outside of the VM/containers) work?
+
+Currently, no.
+You can star https://crbug.com/834585 for updates.
+
 ### Can I access hardware (e.g. USB/Bluetooth/serial)?
 
 Currently, no, but we are working on it.
