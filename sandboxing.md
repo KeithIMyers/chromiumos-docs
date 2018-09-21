@@ -227,7 +227,8 @@ files and generate a policy file suitable for use with Minijail. On top of that,
 the `-L` option will print the name of the first syscall to be blocked to
 syslog. The best way to proceed is to combine both approaches: use  `strace` and
 the script to generate a rough policy, and then use `-L` if you notice your
-program is still crashing.
+program is still crashing. Note that the `-L` option should NOT be used in
+production.
 
 The policy file needs to be installed in the system, so we need to add it to
 the ebuild file:
@@ -236,8 +237,8 @@ the ebuild file:
 
 ```bash
 # Install seccomp policy file.
-insinto /opt/google/mtpd
-newins "mtpd-seccomp-${ARCH}.policy" mtpd-seccomp.policy
+insinto /usr/share/policy
+use seccomp && newins "mtpd-seccomp-${ARCH}.policy" mtpd-seccomp.policy
 ```
 
 And finally, the policy file has to be passed to Minijail, using the `-S`
@@ -246,9 +247,14 @@ option:
 [`mtpd.conf`](https://chromium.googlesource.com/chromiumos/platform2/+/master/mtpd/mtpd.conf)
 
 ```bash
-# use minijail (drop root, set no_new_privs, set seccomp filter)
-exec minijail0 -u mtp -g mtp -G -n -S /opt/google/mtpd/mtpd-seccomp.policy -- \
-        /opt/google/mtpd/mtpd -minloglevel="${MTPD_MINLOGLEVEL}"
+# use minijail (drop root, set no_new_privs, set seccomp filter).
+# Mount /proc, /sys, /dev, /run/udev so that USB devices can be
+# discovered.  Also mount /run/dbus to communicate with D-Bus.
+exec minijail0 -i -I -p -l -r -v -t -u mtp -g mtp -G \
+  -P /var/empty -b / -b /proc -b /sys -b /dev \
+  -k tmpfs,/run,tmpfs,0xe -b /run/dbus -b /run/udev \
+  -n -S /usr/share/policy/mtpd-seccomp.policy -- \
+  /usr/sbin/mtpd -minloglevel="${MTPD_MINLOGLEVEL}"
 ```
 
 ### Detailed instructions for generating a seccomp policy
@@ -259,21 +265,21 @@ exec minijail0 -u mtp -g mtp -G -n -S /opt/google/mtpd/mtpd-seccomp.policy -- \
     used with `LD_PRELOAD`:
 
 ```
-futex(<uaddr>, FUTEX_WAKE_PRIVATE, 1) = 0
-futex(<uaddr>, FUTEX_WAIT_BITSET_PRIVATE|FUTEX_CLOCK_REALTIME, 1, NULL, <uaddr2>) = -1
 rt_sigaction(SIGRTMIN, {<sa_handler>, [], SA_RESTORER|SA_SIGINFO, <sa_restorer>}, NULL, 8) = 0
 rt_sigaction(SIGRT_1, {<sa_handler>, [], SA_RESTORER|SA_RESTART|SA_SIGINFO, <sa_restorer>}, NULL, 8) = 0
 rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
 getrlimit(RLIMIT_STACK, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
-brk(0)                                  = 0x7f8a0656e000
+brk(NULL)                               = 0x7f8a0656e000
 brk(<addr>)                             = <addr>
 ```
 
 *   Run the policy generation script:
     *   `~/chromiumos/src/aosp/external/minijail/tools/generate_seccomp_policy.py strace.log > seccomp.policy`
-*   Test the policy:
+*   Test the policy (look at /var/log/messages for the blocked syscall when this
+    crashes):
     *   `minijail0 -S seccomp.policy -L <cmd>`
-*   To find a failing syscall without having seccomp logs available:
+*   To find a failing syscall without having seccomp logs available (i.e., when
+    minijail0 was run without the `-L` option):
     *   `dmesg | grep "syscall="` to find something similar to:
 
 ```
