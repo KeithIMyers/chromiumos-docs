@@ -31,7 +31,7 @@ with.
 the guest [VM], and facilitating the low-level ([virtio]-based) communication.
 
 [Termina] is a [VM] image with a stripped-down Chrome OS linux kernel and
-userland tools.
+[userland] tools.
 Its only goal is to boot up as quickly as possible and start running containers.
 Many of the programs/tools are custom here.
 In hindsight, we might not have named it one letter off from "Terminal", but so
@@ -344,6 +344,8 @@ You can look up the board name in our public [device list].
 *   **[Crostini]**: An umbrella name for providing a polished UI experience to
     run Linux apps.
 *   **[crosvm]**: The Chrome OS Virtual Machine Monitor (akin to [QEMU]).
+*   **[FUSE]**: Filesystem handling in [userland] which enables a wider variety
+    of formats, remote filesystems, and improves overall security/stability.
 *   **[Garcon]**: Daemon in the container for passing requests between the
     container and Chrome via [Cicerone].
 *   **[KVM]** (Kernel Virtual Machine): The Linux interface for managing virtual
@@ -359,6 +361,8 @@ You can look up the board name in our public [device list].
 *   **[Termina]**: Codename for the custom [VM] that we boot.
 *   **[Terminal]**: Public name for getting a full Linux command line
     environment and running [Crostini].
+*   **[userland]**: Everything not running inside of the kernel.  Also known as
+    user space.
 *   **[VM]** (Virtual Machine): A way to boot a different operating system in a
     strongly isolated environment.
 *   **[vmc]**: [crosh] command to manually manage custom [VM] instances via
@@ -476,26 +480,36 @@ That means trying to use software that requires building or loading custom
 kernel modules (e.g. VirtualBox) will not work.
 See the next question too.
 
-### Can I mount filesystems?
+### Can I mount filesystems? {#fs-mount}
 
 Currently, no (*).
 The containers are implemented using Linux [user namespaces] and those are quite
 restricted (by design).
-We're looking into [supporting FUSE](https://crbug.com/841787) though.
+
+See the [FUSE support entry](#FUSE) for alternatives.
 
 (*): Technically you can mount a few limited pseudo filesystems (like
 memory-backed tmpfs), but most people aren't interested in those.
 
+### Is FUSE supported? {#FUSE}
+
+Currently, no.
+We're looking into [supporting FUSE](https://crbug.com/841787) though.
+
+We're waiting for the CrOS kernel to rebase on top of Linux-4.18+ as that
+version includes support for unprivileged FUSE mounts.
+Then we'll be able to update the [Termina] kernel to that.
+
 ### Can I use loop devices?
 
 Currently, no.
-See the previous question about mounting filesystems.
+See the [previous question about mounting filesystems](#fs-mount).
 
 Specifically, we're referring to `losetup` and `mount -o loop` which use
 `/dev/loop-control` and nodes like `/dev/loop0` via the `loop` kernel module.
 
-If you have a use case that wouldn't be solved by supporting
-[FUSE](https://crbug.com/841787), please [file a bug][new-bug] for us.
+If you have a use case that wouldn't be solved by supporting [FUSE](#FUSE),
+please [file a bug][new-bug] for us.
 
 ### Can I run a VM inside the VM?
 
@@ -916,6 +930,7 @@ At which point, there will be no knob for unmanaged devices.
 [Debian]: https://www.debian.org/
 [dm-verity]: https://gitlab.com/cryptsetup/cryptsetup/wikis/DMVerity
 [DPI]: https://en.wikipedia.org/wiki/Dots_per_inch#Computer_monitor_DPI_standards
+[FUSE]: https://github.com/libfuse/libfuse/
 [Garcon]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/garcon/
 [Gentoo]: https://gentoo.org/
 [HiDPI]: https://en.wikipedia.org/wiki/HiDPI
@@ -937,6 +952,7 @@ At which point, there will be no knob for unmanaged devices.
 [Termina]: https://chromium.googlesource.com/chromiumos/overlays/board-overlays/+/master/project-termina/
 [Terminal]: #Terminal
 [user namespaces]: http://man7.org/linux/man-pages/man7/user_namespaces.7.html
+[userland]: https://en.wikipedia.org/wiki/User_space
 [UTC]: https://en.wikipedia.org/wiki/Coordinated_Universal_Time
 [virtio]: http://docs.oasis-open.org/virtio/virtio/v1.0/virtio-v1.0.html
 [VM]: https://en.wikipedia.org/wiki/Virtual_machine
