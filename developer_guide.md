@@ -1032,185 +1032,7 @@ to edit them.
 
 ### Upload your changes and get a code review
 
-Once your changes are committed locally, upload your changes using `repo
-upload`. The `repo upload` command takes all of the changes that are unmerged
-and asks them if you want to upload them. You can specifically say to only look
-for unmerged changes in your current repo by passing in '.'. Please note that
-you must have a [Gerrit account] before you can upload changes.
-
-```shell
-repo upload [.|${PROJECT-NAME}] [--current-branch]
-```
-
-It is important to note that repo uses the `Change-Id` in your git commits to
-track code reviews. So in order to work on a CL the standard work flow is to use
-`git commit --amend` rather than make a new commit. This differs from our old
-`git-cl` style.
-
-In your local commit logs make sure to add a `BUG=` field and `TEST=` field. For
-`BUG=`, you should put something that looks like: `BUG=bug-tracker:number`. The
-Chromium OS project has supported various bug trackers over the years, but as of
-2018, there are 2 supported trackers: one at [crbug.com], for which you should
-use the prefix chromium:, and one at [issuetracker.google.com] (see [issue
-tracker]; internally known as Buganizer), for which you should use the prefix
-'b:'. If your changes are related to more than one issue, you can list all the
-issues separated with commas, or include multiple `BUG=` lines.
-
-For `TEST=`, you should describe what you did to test the changes.
-
-Here's what a sample description should look like:
-
-```shell
-# Enter a description of the change.
-# This will displayed on the codereview site.
-# The first line will also be used as the subject of the review.
-Here's a SHORT, one-line summary of my change.
-
-And here are more details
-...this can be as long as I want.
-
-BUG=b:99999, chromium:88888
-TEST=Ran all the white box tests
-
-Change-Id: I8d7f86d716f1da76f4c85259f401c3ccc9a031ff
-```
-
-Once you run `repo upload`, this uploads the changes and prints out a URL for
-the code review (if it's a new code review). Go to that URL (log in with your
-chromium.org account, which you might want to do in an "incognito" window in
-Chrome), and use the "**Review->Publish Comments**" link to mail your changes to
-your reviewers.
-
-You should pick reviewers that know the code you're working on well and that
-will do the best reviews. Picking reviewers who will just rubber-stamp your
-changes is a bad idea. The point of submitting changes is to submit good code,
-not to submit as much code as you can. If you don't know who should review your
-changes, start by looking at the `git log` for the project that you're working
-on. Simply type the command below in a directory related to your project:
-
-```shell
-git log
-```
-
-Your reviewers will likely provide comments about changes that you should make
-before submitting your code. You should make such changes, submit them locally,
-and then re-upload your changes for code review by amending your changes to your
-git commit and re-running repo upload.
-
-```shell
-# make some changes
-git add -u .
-git commit --amend
-```
-
-If you have a chain of commits (which `repo upload .` converts to a chain of
-CLs), and you need to modify any commits that are not at the top of the chain,
-use interactive rebase:
-
-```shell
-git rebase -i
-# This shows a list of cherry-picks into a temporary branch.
-# Change some of the "pick" keywords to "edit".  Then exit the editor.
-git log # shows you are at the first "edit"ed commit.  All earlier commits are cherry-picked.
-# Make some modifications.
-git add -u .
-git commit --amend
-git rebase --continue # goes to the next "edit"ed commit.
-repo upload . --current-branch # when all modifications are ready to be uploaded again.
-```
-
-### Try seeing the mainline again
-
-While you're working on your changes, you might want to go back to the mainline
-for a little while (maybe you want to see if some bug you are seeing is related
-to your changes, or if the bug was always there). If you want to go back to the
-mainline without abandoning your changes, you can run the following command from
-within a directory associated with your project:
-
-```shell
-git checkout cros/master
-```
-
-When you're done, you can get back to your changes by running:
-
-```shell
-git checkout ${BRANCH_NAME}
-```
-
-### Work on something else while you're waiting
-
-If you want to start on another (unrelated) change while waiting for your code
-review, you can `repo start` another branch. When you want to get back to your
-first branch, run the following command from within a directory associated with
-your project:
-
-```shell
-git checkout ${BRANCH_NAME}
-```
-
-### Send your changes to the Commit Queue
-
-Eventually, all your reviewers will be happy and will give you a Looks Good and
-Approved (the latter is only available to owners of the code) message in
-Gerrit. When a reviewer is satisfied with the CL but wants other reviewers to
-approve they may give a +1. If they choose to test it they can also mark
-Verified but typically you'll need to test the CL and mark Verified
-yourself. Both Looks Good and Approved (+2) and Verified must be set in order to
-commit your CL. Once they are set, set the Commit Ready bit on your CL and the
-commit queue will test the change.
-
-Before the Commit Queue picks up your CL it must pass a pre-CQ trybot. This
-trybot run is triggered automatically when your CL is marked Looks Good and
-Approved. You can trigger this trybot earlier by checking 'Trybot-Ready' and, if
-the run passes, it will not be required again before the Commit Queue picks up
-the CL.
-
-Note it is possible that your change will be rejected because of a merge
-conflict. If it is, rebase against any new changes and re-upload your
-patch. This patch will have to be re-approved before it is allowed to be
-committed. (Note: If it's just a trivial rebase, you can approve the rebase
-yourself.)
-
-More details on the Commit Queue can be found in the [Commit Queue
-Overview].
-
-### Make sure your changes didn't break things
-
-After you commit, make sure you didn't break the build by checking the
-[buildbot].
-
-### Share your changes using the Gerrit sandbox
-
-It is possible to upload changes to a personal sandbox on Gerrit. This way, a
-change can be shared between developers before it is ready for code review.
-
-```shell
-project_url=https://chromium.googlesource.com/$(git config remote.cros.projectname)
-git push ${project_url} HEAD:refs/sandbox/${USER}/${BRANCH_NAME}
-```
-
-Other developers can then fetch your changes using the following commands:
-
-```shell
-project_url=https://chromium.googlesource.com/$(git config remote.cros.projectname)
-git fetch ${project_url} refs/sandbox/${USER}/${BRANCH_NAME}
-git checkout FETCH_HEAD
-```
-
-In a given repository, you can explore sandboxes using the `ls-remote` command:
-
-```shell
-git ls-remote cros "refs/sandbox/${USER}/*"
-git ls-remote cros "refs/sandbox/*"
-```
-
-Once you're finished with a sandbox, you can delete it using the following
-commands:
-
-```shell
-project_url=https://chromium.googlesource.com/$(git config remote.cros.projectname)
-git push $project_url :refs/sandbox/`${USER}`/`${BRANCH_NAME}`
-```
+Check out our [Gerrit Workflow] guide for details on our review process.
 
 ### Clean up after you're done with your changes
 
@@ -1225,21 +1047,9 @@ following command:
 This command tells `cros_workon` to stop forcing the `-9999.ebuild` and to stop
 forcing a build from source every time.
 
-You can also delete the branch that repo created. There are a number of ways to
-do so; here is one way:
-
-```shell
-repo abandon ${BRANCH_NAME} ${CROS_WORKON_PROJECT}
-```
-
-**SIDE NOTES:**
-
-*   If you don't specify a project name, the `repo abandon` command will throw
-    out any local changes across **all projects**. You might also want to look
-    at `git branch -D` or `repo prune`.
-*   If you're using the `minilayout`, doing a `cros_workon` stop **will not**
-    remove your source code. The code will continue to stay on your hard disk
-    and get synced down.
+If you're using the `minilayout`, doing a `cros_workon` stop **will not** remove
+your source code. The code will continue to stay on your hard disk and get
+synced down.
 
 ## Making changes to non-cros_workon-able packages
 
@@ -1962,12 +1772,6 @@ Below are a few links to external sites that you might also find helpful
 [crosh]: https://chromium.googlesource.com/chromiumos/platform2/+/master/crosh/
 [crbug/710629]: https://bugs.chromium.org/p/chromium/issues/detail?id=710629
 [cros deploy]: https://sites.google.com/a/chromium.org/dev/chromium-os/build/cros-deploy
-[Gerrit account]: https://sites.google.com/a/chromium.org/dev/chromium-os/developer-guide/gerrit-guide
-[crbug.com]: http://crbug.com
-[issuetracker.google.com]: https://issuetracker.google.com/
-[issue tracker]: https://developers.google.com/issue-tracker/
-[Commit Queue Overview]: https://sites.google.com/a/chromium.org/dev/developers/tree-sheriffs/sheriff-details-chromium-os/commit-queue-overview
-[buildbot]: http://build.chromium.org/buildbot/chromiumos
 [Create a branch for your changes]: #Create-a-branch-for-your-changes
 [Making changes to the Chromium web browser on Chromium OS]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/building-chromium-browser
 [Remote Debugging in Chromium OS]: http://www.chromium.org/chromium-os/how-tos-and-troubleshooting/remote-debugging
@@ -1999,6 +1803,7 @@ Below are a few links to external sites that you might also find helpful
 [Chromium OS gitweb]: https://chromium.googlesource.com/
 [Chromium OS build waterfall]: http://build.chromium.org/p/chromiumos/waterfall
 [#chromium-os channel]: http://webchat.freenode.net/?channels=chromium-os
+[Gerrit Workflow]: contributing.md
 [Git for Computer Scientists]: http://eagain.net/articles/git-for-computer-scientists/
 [Git Magic]: http://www-cs-students.stanford.edu/~blynn/gitmagic/
 [Git Manual]: http://schacon.github.com/git/user-manual.html
