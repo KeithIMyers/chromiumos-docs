@@ -46,6 +46,12 @@ responsible for communicating with [Concierge] (which runs outside of the [VM]).
 [Concierge] sends it requests and [Maitred] is responsible for carrying those
 out.
 
+[Tremplin] is a daemon that runs in the [VM] to provide a gRPC wrapper for LXD.
+This includes basic functionality such as creating and starting containers,
+but also provides other [Crostini]-specific integration such as setting up
+a container's primary user, and setting up apt repositories in the guest
+to match the Chrome OS milestone.
+
 [Cicerone] is a daemon that runs in Chrome OS which handles all communication
 directly with the container using gRPC over IP.
 
@@ -951,6 +957,7 @@ At which point, there will be no knob for unmanaged devices.
 [SVM]: https://en.wikipedia.org/wiki/AMD-V
 [Termina]: https://chromium.googlesource.com/chromiumos/overlays/board-overlays/+/master/project-termina/
 [Terminal]: #Terminal
+[Tremplin]: https://chromium.googlesource.com/chromiumos/platform/tremplin/+/master/
 [user namespaces]: http://man7.org/linux/man-pages/man7/user_namespaces.7.html
 [userland]: https://en.wikipedia.org/wiki/User_space
 [UTC]: https://en.wikipedia.org/wiki/Coordinated_Universal_Time
