@@ -77,8 +77,8 @@ stop on stopping system-services
 respawn
 
 # Run as 'devbroker' user.
-exec minijail0 -u devbroker -c 0009 /usr/bin/permission_broker \
-    --access_group=${PERMISSION_BROKER_GRANT_GROUP}
+exec minijail0 -u devbroker -c 'cap_chown,cap_fowner+eip' -- \
+    /usr/bin/permission_broker --access_group=${PERMISSION_BROKER_GRANT_GROUP}
 ```
 
 Minijail's `-u` argument forces the target program (in this case
@@ -129,19 +129,11 @@ respawn
 
 # Run as <devbroker> user.
 # Grant CAP_CHOWN and CAP_FOWNER.
-exec minijail0 -u devbroker -c 0009 /usr/bin/permission_broker \
-    --access_group=${PERMISSION_BROKER_GRANT_GROUP}
+exec minijail0 -u devbroker -c 'cap_chown,cap_fowner+eip' -- \
+    /usr/bin/permission_broker --access_group=${PERMISSION_BROKER_GRANT_GROUP}
 ```
 
-Capabilities are expressed using a capabilities mask, calculated from the
-index of the capability in [capability.h], and changed to a mask as in
-`CAP_TO_MASK`:
-
-```c
-#define CAP_TO_MASK(x)      (1 << ((x) & 31)) /* mask for indexed __u32 */
-```
-
-You can use [cap-to-mask.appspot.com] to figure out capabilities masks.
+Capabilities are expressed using the format that [cap_from_text(3)] accepts.
 
 ## Namespaces
 
@@ -376,7 +368,7 @@ TODO(jorgelo)
 [How do I specify the dependencies of a change?]: http://www.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/commit-queue-overview
 [Linux capabilities]: http://man7.org/linux/man-pages/man7/capabilities.7.html
 [capability.h]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/linux/capability.h
-[cap-to-mask.appspot.com]: https://cap-to-mask.appspot.com
+[cap_from_text(3)]: http://man7.org/linux/man-pages/man3/cap_from_text.3.html
 [namespaces overview]: http://man7.org/linux/man-pages/man7/namespaces.7.html
 [control groups settings]: http://man7.org/linux/man-pages/man7/cgroups.7.html
 [Seccomp-BPF]: https://www.kernel.org/doc/Documentation/prctl/seccomp_filter.txt
