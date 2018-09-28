@@ -82,6 +82,7 @@ In this flow, the [VM] is named `termina` and the container is `penguin`.
 ## Quickstart
 
 Here's a quick run down of how to get started.
+
 *   Buy a [Google Pixelbook](https://store.google.com/product/google_pixelbook).
     It is our objectively biased opinion that it's a nice piece of hardware.
     *   Or see the [Supported Now](#Supported-Now) section below.
@@ -226,7 +227,7 @@ We don't want to compromise system stability and security here.
 ### Supported Now
 
 These are the initial set of boards that we're supporting.
-They're a mix of x86_64 and aarch64 kernels.
+They're a mix of `x86_64` and `aarch64` kernels.
 
 You can look up the board name in our public [device list].
 
@@ -286,6 +287,7 @@ There are no plans to support Linux 3.14 or older.
 
 These require backports of new features that are extensive and often invasive.
 For example:
+
 * [vsock](https://crbug.com/763970)
 * [aarch64 kvm](https://crbug.com/846515)
 * [Foreshadow/L1TF](https://crbug.com/875512)
@@ -307,11 +309,11 @@ You can look up the board name in our public [device list].
 
 ### 32-bit ARM CPUs
 
-Getting virtual machines working under 32-bit ARM cpus is difficult,
+Getting virtual machines working under 32-bit ARM CPUs is difficult,
 non-standard, and requires coordination with the firmware.
 Unfortunately, Chrome OS firmware tended to not configure the extensions.
 We do not plan on supporting these systems,
-especially since they all tended to have smaller amounts of storage & RAM.
+especially since they all tended to have smaller amounts of storage and RAM.
 
 You can look up the board name in our public [device list].
 
@@ -546,6 +548,7 @@ have.
 
 If you don't know what device you have, you can find this out in two different
 ways:
+
 *   Open chrome://settings/help/details and look at the Platform,
     then match the board name with our public [device list].
     Look at the "User ABI" field to see what kind of CPU you have.
