@@ -1267,6 +1267,7 @@ The types of changes that fall into this category include:
 *   changes to `eclass` files (like the ones in
     `src/third_party/chromiumos-overlay/eclass`)
 *   changes to the buildbot infrastructure (in `crostools`)
+*   changes to Chromium OS project documentation (in `docs`)
 *   TODO: anything else?
 
 ### Adding small patches to existing packages
@@ -1940,7 +1941,7 @@ Below are a few links to external sites that you might also find helpful
 [Attribution requirements]: #Attribution-requirements
 [Ubuntu]: http://www.ubuntu.com/
 [RAM-thread]: https://groups.google.com/a/chromium.org/d/topic/chromium-os-dev/ZcbP-33Smiw/discussion
-[install depot_tools]: https://sites.google.com/a/chromium.org/dev/developers/how-tos/install-depot-tools
+[install depot_tools]: http://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html#_setting_up
 [Making sudo a little more permissive]: http://www.chromium.org/chromium-os/tips-and-tricks-for-chromium-os-developers#TOC-Making-sudo-a-little-more-permissive
 [Decide where your source will live]: Decide-where-your-source-will-live
 [gerrit-guide]: http://www.chromium.org/chromium-os/developer-guide/gerrit-guide
