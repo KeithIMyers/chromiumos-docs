@@ -413,7 +413,7 @@ Please first make sure you're using the latest dev channel.
 A lot of work is still ongoing.
 
 Next, please make sure the issue isn't already known or fixed.
-You can check the existing bug list.
+You can check the [existing bug list][known-bugs].
 
 If you still want to send feedback, you can [file a feedback
 report][feedback-report] and include `#crostini` in the description.
@@ -697,7 +697,8 @@ You can run `sudo apt-get update && sudo apt-get dist-upgrade`.
 
 Unfortunately, only IPv4 is currently supported.
 Yes, we're fully aware that everything should be IPv6-compatible in 2018.
-We're working on it.
+
+You can star https://crbug.com/863260 for updates.
 
 ### Can I access layer 2 networking?
 
