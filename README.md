@@ -17,8 +17,7 @@ Markdown documents must follow the [style guide].
 
 This repository is managed by the [repo] tool, so you can make changes to it
 using the same techniques that you'd use for any other repositories in the
-project. Feel free to bypass the commit queue and commit changes immediately
-after they are reviewed.
+project.
 
 ## Making changes without repo
 
