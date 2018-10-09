@@ -602,6 +602,28 @@ For more details, see the [Security] section in this doc.
 Nope!
 See the previous questions, and the [Security] section.
 
+### Is multiprofile supported?
+
+No, [Terminal] is only supported in the primary profile (*).
+Our goal is to have a fully functional and smooth experience for the primary
+profile, and to not crash or cause problems in secondary profiles.
+We don't plan on making secondary profiles more featureful.
+
+If you're unfamiliar with [multiprofile] support, check out the general
+[multiprofile documentation][multiprofile] for more details.
+
+(*): The [Terminal] application is disabled in all secondary profiles.
+People can manually start [VM]s via [crosh] and containers therein, but the UI
+and Files app probably won't work integrate automatically.
+
+### Are child accounts supported?
+
+No, [Terminal] is not supported in [child accounts].
+We don't have plans to make this available to such accounts.
+
+If you're unfamiliar with [child accounts], check out the general
+[child accounts documentation][child accounts] for more details.
+
 ### Are my VMs/containers/data synced/backed up?
 
 Currently, no, nothing is synced or backed up.
@@ -930,6 +952,7 @@ At which point, there will be no knob for unmanaged devices.
 [AMD-V]: https://en.wikipedia.org/wiki/AMD-V
 [alt syscall]: https://chromium.googlesource.com/chromiumos/third_party/kernel/+/HEAD/security/chromiumos/alt-syscall.c
 [Android Studio]: https://developer.android.com/topic/arc/studio
+[child accounts]: https://support.google.com/families/answer/7680868
 [Cicerone]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/cicerone/
 [component]: https://chromium.googlesource.com/chromium/src/+/lkgr/components/component_updater/README.md
 [Concierge]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/concierge/
@@ -949,6 +972,7 @@ At which point, there will be no knob for unmanaged devices.
 [LXC]: https://linuxcontainers.org/lxc/introduction/
 [Maitred]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/maitred/
 [MIME]: https://en.wikipedia.org/wiki/MIME
+[multiprofile]: https://support.google.com/chromebook/answer/6088201
 [NaCl]: https://developer.chrome.com/native-client
 [namespaces]: http://man7.org/linux/man-pages/man7/namespaces.7.html
 [QEMU]: https://www.qemu.org/
