@@ -216,7 +216,7 @@ browser's data.
 If a [VM] or container are stopped or killed ungracefully (e.g. powerloss),
 then data might be lost and need recovery like anything else in the system.
 
-## Device Support
+## Device Support {#supported}
 
 While we would like to be able to bring this work to all Chromebooks, the
 required kernel and hardware features limit where we can deploy this.
@@ -421,6 +421,14 @@ Feedback about any part of Chrome OS can be filed with "Alt-Shift-i".
 
 If you still want to file a bug with the developers, use [this link][new-bug] to
 route to the right people.
+
+### When will my device be supported?
+
+We are not currently publishing any information beyond this document.
+If your device is not listed in the [Device Support] section, then we have not
+yet made any decisions for that specific device that are ready for the public.
+
+So please do not ask us for device support roadmaps as we don't have them.
 
 ### Do I need to enable developer mode?
 
@@ -961,6 +969,7 @@ At which point, there will be no knob for unmanaged devices.
 [Crostini]: #Crostini
 [crosvm]: https://chromium.googlesource.com/chromiumos/platform/crosvm/
 [Debian]: https://www.debian.org/
+[Device Support]: #supported
 [dm-verity]: https://gitlab.com/cryptsetup/cryptsetup/wikis/DMVerity
 [DPI]: https://en.wikipedia.org/wiki/Dots_per_inch#Computer_monitor_DPI_standards
 [FUSE]: https://github.com/libfuse/libfuse/
