@@ -188,12 +188,7 @@ There is much more information about filing bugs and using labels in the
 
 ## Mailing lists
 
-We use the [Chromium technical discussion groups] and
-[Chromium OS technical discussion groups] for development-related
-discussion. Most Chromium OS discussion takes place on [chromium-os-dev] (for
-OS-related topics) and [chromium-dev] (for browser-related topics). You should
-subscribe to chromium-os-dev if you're doing Chromium OS development, as
-important PSAs are frequently sent there.
+See the [contact] document for more details.
 
 ## Developing in the open
 
@@ -201,6 +196,7 @@ Chromium OS is an open-source project. Whenever possible (i.e. when not
 discussing private, partner-related information), use the public issue tracker
 and mailing lists rather than the internal versions.
 
+[contact]: contact.md
 [documentation guidelines]: https://chromium.googlesource.com/chromium/src/+/master/docs/documentation_guidelines.md
 [documentation best practices]: https://chromium.googlesource.com/chromium/src/+/master/docs/documentation_best_practices.md
 [Chromium OS design docs]: https://www.chromium.org/chromium-os/chromiumos-design-docs
@@ -235,7 +231,4 @@ and mailing lists rather than the internal versions.
 [Gerrit notification settings]: https://chromium-review.googlesource.com/settings/#Notifications
 [chromium issue tracker]: https://bugs.chromium.org/p/chromium/issues/list
 [Chromium bug reporting guidelines]: https://www.chromium.org/for-testers/bug-reporting-guidelines
-[Chromium technical discussion groups]: https://www.chromium.org/developers/technical-discussion-groups
-[Chromium OS technical discussion groups]: https://www.chromium.org/chromium-os/discussion-groups
 [chromium-os-dev]: https://groups.google.com/a/chromium.org/forum/#!forum/chromium-os-dev
-[chromium-dev]: https://groups.google.com/a/chromium.org/forum/#!forum/chromium-dev
