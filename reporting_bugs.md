@@ -38,6 +38,19 @@ Issues are publicly-viewable by default, but the `Restrict-View-Google` label
 restricts the issue to Google employees. [go/newcrosbug] (internal link) may be
 used to start a new issue with this label.
 
+## Security bugs
+
+If you want to report a security bug, please follow [Reporting Security Bugs].
+
+That covers how to securely and privately report issues to the right group.
+Please do *not* use the default [crbug.com/new] system as that creates public
+bugs which anyone can view.
+
+Note that we do not handle account compromises with your Google account
+(e.g. someone stole your Gmail password).  Please see the
+[Google Account Help document](https://support.google.com/accounts/answer/7539929)
+and related articles instead.
+
 ## Collecting full debug logs
 
 It's also possible to collect extensive system logs rather than the subset
@@ -138,3 +151,4 @@ If you think you've identified a bug in Chrome OS, please do the following:
 [new.crbug.com]: https://new.crbug.com/
 [crbug.com/new]: https://crbug.com/new
 [go/newcrosbug]: https://goto.google.com/newcrosbug
+[Reporting Security Bugs]: https://dev.chromium.org/Home/chromium-security/reporting-security-bugs
