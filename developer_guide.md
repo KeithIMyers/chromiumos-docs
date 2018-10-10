@@ -1230,7 +1230,7 @@ $ CFLAGS="$(portageq-$board envvar CFLAGS) -clang" \
 After your package builds cleanly with Clang, you can add `-clang` to your
 ebuild.
 
-##　Local Debugging
+## Local Debugging
 
 ### Debugging both x86 and non-x86 binaries on your workstation.
 
@@ -1793,7 +1793,7 @@ Below are a few links to external sites that you might also find helpful
 [Debugging Tips]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/debugging-tips
 [Working on a Branch]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/working-on-a-branch
 [Git server-side information]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/git-server-side-information
-[Portage Package Upgrade Process]: https://sites.google.com/a/chromium.org/dev/chromium-os/portage-package-status
+[Portage Package Upgrade Process]: https://sites.google.com/a/chromium.org/dev/chromium-os/gentoo-package-upgrade-process
 [Chromium OS Sandboxing]: https://sites.google.com/a/chromium.org/dev/chromium-os/developer-guide/chromium-os-sandboxing
 [Go in Chromium OS]: https://sites.google.com/a/chromium.org/dev/chromium-os/developer-guide/go-in-chromium-os
 [Go]: http://golang.org
