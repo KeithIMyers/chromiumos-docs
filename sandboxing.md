@@ -371,7 +371,7 @@ TODO(jorgelo)
 [libbrillo]: http://www.chromium.org/chromium-os/packages/libchromeos
 [shell command-injection bugs]: http://en.wikipedia.org/wiki/Code_injection#Shell_injection
 [Chrome OS user accounts README]: https://chromium.googlesource.com/chromiumos/overlays/eclass-overlay/+/master/profiles/base/accounts/README.md
-[How do I specify the dependencies of a change?]: http://www.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/commit-queue-overview
+[How do I specify the dependencies of a change?]: contributing.md#CQ-DEPEND
 [Linux capabilities]: http://man7.org/linux/man-pages/man7/capabilities.7.html
 [capability.h]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/linux/capability.h
 [cap_from_text(3)]: http://man7.org/linux/man-pages/man3/cap_from_text.3.html
