@@ -253,6 +253,20 @@ Note that two Code-Review+1 labels does not equal a Code-Review+2.
 It simply means more than one person said the code looks good, but they all want
 someone else to approve the [CL].
 
+#### Code-Review+2 access
+
+Chromium OS repos allow anyone to give Code-Review+1 on [CL]s, but restrict
+access to Code-Review+2 to developers (and partners in specific repos).
+
+For Googlers, if you don't have Code-Review+2 but think you should, check to
+make sure you're listed in a Chrome OS sheriff rotation.
+If you're still having troubles, e-mail [chromeos-chatty-eng][Contact].
+
+For partners, raise an issue through your partner contact channels.
+
+If you're looking for someone to give Code-Review+2 to your [CL], then see the
+[Adding Reviewers] section.
+
 ### Setting verified
 
 Some reviewers, depending on how they reviewed things, might add the Verified+1
@@ -440,6 +454,7 @@ $ git checkout ${BRANCH_NAME}
 [Adding Reviewers]: #reviewers
 [Change-Id]: https://gerrit-review.googlesource.com/Documentation/user-changeid.html
 [CL]: https://dev.chromium.org/glossary
+[Contact]: contact.md
 [Contributing Code]: https://dev.chromium.org/developers/contributing-code#TOC-Legal-stuff
 [Contributor License Agreement]: https://cla.developers.google.com/
 [CQ]: https://dev.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/commit-queue-overview
