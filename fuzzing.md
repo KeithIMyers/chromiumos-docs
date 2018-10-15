@@ -28,7 +28,7 @@ infrastructure, [ClusterFuzz], that works with libFuzzer and aids developers
 by providing an end-to-end pipeline that automatically picks up new (and
 existing) fuzz targets, runs fuzz testing on these targets, reports bugs
 (assigning them to appropriate owners), and even verifies fixes. Chromium on
-Linux and MacOS has been using [libFuzzer and ClusterFuzz] for a while, and
+Linux and MacOS has been using [libFuzzer and ClusterFuzz] for years, and
 they have proved very useful, finding thousands of [security bugs] and
 [non-security bugs].
 
@@ -258,14 +258,10 @@ the previous section for an example.
 4.  Add the package dependency to the `chromium-os-fuzzers` ebuild. Inside your
     chroot:
 
-    ```bash
-    $ cd ~/trunk/src/third_party/chromiumos-overlay/virtual/chromium-os-fuzzers
-    ```
-
-    Edit `chromium-os-fuzzers-1.ebuild`. In that file, find the `RDEPEND` list
-    and add your package/fuzzer (you can look at the other packages there, to
-    see how it's done). Don't forget to uprev the ebuild symlink. Commit the
-    changes and upload them for review.
+    Edit `~/trunk/src/third_party/chromiumos-overlay/virtual/chromium-os-fuzzers/chromium-os-fuzzers-1.ebuild`.
+    In that file, find the `RDEPEND` list and add your package/fuzzer (you can
+    look at the other packages there, to see how it's done). Don't forget to
+    uprev the ebuild symlink. Commit the changes and upload them for review.
 
 5.  Optional: Verify that the `amd64-generic-fuzzer` builder is happy with your
     changes.
@@ -422,14 +418,10 @@ the previous section for an example.
 5.  Add the package dependency to the `chromium-os-fuzzers` ebuild. Inside your
     chroot:
 
-    ```bash
-    $ cd ~/trunk/src/third_party/chromiumos-overlay/virtual/chromium-os-fuzzers
-    ```
-
-    Edit `chromium-os-fuzzers-1.ebuild`. In that file, find the `RDEPEND` list
-    and add your package/fuzzer (you can look at the other packages there, to
-    see how it's done). Don't forget to uprev the ebuild symlink. Commit the
-    changes and upload for review.
+    Edit `~/trunk/src/third_party/chromiumos-overlay/virtual/chromium-os-fuzzers/chromium-os-fuzzers-1.ebuild`.
+    In that file, find the `RDEPEND` list and add your package/fuzzer (you can
+    look at the other packages there, to see how it's done). Don't forget to
+    uprev the ebuild symlink. Commit the changes and upload them for review.
 
 6.  Optional: Verify that the `amd64-generic-fuzzer` builder is happy with your
     changes.
@@ -486,9 +478,9 @@ In particular, if you're fuzzing code that's using the logging primitives from
 #include "base/logging.h"
 
 struct Environment {
-Environment() {
-  logging::SetMinLogLevel(logging::LOG_FATAL);  // <- DISABLE LOGGING.
-}
+  Environment() {
+    logging::SetMinLogLevel(logging::LOG_FATAL);  // <- DISABLE LOGGING.
+  }
 };
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
@@ -528,25 +520,25 @@ out of it:
 
 ```cpp
 class FuzzedDataProvider {
-...
+public:
+  ...
+  std::string ConsumeBytes(size_t num_bytes);
 
-std::string ConsumeBytes(size_t num_bytes);
+  std::string ConsumeRemainingBytes();
 
-std::string ConsumeRemainingBytes();
+  std::string ConsumeRandomLengthString(size_t max_length);
 
-std::string ConsumeRandomLengthString(size_t max_length);
+  uint32_t ConsumeUint32InRange(uint32_t min, uint32_t max);
+  int ConsumeInt32InRange(int min, int max);
 
-uint32_t ConsumeUint32InRange(uint32_t min, uint32_t max);
-int ConsumeInt32InRange(int min, int max);
+  bool ConsumeBool();
 
-bool ConsumeBool();
+  uint8_t ConsumeUint8();
 
-uint8_t ConsumeUint8();
+  uint16_t ConsumeUint16();
 
-uint16_t ConsumeUint16();
-
-...
-}
+  ...
+};
 ```
 
 Using this API, we can obtain integers and strings to pass to the above API, and
