@@ -84,10 +84,10 @@ Some common examples:
 
 *   `TEST=None`: Used if the [CL] in question doesn't need testing (e.g. fixing
     typos in documentation files).
-*   `TEST=ran unittests`: Implies the unittests in the package are sufficient to
-    prove functionality.
-*   `TEST=precq passes`: Implies all unittest/vmtests/hwtests passed, and those
-    tests are sufficient to validate the code.
+*   `TEST=ran unittests`: Implies the [unittests] in the package are sufficient
+    to prove functionality.
+*   `TEST=precq passes`: Implies all [unittests]/vmtests/hwtests passed, and
+    those tests are sufficient to validate the code.
 
 ### Change-Id
 
@@ -267,7 +267,7 @@ For partners, raise an issue through your partner contact channels.
 If you're looking for someone to give Code-Review+2 to your [CL], then see the
 [Adding Reviewers] section.
 
-### Setting verified
+### Setting Verified
 
 Some reviewers, depending on how they reviewed things, might add the Verified+1
 label to indicate that they also tested/verified the [CL].
@@ -286,13 +286,26 @@ If the [CL] doesn't have Code-Review+2, Verified+1, and Commit-Queue+1 labels,
 then the [CL] will never be picked up by the [CQ].
 Further, if someone adds Code-Review-2 or Verified-1, the [CQ] will ignore it.
 
-Before the [CQ] picks up your [CL] it must pass the pre-CQ.
-The pre-CQ is triggered automatically when your [CL] is marked Code-Review+2.
-You can trigger this earlier by adding the Trybot-Ready+1 label yourself.
-If the pre-CQ passes, it will not be required again before the [CQ] runs.
-
 More details on the Commit Queue can be found in the [Commit Queue
 Overview][CQ].
+
+### Pre-Commit Queue (Pre-CQ)
+
+The Pre-CQ runs a reduced set of tests against a [CL] before going to the [CQ].
+The goal is to get quicker feedback by running compile & [unittests] (and some
+VM tests) against the [CL] in isolation.
+If a [CL] fails the Pre-CQ, it's a pretty good signal the [CL] is buggy.
+
+The Pre-CQ is triggered automatically when your [CL] is marked Code-Review+2.
+You can trigger this earlier by adding the Trybot-Ready+1 label yourself.
+If the Pre-CQ passes, it will not be required again before the [CQ] runs.
+
+Setting Trybot-Ready+1 is intended just for getting the Pre-CQ to test the [CL].
+Once you've gone through the review and you're ready to submit to the [CQ], you
+don't have to set both Trybot-Ready+1 and Commit-Queue+1 -- setting CQ+1 is all
+you need to merge.
+
+More details on the Pre-CQ can be found in the [Commit Queue Overview][CQ].
 
 ### Merge conflicts
 
@@ -307,6 +320,9 @@ For developers with access, they'll often apply Code-Review+2 to their own
 [CL] with a comment like "inheriting CR+2 from previous patch".
 The expectation here is that the developer hasn't made significant changes that
 the reviewers would have objected to.
+
+Adding Code-Review+1 to your own [CL]s doesn't make sense.
+It's like saying "my code LGTM" which we already know because you uploaded it.
 
 If the developer doesn't have access, they'll have to get approvals from the
 reviewers again.
@@ -466,5 +482,6 @@ $ git checkout ${BRANCH_NAME}
 [issue tracker]: https://developers.google.com/issue-tracker/
 [issuetracker.google.com]: https://issuetracker.google.com/
 [Life of a Patch]: https://source.android.com/setup/contribute/life-of-a-patch
+[unittests]: unit_tests.md
 [Uploading Changes]: https://gerrit-review.googlesource.com/Documentation/user-upload.html
 [Work-in-Progress (WIP)]: https://gerrit-review.googlesource.com/Documentation/intro-user.html#wip
