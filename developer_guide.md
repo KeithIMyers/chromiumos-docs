@@ -606,7 +606,7 @@ The preferred way to mount the image you just built to look at its contents is:
 
 ```shell
 (inside)
-./mount_gpt_image.sh --board=${BOARD} --safe -f $(./get_latest_image.sh --board=${BOARD})
+./mount_gpt_image.sh --board=${BOARD} --safe --most_recent
 ```
 
 If you built a test image, also make sure to add `-i chromiumos_test_image.bin`
