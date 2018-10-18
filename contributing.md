@@ -380,7 +380,7 @@ You might also want to look at `git branch -D` or `repo prune`.
 
 ## Advanced topics
 
-### Share your changes using the Gerrit sandbox
+### Share your changes using the Gerrit sandbox {#sandbox}
 
 It is possible to upload changes to a personal sandbox on [Gerrit].
 This way, changes can be shared between developers before it's ready for review.

@@ -252,6 +252,107 @@ build/infra team first using [chromeos-chatty-eng@google.com][Contact].
     *   `gob/`: Mirrors of other GoB instances.  Uses a $GOB_NAME subdir followed
         by the path as it exists on the remote GoB server.
 
+## Branch naming
+
+We have a few conventions when it comes to branch names in our repos.
+Not all repos follow all these rules, but moving forward new repos should.
+
+When cloning/syncing git repos, only `heads/` and `tags/` normally get synced.
+Any other refs stay on the server and are accessed directly.
+
+Note: All the paths here assume a `refs/` prefix on them.
+So when using `git push`, make sure to use `refs/heads/xxx` and not just `xxx`
+to refer to the remote ref.
+
+*   `tags/`: CrOS doesn't use git tags normally.  Repos that do tend to do so
+    for their own arbitrary usage.  If they are used, they should follow the
+    [SemVerTag] format (e.g. `v1.2.3`).
+*   `heads/`: The majority of CrOS development happens under these branches.
+    *   `factory-xxx`: Every device gets a unique branch for factory purposes.
+        Factory developers tend to be the only ones who work on these.
+        Typically it uses `<device>-<OS major version>.B` names.
+    *   `firmware-xxx`: Every device gets a unique branch for maintaining a
+        stable firmware release.  Firmware developers tend to be the only ones
+        who work on these.  Typically it uses `<device>-<OS major version>.B`
+        names.
+    *   `master`: The normal ToT branch where current development happens.
+    *   `release-xxx`: Every release gets a unique branch.  When developers
+        need to cherry pick back changes to releases to fix bugs, these are
+        the branches they work on.  Typically it uses
+        `R<milestone>-<OS major version>.B` names.
+    *   `stabilize-xxx`: Temporary branches used for testing new releases.
+        Developers pretty much never work with these and they're managed by
+        TPMs.  Typically it uses `<OS major version>.B` names.
+*   `sandbox/`: Arbitrary developer scratch space.  See the [sandbox]
+    documentation for more details.
+
+### Automatic m/ repo refs
+
+Locally, repo provides some pseudo refs to help developers.
+It uses the `m/xxx` style where `xxx` is the branch name used when running
+`repo init`.
+It often matches the actual git branch name used in the git repo, but there is
+no such requirement.
+
+For example, when getting a repo checkout of the master branch (i.e. after
+running `repo init -b master`), every git repo will have a pseudo `m/master`
+that points to the branch associated with that project in the [manifest].
+In chromite, `m/master` will point to `heads/master`, but in bluez, `m/master`
+will point to `heads/chromeos`.
+
+In another example, when getting a repo checkout of the R70 release branch (i.e.
+after running `repo init -b release-R70-11021.B`), every git repo will have a
+pseudo `m/release-R70-11021.B` that points to the branch associated with that
+project in the [manifest].
+In chromite, `m/release-R70-11021.B` will point to `heads/release-R70-11021.B`,
+but in kernel/v4.14, `m/release-R70-11021.B-chromeos-4.14`.
+
+### Other refs
+
+There are a few additional paths that you might come across, although they
+aren't commonly used, or at least directly.
+
+*   `changes/`: Read-only paths used by Gerrit to expose uploaded CLs and their
+    various patchsets.  See the [Gerrit refs/for] docs for more details.
+*   `for/xxx`: All paths under `for/` are a Gerrit feature for uploading commits
+    for Gerrit review in the `xxx` branch.  See the [Gerrit refs/for] docs for
+    more details.
+*   `infra/config`: Branch used by [LUCI] for configuring that service.
+*   `meta/config`: Branch for storing per-repo Gerrit settings & ACLs.  Usually
+    people use the [Admin UI] in each GoB to manage these settings indirectly,
+    but users can manually check this out and upload CLs by hand for review.
+    See the [Gerrit project config] docs for more details.
+
+### Local heads/ namespaces
+
+You might see that, depending on the repo, the remote branches look like
+`remotes/cros/xxx` or `remotes/cros-internal/xxx` or `remotes/aosp/xxx`.
+The `cros` and such names come from the `remote` name used in the [manifest]
+for each `project` element.
+
+For example, the [manifest] has:
+```xml
+<manifest>
+  <remote  name="cros"
+           fetch="https://chromium.googlesource.com"
+           review="https://chromium-review.googlesource.com" />
+
+  <default revision="refs/heads/master"
+           remote="cros" sync-j="8" />
+
+  <project path="chromite" name="chromiumos/chromite" ?>
+  <project path="src/aosp/external/minijail"
+           name="platform/external/minijail"
+           remote="aosp" />
+</manifest>
+```
+
+The `default` element sets `remote` to `cros`, so that's why it shows up in
+the chromite (whose `project` omits `remote`) repo as `remotes/cros/xxx`.
+
+The minijail project has an explicit `remote=aosp`, so that's why it shows up
+as `remotes/aosp/xxx` in the local checkout.
+
 ## FAQ
 
 ### How do I create a new repo on the server?
@@ -358,6 +459,7 @@ Use one of the respective private overlays instead.
 See the previous questions in this FAQ for more details.
 
 
+[Admin UI]: https://chromium-review.googlesource.com/admin/repos
 [AOSP GoB]: https://android.googlesource.com/
 [Chrome GoB]: https://chrome-internal.googlesource.com/
 [chromeos-overlay]: https://chrome-internal.googlesource.com/chromeos/overlays/chromeos-overlay/
@@ -379,9 +481,12 @@ See the previous questions in this FAQ for more details.
 [external_full.xml]: https://chrome-internal.googlesource.com/chromeos/manifest-internal/+/HEAD/external_full.xml
 [filesystem layout]: filesystem_layout.md
 [full.xml]: https://chromium.googlesource.com/chromiumos/manifest/+/HEAD/full.xml
+[Gerrit project config]: https://www.gerritcodereview.com/config-project-config.html
+[Gerrit refs/for]: https://www.gerritcodereview.com/concept-refs-for-namespace.html
 [internal_full.xml]: https://chrome-internal.googlesource.com/chromeos/manifest-internal/+/HEAD/internal_full.xml
 [kernel]: https://chromium.googlesource.com/chromiumos/third_party/kernel/
 [Local manifests]: https://gerrit.googlesource.com/git-repo/+/master/docs/manifest-format.md#Local-Manifests
+[LUCI]: https://chromium.googlesource.com/infra/luci/luci-py/
 [manifest]: https://chromium.googlesource.com/chromiumos/manifest/
 [manifest-internal]: https://chrome-internal.googlesource.com/chromeos/manifest-internal/
 [board-overlays]: https://chromium.googlesource.com/chromiumos/overlays/board-overlays/
@@ -391,5 +496,7 @@ See the previous questions in this FAQ for more details.
 [portage_tool]: https://chromium.googlesource.com/chromiumos/third_party/portage_tool/
 [repo]: https://gerrit.googlesource.com/git-repo
 [repohooks]: https://chromium.googlesource.com/chromiumos/repohooks/
+[sandbox]: contributing.md#sandbox
+[SemVerTag]: https://semver.org/spec/v1.0.0.html#tagging-specification-semvertag
 [vboot_reference]: https://chromium.googlesource.com/chromiumos/platform/vboot_reference/
 [VM/containers]: containers_and_vms.md
