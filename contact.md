@@ -77,9 +77,14 @@ topics, and partner-specific only.
 We strongly encourage people to try and stick to the public groups whenever
 possible.
 
+*   [chrome-discuss]: Internal mailing list for general Chrome (browser)
+    discussion.  More user rather than engineering focused.  Sees many questions
+    and bug reports that haven't been formally filed.  Chrome OS related topics
+    should be in the next group.
 *   [chromeos-discuss]: Internal mailing list for general Chrome OS discussion.
     More user rather than engineering focused.  Sees many questions/bug reports
-    that haven't been formally filed.
+    that haven't been formally filed.  Chrome (browser) specified topics should
+    be in the previous group.
 *   [chromeos-chatty-eng]: Internal mailing list for engineering questions.
     While it is a high-volume "chatty" group, the focus is on Chrome OS.
     Browser topics would be better served on browser-specific groups.
@@ -112,6 +117,7 @@ It has a section specifically about filing security sensitive bugs.
 
 
 [chromebook-central]: https://productforums.google.com/d/forum/chromebook-central
+[chrome-discuss]: http://g/chrome-discuss
 [chromeos-chatty-eng]: http://g/chromeos-chatty-eng
 [chromeos-discuss]: http://g/chromeos-discuss
 [chromium-dev]: https://groups.google.com/a/chromium.org/group/chromium-dev
