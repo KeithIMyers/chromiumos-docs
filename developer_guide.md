@@ -287,7 +287,7 @@ repo sync -j4
 
 Secondly, decide whether you need to use features of Chromium that access Google
 APIs from the image you are building (**signing in**, translating web pages,
-geolocation, etc**)**. If the answer is yes, you will need to have keys (see
+geolocation, etc). If the answer is yes, you will need to have keys (see
 [API Keys]) either in your include.gypi, or in a file in your home directory
 called ".googleapikeys". If either of these file are present for step 1 of
 building (below) they will be included automatically. If you don't have these
@@ -387,11 +387,11 @@ take effect inside the chroot.
 Calling this will also install a chroot, if you don't have one yet, for example
 by not following the above.
 
-While in the chroot you will see a special "(cros-chroot)" prompt to remind you
+While in the chroot you will see a special "(cr)" prompt to remind you
 that you are there:
 
 ```shell
-(cros-chroot) johnnyrotten@flyingkite ~/trunk/src/scripts $
+(cr) ((...)) johnnyrotten@flyingkite ~/trunk/src/scripts $
 ```
 
 You generally cannot run programs on your filesystem from within the chroot. For
@@ -402,8 +402,6 @@ course this command will build emacs from source so allow 5-10mins.
 
 **IMPORTANT NOTES**:
 
-*   In this document, commands that are intended to be entered inside the
-    chroot, and paths inside the chroot, are colored purple.
 *   **If you need to delete your chroot**, use `cros_sdk --delete` to delete it
     properly. Using `rm -rf` could end up deleting your source tree due to the
     active bind mounts.
@@ -1753,7 +1751,7 @@ Below are a few links to external sites that you might also find helpful
 [RAM-thread]: https://groups.google.com/a/chromium.org/d/topic/chromium-os-dev/ZcbP-33Smiw/discussion
 [install depot_tools]: http://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html#_setting_up
 [Making sudo a little more permissive]: http://www.chromium.org/chromium-os/tips-and-tricks-for-chromium-os-developers#TOC-Making-sudo-a-little-more-permissive
-[Decide where your source will live]: Decide-where-your-source-will-live
+[Decide where your source will live]: #Decide-where-your-source-will-live
 [gerrit-guide]: http://www.chromium.org/chromium-os/developer-guide/gerrit-guide
 [repo]: https://code.google.com/p/git-repo/
 [git]: http://git-scm.com/
