@@ -39,7 +39,7 @@ it goes.
 
 [Concierge] is a daemon that runs in Chrome OS which handles lifecycle
 management of VMs and containers and uses gRPC over vsock to communicate with
-a daemon in the VM.
+[Maitred].
 
 [Maitred] is our init and service/container manager inside of the [VM], and is
 responsible for communicating with [Concierge] (which runs outside of the [VM]).
@@ -53,12 +53,29 @@ a container's primary user, and setting up apt repositories in the guest
 to match the Chrome OS milestone.
 
 [Cicerone] is a daemon that runs in Chrome OS which handles all communication
-directly with the container using gRPC over IP.
+directly with the [VM] and container once the container starts running.
+Specifically, it communicates with [Tremplin] (which runs inside of the [VM]),
+and [Garcon] (which runs in a container inside the [VM]).
 
 [Garcon] runs inside the container and provides integration with
 [Cicerone]/Chrome for more convenient/natural behavior.
 For example, if the container wants to open a URL, [Garcon] takes care of
 plumbing that request back out.
+
+[Seneschal] is a daemon that runs in Chrome OS that handles lifecycle management
+of [9P] servers.  When [Concierge] starts a [VM], it sends a message to
+[Seneschal] to also start a [9s] instance for that [VM].  Then, while configuring
+the [VM], [Concierge] sends a message to [Maitred] instructing it to connect to
+the [9s] instance and mount it inside the [VM].
+
+[9s] is a server for the [9P] file system protocol.  There is one instance of
+[9s] for each [VM] and it provides that [VM] with access to the user's data
+stored outside the [VM].  This includes things like the Downloads folder, Google
+Drive, and removable media.  The lifecycle of each [9s] instance is managed by
+[Seneschal].  Each [9s] instance starts with no access to any files.  Access to
+specific paths is granted by sending a message to [Seneschal], which makes the
+requested path available to the specified [9s] instance.  Requests to share
+paths can only be triggered by some user action.
 
 [Sommelier] is a [Wayland] proxy compositor that runs inside the container.
 [Sommelier] provides seamless forwarding of contents, input events, clipboard
@@ -336,6 +353,7 @@ You can look up the board name in our public [device list].
 
 ## Glossary
 
+*   **[9s]**: Server for the [9p] file system protocol.
 *   **[AMD-V]** (AMD Virtualization): AMD's marketing name for hardware
     virtualization extensions.
 *   **ARC** (App Runtime for Chrome): The old/deprecated method of running
@@ -362,6 +380,7 @@ You can look up the board name in our public [device list].
 *   **[LXC]**/**lxd**: Linux container solution.
 *   **[Maitred]**: Agent that runs inside the [VM] and manages containers.
 *   **[QEMU]**: A large/complete virtual machine emulator.
+*   **[Seneschal]**: Chrome OS daemon that manages [9p] servers.
 *   **[Sommelier]**: [Wayland] proxy compositor in the container that provides
     seamless forwarding of contents, input events, clipboard data, etc...
     between Linux apps and Chrome, and seamless [X] integration.
@@ -957,6 +976,8 @@ At which point, there will be no knob for unmanaged devices.
 
 [Security]: #Security
 
+[9p]: http://man.cat-v.org/plan_9/5/intro
+[9s]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/9s/
 [AMD-V]: https://en.wikipedia.org/wiki/AMD-V
 [alt syscall]: https://chromium.googlesource.com/chromiumos/third_party/kernel/+/HEAD/security/chromiumos/alt-syscall.c
 [Android Studio]: https://developer.android.com/topic/arc/studio
@@ -988,6 +1009,7 @@ At which point, there will be no knob for unmanaged devices.
 [seccomp]: https://en.wikipedia.org/wiki/Seccomp
 [Secure Shell]: https://chrome.google.com/webstore/detail/pnhechapfaindjhompbnflcldabbghjo
 [SELinux]: https://en.wikipedia.org/wiki/Security-Enhanced_Linux
+[Seneschal]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/seneschal/
 [Sommelier]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/sommelier/
 [SquashFS]: https://en.wikipedia.org/wiki/SquashFS
 [Steam]: https://store.steampowered.com/linux
