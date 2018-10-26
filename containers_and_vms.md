@@ -248,28 +248,28 @@ They're a mix of `x86_64` and `aarch64` kernels.
 
 You can look up the board name in our public [device list].
 
-* banon
-* bob
-* celes
-* coral
-* cyan
-* edgar
-* eve
-* fizz
-* kefka
-* kevin
-* nautilus
-* pyro
-* reef
-* reks
-* relm
-* sand
-* setzer
-* snappy
-* soraka
-* terra
-* ultima
-* wizpig
+* banon (R70)
+* bob (R69)
+* celes (R70)
+* coral (R69)
+* cyan (R70)
+* edgar (R70)
+* eve (R69)
+* fizz (R69)
+* kefka (R70)
+* kevin (R69)
+* nautilus (R69)
+* pyro (R69)
+* reef (R69)
+* reks (R70)
+* relm (R70)
+* sand (R69)
+* setzer (R70)
+* snappy (R69)
+* soraka (R69)
+* terra (R70)
+* ultima (R70)
+* wizpig (R70)
 
 ### Hardware Requirements
 
