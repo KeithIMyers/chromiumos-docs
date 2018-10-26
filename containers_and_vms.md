@@ -248,6 +248,7 @@ They're a mix of `x86_64` and `aarch64` kernels.
 
 You can look up the board name in our public [device list].
 
+* atlas (R70)
 * banon (R70)
 * bob (R69)
 * celes (R70)
@@ -258,7 +259,9 @@ You can look up the board name in our public [device list].
 * fizz (R69)
 * kefka (R70)
 * kevin (R69)
+* nami (R69)
 * nautilus (R69)
+* nocturne (R70)
 * pyro (R69)
 * reef (R69)
 * reks (R70)
