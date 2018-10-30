@@ -25,12 +25,12 @@ keyboard attached.
 | File feedback / bug report            | `Alt + Shift + I` **\***                                 |
 | Powerwash                             | `Ctrl + Alt + Shift + R` from login screen **\***        |
 | EC reset                              | `Power + Refresh`                                        |
-| Recovery mode                         | See [recovery mode] section                              |
-| Developer mode                        | See [recovery mode] section                              |
+| Recovery mode                         | See [firmware keyboard UI] section                       |
+| Developer mode                        | See [firmware keyboard UI] section                       |
 | Battery cutoff                        | `Power + Refresh`, hold down, remove power for 5 seconds |
 | Warm AP reset                         | `Alt + Volume-Up + R`                                    |
-| Restart Chrome                        | `Alt + Volume-Up + X + X` **\***                         |
-| Kernel panic/reboot                   | `Alt + Volume-Up + X + X + X` **\***                     |
+| Restart Chrome                        | `Alt + Volume-Up + X` **\***                             |
+| Kernel panic/reboot                   | `Alt + Volume-Up + X + X` **\***                         |
 | Reboot EC but don't boot AP           | `Alt + Volume-Up + Down-Arrow`                           |
 | Force EC hibernate                    | `Alt + Volume-Up + H`                                    |
 | Override USB-C port used for charging | `Left-Ctrl + Right-Ctrl + Search + (0 or 1 or 2)` **\*** |
@@ -45,18 +45,39 @@ keyboard attached.
     kernel docs.
 *   Overriding the charging port is only supported on Samus.
 
-### Recovery Mode
+### Firmware Keyboard Interface
 
 *   **Recovery mode**: Hold `Esc + Refresh` and press `Power`.
-    *   From here, follow the on-screen instructions to recover your device
-        using external media.
+    *   From here, follow the instructions at
+        https://google.com/chromeos/recovery to recover your device using
+        external media.
 *   **Developer mode**: To enter [developer mode], first enter recovery mode,
     then press `Ctrl + D`, followed by `Enter` to accept.
+    *   Note that developer mode disables security features and may leave your
+        device open to attack. Only enable if you understand the risks.
+    *   Devices in developer mode will show a warning screen on every boot. The
+        screen will time out after 30 seconds, playing a warning beep.
+    *   From the warning screen, the following keyboard shortcuts are available:
+        *   `Ctrl + D`: Boot the system from the internal disk.
+        *   `Ctrl + U`: Boot the system from an external USB stick or SD card.
+            The option `crossystem dev_boot_usb=1` must be set from the command
+            line before this option is available.
+        *   `Ctrl + L`: Chain-load an included legacy bootloader (e.g. SeaBIOS).
+            This may allow booting other Operating Systems more easily. Not all
+            devices are shipped with legacy bootloaders. New legacy bootloaders
+            can be manually installed on the device from developer mode. The
+            option `crossystem dev_boot_legacy=1` must be set from the command
+            line before this option is available.
+    *   The option `crossystem dev_boot_default=usb` can be set to override the
+        default boot behavior if no key combination is pressed for 30 seconds.
 
 Some devices do not support `Esc + Power + Refresh` for entering Recovery Mode:
 
 *   Chromeboxes have a recovery button. To enter Recovery Mode, hold down the
     recovery button and press `Power`.
+    *   To enter developer mode on a Chromebox, first enter recovery mode and
+        press `Ctrl + D` on the keyboard, then push the physical recovery button
+        on the Chromebox to accept.
 *   Older devices have a physical developer mode switch. You can read up on
     your particular device under the [device-specific developer information]
     table.
@@ -87,8 +108,8 @@ used in tablet mode.
 | Screenshot capture                | `Power + Volume-Down`, short press                             |
 | File feedback                     | Power button, hold for 3 seconds, select option in menu        |
 | EC reset                          | `Power + Volume-Up`, hold for 10 seconds                       |
-| Recovery mode                     | See [firmware UI] section                                      |
-| Developer mode                    | See [firmware UI] section                                      |
+| Recovery mode                     | See [firmware menu UI] section                                 |
+| Developer mode                    | See [firmware menu UI] section                                 |
 | Battery cutoff                    | `Power + Volume-Up`, hold down, remove power for 5 seconds     |
 | Warm AP reset                     | See [EC debug mode] section                                    |
 | Restart Chrome                    | See [EC debug mode] section                                    |
@@ -105,23 +126,40 @@ used in tablet mode.
     (e.g., not Scarlet, Dru).
 
 
-### Firmware User Interface
+### Firmware Menu Interface
 
 The [boot firmware screen] is accessible through keyboard shortcuts on devices
 with keyboards; on keyboardless devices, the following methods are supported:
 
 *   **Recovery mode**: `Power + Volume-Up + Volume-Down`, hold for 10 seconds.
-    *   From here, follow the on-screen instructions to recover your device
-        using external media.
-
-To exercise more advanced options, like entering **developer mode**, continue
-to the following.
-
-*   Press `Volume-Up + Volume-Down` simultaneously; now you should see a
-    developer menu. This menu can be navigated with the volume buttons, and
-    menu items can be selected with the power button.
-*   For example, to enter Developer Mode, press Volume-Up until you reach
-    "Confirm Enabling Developer Mode," then press the Power button.
+    If the screen turns off or on during that period, ignore it and make sure
+    you keep all three buttons held down for the whole 10 second period, then
+    release them.
+    *   From here, follow the instructions at
+        https://google.com/chromeos/recovery to recover your device using
+        external media.
+    *   To change the UI language or display additional debugging information,
+        you can press either `Volume-Up` or `Volume-Down`. This leads to a menu
+        that can be navigated with the volume buttons, and menu items can be
+        selected with the power button.
+*   **Developer mode**: Enter recovery mode and press `Volume-Up + Volume-Down`
+    simultaneously, then select "Confirm Enabling Developer Mode" in the menu.
+    *   Note that developer mode disables security features and may leave your
+        device open to attack. Only enable if you understand the risks.
+    *   Devices in developer mode display a similar menu on every boot that
+        allows selecting developer boot options. The menu will time out and boot
+        after no key has been pressed for 30 seconds, playing a warning beep.
+    *   The "USB or SD card" and "Legacy BIOS" boot menu options need to be
+        enabled on the command line before they work, same as with the [firmware
+        keyboard UI].
+    *   In addition to selecting boot options in the menu, the following
+        shortcut combinations are available in the developer warning menu:
+        *   Press `Volume-Down` for 3+ seconds, then release: Boot the system
+            from the internal disk.
+        *   Press `Volume-Up` for 3+ seconds, then release: Boot the system
+            from an external USB stick or SD card.
+        *   If a keyboard is connected, all boot shortcuts from the [firmware
+            keyboard UI] are also available in the developer warning menu.
 
 _Note_: An additional, deeper reset (with forced memory retraining) can be
 triggered on some devices on the way to recovery mode by holding `Power +
@@ -149,11 +187,11 @@ volume button press.
 
 
 [official support page]: https://support.google.com/chromebook/answer/183101
-[recovery mode]: #Recovery-Mode
+[firmware keyboard UI]: #Firmware-Keyboard-Interface
 [Magic SysRq]: https://www.kernel.org/doc/html/latest/admin-guide/sysrq.html
 [developer mode]: https://www.chromium.org/chromium-os/poking-around-your-chrome-os-device
 [convertible]: https://en.wikipedia.org/wiki/Laptop#Convertible
-[firmware UI]: #Firmware-User-Interface
+[firmware menu UI]: #Firmware-Menu-Interface
 [EC debug mode]: #EC-Debug-Mode
 [smart battery]: http://sbs-forum.org/specs/sbdat110.pdf
 [device-specific developer information]: https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices
