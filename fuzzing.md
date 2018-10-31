@@ -56,9 +56,10 @@ section.
 
 ### Steps to create a new fuzzer in Chrome OS
 
-*   Write a new test program in your package, whose name ends in `_fuzzer` and
-    which defines a function `LLVMFuzzerTestOneInput` with the following
-    signature:
+*   Write a new test program in your package, whose name ends in `_fuzzer` (it
+    would be a good idea, but not required, to prepend your package name to
+    your fuzzer as well, e.g. 'cryptohome_<descriptive-name>_fuzzer') and which
+    defines a function `LLVMFuzzerTestOneInput` with the following signature:
 
     ```c
     extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
@@ -152,6 +153,11 @@ the previous section for an example.
                     # This could be an intermediate static library target in your
                     # package.
                   ],
+                  'variables': {
+                    'deps': [
+                      'libchrome-test-<(libbase_ver)',  # For FuzzedDataProvider
+                    ],
+                  },
                   'sources': [
                     'your_fuzzer.cc',
                   ],
@@ -178,9 +184,9 @@ the previous section for an example.
 
 2.  Update your package's ebuild file:
     1.  Update the ebuild file to build the new binary when the fuzzer
-        USE flag is being used. For platform packages built with GYP files,
+        USE flag is being used. **For platform packages built with GYP files,
         you should skip this step and go directly to the next step for
-        installing the fuzzer binary.
+        installing the fuzzer binary.**
 
         1.  Find the `src_compile()` function in your ebuild file. If
             there isn't one, add one:
@@ -228,6 +234,11 @@ the previous section for an example.
     Note: Fuzzing using undefined behavior sanitizer (ubsan) is also supported.
     To use ubsan, simply replace `asan` with `ubsan` in the commands below.
 
+    Note 2: If your package depends on chromeos-chrome, the build_packages
+    command below can take a very long time. In such a case, it would be advisable
+    to adjust the package dependencies to not depend on chromeos-chrome with
+    'USE=fuzzer'.
+
     ```bash
     # Run build_packages to build the package and its dependencies.
     $ USE="asan fuzzer" ./build_packages --board=${BOARD} --skip_chroot_upgrade <your-package>
@@ -256,6 +267,9 @@ the previous section for an example.
     $ sudo chroot /path-to-chroot/chroot/build/${BOARD}
     $ ASAN_OPTIONS="log_path=stderr" /usr/libexec/fuzzers/<your_fuzzer>
     ```
+
+    NOTE:  The fuzzer will run forever (or until it finds a bug), so you will
+    want to halt it manually after a couple of minutes.
 
     You should also verify that your package still builds correctly without
     `USE="fuzzer"`.
