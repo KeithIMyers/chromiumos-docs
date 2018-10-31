@@ -242,9 +242,9 @@ the previous section for an example.
     ```
 
     You should verify that your fuzzer was built and that it was installed in
-    `/usr/libexec/fuzzers/` (make sure the owners file was installed there as
-    well). To run your fuzzer locally, you first run this script *outside your
-    chroot* to set up your environment properly:
+    `/build/${BOARD}/usr/libexec/fuzzers/` (make sure the owners file was
+    installed there as well). To run your fuzzer locally, you first run this
+    script *outside your chroot* to set up your environment properly:
 
     ```bash
     $ path-to-chroot/chromite/bin/cros_fuzz_test_env --board=${BOARD}
