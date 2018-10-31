@@ -134,25 +134,32 @@ the previous section for an example.
         build the fuzzer binary:
 
         ```
-        # Fuzzer target.
-        ['USE_fuzzer == 1', {
+        {
           'targets': [
-            {
-              'target_name': 'your_fuzzer',
-              'type': 'executable',
-              'includes': [
-                '../common-mk/common_fuzzer.gypi',
-              ],
-              'dependencies': [
-                # This could be an intermediate static library target in your
-                # package.
-              ],
-              'sources': [
-                'your_fuzzer.cc',
-              ],
-            },
+            ...
           ],
-        }],
+          'conditions': [
+            # Fuzzer target.
+            ['USE_fuzzer == 1', {
+              'targets': [
+                {
+                  'target_name': 'your_fuzzer',
+                  'type': 'executable',
+                  'includes': [
+                    '../common-mk/common_fuzzer.gypi',
+                  ],
+                  'dependencies': [
+                    # This could be an intermediate static library target in your
+                    # package.
+                  ],
+                  'sources': [
+                    'your_fuzzer.cc',
+                  ],
+                },
+              ],
+            }],
+          ],
+        }
         ```
 
         See the [midis GYP file] for a complete example.
