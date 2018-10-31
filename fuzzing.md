@@ -241,38 +241,40 @@ the previous section for an example.
 
     ```bash
     # Run build_packages to build the package and its dependencies.
-    $ USE="asan fuzzer" ./build_packages --board=${BOARD} --skip_chroot_upgrade <your-package>
+    $ USE="asan fuzzer" ./build_packages --board=${BOARD} --skip_chroot_upgrade <your_package>
     # If you make more changes to your fuzzer or build, you can rebuild the package with:
-    $ USE="asan fuzzer" emerge-${BOARD} <your-package>
+    $ USE="asan fuzzer" emerge-${BOARD} <your_package>
     ```
 
     These flags work with `cros_workon_make` as well for a faster compile cycle:
 
     ```bash
-    $ USE="asan fuzzer" cros_workon_make --board=$BOARD <your-package>
+    $ USE="asan fuzzer" cros_workon_make --board=$BOARD <your_package>
     ```
 
     You should verify that your fuzzer was built and that it was installed in
     `/build/${BOARD}/usr/libexec/fuzzers/` (make sure the owners file was
-    installed there as well). To run your fuzzer locally, you first run this
-    script *outside your chroot* to set up your environment properly:
+    installed there as well). To run your fuzzer locally, run this command to
+    prepare the environment and get a shell ready for fuzzing:
 
     ```bash
-    $ path-to-chroot/chromite/bin/cros_fuzz_test_env --board=${BOARD}
+    $ cros_fuzz --board=${BOARD} shell
     ```
 
-    Then run your fuzzer, *outside of the chroot as well*:
+    Then run your fuzzer:
 
     ```bash
-    $ sudo chroot /path-to-chroot/chroot/build/${BOARD}
-    $ ASAN_OPTIONS="log_path=stderr" /usr/libexec/fuzzers/<your_fuzzer>
+    (in board) # /usr/libexec/fuzzers/<your_fuzzer>
     ```
 
-    NOTE:  The fuzzer will run forever (or until it finds a bug), so you will
-    want to halt it manually after a couple of minutes.
+    ***note
+    **Note**: The fuzzer will run forever (or until it finds a bug), so you will
+    want to halt it manually (using Ctrl-C) after a couple of minutes.
+    ***
 
-    You should also verify that your package still builds correctly without
-    `USE="fuzzer"`.
+    You can read more about the `cros_fuzz` script in the section
+    [Using cros_fuzz]. You should also verify that your package still builds
+    correctly without `USE="fuzzer"`.
 
     Once you are happy with your new fuzzer, commit your changes.
 
@@ -410,29 +412,33 @@ the previous section for an example.
 
     ```bash
     # Run build_packages to build the package and its dependencies.
-    $ USE="asan fuzzer" ./build_packages --board=${BOARD} --skip_chroot_upgrade <your-package>
+    $ USE="asan fuzzer" ./build_packages --board=${BOARD} --skip_chroot_upgrade <your_package>
     # If you make more changes to your fuzzer or build, you can rebuild the package by:
-    $ USE="asan fuzzer" emerge-${BOARD} <your-package>
+    $ USE="asan fuzzer" emerge-${BOARD} <your_package>
     ```
 
     You should verify that your fuzzer was built and that it was installed in
-    `/usr/libexec/fuzzers/` (make sure the owners file was installed there as
-    well). To run your fuzzer locally, you first run this script *outside your
-    chroot* to set up your environment properly:
+    `/build/${BOARD}/usr/libexec/fuzzers/` (make sure the owners file was
+    installed there as well). To run your fuzzer locally, run this command to
+    prepare the environment and get a shell ready for fuzzing:
 
     ```bash
-    $ /path-to-chroot/chromite/bin/cros_fuzz_test_env --board=${BOARD}
+    $ cros_fuzz --board=${BOARD} shell
     ```
 
-    Then run your fuzzer, *outside of the chroot as well*:
+    Then run your fuzzer:
 
     ```bash
-    $ sudo chroot /path-to-chroot/chroot/build/${BOARD}
-    $ ASAN_OPTIONS="log_path=stderr" /usr/libexec/fuzzers/<your_fuzzer>
+    (in board) # /usr/libexec/fuzzers/<your_fuzzer>
     ```
 
-    You should also verify that your package still builds correctly without
-    `USE="fuzzer"`.
+    ***note
+    **Note**: The fuzzer will run forever (or until it finds a bug), so you will
+    want to halt it manually (using Ctrl-C) after a couple of minutes.
+    ***
+    You can read more about the `cros_fuzz` script in the section
+    [Using cros_fuzz]. You should also verify that your package still builds
+    correctly without `USE="fuzzer"`.
 
     Once you are happy with your new fuzzer, commit your changes.
 
@@ -692,6 +698,194 @@ useful. Below are links to some of the more important ones:
 *   [Fuzzer corpus] - Testcases produced by the fuzzer that libFuzzer has deemed
     "interesting" (meaning it causes unique program behavior).
 
+## Using cros_fuzz
+
+`cros_fuzz` is a script we have provided to use within the Chrome OS SDK chroot.
+Its purpose is to make fuzzer development easier by automating important tasks.
+These include:
+
+*   [Preparing the environment for fuzzing]
+*   [Getting a coverage report for your fuzzer]
+*   [Reproducing Crashes from ClusterFuzz]
+
+`cros_fuzz` is used like so:
+
+   ```bash
+   $ cros_fuzz --board=${BOARD} <command> <command arguments>
+   ```
+
+You can get detailed help information on each command by using the command
+argument: `--help`. We explain the more important commands in each subsection.
+
+***note
+**Tip**: Set your `.default_board` to avoid the need to specify `--board` every
+time you run `cros_fuzz`
+
+**Tip**: `cros_fuzz` will print every shell command it runs if you set the
+log-level to debug ("--log-level debug").
+***
+
+### Preparing the environment for fuzzing
+
+This section describes the `shell`, `cleanup`, `setup` and commands, in that
+order. To run a fuzzer, you should not just chroot into the board where it was
+built and run it since libFuzzer needs certain special files that are present on
+most systems but not on the board. You also should also not run the fuzzer
+outside of the board because that environment will contain devices and other
+things that will not be available on ClusterFuzz. Instead you should run the
+`shell` command from `cros_fuzz`. `shell` will prepare the board for fuzzing and
+then chroot into the board giving you a shell. It is simple to use:
+
+   ```bash
+   $ cros_fuzz --board=${BOARD} shell
+   (board chroot) # /usr/libexec/fuzzers/<your_fuzzer>
+   ```
+
+The changes made by the `shell` command to the board can be mostly undone
+using the `cleanup` command.
+
+Internally, the `shell` command does the same thing as the `setup` command and
+then gives you a shell with the `ASAN_OPTIONS` env variable set to
+`log_path=stderr`, which is needed to view stack traces when the fuzzer finds a
+bug. You can use the `setup` command to run your fuzzer using this sequence of
+these bash commands:
+
+   ```bash
+   $ cros_fuzz --board=${BOARD} setup
+   $ sudo chroot /build/${BOARD}
+   (board chroot) # ASAN_OPTIONS="log_path=stderr" /usr/libexec/fuzzers/<your_fuzzer>
+   ```
+
+### Getting a coverage report for your fuzzer
+
+This section describes the `coverage` command. Coverage reports are a great way
+to tell what code your fuzzer is actually testing. `cros_fuzz` provides an easy
+way to get a coverage report using the `coverage` command.
+
+Before we explain how to use `coverage`, there are two things you should
+understand about the coverage report process.
+
+*   First is the importance of a corpus in generating a coverage report. As
+    explained in the [What is fuzz testing?] section, a testcase is added to the
+    corpus if it increases the fuzzer's coverage of the target code. Thus, if
+    everything works correctly, one can use a fuzzer's corpus from fuzzing to
+    quickly find the code covered by the fuzzer.
+
+*   The second thing to understand is how we generate the report. The report is
+    generated by [clang's source based coverage]. This is not the same
+    instrumentation libFuzzer uses to get coverage data, but we use it
+    because the reports it generates are much better than the ones libFuzzer
+    generates. Because we need a new kind of instrumentation to generate the
+    report we must do a new kind of build.
+
+The `coverage` command on the most simple level: runs a fuzzer, collects
+coverage info from the run, and then generates an HTML coverage report for you
+to view. It can also automate many things you would want to do in this process
+including doing a build with the source based coverage instrumentation and using
+a fuzzer's corpus from disk or from ClusterFuzz (if it is already run on
+ClusterFuzz).
+
+These are a list of the options the `coverage` command accepts, and an
+explanation of each of them.
+
+*   `--fuzzer <your_fuzzer>`: The name of the fuzzer to generate a coverage
+    report for. This is the only mandatory option.
+
+*   `--package <your_package>`: The name of the fuzzer's package. Not mandatory,
+    but you probably should use this unless you know what you are doing. If this
+    option is used, a coverage build of the package will be done. A coverage
+    build uses the `USE` flags `fuzzer asan coverage`. Unless the current build
+    of the fuzzer on the board is a coverage build, the `coverage` command will
+    fail.
+
+*   `--corpus <path_to_corpus>`: The path to a corpus we should use when
+    generating the coverage report. If this option is used `cros_fuzz` will copy
+    the corpus into the board (if needed) and the fuzzer will run every
+    testcase in the corpus once and will not actually do any fuzzing. This
+    option is mutually exclusive with `--download`.
+
+*   `--download`: Whether to download the corpus from ClusterFuzz. This will
+    fail if the fuzzer has not yet been run on ClusterFuzz. It will also fail if
+    you are not logged into `gsutil` using your `@google.com` account (it will
+    instruct you on how to do this if that happens). If the download succeeds,
+    then pretty much the same thing happens if the `--corpus` command were used,
+    the fuzzer will run every testcase in the corpus but not try to find any new
+    testcases (fuzzing). This option is mutually exclusive with `--corpus`.
+
+*  `--fuzz-args <libfuzzer_options>`: libFuzzer options to pass to the fuzzer.
+    Each separated by a space. Note that using this option will probably
+    confuse the script's argument parser unless you use it like this:
+    `--fuzz-args="-max_total_time=60"`
+
+Once this command has completed, it will print a `file://` URI of an HTML
+coverage report that you can view in your browser.
+If neither the `--corpus` or `--download` options is used, there needs to be
+some kind of arbitrary limit imposed on fuzzing so it doesn't continue forever.
+If you don't specify one, the script will specify a timeout of 30 seconds. You
+can specify a limit by passing one of the `-max_total_time` or `-runs` libFuzzer
+options in `--fuzz-args`.
+
+If you want access to some of the data used by this command, it is probably
+stored in the directory: `/build/${BOARD}/tmp/fuzz/` but we make no guarantees
+about this.
+
+## Reproducing crashes from ClusterFuzz
+
+This section explains how to reproduce bugs found by ClusterFuzz. No knowledge
+of fuzzing is assumed and it summarizes info from elsewhere in this document.
+
+To reproduce crashes you should use the `reproduce` command from `cros_fuzz`,
+here's a guide on how to use it to reproduce crashes reported by ClusterFuzz.
+
+1.  Download the reproducer testcase from the link on the bug report, and copy
+    it to the board.
+
+    ```bash
+    $ cp ~/Downloads/<testcase_name> /path/to/chromiumos-checkout/chroot/build/${BOARD}/tmp/
+    ```
+
+2.  Identify the package, build type, and the name of the fuzzer. The name of
+    the fuzzer will be on the "Fuzzer:" line. It will begin with
+    "libFuzzer_chromeos_" but this prefix is added by ClusterFuzz and isn't
+    actually part of the binary name. You can determine the build type from the
+    "Sanitizer" line in the bug report. It will either be "asan" or "ubsan".
+
+3.  Run the `reproduce` command of `cros_fuzz` from within the Chrome OS SDK
+    chroot like so:
+
+    ```bash
+    (chromeos_sdk) $
+    cros_fuzz --board=${BOARD} reproduce --fuzzer <your_fuzzer> --testcase /path/to/testcase/<testcase_name> \
+              --package <package_of_fuzzer> --build-type <build_type>
+    ```
+
+You should see a stack trace after running the `reproduce` command.
+
+For more advanced uses, we will explain the details for the `reproduce` command.
+Below is an explanation of what the options to `reproduce` mean, note that no
+option is mandatory unless explicitly specified.
+
+*  `--testcase`: The path to the testcase to run the fuzzer on. Mandatory. Note
+   that the path must be in the chroot, but does not need to be on the board, it
+   will be copied if necessary.
+
+*  `--fuzzer`: The fuzzer to run the testcase on. Mandatory.
+
+*   `--package`: The package of the fuzzer to build. If this option is provided
+    then one must also provide the `--build_type` option.
+
+*   `--build_type`: The type of build we want to do. This can either be `asan`,
+    `ubsan`, or `coverage`. Note that `coverage` is not actually used on
+    ClusterFuzz. This option may only be used if the `--package` option is used.
+
+Note that once the build needed is in a root it doesn't need to be done again,
+so it isn't necessary to use `--package` unless another build clobbered the one
+we need if we have already done the build we need.
+
+To summarize: the reproduce command does a build of the package (if needed),
+copies the testcase into the board, prepares the board for running the fuzzer,
+and then runs the fuzzer on the testcase.
+
 ## Improving fuzzer effectiveness
 
 Below are some optional things you can do to improve the effectiveness of your
@@ -763,9 +957,10 @@ $ gsutil -m cp <path_to_your_fuzzers_corpus>/* gs://chromeos-corpus/libfuzzer/ch
 ```
 
 Files uploaded to this directory will get pruned when no longer useful.
-You can follow the [instructions to set up the `gsutil` tool]. Note that
-`gsutil` must be connected to your `@google.com` account to have access to the
-corpus.
+Your Chrome OS SDK chroot comes with a copy of `gsutil`, or you can install it
+on your host by following the [instructions to set up the `gsutil` tool]. Note
+that `gsutil` must be connected to your `@google.com` account to have access to
+the corpus.
 
 To use a corpus in local fuzzing, pass the directory to your fuzzer, like so:
 
@@ -898,44 +1093,10 @@ trouble passing some check.
     for libFuzzer to mutate, which you then convert into raw bytes. It is not
     yet supported in Chrome OS (follow [issue 853017] for updates).
 
-## Reproducing crashes from ClusterFuzz
+## Getting help/Asking questions
 
-This section explains how to reproduce bugs found by ClusterFuzz. No knowledge
-of fuzzing is assumed and it summarizes info from elsewhere in this document.
-
-1.  Set up a board (eg: amd64-generic) and build the package containing the
-    fuzzer:
-
-    ```bash
-    $ ./setup_board --board=${BOARD}
-    $ USE="asan fuzzer" ./build_packages --board=${BOARD} --skip_chroot_upgrade <your-package>
-    ```
-
-    Note that your fuzzer will not begin with the prefix `libFuzzer_chromeos_`.
-
-2.  Download the reproducer testcase from the link on the bug report, and copy
-    it to the build root.
-
-    ```bash
-    $ cp ~/Downloads/<testcase-name> /path/to/chromiumos-checkout/chroot/build/${BOARD}/tmp/
-    ```
-
-3. Prepare the build chroot for running the fuzzer. Do this outside of the
-   chroot but in the chromiumos checkout.
-
-    ```bash
-    $ /path-to-chromiumos-checkout/chromite/bin/cros_fuzz_test_env --board=${BOARD}
-    ```
-
-4. Chroot into the build and run the fuzzer on the testcase:
-
-    ```bash
-    $ sudo chroot /path-to-chromiumos-checkout/chroot/build/${BOARD}
-    $ ASAN_OPTIONS="log_path=stderr" /usr/libexec/fuzzers/<your_fuzzer> /tmp/<testcase-name>
-    ```
-
-Feel free to send an email to [chromeos-fuzzing@google.com] if you get stuck, or
-to ask questions.
+You can send an email to [chromeos-fuzzing@google.com] if you get stuck, or to
+ask questions.
 
 ## See also
 
@@ -1034,3 +1195,15 @@ to ask questions.
 [issue 853017]: https://bugs.chromium.org/p/chromium/issues/detail?id=853017
 
 [instructions to set up the `gsutil` tool]: https://cloud.google.com/storage/docs/quickstart-gsutil
+
+[Using cros_fuzz]: #using-cros_fuzz
+
+[Preparing the environment for fuzzing]: #preparing-the-environment-for-fuzzing
+
+[Reproducing crashes from ClusterFuzz]: #reproducing-crashes-from-clusterfuzz
+
+[Getting a coverage report for your fuzzer]: #getting-a-coverage-report-for-your-fuzzer
+
+[What is fuzz testing?]: #what-is-fuzz-testing
+
+[clang's source based coverage]: https://clang.llvm.org/docs/SourceBasedCodeCoverage.html
