@@ -132,7 +132,7 @@ There's a lot of low-hanging fruit we're working on fleshing out.
 
 * [Audio support](https://crbug.com/781398).
 * Peripheral access ([USB](https://crbug.com/831850)/Bluetooth/etc...).
-* [Accelerated graphics](https://crbug.com/837209).
+* [Accelerated graphics](https://crbug.com/837073).
 * Video hardware decoding.
 * [IMEs](https://crbug.com/826614).
 * [Timezone syncing](https://crbug.com/829934).
