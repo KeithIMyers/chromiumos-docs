@@ -155,7 +155,8 @@ the previous section for an example.
                   ],
                   'variables': {
                     'deps': [
-                      'libchrome-test-<(libbase_ver)',  # For FuzzedDataProvider
+                      'libchrome-test-<(libbase_ver)',  # For FuzzedDataProvider (optional)
+                      'libprotobuf-mutator', # For fuzzing with Protobufs (optional)
                     ],
                   },
                   'sources': [
@@ -520,14 +521,20 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 ### What if my code doesn't simply consume a chunk of bytes?
 
 Odds are that the code that you want to test *doesn't* just take a chunk of
-bytes and a length. You might want to fuzz an API where functions take integers
-and strings. There might be useful state to set up before hitting parsing code,
-or you might want to test a state machine where some calls need to happen in a
-certain order to avoid erroring out of functions early.
+bytes and a length. You might want to fuzz an API where functions take integers,
+strings, or protocol buffers. There might be useful state to set up before
+hitting parsing code, or you might want to test a state machine where some calls
+need to happen in a certain order to avoid erroring out of functions early.
 
 Don't despair! This is actually very common. Most fuzzers end up extracting some
 structure out of the random data received in order to better exercise the code
-under test.
+under test. Below are two different tools for handling this case. One for
+non-protos and another for protocol buffers.
+
+#### [FuzzedDataProvider]:
+
+FuzzedDataProvider is a class that can genating many things such as integers
+or strings from the fuzz target input data.
 
 Consider the interface of the `permission_broker` [firewall implementation]:
 
@@ -665,6 +672,48 @@ The `cov` value will increase (unsurprisingly) with increased coverage. In the
 current example, avoiding random strings for the `interface` argument
 significantly increased coverage because both API functions were no longer
 erroring out early.
+
+#### [Libprotobuf-mutator]:
+
+For cases where your code accepts a protocol buffer as input, there is a library
+[libprotobuf-mutator] that generates mutated protocol buffers for fuzz targets.
+First identify the function(s) you want to call in your fuzz target. If there
+is only one input proto, writing a fuzz target is really easy and you can
+skip the next paragraph.
+
+Whenever you need more than one input proto or want to invoke a function
+multiple times, you can make a new proto message that includes all the input
+protos. Repeated fields can be used in cases where more than one action needs to
+be performed multiple times to get good code coverage from a fuzz target.
+
+```cpp
+// Copyright 2018 The Chromium OS Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include <libprotobuf-mutator/src/libfuzzer/libfuzzer_macro.h>
+
+#include "my_code.h"
+#include "my_proto.pb.h"
+
+DEFINE_PROTO_FUZZER(const my_package::MyProto& input) {
+  my_code::MyFunction(input);
+}
+```
+
+Building this fuzz target requires linking against [libprotobuf-mutator]. You
+can add it as a dependency in the GYP/GN build file for platform projects. For
+compiling non-platform projects include `$(pkg-conf --cflags)` as compile flags
+and `$(pkg-conf --libs)` as linker flags.
+
+Lastly, for both platform and non-platform projects
+`fuzzer? ( dev-libs/libprotobuf-mutator )` should be added to the dependency
+list in the ebuild. This makes sure the `dev-libs/libprotobuf-mutator` package
+is installed on the target and the headers are available at compile time.
+
+For additional tips you can take a look at this chromium document for writing a
+[grammar-based-fuzzer](https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/libprotobuf-mutator.md)
+with libprotobuf-mutator.
 
 ### Getting help with modifying ebuild files
 
@@ -1176,6 +1225,8 @@ ask questions.
 [libchrome]: https://chromium.googlesource.com/aosp/platform/external/libchrome/+/master
 
 [FuzzedDataProvider]: https://chromium.googlesource.com/aosp/platform/external/libchrome/+/master/base/test/fuzzed_data_provider.h
+
+[libprotobuf-mutator]: https://github.com/google/libprotobuf-mutator
 
 [firewall_fuzzer]: https://chromium.googlesource.com/chromiumos/platform2/+/master/permission_broker/firewall_fuzzer.cc
 
