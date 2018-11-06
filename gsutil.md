@@ -106,12 +106,15 @@ These are used by developers working on ARC++ (Android in CrOS).
 *   `gs://chromeos-arc-images/`: Prebuilt Android images referenced by official
     ARC++ ebuilds for use in CrOS releases.
 
+### ClusterFuzz buckets
+
+See the [fuzzing documentation](./fuzzing.md#using-clusterfuzz) for details
+on the buckets used by ClusterFuzz.
+
 ### Other buckets
 
 These are buckets most developers won't use on a day-to-day basis.
 
-*   `gs://chromeos-fuzzing-artifacts/`: Used to hold fuzzing related artifacts.
-    See the [fuzzing documentation](./fuzzing.md) for more details.
 *   `gs://cros-packages/`: Used to host
     [Containers/VM/Crostini](./containers_and_vms.md) files.
 

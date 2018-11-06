@@ -681,8 +681,7 @@ bug in the [Chromium issue tracker], assign it to the
 As already mentioned, ClusterFuzz will pick up any fuzzer written using the
 above steps, run the fuzzer, and file bugs for any crashes found. ClusterFuzz
 runs fuzzers as soon as the [fuzzer builder] completes a build and uploads it
-to the Google Cloud Storage bucket
-(`gs://chromeos-fuzzing-artifacts/libfuzzer-asan/amd64-generic-fuzzer/`).
+to the Google Cloud Storage bucket: `gs://chromeos-fuzzing-artifacts/`.
 
 ClusterFuzz has many features such as statistics reporting that you may find
 useful. Below are links to some of the more important ones:
@@ -693,10 +692,18 @@ useful. Below are links to some of the more important ones:
     down to "Time" and specifying the fuzzer you are interested in, rather than
     "libFuzzer".
 *   [Crash statistics] - Statistics on recent crashes.
-*   [Fuzzer logs] - Logs output by your fuzzer each time ClusterFuzz runs
-    it. This is usually a good place to debug issues with your fuzzer.
-*   [Fuzzer corpus] - Testcases produced by the fuzzer that libFuzzer has deemed
-    "interesting" (meaning it causes unique program behavior).
+*   [Fuzzer logs] - Cloud storage bucket containing logs output by your fuzzer
+    each time ClusterFuzz runs it. This is usually a good place to debug issues
+    with your fuzzer. The URI for this bucket is:
+    `gs://chromeos-libfuzzer-logs/`.
+*   [Fuzzer corpus] - Cloud storage bucket containing test cases produced by the
+    fuzzer that libFuzzer has deemed "interesting" (meaning it causes unique
+    program behavior). The URI for this bucket is:
+    `gs://chromeos-corpus/libfuzzer/`.
+
+Note that you may need to authenticate to access the corpus and logs buckets
+using `gsutil`. See the documentation on [Configuring Authentication] for how to
+do this.
 
 ## Using cros_fuzz
 
@@ -829,7 +836,7 @@ If you want access to some of the data used by this command, it is probably
 stored in the directory: `/build/${BOARD}/tmp/fuzz/` but we make no guarantees
 about this.
 
-## Reproducing crashes from ClusterFuzz
+### Reproducing crashes from ClusterFuzz
 
 This section explains how to reproduce bugs found by ClusterFuzz. No knowledge
 of fuzzing is assumed and it summarizes info from elsewhere in this document.
@@ -1176,9 +1183,9 @@ ask questions.
 
 [Crash statistics]: https://clusterfuzz.com/v2/crash-stats?block=day&days=7&end=423713&fuzzer=libFuzzer&group=platform&job=libfuzzer_asan_chromeos&number=count&sort=total_count
 
-[Fuzzer logs]: https://console.cloud.google.com/storage/browser/chromeos-libfuzzer-logs/libfuzzer
+[Fuzzer logs]: https://console.cloud.google.com/storage/browser/chromeos-libfuzzer-logs/
 
-[Fuzzer corpus]: https://console.cloud.google.com/storage/browser/chromeos-libfuzzer-logs
+[Fuzzer corpus]: https://console.cloud.google.com/storage/browser/chromeos-corpus/libfuzzer
 
 [example for installing a seed corpus]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/82865b4aa16ca096046eb0a16ddc4b2fb1202be6/chromeos-base/authpolicy/authpolicy-9999.ebuild?pli=1#61
 
@@ -1207,3 +1214,5 @@ ask questions.
 [What is fuzz testing?]: #what-is-fuzz-testing
 
 [clang's source based coverage]: https://clang.llvm.org/docs/SourceBasedCodeCoverage.html
+
+[Configuring Authentication]: gsutil.md#setup
