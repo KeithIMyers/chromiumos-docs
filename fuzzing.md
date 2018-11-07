@@ -62,6 +62,9 @@ section.
     defines a function `LLVMFuzzerTestOneInput` with the following signature:
 
     ```c
+    #include <stddef.h>
+    #include <stdint.h>
+
     extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
         <your test code goes here>
         return 0;
@@ -111,6 +114,9 @@ Start with a dummy fuzzer:
 // Copyright 2018 The Chromium OS Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+
+#include <stddef.h>
+#include <stdint.h>
 
 class Environment {
  public:
