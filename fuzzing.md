@@ -112,7 +112,8 @@ Start with a dummy fuzzer:
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-struct Environment {
+class Environment {
+ public:
   Environment() {
     // Set-up code.
   }
@@ -505,7 +506,8 @@ In particular, if you're fuzzing code that's using the logging primitives from
 ```cpp
 #include "base/logging.h"
 
-struct Environment {
+class Environment {
+ public:
   Environment() {
     logging::SetMinLogLevel(logging::LOG_FATAL);  // <- DISABLE LOGGING.
   }
@@ -594,7 +596,8 @@ also use booleans to decide how to call the API:
 
 ...
 
-struct Environment {
+class Environment {
+ public:
   Environment() {
     logging::SetMinLogLevel(logging::LOG_FATAL);
   }
