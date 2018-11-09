@@ -533,7 +533,7 @@ structure out of the random data received in order to better exercise the code
 under test. Below are two different tools for handling this case. One for
 non-protos and another for protocol buffers.
 
-#### [FuzzedDataProvider]:
+#### [FuzzedDataProvider]
 
 FuzzedDataProvider is a class that can genating many things such as integers
 or strings from the fuzz target input data.
@@ -676,7 +676,7 @@ current example, avoiding random strings for the `interface` argument
 significantly increased coverage because both API functions were no longer
 erroring out early.
 
-#### [Libprotobuf-mutator]:
+#### [Libprotobuf-mutator]
 
 For cases where your code accepts a protocol buffer as input, there is a library
 [libprotobuf-mutator] that generates mutated protocol buffers for fuzz targets.
