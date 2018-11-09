@@ -143,7 +143,7 @@ build Chrome (after entering the Simple Chrome SDK environment as described
 above):
 ```bash
 (sdk) .../chrome/src $ autoninja -C out_$SDK_BOARD/Release/ \
-chrome chrome_sandbox nacl_helper
+chromiumos_preflight
 ```
 
 ### Launch the VM
