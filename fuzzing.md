@@ -705,9 +705,7 @@ DEFINE_PROTO_FUZZER(const my_package::MyProto& input) {
 ```
 
 Building this fuzz target requires linking against [libprotobuf-mutator]. You
-can add it as a dependency in the GYP/GN build file for platform projects. For
-compiling non-platform projects include `$(pkg-conf --cflags)` as compile flags
-and `$(pkg-conf --libs)` as linker flags.
+can add it as a dependency in the GYP/GN build file for platform projects.
 
 Lastly, for both platform and non-platform projects
 `fuzzer? ( dev-libs/libprotobuf-mutator )` should be added to the dependency
