@@ -248,11 +248,7 @@ the previous section for an example.
     $ USE="asan fuzzer" emerge-${BOARD} <your_package>
     ```
 
-    These flags work with `cros_workon_make` as well for a faster compile cycle:
-
-    ```bash
-    $ USE="asan fuzzer" cros_workon_make --board=$BOARD <your_package>
-    ```
+    For more details on cros-workon packages, see the [Developer Guide][cros-workon].
 
     You should verify that your fuzzer was built and that it was installed in
     `/build/${BOARD}/usr/libexec/fuzzers/` (make sure the owners file was
@@ -1268,3 +1264,5 @@ ask questions.
 [clang's source based coverage]: https://clang.llvm.org/docs/SourceBasedCodeCoverage.html
 
 [Configuring Authentication]: gsutil.md#setup
+
+[cros-workon]: developer_guide.md#Making-changes-to-packages-whose-source-code-is-checked-into-Chromium-OS-git-repositories
