@@ -391,16 +391,10 @@ the previous section for an example.
     3.  Install your binary in `/usr/libexec/fuzzers/`
 
         In your ebuild file, find the `src_install()` function. Add a
-        conditional statement to install your fuzzer:
+        `fuzzer_install` statement to install your fuzzer:
 
-        ```base
-        if use fuzzer; then
-            local f="${OUT}/<your_fuzzer>"
-            insinto /usr/libexec/fuzzers
-            exeinto /usr/libexec/fuzzers
-            doexe "${f}"
-            newins "${S}/OWNERS" "${f##*/}.owners"
-        fi
+        ```bash
+        fuzzer_install "${S}/OWNERS" <your_fuzzer>
         ```
 
         (The owners part above is so that ClusterFuzz knows to whom to assign
