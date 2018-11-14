@@ -106,17 +106,26 @@ These are used by developers working on ARC++ (Android in CrOS).
 *   `gs://chromeos-arc-images/`: Prebuilt Android images referenced by official
     ARC++ ebuilds for use in CrOS releases.
 
+### VM/container (Crostini) buckets
+
+These buckets are used for [Containers/VM/Crostini](./containers_and_vms.md).
+
+*   `gs://chrome-component-termina/`: Termina VM images for signing. VM images
+    uploaded here will be signed, then made available in the Omaha dashboard
+    for release.
+*   `gs://termina-component-testing/`: Termina VM images for testing. This
+    bucket contains both the live and staging VM images.
+*   `gs://cros-containers/`: LXD container images.
+*   `gs://cros-containers-staging/`: Staging LXD container images. Used only
+    in testing.
+*   `gs://cros-packages/`: apt package repo for container guests.
+*   `gs://cros-packages-staging/`: Staging apt package repo for container
+    guests. Used only in testing.
+
 ### ClusterFuzz buckets
 
 See the [fuzzing documentation](./fuzzing.md#using-clusterfuzz) for details
 on the buckets used by ClusterFuzz.
-
-### Other buckets
-
-These are buckets most developers won't use on a day-to-day basis.
-
-*   `gs://cros-packages/`: Used to host
-    [Containers/VM/Crostini](./containers_and_vms.md) files.
 
 ### Old/dead buckets
 
