@@ -19,6 +19,8 @@ This repository is managed by the [repo] tool, so you can make changes to it
 using the same techniques that you'd use for any other repositories in the
 project.
 
+See the [Contributing] guide for more details.
+
 ## Making changes without repo
 
 You can also make changes to this repository without using the [repo] tool. This
@@ -61,6 +63,7 @@ To review someone else's changes, apply them locally first, or just click the
 `gitiles` link near the top of a Gerrit file diff page.
 
 [Chromium OS]: https://www.chromium.org/chromium-os
+[Contributing]: contributing.md
 [rendered by Gitiles]: https://chromium.googlesource.com/chromiumos/docs/+/master/
 [Gitiles-flavored Markdown]: https://gerrit.googlesource.com/gitiles/+/master/Documentation/markdown.md
 [Chromium documentation guidelines]: https://chromium.googlesource.com/chromium/src/+/master/docs/documentation_guidelines.md
