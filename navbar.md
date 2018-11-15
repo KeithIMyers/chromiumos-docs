@@ -4,6 +4,7 @@
 [home]: /README.md
 
 * [Home][home]
+* [Sitemap](/.)
 * [Getting Started](./development_basics.md)
 * [Developer Guide](./developer_guide.md)
 * [Contact](./contact.md)
