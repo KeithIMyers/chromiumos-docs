@@ -70,15 +70,13 @@ in `/etc/init`):
 [`permission_broker.conf`](https://chromium.googlesource.com/chromiumos/platform2/+/master/permission_broker/permission_broker.conf)
 
 ```bash
-env PERMISSION_BROKER_GRANT_GROUP=devbroker-access
-
 start on starting system-services
 stop on stopping system-services
 respawn
 
 # Run as 'devbroker' user.
 exec minijail0 -u devbroker -c 'cap_chown,cap_fowner+eip' -- \
-    /usr/bin/permission_broker --access_group=${PERMISSION_BROKER_GRANT_GROUP}
+    /usr/bin/permission_broker
 ```
 
 Minijail's `-u` argument forces the target program (in this case
@@ -121,8 +119,6 @@ needs capabilities to be able to `chown(2)` device nodes.
 [`permission_broker.conf`](https://chromium.googlesource.com/chromiumos/platform2/+/master/permission_broker/permission_broker.conf)
 
 ```bash
-env PERMISSION_BROKER_GRANT_GROUP=devbroker-access
-
 start on starting system-services
 stop on stopping system-services
 respawn
@@ -130,7 +126,7 @@ respawn
 # Run as <devbroker> user.
 # Grant CAP_CHOWN and CAP_FOWNER.
 exec minijail0 -u devbroker -c 'cap_chown,cap_fowner+eip' -- \
-    /usr/bin/permission_broker --access_group=${PERMISSION_BROKER_GRANT_GROUP}
+    /usr/bin/permission_broker
 ```
 
 Capabilities are expressed using the format that [cap_from_text(3)] accepts.
