@@ -957,7 +957,8 @@ this branch.
 ### Make your changes
 
 You should be able to make your changes to the source code now. To incrementally
-compile your changes, use
+compile your changes, use either `cros_workon_make` or `emerge-${BOARD}`. To use
+`cros_workon_make`, run
 
 ```shell
 (inside) cros_workon_make --board=${BOARD} ${PACKAGE_NAME}
@@ -981,9 +982,22 @@ the changes you made by using
 (inside) cros_workon_make --board=${BOARD} ${PACKAGE_NAME} --install
 ```
 
-You can then rebuild an image with `build_image` and reimage your device, but
-you might also want to take a peek at [cros deploy] if you want something a
-little quicker.
+You can then rebuild an image with `build_image` and reimage your device.
+
+Alternatively, you can build your package using `emerge-${BOARD}` and quickly
+install it to the device by using [cros deploy].
+
+For example, if you want to build `ec-utils` to test on your device, use
+
+```shell
+(inside) emerge-${BOARD} ec-utils
+```
+
+To install the package to the device, use
+
+```shell
+(inside) cros deploy ${IP} ec-utils
+```
 
 ### Set your editor
 
