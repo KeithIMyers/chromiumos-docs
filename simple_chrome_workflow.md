@@ -83,26 +83,33 @@ Entering the Simple Chrome environment does the following:
     (*Non-Googlers* may need to disable this with `--nogoma`).
 1.  `--download-vm` will download a Chrome OS VM and a QEMU binary.
 
+### cros chrome-sdk options
 
-*Non-Googlers*: Only generic boards have publicly available SDK downloads, so
-you will need to use a generic board (e.g. amd64-generic) or your own
-Chrome OS build (see [Using a custom Chrome OS build]). For more info and
-updates star [crbug.com/360342].
-
-### cros chrome-sdk options:
-
-*   `--nogn-gen` Do not run 'gn gen' automatically.
-*   `--gn-extra-args='extra_arg=foo other_extra_arg=bar'` For setting
-    extra gn args, e.g. 'dcheck_always_on = true'.
 *   `--internal` Sets up Simple Chrome to build and deploy the official *Chrome*
     instead of *Chromium*.
+*   `--gn-extra-args='extra_arg=foo other_extra_arg=bar'` For setting
+    extra gn args, e.g. 'dcheck_always_on=true'.
 *   `--log-level=info` Sets the log level to 'info' or 'debug' (default is
     'warn').
+*   `--nogn-gen` Do not run 'gn gen' automatically.
+
+**Chrome OS developers**: Please set `dcheck_always_on=true` and file bugs if
+you encounter any DCHECK crashes.
+```
+(shell) cros chrome-sdk --internal --board=$BOARD --log-level=info --gn-extra-args='dcheck_always_on=true'
+```
+
+### cros chrome-sdk tips
 
 > **Important:** When you sync/update your Chrome source, the Chrome OS SDK
 > version (src/chromeos/CHROMEOS_LKGM) may change. When the SDK version changes
 > you may need to exit and re-enter the Simple Chrome environment to
 > successfully build and deploy Chrome.
+
+> **Non-Googlers**: Only generic boards have publicly available SDK downloads,
+> so you will need to use a generic board (e.g. amd64-generic) or your own
+> Chrome OS build (see [Using a custom Chrome OS build]). For more info and
+> updates star [crbug.com/360342].
 
 > **Note**: See also [Using a custom Chrome OS build].
 
@@ -265,8 +272,7 @@ Specify the build output directory to deploy from using `--build-dir`. For the
 [VM]:
 
 ```
-(sdk) deploy_chrome --build-dir=out_${SDK_BOARD}/Release \
-      --to=localhost --port=9222
+(sdk) deploy_chrome --build-dir=out_${SDK_BOARD}/Release --to=localhost --port=9222
 ```
 
 For a physical device, which must be ssh-able as user 'root', you must specify
@@ -291,8 +297,7 @@ device, e.g.:
 *   When using other compile options that produce a significantly larger image.
 
 ```
-(sdk) deploy_chrome --build-dir=out_$SDK_BOARD/Release --to=$IP_ADDR --mount \
-      [--nostrip]
+(sdk) deploy_chrome --build-dir=out_$SDK_BOARD/Release --to=$IP_ADDR --mount [--nostrip]
 ```
 
 > **Note:** This also prompts to remove rootfs verification so that
@@ -423,8 +428,7 @@ attach the gdb server to the top-level Chrome process.
 
 ```
 (device) sudo /sbin/iptables -A INPUT -p tcp --dport 1234 -j ACCEPT
-(device) sudo gdbserver \
-         --attach :1234 $(pgrep chrome -P $(pgrep session_manager))
+(device) sudo gdbserver --attach :1234 $(pgrep chrome -P $(pgrep session_manager))
 ```
 
 On your host machine (inside the chrome-sdk shell), run gdb and start the Python
