@@ -738,6 +738,27 @@ whatever arbitrary format they like.
 [exo/data_source.cc]: https://chromium.googlesource.com/chromium/src/+/master/components/exo/data_source.cc
 [clipboard_constants.cc]: https://chromium.googlesource.com/chromium/src/+/master/ui/base/clipboard/clipboard_constants.cc
 
+### Can I read/write the clipboard automatically from inside the VM?
+
+Currently, no.
+
+From a security point of view, we don't want untrusted code silently or
+automatically extracting whatever the user has copied.
+Perhaps your browser session is copying personal data or passwords.
+It's the same problem that the [web platform][web-copy-paste] runs into.
+
+This is not the same thing as users manually pasting data (e.g. Ctrl-V).
+This is only about programmatic reading.
+
+We don't expect it to stay this way forever.
+Once we have a permission model and UI to manage these things, we can look into
+allowing users to grant this permission.
+
+If you use `xclip` or [X] tools, they often have a local buffer (in [XWayland]),
+but it won't automatically sync with the rest of the system.
+
+[web-copy-paste]: https://developers.google.com/web/updates/2018/03/clipboardapi#security_and_permissions
+
 ### Do I have to manage VM updates?
 
 Nope!
