@@ -319,12 +319,14 @@ the chromeos_startup script, which picks it up and creates
 `/run/daemon-store/<daemon_name>` as a shared mount.
 
 In your daemon's init script, mount that folder as slave in your mount
-namespace. Be sure not to mount all of `/run` if possible.
+namespace. Be sure not to mount all of `/run` if possible. Make sure to mount
+with the MS_REC flag to propagate any already-mounted cryptohome bind mounts
+into the mount namespace.
 
 ```bash
-minijail0 -Kslave \
+minijail0 -v -Kslave \
           -k 'tmpfs,/run,tmpfs,MS_NOSUID|MS_NODEV|MS_NOEXEC' \
-          -b /run/daemon-store/<daemon_name> \
+          -k '/run/daemon-store/<daemon_name>,/run/daemon-store/<daemon_name>,none,MS_BIND|MS_REC' \
           ...
 ```
 
