@@ -19,8 +19,8 @@ sudo $(which cros_setup_toolchains) --targets=boards --include-boards=kevin,lump
 Place the following contents into `~/.cargo/config` to enable cross-compiling:
 
 ```toml
-[target.armv7a-cros-linux-gnueabi]
-linker = "armv7a-cros-linux-gnueabi-gcc"
+[target.armv7a-cros-linux-gnueabihf]
+linker = "armv7a-cros-linux-gnueabihf-gcc"
 
 [target.aarch64-cros-linux-gnu]
 linker = "aarch64-cros-linux-gnu-gcc"
@@ -121,16 +121,21 @@ the binary size.
 Note that building with the release profile will be significantly slower and less friendly to
 debugging panics at runtime.
 
+> **WARNING**: By default, the release profile disables integer arithmetic overflow checks. As an
+added precaution, you can enable them on release builds by putting `overflow-checks = true` under
+the `[profile.release]` section of your `Cargo.toml`. Be sure to evaluate the performance impact of
+enabling overflow checks before deploying this option.
+
 ### Cross-compiling
 
 The toolchain that is installed by default is targetable to the following triples:
 
-| Target Triple               | Description                                                                      |
-|-----------------------------|----------------------------------------------------------------------------------|
-| `x86_64-pc-linux-gnu`       | **(default)** Used exclusively for packages installed in the chroot              |
-| `armv7a-cros-linux-gnueabi` | Used by 32-bit usermode ARM devices                                              |
-| `aarch64-cros-linux-gnu`    | Used by 64-bit usermode ARM devices (none of these exist as of August 4th, 2017) |
-| `x86_64-cros-linux-gnu`     | Used by x86_64 devices                                                           |
+| Target Triple                 | Description                                                                         |
+|-------------------------------|-------------------------------------------------------------------------------------|
+| `x86_64-pc-linux-gnu`         | **(default)** Used exclusively for packages installed in the chroot                 |
+| `armv7a-cros-linux-gnueabihf` | Used by 32-bit usermode ARM devices                                                 |
+| `aarch64-cros-linux-gnu`      | Used by 64-bit usermode ARM devices (none of these exist as of November 30th, 2018) |
+| `x86_64-cros-linux-gnu`       | Used by x86_64 devices                                                              |
 
 When building Rust projects for development, a non-default target can be selected as follows:
 
@@ -149,6 +154,14 @@ also need to set the `TARGET_CC` environment variable to point at the appropriat
 
 ```shell
 export TARGET_CC="<target_triple>-clang"
+```
+
+If a C/C++ package is being pulled in via `pkg-config`, the `PKG_CONFIG_ALLOW_CROSS` environment
+variable should be exposed. Without this, you might see `CrossCompilation` as part of an error
+message during build script execution.
+
+```shell
+export PKG_CONFIG_ALLOW_CROSS=1
 ```
 
 [Rust]: https://www.rust-lang.org
