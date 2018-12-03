@@ -84,9 +84,8 @@ project.
 
 ## Depending on Crates
 
-Because the sources for all ebuilds in Chrome OS must be available at [localmirror] (link only
-accessible with Google account), you will have to upload all crate dependencies for the project to
-localmirror.
+Because the sources for all ebuilds in Chrome OS must be available at [localmirror],
+you will have to upload all crate dependencies for the project to localmirror.
 
 The following will download a crate, upload it to localmirror, and make it accessible for download:
 
@@ -167,5 +166,5 @@ export PKG_CONFIG_ALLOW_CROSS=1
 [Rust]: https://www.rust-lang.org
 [Cargo]: https://crates.io/
 [cargo.eclass]: https://chromium.googlesource.com/chromiumos/overlays/portage-stable/+/master/eclass/cargo.eclass
-[localmirror]: go/localmirror
+[localmirror]: archive_mirrors.md
 [link time optimizations]: https://en.wikipedia.org/wiki/Interprocedural_optimization
