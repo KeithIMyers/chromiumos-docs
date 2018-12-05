@@ -1147,6 +1147,28 @@ trouble passing some check.
     for libFuzzer to mutate, which you then convert into raw bytes. It is not
     yet supported in Chrome OS (follow [issue 853017] for updates).
 
+### How do I reproduce issues found in a third party library?
+
+The fuzzing builders instrument most of the packages with sanitizer flags which
+can sometimes find errors in third party libraries.
+
+To reproduce the errors found in a third party package, the easiest way is to
+build the packages with sanitizers flags just like the builders.
+
+```bash
+# Run setup_board with the fuzzer profile.
+# Use --profile=ubsan-fuzzer for ubsan issues.
+$ ./setup_board --board=amd64-generic --profile=fuzzer
+# Run build_packages to build the package and its dependencies.
+# Use USE="ubsan fuzzer" for ubsan issues.
+# Note that `--nousepkg` must be passed to avoid using prebuilts.
+$ "USE=asan fuzzer" ./build_packages --board=amd64-generic --skip_chroot_upgrade --nousepkg <your_package>
+```
+
+Once the package and its dependencies have been built,
+[cros_fuzz](fuzzing.md#reproducing-crashes-from-clusterfuzz) can be used
+to reproduce the issue using the downloaded testcase.
+
 ## Getting help/Asking questions
 
 You can send an email to [chromeos-fuzzing@google.com] if you get stuck, or to
