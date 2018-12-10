@@ -226,6 +226,11 @@ the script to generate a rough policy, and then use `-L` if you notice your
 program is still crashing. Note that the `-L` option should NOT be used in
 production.
 
+You should ensure that your service is executing as many of its code paths as
+possible when executing `strace`, in particular error paths.  In some cases it
+may be easier to add syscalls manually (for instance, `abort`) rather than
+forcing execution of those paths.
+
 The policy file needs to be installed in the system, so we need to add it to
 the ebuild file:
 
