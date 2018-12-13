@@ -681,8 +681,8 @@ before you run this command.
 
 **SIDE NOTES:**
 
-*   If you want to create a test image (used for allowing Chromium OS to talk to
-    autotest), see the [Running Tests] section.
+*   If you want to create a test image (used for integration testing), see the
+    [Running Tests] section.
 
 ### Disable verified boot
 
@@ -788,8 +788,8 @@ This command creates the file
 *   Only KVM/QEMU VM's are actively supported at the moment.
 *   You can specify source/destination paths with the `--from` and `--to`
     parameters.
-*   If you're interested in creating a test image (used for allowing Chromium OS
-    to talk to autotest), see the [Running Tests] section.
+*   If you're interested in creating a test image (used for integration
+    testing), see the [Running Tests] section.
 
 ## Making changes to packages whose source code is checked into Chromium OS git repositories
 
@@ -1582,16 +1582,47 @@ $ sudo reboot
 
 ## Running Tests
 
-Many of the automated tests that are part of the Chromium OS project run using
-the autotest framework. See [Autotest User Documentation] for details.
+Chromium OS integration (or "functional") tests are written using the [Tast] or
+[Autotest] frameworks.
 
-**Various quick links:**
+### Tast
 
-*   [Creating a new test]
-*   [Running Smoke Suite On a VM Image]
-*   [Seeing which tests are implemented by an ebuild]
-*   [Getting an image that has been modified for test] This doesn't work if you
-    want to create a recovery image and boot a Cr48 with it, see below
+[Tast] is a Go-based integration testing framework with a focus on speed,
+ease-of-use, and maintainability. Existing Autotest-based tests that run on the
+Chrome OS Commit Queue are being ported to Tast and decommissioned as of 2018
+Q4. Please strongly consider using Tast when writing new integration tests (but
+be aware that not all functionality provided by Autotest is available in Tast;
+for example, tests that use multiple devices simultaneously when running are not
+currently supported).
+
+Here are some starting points for learning more about Tast:
+
+*   [Tast Quickstart]
+*   [Tast: Running Tests]
+*   [Tast: Writing Tests]
+*   [Tast Overview]
+
+Please contact the public [tast-users mailing list] if you have questions.
+
+### Autotest
+
+[Autotest] is a Python-based integration testing framework; the codebase is also
+responsible for managing the [Chrome OS lab] that is used for hardware testing.
+Chromium-OS-specific Autotest information is available in the [Autotest User
+Documentation].
+
+Additional Autotest documentation:
+
+*   [Creating a new Autotest test]
+*   [Running Autotest Smoke Suite On a VM Image]
+*   [Seeing which Autotest tests are implemented by an ebuild]
+
+### Creating a normal image that has been modified for test
+
+See [Creating an image that has been modified for test] for information about
+modifying a normal system image so that integration tests can be run on it.
+
+### Creating a VM image that has been modified for test
 
 If you wish to produce a VM image instead, you should omit the --test flag to
 build_image and let `./image_to_vm.sh` produce the test image:
@@ -1606,9 +1637,9 @@ looks for `chromiumos_image.bin`. We expect this to change in the future.
 
 Note that creating a test image will change the root password of the image to
 **`test0000`**. The `--test_image` flag causes the `image_to_xxx commands` to
-make a copy of your chromiumos_image.bin file called `chromiumos_test_image.bin`
-(if that file doesn't already exist), modify that image for test, and use the
-test image as the source of the command.
+make a copy of your `chromiumos_image.bin` file called
+`chromiumos_test_image.bin` (if that file doesn't already exist), modify that
+image for test, and use the test image as the source of the command.
 
 **SIDE NOTES:**
 
@@ -1618,8 +1649,8 @@ test image as the source of the command.
 
 ### Creating a recovery image that has been modified for test
 
-After building a test image using ./build_image test as described above, you may
-wish to encapsulate it within a recovery image:
+After building a test image using `./build_image test` as described above, you
+may wish to encapsulate it within a recovery image:
 
 ```shell
 (inside)
@@ -1790,11 +1821,19 @@ Below are a few links to external sites that you might also find helpful
 [cdgb]: https://cgdb.github.io/
 [crbug.com/new]: https://crbug.com/new
 [Simple Chrome Workflow]: simple_chrome_workflow.md
-[Autotest User Documentation]: https://sites.google.com/a/chromium.org/dev/chromium-os/testing/autotest-user-doc
-[Creating a new test]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md#Writing-and-developing-tests
-[Running Smoke Suite On a VM Image]: https://sites.google.com/a/chromium.org/dev/chromium-os/testing/running-smoke-suite-on-a-vm-image
-[Seeing which tests are implemented by an ebuild]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md#Q4_I-have-an-ebuild_what-tests-does-it-build
-[Getting an image that has been modified for test]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md#W4_Create-and-run-a-test_enabled-image-on-your-device
+[Tast]: https://chromium.googlesource.com/chromiumos/platform/tast/
+[Autotest]: https://autotest.github.io/
+[Tast Quickstart]: https://chromium.googlesource.com/chromiumos/platform/tast/+/HEAD/docs/quickstart.md
+[Tast: Running Tests]: https://chromium.googlesource.com/chromiumos/platform/tast/+/HEAD/docs/running_tests.md
+[Tast: Writing Tests]: https://chromium.googlesource.com/chromiumos/platform/tast/+/HEAD/docs/writing_tests.md
+[Tast Overview]: https://chromium.googlesource.com/chromiumos/platform/tast/+/HEAD/docs/overview.md
+[tast-users mailing list]: https://groups.google.com/a/chromium.org/forum/#!forum/tast-users
+[Chrome OS lab]: http://sites/chromeos/for-team-members/lab/lab-faq
+[Autotest User Documentation]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md
+[Creating a new Autotest test]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md#Writing-and-developing-tests
+[Running Autotest Smoke Suite On a VM Image]: https://sites.google.com/a/chromium.org/dev/chromium-os/testing/running-smoke-suite-on-a-vm-image
+[Seeing which Autotest tests are implemented by an ebuild]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md#Q4_I-have-an-ebuild_what-tests-does-it-build
+[Creating an image that has been modified for test]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md#W4_Create-and-run-a-test_enabled-image-on-your-device
 [about_os_credits.html]: https://chromium.googlesource.com/chromium/src/+/master/chrome/browser/resources/chromeos/about_os_credits.html
 [devserver]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/using-the-dev-server
 [directory structure]: https://sites.google.com/a/chromium.org/dev/chromium-os/developer-guide/directory-structure

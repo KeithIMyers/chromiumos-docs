@@ -17,11 +17,11 @@ The [unit testing document] has more details about how unit tests are executed.
 
 ## Prefer unit tests to functional tests
 
-[Functional tests] (sometimes also called *integration tests*) are written in
-Python using the [Autotest] framework. They run on a live Chrome OS system and
-verify the end-to-end functionality of multiple components. As a result, they do
-not run automatically while a build is being performed, and take substantially
-longer to complete than unit tests.
+[Functional tests] (sometimes also called *integration tests*) are written in Go
+using the [Tast] framework or in Python using the [Autotest] framework. They run
+on a live Chrome OS system and verify the end-to-end functionality of multiple
+components. As a result, they do not run automatically while a build is being
+performed, and take substantially longer to complete than unit tests.
 
 Functional tests are needed to verify that different components work together.
 For example, a test that verifies that the user is able to log into Chrome
@@ -41,7 +41,8 @@ tests for all of our testing:
 -   Developers can't run functional tests without booting a Chrome OS device (or
     virtual machine) and deploying their code to it.
 -   A no-op Autotest-based test takes more than 20 seconds to run, compared to a
-    tiny fraction of a second for a no-op unit test.
+    tiny fraction of a second for a no-op unit test. Tast tests have minimal
+    overhead, but they're still slower than unit tests.
 -   There are many things that can go wrong when booting a full Chrome OS system
     (e.g. hardware issues, network issues, legitimate but rare races in Chrome
     OS), and functional tests are much more likely to experience flakiness than
@@ -669,6 +670,7 @@ Blog] also include more information about different types of test objects.
 [Google Test]: https://github.com/google/googletest
 [unit testing document]: https://www.chromium.org/chromium-os/testing/adding-unit-tests-to-the-build
 [Functional tests]: https://en.wikipedia.org/wiki/Functional_testing
+[Tast]: https://chromium.googlesource.com/chromiumos/platform/tast/
 [Autotest]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md
 [commit queue]: https://www.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/commit-queue-overview
 [Google Mock]: https://github.com/google/googletest/blob/master/googlemock/README.md
