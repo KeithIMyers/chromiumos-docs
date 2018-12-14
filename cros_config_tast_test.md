@@ -49,7 +49,7 @@ chromeos:
 ```
 
 The real nautilus commands file is
-[here](https://cs.corp.google.com/chromeos_internal/src/private-overlays/overlay-nautilus-private/chromeos-base/chromeos-config-bsp/tast_files/cros_config_device_commands.yaml).
+[here](https://chrome-internal.googlesource.com/chromeos/overlays/overlay-nautilus-private/+/HEAD/chromeos-base/chromeos-config-bsp/tast_files/cros_config_device_commands.yaml)
 
 If you only want to test the common commands this is all you need to set up. If
 you want to extend the commands you will need to create a new custom command
@@ -66,7 +66,7 @@ repo under the `overlay-<board>-private/chromeos-base/chromeos-config-bsp` direc
 Create a new directory named `tast_files` and place the new YAML file in this
 directory. This keeps the testing configuration close to the `model.yaml` configuration.
 
-An example is the [Nautilus](https://cs.corp.google.com/chromeos_internal/src/private-overlays/overlay-nautilus-private/chromeos-base/chromeos-config-bsp/tast_files/cros_config_device_commands.yaml)
+An example is the [Nautilus](https://chrome-internal.googlesource.com/chromeos/overlays/overlay-nautilus-private/+/HEAD/chromeos-base/chromeos-config-bsp/tast_files/cros_config_device_commands.yaml)
 test configuration.
 
 NOTE: The testing configuration needed a seperate directory because the unibuild
@@ -80,7 +80,7 @@ overlays repo under the
 `overlay-<board>-private/chromeos-base/chromeos-bsp-<board>-private`
 directory in a new directory named `tast_files`.
 
-An example is the [Caroline](https://cs.corp.google.com/chromeos_internal/src/private-overlays/overlay-caroline-private/chromeos-base/chromeos-bsp-caroline-private/tast_files/cros_config_device_commands.yaml)
+An example is the [Caroline](https://chromium.googlesource.com/chromeos/overlays/overlay-caroline-private/+/HEAD/chromeos-base/chromeos-bsp-caroline-private/tast_files/cros_config_device_commands.yaml)
 test configuration.
 
 ### Update the ebuild
@@ -117,7 +117,7 @@ group-name: &group-anchor
       - 'command 2 args'
 ```
 
-For examples see [cros_config_test_common.yaml](https://cs.corp.google.com/chromeos_public/src/third_party/chromiumos-overlay/chromeos-base/cros-config-test/files/cros_config_test_common.yaml).
+For examples see [cros_config_test_common.yaml](https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/chromeos-base/cros-config-test/files/cros_config_test_common.yaml)
 The common commands YAML defines two command groups, one for the `mosys` command
 and another for the `cros_config` command.
 
@@ -127,7 +127,7 @@ The common commands are a set of Command Groups that can be added to a device
 specific commands list. The common commands need to work on all devices. For
 example, `cros_config` only works on unibuild devices.
 
-The [cros_config_test_common.yaml](https://cs.corp.google.com/chromeos_public/src/third_party/chromiumos-overlay/chromeos-base/cros-config-test/files/cros_config_test_common.yaml)
+The [cros_config_test_common.yaml](https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/chromeos-base/cros-config-test/files/cros_config_test_common.yaml)
 is located in the
 `third_party/chromeos-overlay/chromeos-base/cros-config-test/files` directory.
 
@@ -178,13 +178,13 @@ test will be copied back to the host you ran the command from to the
 The results directory will contain several logs and directories, the most
 interesting are:
 
-  *   `system_logs` directory contains the contents of the system logs during
-      the run.
-  *   `crashes` directory contains crash results from the run, empty if none.
-  *   `tests/platform.CrosConfig` directory contains `log.txt` of
-      CrosConfig messages.
-  *   `tests/platform.CrosConfig` directory contains the new golden file named
-      `<board>_output.json`.
+*   `system_logs` directory contains the contents of the system logs during
+    the run.
+*   `crashes` directory contains crash results from the run, empty if none.
+*   `tests/platform.CrosConfig` directory contains `log.txt` of
+    CrosConfig messages.
+*   `tests/platform.CrosConfig` directory contains the new golden file named
+    `<board>_output.json`.
 
 See the following [Test Comparison and Errors](#errors) section on how errors
 are determined and the
@@ -198,28 +198,28 @@ the golden file and the values differ.
 
 See details below of the different scenarios:
 
-  *   No commands JSON file - This scenario reflects a device that is most
-      likely not setup for cros_config testing. The device will quickly
-      PASS the test as this scenario is defined as not an error.
-  *   No device golden file - This scenario most likely reflects a device
-      that is in development. The commands JSON file exists and all commands
-      will be run. The test will PASS and log a warning about the missing
-      golden file.
-  *   Commands missing from golden file - This scenario will PASS the test
-      and log a warning about the missing command and associated value. This
-      will stop massive CQ failures if a new common command were added until
-      all of the golden files can be updated.
-  *   Extra commands in golden file - This scenario will PASS the test and log
-      a warning about the extra command and value in the golden file. As above
-      this stop massive CQ failures if a common command is removed from the
-      input.
-  *   The set of commands in input and golden are equal, one or more output
-      values differ - This scenario is the only one that will trigger a test
-      FAIL. All of the differing commands and their values will be logged as
-      an error to the output.
-  *   The set of commands in input and golden are equal, no differences in
-      output values - This is the happy path and will not log much info and
-      test will PASS.
+*   No commands JSON file - This scenario reflects a device that is most
+    likely not setup for cros_config testing. The device will quickly
+    PASS the test as this scenario is defined as not an error.
+*   No device golden file - This scenario most likely reflects a device
+    that is in development. The commands JSON file exists and all commands
+    will be run. The test will PASS and log a warning about the missing
+    golden file.
+*   Commands missing from golden file - This scenario will PASS the test
+    and log a warning about the missing command and associated value. This
+    will stop massive CQ failures if a new common command were added until
+    all of the golden files can be updated.
+*   Extra commands in golden file - This scenario will PASS the test and log
+    a warning about the extra command and value in the golden file. As above
+    this stop massive CQ failures if a common command is removed from the
+    input.
+*   The set of commands in input and golden are equal, one or more output
+    values differ - This scenario is the only one that will trigger a test
+    FAIL. All of the differing commands and their values will be logged as
+    an error to the output.
+*   The set of commands in input and golden are equal, no differences in
+    output values - This is the happy path and will not log much info and
+    test will PASS.
 
 Crashes of any of the commands will automatically cause the test to FAIL.
 
@@ -240,7 +240,7 @@ results file to the device's `tast_files` directory as documented above.
 
 The platform.CrosConfig test is a Golang program that is part of the tast cros
 platform bundle of local tests. Local tast tests are tests that are run on the
-DUT. The [cros_config.go](https://cs.corp.google.com/chromeos_public/src/platform/tast-tests/src/chromiumos/tast/local/bundles/cros/platform/cros_config.go)
+DUT. The [cros_config.go](https://chromium.googlesource.com/chromiumos/platform/tast-tests/+/HEAD/src/chromiumos/tast/local/bundles/cros/platform/cros_config.go)
 test lives in the
 `src/platform/tast-tests/src/chromiumos/tast/local/bundles/cros/platform`
 directory. The executable will automatically be built and included in all
