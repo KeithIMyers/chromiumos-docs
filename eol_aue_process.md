@@ -74,7 +74,7 @@ the way of other things (like code refactoring).
 
 ## FAQ
 
-### When can we drop support for an AUE board?
+### When can we drop support for an AUE board? {#faq-drop-board}
 
 Once the version in the stable channel is newer than the board's AUE version.
 
@@ -85,6 +85,12 @@ You can find the AUE version in [GoldenEye] for the board (or the
 [public device page]).
 You can find the current versions being served by Omaha in
 https://cros-updates-serving.appspot.com/.
+
+### When can we remove devices from the hardware lab?
+
+Follow the same guidance in the
+[previous question about dropping support](#faq-drop-board).
+
 
 [GoldenEye]: http://go/goldeneye
 [public device page]: https://dev.chromium.org/chromium-os/developer-information-for-chrome-os-devices
