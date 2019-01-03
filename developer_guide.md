@@ -573,12 +573,14 @@ developer image by running the command below from inside the
 (inside) ./build_image --board=${BOARD} --noenable_rootfs_verification test
 ```
 
-The args for build_image specify what type of build you want (test in the
-example above). It is more convenient to use test images, but developers could
-also build developer (dev) images. A developer image provides a Chromium
-OS-based image with additional developer packages. To build a test image with
-additional test-specific packages that also accepts an incoming ssh connection,
-use 'test' instead of 'dev'. If building a test image, the password set using
+The args for `build_image` specify what type of build you want.
+A test image (in the example above) has additional test-specific packages and
+also accepts incoming ssh connections.
+It is more convenient to use test images, but developers could
+also build developer images. A developer image provides a Chromium OS-based
+image with additional developer packages.
+To build it use `dev` instead of `test`.
+If building a test image, the password set using
 `set_shared_user_password.sh` will be ignored and `"test0000"` will be the
 password instead. The `--noenable_rootfs_verification` turns off verified boot
 allowing you to freely modify the root file system. The system is less secure
@@ -586,8 +588,8 @@ using this flag, however, for rapid development you may want to set this
 flag. If you would like a more secure, locked-down version of Chromium OS, then
 simply remove the `--noenable_rootfs_verification` flag. Finally if you want
 just the pristine Chromium OS-based image (closest to Chrome OS but not quite
-the same), pass in `base` rather than dev. Use `build_image --help` for more
-information.
+the same), pass in `base` rather than `test` or `dev`. Use `build_image --help`
+for more information.
 
 The image produced by build_image will be located in
 `~/trunk/src/build/images/${BOARD}/versionNum/` (where `versionNum` will
