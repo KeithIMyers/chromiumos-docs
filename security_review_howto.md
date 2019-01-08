@@ -1,5 +1,20 @@
 # Chrome OS security review HOWTO
 
+This document describes the Chrome OS security review process. It attempts to
+comprehensively document the process and thus caters to various audiences, most
+importantly feature owners and security team members. Individual sections call
+out the main target audience where appropriate.
+
+## Goals
+
+The Chrome OS security review process' main goal is to ensure new features stay
+faithful to Chrome OS' security architecture. More details on what the review
+covers are described below in the [review framework] section, but at a high
+level the goal is to protect our users' data and devices. The security review
+process is designed to make sure that new features don't make it
+disproportionately easier for attackers to compromise user data or devices.
+In general, every Chrome OS feature requires a security review.
+
 ## The security review process
 
 Chrome OS development is structured around six-week cycles called *milestones*.
@@ -81,6 +96,9 @@ In general, a feature that properly addresses the questions and recommendations
 in this document can expect to have its security flag flipped by branch point.
 
 ## The role of the security review lead
+
+This section is mostly only relevant for security team members and can be safely
+skipped by feature owners.
 
 The security review lead represents Chrome OS security at Chrome OS Launch
 review meetings. They are responsible for getting features *that are ready to be
@@ -171,72 +189,81 @@ launch review meetings.
 
 ## Life of a security review
 
-Chrome OS security team members will use the following process when handling a
-feature launch bug for the upcoming milestone:
+This section describes how we use launch bug labels to determine the status of a
+given launch bug and its progression through various states. It's useful context
+for feature owners to be able to request reviews and supply information properly
+and to clarify expectations on what should happen next at any point in time.
+Similarly, Chrome OS security team members find a detailed description of their
+role and responsibility in the review process:
 
-1.  Look at the launch bug. Is the *Launch-Security* flag set to
-    *ReviewRequested*? If not, the feature might not be ready for review. Feel
-    free to point out in the launch bug that a design doc with a "Security
-    considerations" section filled out will speed up the review process.
-2.  If the *Launch-Security* flag is set to *ReviewRequested*, check for a
-    design doc. If there isn't one, ask for one. Flip the *Launch-Security*
-    flag to *NeedInfo*. The feature owner should flip the flag back to
-    *ReviewRequested* when the design doc is ready for review.
-3.  If the design doc doesn't have a *Security Considerations* section, ask for
-    one. Offer a link to the [review framework] as a guide for how to write that
-    section. Flip the *Launch-Security* flag to *NeedInfo*. The feature owner
-    should flip the flag back to *ReviewRequested* when the design doc is ready
-    for re-review.
-4.  Use the [review framework] to evaluate if the feature is respecting security
-    boundaries, handles sensitive data appropriately, etc. It's often also a
-    good idea to consider existing features, in particular their security design
-    and trade-off decisions made in previous reviews.
+1.  The process only kicks off once the *Launch-Security* flag set to
+    *ReviewRequested*. If the feature isn't marked as such, it might not be
+    ready for review. Feature owners are responsible for setting
+    *ReviewRequested* and should make sure to supply a design doc with a
+    "Security considerations" section before doing so.
+2.  If the *Launch-Security* flag is set to *ReviewRequested*, the first thing
+    the security reviewer will do is check for a design doc. If there isn't one,
+    they will generally ask for one and flip the *Launch-Security* flag to
+    *NeedInfo*. The feature owner should flip the flag back to *ReviewRequested*
+    when the design doc is ready for review.
+3.  If the design doc doesn't have a *Security Considerations* section, the
+    security reviewer may ask for one. Offer a link to the [review framework] as
+    a guide for how to write that section. Flip the *Launch-Security* flag to
+    *NeedInfo*. The feature owner should flip the flag back to *ReviewRequested*
+    when the design doc is ready for re-review.
+4.  The security reviewer should use the [review framework] to evaluate if the
+    feature is respecting security boundaries, handles sensitive data
+    appropriately, etc. It's often also a good idea to consider existing
+    features, in particular their security design and trade-off decisions made
+    in previous reviews.
 5.  If any security-relevant aspects are unclear or if there are concerns,
-    communicate this back to the feature owner via design doc comments and
-    comment on the launch bug to clarify the security review status. Flip the
-    *Launch-Security* flag back to *NeedInfo*.
-6.  Surface controversial design/implementation choices or aspects you're unsure
-    about in the weekly Chrome OS security team meeting. Rely on the rest of the
-    team to suggest useful alternative angles and to provide historic context
-    and high-level guidance on Chrome OS security philosophy.
-7.  If necessary, iterate with the feature owner to resolve any questions or
-    concerns. Use whatever means of communication seems most appropriate to make
-    progress. For simple questions, document comments or email threads will
-    work. For in-depth discussion of product requirements, design choices, and
-    implications on security assessment, it's usually better to ask for a
-    meeting. Note that it is generally the responsibility of the feature owner
-    to drive the review process to a conclusion. However, the security reviewer
-    should strive for clear communication on what remains to be addressed at any
-    point in the process. As you have probably realized by now, the
-    *Launch-Security* flag gets flipped between *NeedInfo* and
+    the security reviewer should communicate this back to the feature owner via
+    design doc comments and comment on the launch bug to clarify the security
+    review status. Flip the *Launch-Security* flag back to *NeedInfo*.
+6.  Security reviewers are encouraged to surface controversial
+    design/implementation choices or aspects you're unsure about in the weekly
+    Chrome OS security team meeting. This is useful so the rest of the team can
+    suggest useful alternative angles and to provide historical context and
+    high-level guidance on Chrome OS security philosophy.
+7.  If necessary, the security reviewer and feature owner will iterate to
+    resolve any questions or concerns. Use whatever means of communication seems
+    most appropriate to make progress. For simple questions, document comments
+    or email threads will work. For in-depth discussion of product requirements,
+    design choices, and implications on security assessment, it's usually better
+    to ask for a meeting. Note that it is generally the responsibility of the
+    feature owner to drive the review process to a conclusion. However, the
+    security reviewer should strive for clear communication on what remains to
+    be addressed at any point in the process. As you have probably realized by
+    now, the *Launch-Security* flag gets flipped between *NeedInfo* and
     *ReviewRequested* as the review progresses, always keeping track of who's
     responsible for the next action.
-8.  We're aiming to acknowledge a *ReviewRequested* flag within seven days.
-    This doesn't mean the review needs to be completed in seven days.
-    *ReviewRequested* means "the feature team has done everything they thought
-    they had to, and now they need input from the security team". It doesn't
-    mean "we solemnly swear the feature is 100% complete". Therefore, what we're
-    aiming to do within seven days is to unblock the feature team by letting
-    them know what the next step is. As explained in this list, the next step
-    could be more documentation, or an updated or more robust implementation.
-    In any of those cases, or if the feature is not really ready for review,
-    flip the review flag to *NeedInfo* and explain what's missing.
-9.  Once everything looks good, flip the review flag to *Launch-Security-Yes*.
-    Document conclusions and aspects that were specifically evaluated in the
-    security review in a bug comment. You can use the [review framework] to
-    structure this. The information in the comment is useful for future
-    reference when consulting previous security review decisions for guidance.
-    Also, in case aspects of a feature are later found to cause security issues,
-    it's useful to understand whether these aspects surfaced in the security
-    review and the reasoning behind review conclusions. Note that the purpose is
-    *not* to blame reviewers in case they have missed problems, but to help our
-    future selves understand how we can improve the process as needed (for
-    example by adding specific items to watch out for to the [review
-    framework]).
-10. In case the review reaches an impasse, don't just mark *Launch-Security-No*
-    as we're committed to engage productively as much as we can. Instead,
-    surface the current state of things and bring in relevant leads to figure
-    out a way forward.
+8.  We're aiming to acknowledge a *ReviewRequested* flag for the upcoming
+    milestone within seven days. This doesn't mean the review needs to be
+    completed in seven days. *ReviewRequested* means "the feature team has done
+    everything they thought they had to, and now they need input from the
+    security team". It doesn't mean "we solemnly swear the feature is 100%
+    complete". Therefore, what we're aiming to do within seven days is to
+    unblock the feature team by letting them know what the next step is. As
+    explained in this list, the next step could be more documentation, or an
+    updated or more robust implementation. In any of those cases, or if the
+    feature is not really ready for review, flip the review flag to *NeedInfo*
+    and explain what's missing.
+9.  Once everything looks good, the security reviewer should flip the review
+    flag to *Launch-Security-Yes* and document conclusions and aspects that were
+    specifically evaluated in the security review in a bug comment. The [review
+    framework] section is useful to structure this. The information in the
+    comment is intended for future reference when consulting previous security
+    review decisions for guidance. Also, in case aspects of a feature are later
+    found to cause security issues, it's useful to understand whether these
+    aspects surfaced in the security review and the reasoning behind review
+    conclusions. Note that the purpose is *not* to blame security reviewers in
+    case they have missed problems, but to help our future selves understand how
+    we can improve the process as needed (for example by adding specific items
+    to watch out for to the [review framework]).
+10. In case the review reaches an impasse, the security reviewer shouldn't just
+    mark *Launch-Security-No* as we're committed to engage productively as much
+    as we can. Instead, the current state of things should be surfaced and
+    relevant leads be consulted to figure out a way forward.
 
 ## Review framework - things to look at
 
@@ -433,7 +460,7 @@ These are our security principles:
     settings or decisions that have already been taken that can guide the
     decision? Can we identify relevant user segments automatically?
 *   *Defense in depth*: Layered security defenses are industry standard now. All
-    features must be evaluated under the assumption that one more more security
+    features must be evaluated under the assumption that one or more security
     boundaries are broken by attackers. What would be the correct system
     behavior under that scenario?
 *   *The perfect is the enemy of the good*: There's always room for improvement
