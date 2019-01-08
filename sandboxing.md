@@ -262,15 +262,18 @@ exec minijail0 -i -I -p -l -r -v -t -u mtp -g mtp -G \
 
 *   Generate the syscall log:
   `strace -f -o strace.log <cmd>`
-*   Cut off everything before the following for a smaller filter that can be
-    used with `LD_PRELOAD`:
+*   When sandboxing a dynamically-linked executable, Minijail will default to
+    using `LD_PRELOAD` to install the seccomp filter. This will install the
+    filter *after* glibc initialization, so remove the syscalls related to
+    glibc initialization to obtain a smaller filter (and a tighter sandbox).
+    Those are normally everything up to and including the following:
 
 ```
 rt_sigaction(SIGRTMIN, {<sa_handler>, [], SA_RESTORER|SA_SIGINFO, <sa_restorer>}, NULL, 8) = 0
 rt_sigaction(SIGRT_1, {<sa_handler>, [], SA_RESTORER|SA_RESTART|SA_SIGINFO, <sa_restorer>}, NULL, 8) = 0
 rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
 getrlimit(RLIMIT_STACK, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
-brk(NULL)                               = 0x7f8a0656e000
+brk(NULL)                               = <addr>
 brk(<addr>)                             = <addr>
 ```
 
@@ -279,6 +282,15 @@ brk(<addr>)                             = <addr>
 *   Test the policy (look at /var/log/messages for the blocked syscall when this
     crashes):
     *   `minijail0 -S seccomp.policy -L <cmd>`
+*   When not using the `-n` Minijail flag, privilege-dropping syscalls happen
+    after the filter is installed, and they won't show up in normal program
+    execution because they're called by Minijail itself. They need to be added
+    to the policy:
+    *   `setgroups(2)`, `setresgid(2)`, and `setresuid(2)` for dropping root.
+    *   `capget(2)`, `capset(2)`, and `prctl(2)` for dropping capabilities.
+    *   Normally, it's just easier to use the `-n` flag (`no_new_privs`),
+        which prevents the sandboxed process from obtaining new privileges and
+        is therefore a good addition for sandboxing.
 *   To find a failing syscall without having seccomp logs available (i.e., when
     minijail0 was run without the `-L` option):
     *   `dmesg | grep "syscall="` to find something similar to:
@@ -309,7 +321,7 @@ corresponding mount inside the namespace a shared or slave mount, see the
 [shared subtrees] doc.
 
 To set up a cryptohome daemon store folder that propagates into your daemon's
-mount namespace, add this code to the src_install section of your daemon's
+mount namespace, add this code to the `src_install` section of your daemon's
 ebuild:
 
 ```bash
@@ -320,12 +332,12 @@ fowners <daemon_user>:<daemon_group> "${daemon_store}"
 ```
 
 This directory is never used directly. It merely serves as a secure template for
-the chromeos_startup script, which picks it up and creates
+the `chromeos_startup` script, which picks it up and creates
 `/run/daemon-store/<daemon_name>` as a shared mount.
 
 In your daemon's init script, mount that folder as slave in your mount
 namespace. Be sure not to mount all of `/run` if possible. Make sure to mount
-with the MS_REC flag to propagate any already-mounted cryptohome bind mounts
+with the `MS_REC` flag to propagate any already-mounted cryptohome bind mounts
 into the mount namespace.
 
 ```bash
@@ -347,11 +359,11 @@ user data once the user's cryptohome is mounted. Note that even though
 `/run/daemon-store` is on a tmpfs, your data is actually stored on disk and not
 lost on reboot.
 
-**Be sure not to write to the folder before cryptohome is mounted**. Consider
-listening to Session Manager's `SessionStateChanged` signal or similar to detect
-mount events. Note that `/run/daemon-store/<daemon_name>/<user_hash>` might
-exist even though cryptohome is not mounted, so testing existence is not enough
-(it only works the first time).
+**Be sure not to write to the folder before the cryptohome is mounted**.
+Consider listening to Session Manager's `SessionStateChanged` signal or similar
+to detect mount events. Note that `/run/daemon-store/<daemon_name>/<user_hash>`
+might exist even though cryptohome is not mounted, so testing existence is not
+enough (it only works the first time).
 
 The `<user_hash>` can be retrieved with Cryptohome's `GetSanitizedUsername`
 D-Bus method.
