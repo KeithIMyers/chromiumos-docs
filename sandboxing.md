@@ -156,9 +156,12 @@ about -- most likely you aren't using it!).
     the `-b` (bind-mount) and `-k` (regular mount) flags.
 *   `--uts`: Just always turn this on. It makes changes to the host / domain
     name not affect the rest of the system.
-*   `-e`: If your process doesn't need network access (including UNIX or netlink
-    sockets).
+*   `-e`: If your process doesn't need network access. This also isolates netlink
+    and [UNIX _abstract_ sockets].  Note: D-Bus and syslog use _named_ UNIX sockets,
+    so they will still be usable (as long as you bind mounted them).
 *   `-l`: If your process doesn't use SysV shared memory or IPC.
+*   `-p`: If your process doesn't interact with other process PIDs (other than
+    child processes).
 
 The `-N` option does not work on Linux 3.8 systems. So only enable it if you know
 your service will run on a newer kernel version otherwise minijail will abort
@@ -166,6 +169,20 @@ for the older kernels ([Chromium bug 729690](https://crbug.com/729690)).
 
 *   `-N`: If your process doesn't need to modify common
     [control groups settings].
+
+### Passing Common Resources
+
+When using many namespaces to isolate a service, there are some resources
+that the service still reasonably should be able to access.
+
+*  syslog: You can pass access to the syslog daemon by using `-b /dev/log`.
+   You do not need to specify the writable flag to `-b` for this to work.
+   This will work across all namespaces (including `-e` network).
+*  D-Bus: You can access the system D-Bus by using `-b /run/dbus`.
+   You do not need to specify the writable flag to `-b` for this to work.
+   This will work across all namespaces (including `-e` network and `-p` pid).
+*  Nameservers: If you need to resolve hostnames (DNS), you'll need to pass
+   `-b /run/shill` as that daemon maintains the `/etc/resolv.conf` file.
 
 ## Seccomp filters
 
@@ -381,6 +398,7 @@ TODO(jorgelo)
 [Capabilities]: #Capabilities
 [Namespaces]: #Namespaces
 [Seccomp filters]: #Seccomp-filters
+[UNIX _abstract_ sockets]: http://man7.org/linux/man-pages/man7/unix.7.html
 
 [libchrome]: http://www.chromium.org/chromium-os/packages/libchrome
 [libbrillo]: http://www.chromium.org/chromium-os/packages/libchromeos
