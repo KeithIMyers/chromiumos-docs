@@ -222,7 +222,6 @@ Launch a VM from within the [Simple Chrome] environment:
 Follow instructions to [build Chromium OS] and a VM image. In the [chroot]:
 ```bash
 (chroot) ~/trunk/src/scripts $ export BOARD=betty
-(chroot) ~/trunk/src/scripts $ ./setup_board --board=$BOARD
 (chroot) ~/trunk/src/scripts $ ./build_packages --board=$BOARD
 (chroot) ~/trunk/src/scripts $ ./build_image \
 --noenable_rootfs_verification test --board=$BOARD

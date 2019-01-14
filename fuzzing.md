@@ -1158,7 +1158,7 @@ build the packages with sanitizers flags just like the builders.
 ```bash
 # Run setup_board with the fuzzer profile.
 # Use --profile=ubsan-fuzzer for ubsan issues.
-$ ./setup_board --board=amd64-generic --profile=fuzzer
+$ setup_board --board=amd64-generic --profile=fuzzer
 # Run build_packages to build the package and its dependencies.
 # Use USE="ubsan fuzzer" for ubsan issues.
 # Note that `--nousepkg` must be passed to avoid using prebuilts.

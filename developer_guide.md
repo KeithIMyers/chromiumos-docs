@@ -472,7 +472,7 @@ To start building for a given board, issue the following command inside your
 chroot (you should be in the `~/trunk/src/scripts` directory):
 
 ```shell
-(inside) ./setup_board --board=${BOARD}
+(inside) setup_board --board=${BOARD}
 ```
 
 This command sets up the board target with a default sysroot of
