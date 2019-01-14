@@ -57,6 +57,7 @@ Moreover, when you execute them, consider further restricting their privileges
 *   Use as many namespaces as possible. See section [Namespaces].
 *   Consider reducing the kernel attack surface exposed to your service by
     using seccomp filters, see section [Seccomp filters].
+*   Add your sandboxed service to the [security_SandboxedServices] test.
 
 ## User ids
 
@@ -399,6 +400,7 @@ TODO(jorgelo)
 [Namespaces]: #Namespaces
 [Seccomp filters]: #Seccomp-filters
 [UNIX _abstract_ sockets]: http://man7.org/linux/man-pages/man7/unix.7.html
+[security_SandboxedServices]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/client/site_tests/security_SandboxedServices/baseline
 
 [libchrome]: http://www.chromium.org/chromium-os/packages/libchrome
 [libbrillo]: http://www.chromium.org/chromium-os/packages/libchromeos
