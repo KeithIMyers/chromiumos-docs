@@ -1258,9 +1258,6 @@ ${CROSS_ARCH}-gdb \
 
 #### Errata
 
-*   [https://crbug.com/638723](https://crbug.com/638723): Linux commit
-    5516fd7b92a7 ("debug: prevent entering debug mode on panic/exception.")
-    breaks some handy KGDB-based workflows.
 *   KDB's `monitor ftdump` calls sleeping allocation functions (as of
     2016-11-17)
 *   [https://lkml.kernel.org/r/20161117191605.GA21459@google.com](https://lkml.kernel.org/r/20161117191605.GA21459@google.com)
