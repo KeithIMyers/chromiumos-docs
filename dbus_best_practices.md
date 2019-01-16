@@ -441,7 +441,7 @@ dbus-send --system --print-reply --type=method_call \
 [libchrome package]: https://android.googlesource.com/platform/external/libchrome/+/master/dbus/
 [libbrillo]: https://android.googlesource.com/platform/external/libbrillo/+/master/brillo/dbus/
 [DBusDaemon and DBusServiceDaemon classes]: https://android.googlesource.com/platform/external/libbrillo/+/master/brillo/daemons/dbus_daemon.h
-[chromeos-dbus-bindings]: https://chromium.googlesource.com/aosp/platform/external/dbus-binding-generator/+/master/chromeos-dbus-bindings/
+[chromeos-dbus-bindings]: https://chromium.googlesource.com/chromiumos/platform2/+/master/chromeos-dbus-bindings/
 [libdbus]: https://dbus.freedesktop.org/doc/api/html/index.html
 [dbus-glib]: https://dbus.freedesktop.org/doc/dbus-glib/
 [own object system]: https://developer.gnome.org/gobject/stable/gobject-The-Base-Object-Type.html
