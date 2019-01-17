@@ -554,14 +554,11 @@ memory-backed tmpfs), but most people aren't interested in those.
 
 ### Is FUSE supported? {#FUSE}
 
-Currently, no.
-We're looking into [supporting FUSE](https://crbug.com/841787) though.
+Yes, starting with M73. Note that unprivileged containers can't set up
+loopback mounts (see the [next question](#loop-mount)), so your FUSE driver of
+choice can't require a block device.
 
-We're waiting for the CrOS kernel to rebase on top of Linux-4.18+ as that
-version includes support for unprivileged FUSE mounts.
-Then we'll be able to update the [Termina] kernel to that.
-
-### Can I use loop devices?
+### Can I use loop devices? {#loop-mount}
 
 Currently, no.
 See the [previous question about mounting filesystems](#fs-mount).
