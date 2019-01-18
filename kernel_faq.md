@@ -396,7 +396,7 @@ original author and hash, and `-s` to sign-off-by the commit:
 ```
 repo sync .
 repo start my_upstream_commit .
-git cherry-pick -x -s` `<``upstream_commit_hash>
+git cherry-pick -x -s <upstream_commit_hash>
 ```
 
 Add TEST= and BUG= lines at the bottom of the patch description. Also, remember
