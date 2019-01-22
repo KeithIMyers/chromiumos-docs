@@ -244,8 +244,10 @@ You can now unplug the USB stick.
 
 Use your USB-to-Ethernet adapter to connect the device to a network.
 
-*Googlers*: You can use a corp Ethernet jack, which will place you on a special
-restricted network.
+*Googlers*: If your building has Ethernet jacks connected to the test VLAN
+(e.g. white ports), use one of those jacks. Otherwise get a second Ethernet
+adapter and see [go/shortleash] to reverse tether your Chromebook to your
+workstation.
 
 ### Checking the IP address
 
@@ -598,6 +600,7 @@ The legacy `GYP` build system is no longer supported.
 [VM]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md
 [Running a Chrome Google Test binary in the VM]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md#Run-a-Chrome-GTest-binary-in-the-VM
 [go/goldeneye]: https://cros-goldeneye.corp.google.com/chromeos/console/listBuild
+[go/shortleash]: https://goto.google.com/shortleash
 [debugging tips]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips
 [go/chrome-build-instructions]: https://companydoc.corp.google.com/company/teams/chrome/chrome_build_instructions.md
 [api-keys]: https://www.chromium.org/developers/how-tos/api-keys
