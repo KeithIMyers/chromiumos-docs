@@ -1,10 +1,10 @@
 # Chrome OS Security Severity Guidelines
 
-These are the severity guidelines for Chrome OS Security
-Issues. They are related to to the [Severity Guidelines for Chrome Security
-Issues]. One key difference between the Chrome and  Chrome OS security model is
-that Chrome OS needs to protect against physically local attackers in
-certain cases, such as at the lockscreen.
+These are the severity guidelines for Chrome OS Security Issues.
+They are related to to the [Severity Guidelines for Chrome Security Issues].
+One key difference between the Chrome and Chrome OS security models is that
+Chrome OS needs to protect against physically local attackers in certain cases,
+such as at the lockscreen.
 
 [TOC]
 
@@ -14,8 +14,8 @@ Critical severity issues breach vital security boundaries. The following
 boundaries are considered critical:
 
 *   Verified boot (any attack that persists across reboot)
-*   User isolation. One user can exploit another user or access
-    the encrypted data of another user (i.e. [crbug.com/764540])
+*   User isolation. One user being able to exploit another user or
+    access the encrypted data of another user (i.e. [crbug.com/764540])
 *   Native code execution via a remote vector
 *   Kernel code execution via a remote vector
 *   A lock screen bypass from the lockscreen
@@ -27,14 +27,14 @@ bugs, [SheriffBot] will automatically assign the milestone.
 > For critical vulnerabilities, we aim to deploy the patch to all
 > Chrome OS users in under 30 days.
 
-Critical vulnerability details may be made public in 60
-days, in accordance with Google's general
+Critical vulnerability details may be made public in 60 days,
+in accordance with Google's general
 [vulnerability disclosure recommendations], or [faster (7 days)],
 if there is evidence of active exploitation.
 
 A typical type of critical vulnerability on Chrome OS is
 an exploit chain comprising individual bugs that allows
-persistent root access on a machine, even on guest mode ([766253]).
+persistent root access on a machine, even in guest mode ([766253]).
 
 Note that the individual bugs that make up the chain will have lower
 severity ratings.
@@ -42,20 +42,20 @@ severity ratings.
 ## High Severity
 
 A high severity bug allows code execution in a sandboxed process. Bugs
-which would normally be critical severity with mitigating factors may be
-rated as high severity. Mitigating factors include:
+which would normally be critical severity may be rated as high severity
+when mitigating factors exist. These include:
 
 *   A specific user interaction is required to trigger the exploit.
     For example, a user must be tricked into typing something into an address
     bar, or the vulnerability requires a user to install an extension or
-    Android APK.
+    Android app.
 *   A small fraction of Chrome OS devices are affected due to hardware
     or kernel specific issues.
 
 The above might be generalized to: bugs that allow bypassing of protection
 domains are rated as High severity. A Chrome sandbox escapes allows
 bypassing the Chrome sandbox. A bug that allows code execution as the
-chronos user would also be rated High severity. The individual bug that
+`chronos` user would also be rated High severity. The individual bug that
 allows kernel code execution from root (or a regular user) would be rated
 High severity. The bug that allows for exploit persistence given root
 access would be rated High severity as well.
@@ -71,7 +71,7 @@ High-severity bugs:
 *   Persistent code execution
 
 Full chain exploits don't always need to break all these layers. For example,
-most persistent exploitation doesn't need a kernel exploit.
+most persistent exploitation chains don't need a kernel bug.
 
 They are normally assigned priority **Pri-1** and assigned to the current
 stable milestone (or earliest milestone affected). For high severity bugs,
@@ -114,6 +114,19 @@ Example bugs:
 They are normally assigned priority **Pri-2**. Milestones can be assigned
 to low severity bugs on a case-by-case basis, but they are not normally
 merged to stable or beta branches.
+
+## Security Impact Labels
+
+Security Impact labels are used to identify what release a particular
+security bug is present in.
+
+`Security_Impact-None` is used in the following cases:
+
+*   A bug is only present on trunk and has not made it to any channel
+    releases (except possibly the canary channel.)
+*   A bug is present in a component that is disabled by default.
+*   A bug is present in a package only used by a downstream consumer
+    of Chromium OS (like OnHub, WiFi, or Home devices.)
 
 ## Not Security Bugs
 
