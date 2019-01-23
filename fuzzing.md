@@ -1162,7 +1162,7 @@ $ ./setup_board --board=amd64-generic --profile=fuzzer
 # Run build_packages to build the package and its dependencies.
 # Use USE="ubsan fuzzer" for ubsan issues.
 # Note that `--nousepkg` must be passed to avoid using prebuilts.
-$ "USE=asan fuzzer" ./build_packages --board=amd64-generic --skip_chroot_upgrade --nousepkg <your_package>
+$ USE="asan fuzzer" ./build_packages --board=amd64-generic --skip_chroot_upgrade --nousepkg <your_package>
 ```
 
 Once the package and its dependencies have been built,
