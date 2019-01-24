@@ -85,9 +85,12 @@ possible.
     More user rather than engineering focused.  Sees many questions/bug reports
     that haven't been formally filed.  Chrome (browser) specified topics should
     be in the previous group.
-*   [chromeos-chatty-eng]: Internal mailing list for engineering questions.
-    While it is a high-volume "chatty" group, the focus is on Chrome OS.
-    Browser topics would be better served on browser-specific groups.
+*   [chromeos-chatty-eng]: Internal mailing list for general engineering
+    questions. While it is a high-volume "chatty" group, the focus is on Chrome
+    OS. Browser topics would be better served on browser-specific groups.
+*   [chromeos-chatty-kernel]: Internal mailing list for kernel questions.
+*   [chromeos-chatty-firmware]: Internal mailing list for firmware questions.
+
 
 ## FAQ
 
@@ -119,6 +122,8 @@ It has a section specifically about filing security sensitive bugs.
 [chromebook-central]: https://productforums.google.com/d/forum/chromebook-central
 [chrome-discuss]: http://g/chrome-discuss
 [chromeos-chatty-eng]: http://g/chromeos-chatty-eng
+[chromeos-chatty-kernel]: http://g/chromeos-chatty-kernel
+[chromeos-chatty-firmware]: http://g/chromeos-chatty-firmware
 [chromeos-discuss]: http://g/chromeos-discuss
 [chromium-dev]: https://groups.google.com/a/chromium.org/group/chromium-dev
 [chromium-extensions]: https://groups.google.com/a/chromium.org/group/chromium-extensions
