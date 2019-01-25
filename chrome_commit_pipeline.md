@@ -73,14 +73,9 @@ builders, since Chrome OS depends heavily on Chrome itself.
 
 ### The PFQ Informational builders
 
-There are two sets of continuous PFQ informational builders that apply the
-most recent Chrome changes to the most recent Chrome OS build and run several
-test suites:
-
-* [chromiumos.chromium] is public and tests the Chromium builds.
-    * It also includes asan and telemetry builders.
-* [chromeos.chrome] is internal and tests the official Chrome builds.
-    * It also tests 'cros chrome-sdk' (Simple Chrome) with official builds.
+Continuous PFQ builders in the [chrome_informational] group apply the most
+recent Chrome changes to the most recent Chrome OS build. This group also has
+open-source Chromium builders and a builder that runs telemetry unit tests.
 
 ### The PFQ builders
 
@@ -103,18 +98,20 @@ Chrome OS image and runs several test suites against the result.
     * Run VM tests on all non ARM builders.
     * Run HW tests on builders where HW is available, including ARC tests on
       boards that support it.
-    * Generate a Simple Chrome environment for developers.
-        * This generates a tarball that includes necessary dependencies from
-          the Chrome OS version used to build Chrome.
-        * These tarballs will be used by Simple Chrome once the [Chrome LKGM]
-          builder identifies a stable Chrome OS version from recent canary
-          builds.
-    * Test the Simple Chrome environment by building Chrome (in parallel with
-      HW tests).
+    * Verify the Simple Chrome environment for developers (in parallel with HW
+      tests).
+        * Download the tarball built by the respective Chrome OS "release" or
+          "full" builder that includes necessary dependencies for building
+          Chrome for Chrome OS.
+        * Test the [Simple Chrome workflow] with this tarball.
+        * If all non-experimental builders pass, the PFQ master generates a
+          Chromium CL to update `chromeos/CHROMEOS_LKGM` and sends it to the CQ.
+          This file determines which version of the tarball Simple Chrome will
+          try to download.
 
 
 [contributing code]: https://www.chromium.org/developers/contributing-code
-[commit queue]: https://dev.chromium.org/developers/testing/commit-queue
+[commit queue]: https://chromium.googlesource.com/chromium/src/+/master/docs/infra/cq.md
 [chromium.org]: http://www.chromium.org
 [codereview]: https://codereview.chromium.org/
 [win]: https://build.chromium.org/p/tryserver.chromium.win
@@ -123,8 +120,7 @@ Chrome OS image and runs several test suites against the result.
 [android]: https://build.chromium.org/p/tryserver.chromium.android/waterfall
 [chromium waterfall]: https://build.chromium.org/p/chromium/waterfall
 [linux-chromeos builders]: https://build.chromium.org/p/chromium.chromiumos/waterfall
-[PFQ]: https://uberchromegw.corp.google.com/i/chromeos/builders/master-chromium-pfq
-[chromiumos.chromium]: https://build.chromium.org/p/chromiumos.chromium/waterfall
-[chromeos.chrome]: https://uberchromegw.corp.google.com/i/chromeos.chrome/waterfall
+[PFQ]: http://go/legoland
+[chrome_informational]: http://go/legoland/builderSummary?buildBranch=master&builderGroups=chrome_informational
 [chromite/cbuildbot/binhost_test]: https://cs.corp.google.com/chromeos_public/chromite/cbuildbot/binhost_test.py
 [Chrome LKGM]: https://yaqs.googleplex.com/eng/q/5254238507106304
