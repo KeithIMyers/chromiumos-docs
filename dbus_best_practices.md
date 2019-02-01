@@ -52,10 +52,10 @@ use Chrome's bindings as well (as has been done for `session_manager`, `shill`,
 
 D-Bus communication consists of **messages**, which are typically either
 **method calls** or **signals**. A method call is a request from one process to
-another that generates a reply or an error. A signal is an asynchronous
-broadcast from one process that may be received by multiple processes. Both may
-have associated arguments, which may be written or read using the
-`dbus::MessageWriter` or `dbus::MessageReader` classes.
+another that generates a reply (sometimes also called a response) or an error. A
+signal is an asynchronous broadcast from one process that may be received by
+multiple processes. Both may have associated arguments, which may be written or
+read using the `dbus::MessageWriter` or `dbus::MessageReader` classes.
 
 When a process connects to `dbus-daemon`, it is assigned a **unique connection
 name**. Unique connection names are analogous to IP addresses. This name will
@@ -323,6 +323,50 @@ that are likely to be extended in the future, using protocol buffers with fields
 that have been marked `optional` (as opposed to `required`) makes it much easier
 to change messages later.
 
+As a hypothetical example, for a method named `MyMethod`, consider defining
+`MyMethodRequest` and `MyMethodResponse` (or `MyMethodReply`) protocol buffers
+and passing them (after serialization) as single input and output arguments:
+
+```proto
+// Passed to MyMethod.
+message MyMethodRequest {
+  optional int32 query_id = 1;
+  optional string query_text = 2;
+}
+
+// Returned by MyMethod.
+message MyMethodResponse {
+  optional string matched_text = 1;
+}
+```
+
+It's advisable to define dedicated request and response protocol buffers for the
+method even if it already operates on existing protocol buffers. For example, if
+the hypothetical `MyMethod` operates on a supplied `Foo` protocol buffer and
+produces a `Bar` protocol buffer, wrap the existing messages:
+
+```proto
+message MyMethodRequest {
+  optional Foo foo = 1;
+}
+
+message MyMethodResponse {
+  optional Bar bar = 1;
+}
+```
+
+This approach makes it possible to later add additional parameters while
+maintaining backward and forward compatibility, and without modifying the
+definitions of `Foo` and `Bar` (which may also be used elsewhere):
+
+```proto
+message MyMethodRequest {
+  optional Foo foo = 1;
+  optional int32 priority = 2;
+  optional string request_key = 3;
+}
+```
+
 Chrome's D-Bus bindings support serializing and deserializing generic protocol
 buffers: see `dbus::MessageWriter::AppendProtoAsArrayOfBytes()` and
 `dbus::MessageReader::PopArrayOfBytesAsProto()`.
@@ -340,6 +384,27 @@ the past, this subtlety has caused at least one [difficult-to-track-down bug].
 If your process exports method calls, make sure you always send replies or
 errors by running the `dbus::ExportedObject::ResponseSender` passed to your
 method callback.
+
+## Use D-Bus error replies when appropriate
+
+D-Bus contains the concept of an _error reply_. This is a subtype of a normal
+reply that is used to report errors. Chrome's bindings implement error replies
+via the `dbus::ErrorResponse` class.
+
+When reporting a simple failure in response to a method call, it's often best to
+send an error reply instead of sending a normal reply containing a boolean
+`success` argument or a protocol buffer with a `success` field. If errors are
+reported within normal replies, callers need to implement error handling at
+multiple levels:
+
+*   When a normal reply is received, the `success` arg needs to be inspected.
+*   Error replies will still be received if the method call failed at the bus
+    level, e.g. due to the receiver being unresponsive or not exporting the
+    called method.
+
+More-structured error reporting may still be needed in some cases, e.g. when
+error codes are returned, but note that D-Bus error replies also contain names
+that can be used to distinguish between different types of errors.
 
 ## Configure permissions correctly.
 
