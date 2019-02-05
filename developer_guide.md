@@ -106,12 +106,12 @@ Linux distro, so the only official supported environment is listed below. If you
 encounter issues with other setups, patches are generally welcomed, but please
 do not expect us to figure out your distro.
 
-*   [Ubuntu]  Linux (version 14.04 - Trusty)
+*   [Ubuntu] Linux (version 16.04 - Xenial)
 
-    Most developers working on Chromium OS are using Trusty (the LTS version of
-    Ubuntu). It is possible that things will work if you're running a different
-    Linux distribution, but you will probably find life easier if you're on this
-    one.
+    Most developers working on Chromium OS are using Xenial (the LTS version of
+    Ubuntu) and Debian testing. It is possible that things will work if you're
+    running a different Linux distribution, but you will probably find life
+    easier if you're on one of these.
 
 *   an x86_64 64-bit system for performing the build
 
