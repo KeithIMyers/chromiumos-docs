@@ -342,14 +342,14 @@ updating an existing test device if you have a Chrome OS checkout.
 
 ### Log files
 
-Chrome-related logs are written to several locations on the device:
+[Chrome-related logs] are written to several locations on the device running a
+test image:
 
 *   `/var/log/ui/ui.LATEST` contains messages written to stderr by Chrome
     before its log file has been initialized.
-*   `/var/log/chrome/chrome` contains messages logged by Chrome before a
-    user has logged in.
-*   `/home/chronos/user/log/chrome` contains messages logged by Chrome
-    after a user has logged in.
+*   `/var/log/chrome/chrome` contains messages logged by Chrome both before and
+    after login since Chrome runs with `--disable-logging-redirect` on test
+    images.
 *   `/var/log/messages` contains messages logged by `session_manager`
     (which is responsible for starting Chrome), in addition to kernel
     messages when a Chrome process crashes.
@@ -605,5 +605,6 @@ The legacy `GYP` build system is no longer supported.
 [go/chrome-build-instructions]: https://companydoc.corp.google.com/company/teams/chrome/chrome_build_instructions.md
 [api-keys]: https://www.chromium.org/developers/how-tos/api-keys
 [Goma]: https://sites.google.com/a/google.com/goma/
+[Chrome-related logs]: https://chromium.googlesource.com/chromium/src/+/lkgr/docs/chrome_os_logging.md
 [crbug.com/360342]: https://bugs.chromium.org/p/chromium/issues/detail?id=360342
 [crbug.com/403086]: https://bugs.chromium.org/p/chromium/issues/detail?id=403086
