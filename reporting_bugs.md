@@ -46,7 +46,15 @@ That covers how to securely and privately report issues to the right group.
 Please do *not* use the default [crbug.com/new] system as that creates public
 bugs which anyone can view.
 
-Note that we do not handle account compromises with your Google account
+Note that while the Chrome browser does not consider physically-local attacks to
+be inside its threat model, Chrome OS does include certain physically-local
+attacks in its threat model. The reason for this difference is that while the
+Chrome browser does not control the operating system it runs on, on Chrome OS we
+are responsible for the entire system. This means that Chrome OS does need to
+protect against certain physically-local attackers, such as at the lockscreen.
+See the [Chrome OS Security Severity Guidelines] for details.
+
+Also note that we do not handle account compromises with your Google account
 (e.g. someone stole your Gmail password).  Please see the
 [Google Account Help document](https://support.google.com/accounts/answer/7539929)
 and related articles instead.
@@ -152,3 +160,4 @@ If you think you've identified a bug in Chrome OS, please do the following:
 [crbug.com/new]: https://crbug.com/new
 [go/newcrosbug]: https://goto.google.com/newcrosbug
 [Reporting Security Bugs]: https://dev.chromium.org/Home/chromium-security/reporting-security-bugs
+[Chrome OS Security Severity Guidelines]: https://chromium.googlesource.com/chromiumos/docs/+/master/security_severity_guidelines.md
