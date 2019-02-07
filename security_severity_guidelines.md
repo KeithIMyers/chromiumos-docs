@@ -4,7 +4,7 @@ These are the severity guidelines for Chrome OS Security Issues.
 They are related to to the [Severity Guidelines for Chrome Security Issues].
 One key difference between the Chrome and Chrome OS security models is that
 Chrome OS needs to protect against physically local attackers in certain cases,
-such as at the lockscreen.
+such as at the lock screen.
 
 [TOC]
 
@@ -18,7 +18,7 @@ boundaries are considered critical:
     access the encrypted data of another user (i.e. [crbug.com/764540])
 *   Native code execution via a remote vector
 *   Kernel code execution via a remote vector
-*   A lock screen bypass from the lockscreen
+*   A lock screen bypass from the lock screen
 
 They are normally assigned priority **Pri-0** and assigned to the current
 stable milestone (or earliest milestone affected). For critical severity
@@ -109,7 +109,7 @@ severity, but which have extreme mitigating factors or highly limited scope.
 Example bugs:
 
 *   Someone with local access to the machine could disable security
-    settings without authenticating (i.e. disable the lockscreen).
+    settings without authenticating (i.e. disable the lock screen).
 
 They are normally assigned priority **Pri-2**. Milestones can be assigned
 to low severity bugs on a case-by-case basis, but they are not normally

@@ -51,7 +51,7 @@ be inside its threat model, Chrome OS does include certain physically-local
 attacks in its threat model. The reason for this difference is that while the
 Chrome browser does not control the operating system it runs on, on Chrome OS we
 are responsible for the entire system. This means that Chrome OS does need to
-protect against certain physically-local attackers, such as at the lockscreen.
+protect against certain physically-local attackers, such as at the lock screen.
 See the [Chrome OS Security Severity Guidelines] for details.
 
 Also note that we do not handle account compromises with your Google account
