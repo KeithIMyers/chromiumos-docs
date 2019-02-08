@@ -1,52 +1,121 @@
 ## Acronyms
 
-*   __CL__: "Change List", a set of changes to files (akin to a single git
-    commit).
+*   __3PL__: Third Party Labs.
+*   __ACLs__: Access Control Lists.
+*   __AFE__: Auto Test Front End.
+*   __AP__: Application Processor.
+*   __AU__: Auto Updates.
+*   __AVL__: Approved Vendor List.
+*   __BCS__: Binary Component Server.
+*   __BFT__: Board Function Testing.
+*   __BOM__: Bill of Materials.
+*   __BSP__: Board support package.
+*   __BVT__: Build & Verification Test.
+*   __CL__: "Change List", a set of changes to files (akin to a
+    single git commit).
+*   __CPFE__: Chrome OS Partner Front End.
 *   __CQ__: "Commit Queue", infrastructure to automatically
-    check/build/test/verify/etc... CLs before merging into the tree. See also
-    the [Chromium CQ] and [Chromium OS CQ] pages.
+    check/build/test/verify/etc... CLs before merging into the tree.
+    See also the [Chromium CQ] and [Chromium OS CQ] pages.
 *   __CRX file__: [CRX files](https://developer.chrome.com/extensions/hosting)
-    are ZIP files with a special header and the .crx
-    file extension used to package Extensions and Apps.
+    are ZIP files with a special header and the .crx file extension used to
+    package Extensions and Apps.
+*   __CTS__: Android Compatibility Test Suite.
 *   __CWS__: ["Chrome Web Store"](https://chrome.google.com/webstore/), used to
     host & distribute Chrome extensions.
-*   __DUT__: "Device under test", used to refer to the system running Chromium
-    [OS] and where tests are being executed.
-*   __GoB__: "Git-on-Borg" or "Gerrit-on-Borg" or "Gitiles-on-Borg" depending
-    on the context. Used as an umbrella term to refer to the git related
-    services on [chromium-review.googlesource.com] and
-    [chromium.googlesource.com].
-*   __GS__: "Google Storage", used to refer to Google Storage Buckets (e.g.
-    gs:// URIs).
-*   __GTTF__: "Green Tree Task Force"
-*   __LGTM__: "Looks good to me", commonly used to approve a code review.
-*   __LKCR__: "Last known compilable revision" - similar to LKGR (below), the
-    last build that compiled.
-*   __LKGM__: "Last known good manifest", the last manifest version that
-    passed a minimal set of tests.
-*   __MVP__: "Minimum viable product", used to refer to the subset of a
-    feature we want to ship initially.
-*   __PFQ__: "Preflight queue", used to describe bot configurations in the
-    waterfall that run to test/gate changes before they're allowed into the
-    tree for everyone to see. See also the PFQ FAQ.
-*   __PTAL__: "Please take a[nother] look", often used when someone is happy
-    with the state of a CL and want reviewers to look [again].
-*   __RSLGTM__: "Rubber stamp looks good to me", used when the reviewer is
-    merely granting OWNERS approval without doing a proper code review.
-*   __SGTM__: Secret Google Time Machine "Sounds good to me"
-*   __TBR__: "To be reviewed". In [specific circumstances](https://chromium.googlesource.com/chromium/src/+/master/docs/code_reviews.md#TBR-To-Be-Reviewed)
+*   __DPTF__: (Intel's) Dynamic Platform & Thermal Framework.
+*   __DUT__: "Device under test", used to refer to the system running
+    Chromium [OS] and where tests are being executed.
+*   __DVT__: Design Validation and Testing.
+*   __EC__: Embedded Controller.
+*   __EVT__: Engineering Validation and Testing.
+*   __FAFT__: Fully Automated Firmware Test.
+*   __FCS__: Final Customer Ship.
+*   __FFT__: Final Function Testing.
+*   __FSI__: Final Shipping Image.
+*   __FSP__: Firmware Support Package.
+*   __GBB__: Google Binary Block, a chunk of data stored in the NVRAM.
+    Contains variables related to boot and identity.
+*   __GERBER__: When ODM gives full set of files for board vendor
+     to make appropriate holes etc.
+*   __GRT__: Google Required Tests.
+*   __GS__: "Google Storage", used to refer to Google Storage Buckets
+    (e.g. gs:// URIs).
+*   __GTM__: Go To Market.
+*   __GTTF__: "Green Tree Task Force".
+*   __GoB__: "Git-on-Borg" or "Gerrit-on-Borg" or "Gitiles-on-Borg"
+    depending on the context. Used as an umbrella term to refer to
+    the git related services on [chromium-review.googlesource.com]
+    and [chromium.googlesource.com].
+*   __HDCP__: High Bandwidth Digital Content Protection.
+*   __HEDT__: High End Desktop.
+*   __HW WP__: Hardware Write Protect. Physical mechanism to prevent
+    disabling software write protect. Typically a signal grounded by
+    a screw.
+*   __IQC__: Incoming Quality Control.
+*   __LGTM__: "Looks good to me", commonly used to approve a code
+    review.
+*   __LKCR__: "Last known compilable revision" - similar to LKGR
+    (below), the last build that compiled.
+*   __LKGM__: "Last known good manifest", the last manifest version
+    that passed a minimal set of tests.
+*   __LOEM__: Local OEM, process model that different OEMs share
+    exactly same device (with no difference) that uses same firmware
+    code and disk image. Only OEM is different.
+*   __MLB__: Main Logic Board (aka motherboard).
+*   __MVP__: "Minimum viable product", used to refer to the subset of
+    a feature we want to ship initially.
+*   __NRE__: Non-Recoverable Engineering cost.
+*   __OGR__: OEM Gate Review Meetings.
+*   __OOBE__: Out-of-box experience.
+*   __OQC__: Ongoing Quality Control, check for sampling.
+*   __PCB__: Printed Circuit Board.
+*   __PCIe__: Peripheral Component Interconnect Express expansion bus
+    standard for connecting devices.
+*   __PCRs__: Platform Configuration Registers.
+*   __PDG__: Platform Design Guide.
+*   __PFQ__: "Preflight queue", used to describe bot configurations
+    in the waterfall that run to test/gate changes before they're
+    allowed into the tree for everyone to see.
+*   __PSR__: Panel Self Refresh (eDP).
+*   __PTAL__: "Please take a[nother] look", often used when someone
+    is happy with the state of a CL and want reviewers to look
+    [again].
+*   __PVT__: Production Validation and Testing.
+*   __PoR__: Process of Record / Plan of Record.
+*   __QAV__: Quality Assurance Verification.
+*   __RSLGTM__: "Rubber stamp looks good to me", used when the
+    reviewer is merely granting OWNERS approval without doing a
+    proper code review.
+*   __SGTM__: Secret Google Time Machine "Sounds good to me".
+*   __SI__: Signal Integrity.
+*   __SMT__: Surface-mount Technology.
+*   __SW WP__: Software Write Protect.
+*   __Servo__: a debugging board that connects via USB to a host
+    machine and a device under test.
+*   __TBR__: "To be reviewed". In
+    [specific circumstances](https://chromium.googlesource.com/chromium/src/+/master/docs/code_reviews.md#TBR-To-Be-Reviewed)
     used to land code and have it reviewed later.
-*   __ToT__: "Tip of Tree", as in the latest revision of the source tree.
+*   __TCPC__: Type C Port Controller.
 *   __TPM__: ["Trusted Platform Module"](https://en.wikipedia.org/wiki/Trusted_Platform_Module),
-    Tamper-resistant chip that the CPU can
-    talk to. Securely stores keys and does cryptographic ops. We use this to
-    encrypt the keys used to encrypt user files (to make passphrase recovery
-    more difficult). See also TpmQuickRef.
-*   __WAI__: "Working As Intended", e.g. the behavior described is not a bug,
-    but working as it is supposed to. This is not to say the intention cannot
-    change (as a feature request), simply that it is not a bug.
-*   __WIP__: "Work In Progress" - e.g. a patch that's not finished, but may be
-    worth an early look
+    Tamper-resistant chip that the CPU can talk to. Securely stores
+    keys and does cryptographic ops. We use this to encrypt the keys
+    used to encrypt user files (to make passphrase recovery more
+    difficult). See also TpmQuickRef.
+*   __ToT__: "Tip of Tree" or "Top of Tree", as in the latest
+    revision of the source tree.
+*   __UFS__: Universal Flash Storage.
+*   __UMA__: User Metrics Analysis.
+*   __VPD__: Vital Product Data.
+*   __WAI__: "Working As Intended", e.g. the behavior described is
+    not a bug, but working as it is supposed to. This is not to say
+    the intention cannot change (as a feature request), simply that
+    it is not a bug.
+*   __WIP__: "Work In Progress" - e.g. a patch that's not finished,
+    but may be worth an early look.
+*   __Zerg__: Process model for partner to build multiple new devices that only
+    had slight variance from the reference board (touch/no touch, etc…). These
+    devices share single firmware code and disk image.
 
 ## English Acronyms and Abbreviations
 
