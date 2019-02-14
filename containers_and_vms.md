@@ -125,12 +125,12 @@ OK, so you've got your container going, but what exactly can you expect to work?
 * Unaccelerated Graphics.
 * [Wayland] programs (preferred; via [Sommelier]).
 * [X] programs (compatibility via [Sommelier] and [XWayland]).
+* Audio output (not [capture/microphone](https://crbug.com/932268)) in R74+.
 
 ### Missing Features
 
 There's a lot of low-hanging fruit we're working on fleshing out.
 
-* [Audio support](https://crbug.com/781398).
 * Peripheral access ([USB](https://crbug.com/831850)/Bluetooth/etc...).
 * [Accelerated graphics](https://crbug.com/837073).
 * Video hardware decoding.
@@ -808,6 +808,31 @@ want this in order to justify the effort involved.
 
 Currently, no.
 You can star https://crbug.com/834585 for updates.
+
+### Is audio output supported?
+
+Yes, starting with R74 ([Termina] version 11707.0.0+).
+
+If you set up your contaier before audio support was deployed, it might not be
+configured correctly (as the default before was to output to the null device).
+You can try these steps to recover:
+
+```sh
+# Make sure the new cros-pulse-config package is installed.
+$ sudo apt-get update
+$ sudo apt-get dist-upgrade
+
+# Clear out existing pulse settings.
+$ rm -rf ~/.config/pulse
+
+# Turn it off & on again via crosh (Ctrl-Alt-T).
+crosh> vmc stop termina
+```
+
+### Is audio capture (e.g. microphone) supported?
+
+Currently, no.
+You can star https://crbug.com/932268 for updates.
 
 ### Can I access hardware (e.g. USB/Bluetooth/serial)?
 
