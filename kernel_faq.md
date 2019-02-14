@@ -1188,9 +1188,7 @@ Command Usage Description
 [...]
 ```
 
-### Other tips:
-
-#### Debugging modules:
+### Debugging modules
 
 You can get a list of modules and addresses in kgdb with `monitor` `lsmod`.
 Then you can add symbol files using the base addresses found there:
@@ -1208,7 +1206,7 @@ Ctrl-Z
 kill -9 %
 ```
 
-#### Multiplexing the console:
+### Multiplexing the console
 
 If you want to use both KGDB and a standard serial console over the same serial
 port, you need to run a program like `kdmx` or `agent-proxy` to multiplex your
@@ -1258,7 +1256,7 @@ ${CROSS_ARCH}-gdb \
          -ex "target remote localhost:5511"
 ```
 
-#### Errata
+### Errata
 
 *   KDB's `monitor ftdump` calls sleeping allocation functions (as of
     2016-11-17)
