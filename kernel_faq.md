@@ -633,17 +633,6 @@ run:
 (chroot) $ ./pack_partitions.sh chromiumos_image.bin
 ```
 
-## How to quickly test kernel modifications (the fastest way, outdated)
-
-**FIXME: The instructions the link leads to seem to apply only to ancient
-boards running U-Boot.**
-
-Please take a look at doc on [network-based
-development](http://dev.chromium.org/chromium-os/how-tos-and-troubleshooting/network-based-development).
-While setting up your environment might appear to be harder and more time
-consuming, in many cases it will allow to test kernel modifications much faster
-and easier than the ways described below.
-
 ## How to test kernel modifications (the slow and not recommended way)
 
 **Note:** there is more information (possibly more useful too) in the [disk
@@ -1274,3 +1263,16 @@ ${CROSS_ARCH}-gdb \
 *   KDB's `monitor ftdump` calls sleeping allocation functions (as of
     2016-11-17)
 *   [https://lkml.kernel.org/r/20161117191605.GA21459@google.com](https://lkml.kernel.org/r/20161117191605.GA21459@google.com)
+
+## Old stuff (may still work with some old boards)
+
+### How to quickly test kernel modifications (the fastest way, outdated)
+
+**FIXME: The instructions the link leads to seem to apply only to ancient
+boards running U-Boot.**
+
+Please take a look at doc on [network-based
+development](http://dev.chromium.org/chromium-os/how-tos-and-troubleshooting/network-based-development).
+While setting up your environment might appear to be harder and more time
+consuming, in many cases it will allow to test kernel modifications much faster
+and easier than the ways described below.
