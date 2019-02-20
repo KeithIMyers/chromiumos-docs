@@ -752,7 +752,7 @@ Note that you may need to authenticate to access the corpus and logs buckets
 using `gsutil`. See the documentation on [Configuring Authentication] for how to
 do this.
 
-## Using cros_fuzz
+## Using cros_fuzz {#script-cros-fuzz}
 
 `cros_fuzz` is a script we have provided to use within the Chrome OS SDK chroot.
 Its purpose is to make fuzzer development easier by automating important tasks.
@@ -1166,8 +1166,38 @@ $ USE="asan fuzzer" ./build_packages --board=amd64-generic --skip_chroot_upgrade
 ```
 
 Once the package and its dependencies have been built,
-[cros_fuzz](fuzzing.md#reproducing-crashes-from-clusterfuzz) can be used
+[cros_fuzz](#script-cros-fuzz) can be used
 to reproduce the issue using the downloaded testcase.
+
+### How do I run gdb on a fuzzer?
+
+If you want to to debug a fuzzer using gdb, you can do it through gdbserver.
+[cros_fuzz](#script-cros-fuzz) automatically
+copies `/usr/bin/gdbserver` to the board if present. `gdbserver` is provided by
+the chroot package `sys-devel/gdb` and can be installed as:
+
+```bash
+$ sudo emerge sys-devel/gdb
+```
+
+To debug a fuzzer binary using `gdbserver`, two separate cros_sdk chroot shells
+are needed.
+
+Shell 1:
+Start gdbserver on port 8888 with the binary.
+```bash
+$ cros_fuzz --board=<board> shell
+$ gdbserver :8888 /usr/libexec/fuzzers/<fuzzer>
+```
+
+Shell 2:
+Run gdb on the binary and attach to the gdbserver session.
+```bash
+$ gdb /build/<board>/usr/libexec/fuzzers/<fuzzer>
+  (gdb) target remote :8888
+  (gdb) set sysroot /build/<board>
+  (gdb) set breakpoints, debug as usual.
+```
 
 ## Getting help/Asking questions
 
