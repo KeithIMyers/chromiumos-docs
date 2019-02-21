@@ -176,9 +176,12 @@ for the older kernels ([Chromium bug 729690](https://crbug.com/729690)).
 When using many namespaces to isolate a service, there are some resources
 that the service still reasonably should be able to access.
 
-*  syslog: You can pass access to the syslog daemon by using `-b /dev/log`.
-   You do not need to specify the writable flag to `-b` for this to work.
-   This will work across all namespaces (including `-e` network).
+*  syslog: If using `-d` to mount a minimal /dev, you can pass access to the
+   syslog daemon by using `-b /dev/log`. If your process mounts all of /dev, you
+   need to use `-b /run/systemd/journal` since /dev/log is a symlink to
+   /run/systemd/journal/dev-log. In either case, you do not need to specify the
+   writable flag to `-b` for this to work. This will work across all namespaces
+   (including `-e` network).
 *  D-Bus: You can access the system D-Bus by using `-b /run/dbus`.
    You do not need to specify the writable flag to `-b` for this to work.
    This will work across all namespaces (including `-e` network and `-p` pid).
