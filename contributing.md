@@ -395,6 +395,10 @@ You're free to create as many branches as you want under your own namespace
 We leave it up to your discretion to properly manage these branches.
 Please don't abuse it by uploading large binary files that don't belong in git.
 
+When we say `${USER}`, we mean your username, **not** your e-mail address.
+The `@` in e-mail addresses do not work smoothly in all scenarios.
+e.g. Use `vapier` and not `vapier@chromium.org`.
+
 Further, the sandbox spaces are a bit loose with access.
 You can push to any path under `refs/sandbox/`, but we've all agreed to restrict
 ourselves to the `${USER}` subdir.
@@ -419,6 +423,14 @@ In a given repository, you can explore sandboxes using the `ls-remote` command:
 $ git ls-remote cros "refs/sandbox/${USER}/*"
 $ git ls-remote cros "refs/sandbox/*"
 ```
+
+Once uploaded, you can browse commits via [Gitiles].
+The URL will look like:
+`https://chromium.googlesource.com/${projectname}/+/sandbox/${USER}/${BRANCH_NAME}`.
+Note that the `refs/` part is omitted.
+
+If you want to preview markdown changes (e.g. `README.md`), check out
+[Previewing changes](./README.md#previewing-changes).
 
 Once you're finished with a sandbox, you can delete it:
 
@@ -478,6 +490,7 @@ $ git checkout ${BRANCH_NAME}
 [Developer Guide]: developer_guide.md
 [Gerrit]: https://gerrit-review.googlesource.com/Documentation/
 [Gerrit Guide]: https://dev.chromium.org/chromium-os/developer-guide/gerrit-guide
+[Gitiles]: https://gerrit.googlesource.com/gitiles/
 [internal CLA documentation]: https://chrome-internal.googlesource.com/chromeos/docs/+/master/signcla.md
 [issue tracker]: https://developers.google.com/issue-tracker/
 [issuetracker.google.com]: https://issuetracker.google.com/

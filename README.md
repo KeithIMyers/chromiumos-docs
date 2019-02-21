@@ -42,7 +42,8 @@ you can get your patch reviewed, and submit.
 
 ## Previewing changes
 
-You can preview your local changes using `scripts/preview_docs`:
+You can preview your local changes using `scripts/preview_docs` which utilizes
+[Gerrit sandbox branches]:
 
 ```bash
 scripts/preview_docs README.md
@@ -65,6 +66,7 @@ To review someone else's changes, apply them locally first, or just click the
 [Chromium OS]: https://www.chromium.org/chromium-os
 [Contributing]: contributing.md
 [rendered by Gitiles]: https://chromium.googlesource.com/chromiumos/docs/+/master/
+[Gerrit sandbox branches]: contributing.md#sandbox
 [Gitiles-flavored Markdown]: https://gerrit.googlesource.com/gitiles/+/master/Documentation/markdown.md
 [Chromium documentation guidelines]: https://chromium.googlesource.com/chromium/src/+/master/docs/documentation_guidelines.md
 [Chromium documentation best practices]: https://chromium.googlesource.com/chromium/src/+/master/docs/documentation_best_practices.md
