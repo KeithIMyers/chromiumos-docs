@@ -596,7 +596,7 @@ The legacy `GYP` build system is no longer supported.
 [additional debugging tips]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips#TOC-Enabling-core-dumps
 [chromite repo]: https://chromium.googlesource.com/chromiumos/chromite/
 [issue 437877]: https://bugs.chromium.org/p/chromium/issues/detail?id=403086
-[Cros Flash page]: https://www.chromium.org/chromium-os/build/cros-flash
+[Cros Flash page]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_flash.md
 [VM]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md
 [Running a Chrome Google Test binary in the VM]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md#Run-a-Chrome-GTest-binary-in-the-VM
 [go/goldeneye]: https://cros-goldeneye.corp.google.com/chromeos/console/listBuild
