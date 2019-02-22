@@ -1749,6 +1749,8 @@ ordered by relevance):
 *   The [Go in Chromium OS] page provides information on using [Go] in Chromium
     OS, including recommendations for project organization, importing and
     managing third party packages, and writing ebuilds.
+*   The [SELinux](selinux.md) page provides information on SELinux in Chrome
+    OS, including overview, writing policies, and trouboshooting.
 
 ### External documentation
 
