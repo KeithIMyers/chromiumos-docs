@@ -273,7 +273,7 @@ option:
 # Mount /proc, /sys, /dev, /run/udev so that USB devices can be
 # discovered.  Also mount /run/dbus to communicate with D-Bus.
 exec minijail0 -i -I -p -l -r -v -t -u mtp -g mtp -G \
-  -P /var/empty -b / -b /proc -b /sys -b /dev \
+  -P /mnt/empty -b / -b /proc -b /sys -b /dev \
   -k tmpfs,/run,tmpfs,0xe -b /run/dbus -b /run/udev \
   -n -S /usr/share/policy/mtpd-seccomp.policy -- \
   /usr/sbin/mtpd -minloglevel="${MTPD_MINLOGLEVEL}"
