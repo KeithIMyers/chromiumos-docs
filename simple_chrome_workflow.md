@@ -120,10 +120,10 @@ you encounter any DCHECK crashes.
 To build Chrome, run:
 
 ```
-(sdk) autoninja -C out_${SDK_BOARD}/Release chrome chrome_sandbox nacl_helper
+(sdk) autoninja -C out_${SDK_BOARD}/Release chrome nacl_helper
 ```
 
-> **Note**: Targets other than **chrome, chrome_sandbox, nacl_helper** or
+> **Note**: Targets other than **chrome**, **nacl_helper** or
 > (optionally) **chromiumos_preflight** are not supported in Simple Chrome and
 > will likely fail. browser_tests should be run outside the Simple Chrome
 > environment. Some unit_tests may be built in the Simple Chrome environment and
