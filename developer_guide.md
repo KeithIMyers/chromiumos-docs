@@ -1685,6 +1685,20 @@ mind.
 
 ## Additional information
 
+### Updating the chroot
+
+If you run `setup_board` or `build_packages` very infrequently, changes
+don't apply to your chroot, despite regularly running `repo_sync` (which
+updates your _source tree_). In this situation, you should periodically run
+`update_chroot` inside your chroot, else things may break if you
+run `repo sync` and run a few emerge commands without updating the SDK.
+`setup_board` and `build_packages` implicitly call `update_chroot`, keeping
+the SDK up-to-date.
+
+```shell
+(cr) ((...)) johnnyrotten@flyingkite ~/trunk/src/scripts $ ./update_chroot
+```
+
 ### Toolchain Compilers
 
 At any given time in the chroot, to see what cross-compiler version is the
