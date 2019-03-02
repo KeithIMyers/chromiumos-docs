@@ -14,34 +14,34 @@ In this documentation, it will briefly introduce
 This documentation contains many SELinux terms. It will be explained in this
 section.
 
-- `SELinux`: short for `Security-Enhanced Linux`. It provides MAC(Mandatory
+- `SELinux`: short for `Security-Enhanced Linux`. It provides MAC (Mandatory
   Access Control) to Linux. It defines (SELinux) a context for each object no
   matter if it's a process, normal file, directory, link, a socket, etc. When
-  the actor(subject) requests to use a permission on the object, it checks the
+  the actor (subject) requests to use a permission on the object, it checks the
   predefined policy to see if it's allowed or not. If the policy does not allow
   the action, then the calls that require this permission are denied. Automatic
   transition upon executing, or creation of a file is also possible.
 - `security context`: Security context, also known as security label, is a
   string containing multiple parts, used to identify the process to look up
-  seucurity rules before granting or denying access to certain permissions.
+  security rules before granting or denying access to certain permissions.
   - `domain`: the `security context` for a process can be called as `domain`.
   - `parts`: The security context consists of 4 parts,
     `<user>:<role>:<type>:<range>`. For the syslog file `/var/log/messages`, it
     looks like `u:object_r:cros_syslog:s0`, and for a process like upstart, it
     looks like `u:r:cros_init:s0`.
-    - `user`: to identify an SELinux user. not related to POSIX user. Chrome OS
+    - `user`: identifies an SELinux user (not related to POSIX user). Chrome OS
       doesn't use multi-user. The only user is `u`.
-    - `role`: to identify an SELinux role. Chrome OS doesn't use multi-role. The
-      role for files is `object_r`, and for process(including /proc/PID/*) is
-      `r`.
+    - `role`: identifies an SELinux role. Chrome OS doesn't use multi-role. The
+      role for files is `object_r`, and for process (including `/proc/PID/*`)
+      is `r`.
     - `type`: this is the most basic and important part in the security context.
       It's a string that independent from each other. For Chrome OS, it's the
-      key part to identify the process, or file, for rules look-up.
+      key part to identify the process or file for rules look-up.
     - `range`: range contains combinations of security classes and security
-      levels. security classes are indepenet from each other, while one security
-      levels is dominated by another one. Chrome OS doesn't use multi-class
-      security or multi-level security, but ARC container runnning Android
-      program is using MCS and MLS.
+      levels. Security classes are independent from each other, while one
+      security levels is dominated by another one. Chrome OS doesn't use
+      multi-class security or multi-level security, but ARC container runnning
+      Android program is using MCS and MLS.
 - `attributes`: attribute is a named group of types.
 - `rules`: rules defines whether an access request should be allowed, or logged,
   and how the security context will transit after the access.  Common rules to
@@ -78,12 +78,10 @@ section.
         and etc auto-inherits label from its parent.
 
 
-For more details, it can be referred from
+For more details:
 
-[Security Context](https://selinuxproject.org/page/NB_SC)
-
-[Object Classes and Their
-Permissions](https://selinuxproject.org/page/ObjectClassesPerms)
+*   [Security Context](https://selinuxproject.org/page/NB_SC)
+*   [Object Classes and Their Permissions](https://selinuxproject.org/page/ObjectClassesPerms)
 
 ## SELinux in Chrome OS boot process
 
@@ -144,7 +142,7 @@ in wpa_supplicant.conf.
 
 The earlier one, without a small script, kernel SELinux subsystem will
 auto-transits the domain from `u:r:cros_init:s0`, `u:r:minijail:s0` upon
-executing `/sbin/minijail0`, and then auto-transitst to `u:r:cros_rsyslogd:s0`
+executing `/sbin/minijail0`, and then auto-transits to `u:r:cros_rsyslogd:s0`
 upon executing `/usr/sbin/rsyslogd` so the AVC for domain `u:r:cros_rsyslogd:s0`
 can be applied to the process. From now in the process, anything file access,
 port usages, network usages, capability request, module load, and etc, will be
@@ -159,7 +157,7 @@ the simple embedded scripts together. Complex script or script needing
 permissions more than file, or directory read, write, or creation, or exec,
 should be avoided in the simple script, and should use a separate script. Within
 the script, it will auto-transits to other domains upon executing the service
-program, directly(for example, `exec /usr/sbin/rsyslogd` or indirectly (via
+program, directly (for example, `exec /usr/sbin/rsyslogd` or indirectly (via
 minijail0 the same as above).
 
 #### Separate script to start the service
@@ -211,11 +209,13 @@ This can be confined together with `u:r:cros_init_script:s0` since
 Like startup script, there're still very small number of services, using an
 external script file for the startup. For example `pre-start exec
 /usr/share/cros/init/shill-pre-start.sh` in shill.conf. This can be either
-separate domains if they involves complex permissions like mounting/umounting
+separate domains if they involves complex permissions like mounting/unmounting
 filesystems, loading/unloading kernel modules, or special capabilities.
+
 ## How to write SELinux policy for Chrome OS
 
 TBD
+
 ## Troubleshooting
 
 ### How to rule out SELinux a possible cause of a problem
@@ -285,7 +285,7 @@ We'll walk through this audit log as an example.
 - `type=1400` means it's an AVC audit log. So it's not what we care about. In
   most cases, you're looking at this kind of audit logs.
 - `denied` means this permission usage is denied. The other result here could be
-  `granted`, `granted` is only printed the the AVC rule has **auditallow** rules
+  `granted`, `granted` is only printed if the AVC rule has **auditallow** rules
   like `auditallow domainA domainB:file read`.
 - `{ read }` means the permission requested is `read`, there could be many
   different kind of permissions, like `open`, `execute`, `append`, `name_bind`,
@@ -462,7 +462,7 @@ we'll fix it.
 
 ##### Writing policy fix
 
-1. Identify whether labebling files is needed. If yes, label the files either in
+1. Identify whether labeling files is needed. If yes, label the files either in
    file_contexts or via type_transition.
 
 1. Fix the program or add `dontaudit` rule to prevent from spamming logs if it
@@ -493,7 +493,7 @@ writing policies.
    not suppressed by printk limit.
 
 1. `USE="selinux_experimental"`: build with SELinux mode in permissive by
-   default. This is equivlant to manually changing `SELINUX=permissive` in
+   default. This is equivalant to manually changing `SELINUX=permissive` in
    `/etc/selinux/config`
 
 1. `USE="selinux_audit_all"`: remove all the `dontaudit` rule before compiling
