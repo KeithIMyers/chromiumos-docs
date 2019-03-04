@@ -9,6 +9,7 @@ In this documentation, it will briefly introduce
   - How to troubleshooting SELinux in Chrome OS.
 
 [TOC]
+
 ## Terms in This Documentation
 
 This documentation contains many SELinux terms. It will be explained in this
@@ -214,7 +215,246 @@ filesystems, loading/unloading kernel modules, or special capabilities.
 
 ## How to write SELinux policy for Chrome OS
 
-TBD
+SELinux policy contains definitions of classes, access vectors (list of
+permissions), security contexts (types, users, roles, and ranges), access vector
+rules, and transition rules.
+
+For most developers the necessary classes, access vectors, users, roles, and
+ranges have already been defined. The most common workflow will be defining new
+rules only.
+
+### Defining Types
+
+Types can be defined in the following syntax
+
+```
+type <type_name>[, <attribute1>, <attribute2>, ...];
+```
+
+This defines a type named `<type_name>`, and optionally add the atributes:
+`<attribute1>`, `<attribute2>`, ...
+
+Also, for an already defined type `<type_name>`, it can add an additional
+attribute `<attributeN>` by using the following syntax:
+
+```
+typeattribute <type_name>, <attributeN>;
+```
+
+While attributes can be defined in
+
+```
+attribute <attribute>;
+```
+
+### File Contexts
+
+#### System Image
+
+File contexts for files in system image is defined in
+`platform2/sepolicy/file_contexts/chromeos_file_contexts`.
+
+Each line defines a path and its security context. For example,
+
+```
+/sbin/init u:object_r:chromeos_init_exec:s0
+```
+
+It defines the security context (label) for file `/sbin/init` to be
+`u:object_r:chromeos_init_exec:s0`. Security context here must be complete
+security context containing user, role, type, and range. Type-only will not
+work. Chrome OS files always use `u` as user, `object_r` as role, and `s0` as
+range for files in system image.
+
+The path can also be an regular expression. For example
+
+```
+/usr/share/zoneinfo(/.*)? u:object_r:cros_tz_data_file:s0
+```
+
+Defined file labels are labelled during `build_image` phase. A simple `emerge`
+invocation won't label files in the build directory. `cros deploy` doesn't label
+it either.
+
+#### Runtime Files
+
+Runtime files consistents of persistent runtime files in stateful partition (for
+example, /var/lib, /var/log), and volatile runtime files in tmpfs (for example,
+/run).
+
+##### At creation
+
+Both runtime files needs to be created at the correct security context. Relabel
+are prohibited in general, except for policy upgrades.
+
+Creation label can be handled by either
+[`setfscreatecon`(3)](https://manpages.ubuntu.com/manpages/bionic/en/man3/setfscreatecon.3.html)
+from `libselinux`, or type transition rules.
+
+Type transition is recommended since it doesn't require to modify the program to
+be SELinux-aware. Developers should try their best to make sure files that need
+type transition on creation, are created at a unique path to reduce the usage of
+file name in the type transition rules. For example, only the daemon process
+create the corresponding directory like `/var/lib/<service>`,
+`/var/log/<service>`, etc, not startup script, nor some random tests.
+
+```
+filetrans_pattern(<domain>, <contextA>, <contextB>, file|dir|...);
+filetrans_pattern(<domain>, <contextA>, <contextB>, file|dir|..., <file name>);
+```
+
+Above macros, provides ability when `<domain>` create a file|dir|... under
+`<contextA>`, the created file|dir|... will be lablled as `<contextB>`. If the
+`<file name>` is provided, only created file|dir|... with exact name will be
+labelled as `<contextB>`.
+
+For example,
+
+```
+filetrans_pattern(cros_rsyslogd, cros_var_log, cros_syslog, file, "messages");
+```
+
+will label "messages" created by process in `cros_rsyslogd` domain under
+directory with `cros_var_log` type be labelled as `cros_syslog`. Thus, the
+created structure will look like
+
+```
+/var/log => u:object_r:cros_var_log:s0
+/var/log/messages => u:object_r:cros_syslog:s0
+```
+
+##### Persistent label for upgrades or recoveries
+
+For files under persistent path, e.g. /var/lib, or /var/log, the fullpath based
+file label **MUST** also be defined in `chromeos_file_contexts` together with
+system image.
+
+This is to make sure when policy upgrades, the new label can be restored upon
+startup script without the need to recreate the files.
+
+### Access Vector Rules
+
+### Type Transition
+
+Transition rules controls auto type transition upon creating of an object (file,
+dir, sock_file, etc.), or executing an executables.
+
+`type_transition` share the same syntax for both file type and process type,
+
+```
+type_transition `source_type` `target_type` : `class` new_type [object name];
+```
+
+#### File Type Transition
+
+For file type transition, when processes running in `source_type` create a
+`class` (file, dir, etc) under `target_type`, the created object is labeled as
+`new_type` by default.
+
+The same example as bove would be
+
+```
+type_transition cros_rsyslogd cros_var_log:file cros_syslog "messages";
+```
+
+`filetrans_pattern` macro wraps the type_transition rule and necessary AV rule
+to one single macro to let creating object as a different type more easily.
+
+#### Process Type Transition
+
+For process transition, when a process running in `source_type` execute an
+executable labelled as `target_type`, the process automatically transits to
+`new_type`.
+
+The example is
+
+```
+type_transition minijail cros_anomaly_collector_exec:process cros_anomaly_collector;
+```
+
+When a process under minijail execute a file labelled as
+cros_anomaly_collector_exec, the after-exec process will be running under
+cros_anomaly_collector domain.
+
+There's also a useful macro like `filetrans_pattern` for process type transition
+that wraps not only type_transition rule but also corresponding AV rules, called
+`domain_auto_trans`. The detail will be explained the later sections.
+
+Besides type_transition rule, there're also some other type rules that's less
+frequently used, it can be referred from [SELinux Project
+Wiki](https://selinuxproject.org/page/TypeRules)
+
+### Useful Macros in Chrome OS
+
+- filetrans_pattern
+
+  - Syntax:
+
+    ```
+    filetrans_pattern(source_type, target_type, new_type, class);
+    filetrans_pattern(source_type, target_type, new_type, class, object_name);
+    ```
+
+  - Explanation:
+
+    When a process running in `source_type` creates an object in `class` (file,
+    dir, etc), in directory labelled as `target_type`. If the object name
+    matches `object_name`, the created object is automatically labelled as
+    `new_type`.
+
+    `source_type`, or `target_type` can be an attribute.
+
+    `object_name` is optional. If `object_name` is not provided, all objects
+    with the `class` created under `target_type` by `source_type` will be
+    `new_type`, no matter what name the new object is.
+
+    This macro will also grants necessary access for the creation, it will allow
+    - `source_type` to create a `class` as `new_type`.
+    - `source_type` to `add_name` in a directory labelled as `target_type`
+
+  - Example:
+
+    ```
+    filetrans_pattern(cros_rsyslogd, cros_var_log, cros_syslog, file, "messages");
+    filetrans_pattern(chromeos_startup, cros_var, cros_var_log, dir, "log");
+    filetrans_pattern(cros_rsyslogd, tmpfs, cros_rsyslogd_tmp_file, file);
+    filetrans_pattern({cros_session_manager cros_browser}, cros_run, arc_dir, dir, "chrome");
+    filetrans_pattern(cros_browser, arc_dir, wayland_socket, sock_file, "wayland-0");
+    ```
+
+- domain_auto_trans
+
+  - Syntax:
+
+    ```
+    domain_auto_trans(source_domain, exec_type, new_domain);
+    ```
+
+  - Explanation:
+
+    When a process running in `source_domain`, executes a `file` labelled as
+    `exec_type`, it becomes a process running in `new_domain`.
+
+    The macro will also grants necessary for the execution, it will allow
+    - `source_domain` to `execute` `exec_type`.
+    - use `exec_type` as the entrypoint of `new_domain`.
+
+  - Example:
+
+    ```
+    domain_auto_trans(minijail, cros_rsyslogd_exec, cros_rsyslogd);
+    # source_domain chromeos_domain is an attribute.
+    domain_auto_trans(chromeos_domain, minijail_exec, minijail);
+    domain_auto_trans(cros_init, cros_unconfined_exec, chromeos);
+    ```
+
+### Naming Conventions
+
+TODO
+
+### Practice in Examples
+
+TODO
 
 ## Troubleshooting
 
