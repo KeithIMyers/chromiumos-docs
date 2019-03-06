@@ -788,6 +788,7 @@ This command creates the file
     ToT. 'betty' is based on 'amd64-generic', though, so 'amd64-generic' is
     likely to also work.
 *   Only KVM/QEMU VM's are actively supported at the moment.
+*   If you built a `test` image, you also need to add the `--test` flag.
 *   You can specify source/destination paths with the `--from` and `--to`
     parameters.
 *   If you're interested in creating a test image (used for integration
