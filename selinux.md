@@ -116,7 +116,7 @@ but also some pre-startup, or short-lived script.
 Simple service startups are simply written in `<service-name>.conf` like
 
 ```
-exec /sbin/minijail0 -l --uts -i -v -e -t -P /var/empty -T static \
+exec /sbin/minijail0 -l --uts -i -v -e -t -P /mnt/empty -T static \
     -b / -b /dev,,1 -b /proc \
     -k tmpfs,/run,tmpfs,0xe -b /run/systemd/journal,,1 \
     -k tmpfs,/var,tmpfs,0xe -b /var/log,,1 -b /var/lib/timezone \
