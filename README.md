@@ -54,7 +54,7 @@ refs/sandbox/ push permission, but has somewhat inaccurate rendering:
 
 ```bash
 # at top of Chromium OS checkout
-./chromium/src/tools/md_browser/md_browser.py -d docs
+./src/chromium/src/tools/md_browser/md_browser.py -d docs
 ```
 
 Then browse to e.g.
