@@ -1146,8 +1146,7 @@ trouble passing some check.
 
 *   The options above may not be enough for a complicated format. There are
     other tools such as libprotobuf-mutator that allow you to specify a format
-    for libFuzzer to mutate, which you then convert into raw bytes. It is not
-    yet supported in Chrome OS (follow [issue 853017] for updates).
+    for libFuzzer to mutate, which you then convert into raw bytes.
 
 ### How do I reproduce issues found in a third party library? {#third-party-crashes}
 
