@@ -450,7 +450,64 @@ Wiki](https://selinuxproject.org/page/TypeRules)
 
 ### Naming Conventions
 
-TODO
+Chrome OS policies will be combined with Android policy before compiling into
+final monolithic policy. Therefore care should be taken to ensure names don't
+conflict with Android policies.
+
+We use the following naming conventions to reduce possibilities of conflicts.
+
+1. Labels created and used before June 2018, including files and directories in
+   the stateful partition, are most likely being used in multiple Android
+   branches, and can be difficult to remove. To reduce the chance of breakage,
+   these files and directories remains on original label even it doesn't fit
+   into the naming conventions.
+
+1. minijail domain is `u:r:minijail:s0` or `u:r:<something>_minijail:s0`. Most
+   minijails should fall in the earlier one since that is the label used for
+   minijail processes started from init or init scripts.
+
+1. All Chrome OS files or processes should have its type prefixed with `cros_`
+   unless it's described in previous rules.
+
+1. Individual executables that desire automatic domain transition on execution
+   must has its type suffixed with `_exec`. Usually these executables are
+   labelled as `u:object_r:cros_<something>_exec:s0`
+
+1. Regarding runtime files
+
+  1. `/var/a/b/c/...` except `/var/run/*` (as /var/run is a bind-mount of /run),
+  should be labelled in type `cros_var_a_b_c`. For example, `/var/lib/chaps`,
+  should be labelled as `u:object_r:cros_var_lib_chaps:s0`.
+
+  1. `/run/a/b/c/...` should be labelled as `cros_run_a_b_c`.
+
+  1. The rule for choosing `c` at which level is not enforced. It's ususally
+  chosen by a level that you want to isolate access. `c` should be at least the
+  same depth as `/run/<service-name>` or `/var/{lib, spool}/<service-name>`, but
+  can be deeper if a special isolation of some files is necessary.
+
+  1. A simple pid or temporary state file in random tmpfs, can be labelled
+  with type `cros_<something>_tmpfile` or `cros_<something>_pid_file`, and the
+  type must have an attribute `cros_tmpfile_type`.
+
+1. Regarding domains
+
+  In general, each service should have its own domain, named in format of
+  `u:r:cros_<service-name>:s0`.
+
+1. Regarding attributes
+
+  1. The prefix rule still applies to attributes.
+
+  1. Attributes for files must suffix with `_type`, for example,
+     `cros_tmpfile_type`, and `cros_labeled_dev_type`.
+
+  1. Attributes for domains must suffix with `_domain` or `domain`, for example,
+     `cros_miscdomain`, `cros_bootstat_domain`. Suffixing with `_domain` is
+     preferred over `domain`.
+
+  1. There's one special attribute for domain, named `chromeos_domain`. All
+     domains outside ARC container should have this attribute.
 
 ### Practice in Examples
 
