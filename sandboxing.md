@@ -356,10 +356,23 @@ This directory is never used directly. It merely serves as a secure template for
 the `chromeos_startup` script, which picks it up and creates
 `/run/daemon-store/<daemon_name>` as a shared mount.
 
-In your daemon's init script, mount that folder as slave in your mount
-namespace. Be sure not to mount all of `/run` if possible. Make sure to mount
-with the `MS_REC` flag to propagate any already-mounted cryptohome bind mounts
-into the mount namespace.
+Next, move the user/group setup to `pkg_setup()` since `pkg_preinst()`, where
+this is usually done, runs after `src_install()`:
+
+```bash
+pkg_setup() {
+	# Has to be done in pkg_setup() instead of pkg_preinst() since
+	# src_install() needs <daemon_user> and <daemon_group>.
+	enewuser <daemon_user>
+	enewgroup <daemon_group>
+	cros-workon_pkg_setup
+}
+```
+
+In your daemon's init script, mount the daemon store folder as slave in your
+mount namespace. Be sure not to mount all of `/run`. Make sure to mount with the
+`MS_REC` flag to propagate any already-mounted cryptohome bind mounts into the
+mount namespace.
 
 ```bash
 minijail0 -v -Kslave \
