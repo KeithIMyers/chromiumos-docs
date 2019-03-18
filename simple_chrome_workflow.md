@@ -45,6 +45,13 @@ slowly and fail with "Login Required" from gsutil.
 When prompted for a project ID, enter `134157665460` (this is the Chrome OS
 project ID).
 
+### Install build deps
+
+You'll also need to pull in Android native toolchain dependencies to build
+ARC++ support libraries. This is done by running the
+[install-build-deps-android.sh] script in Chrome's source code, located at
+`$CHROME_DIR/src/build/install-build-deps-android.sh`.
+
 ### VM versus Device
 
 The easiest way to develop on Chrome OS is to use a [VM].
@@ -604,6 +611,7 @@ The legacy `GYP` build system is no longer supported.
 [debugging tips]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips
 [go/chrome-build-instructions]: https://companydoc.corp.google.com/company/teams/chrome/chrome_build_instructions.md
 [api-keys]: https://www.chromium.org/developers/how-tos/api-keys
+[install-build-deps-android.sh]: https://chromium.googlesource.com/chromium/src/+/master/build/install-build-deps-android.sh
 [Goma]: https://sites.google.com/a/google.com/goma/
 [Chrome-related logs]: https://chromium.googlesource.com/chromium/src/+/lkgr/docs/chrome_os_logging.md
 [crbug.com/360342]: https://bugs.chromium.org/p/chromium/issues/detail?id=360342
