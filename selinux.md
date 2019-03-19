@@ -369,12 +369,12 @@ executable labelled as `target_type`, the process automatically transits to
 The example is
 
 ```
-type_transition minijail cros_anomaly_collector_exec:process cros_anomaly_collector;
+type_transition minijail cros_anomaly_detector_exec:process cros_anomaly_detector;
 ```
 
 When a process under minijail execute a file labelled as
-cros_anomaly_collector_exec, the after-exec process will be running under
-cros_anomaly_collector domain.
+cros_anomaly_detector_exec, the after-exec process will be running under
+cros_anomaly_detector domain.
 
 There's also a useful macro like `filetrans_pattern` for process type transition
 that wraps not only type_transition rule but also corresponding AV rules, called
