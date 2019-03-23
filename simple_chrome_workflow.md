@@ -563,6 +563,17 @@ R27-3789.0.0).
 
 See the [Cros Flash page] for more details.
 
+### Running tests
+
+Chrome's unit and browser tests are compiled into test binaries, but these are
+not meant to be run on a Chrome OS device, even for tests specific to Chrome OS.
+To run them, follow the [instructions for running tests on Linux] using a
+separate GN build directory with `targetos = "chromeos"` in its arguments. (You
+can create one using the `gn args` command.)
+
+If you're running tests which create windows on-screen, you might find the
+instructions for using an embedded X server in [web_tests_linux.md] useful.
+
 ### Setting a custom prompt
 
 By default, cros chrome-sdk prepends something like '`(sdk link R52-8315.0.0)`'
@@ -592,6 +603,7 @@ The legacy `GYP` build system is no longer supported.
 [Set up the Chrome OS device]: #set-up-the-chrome-os-device
 [OS development guide]: https://chromium.googlesource.com/chromiumos/docs/+/master/developer_guide.md
 [Chrome source code and depot_tools]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md
+[instructions for running tests on Linux]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md#Running-test-targets
 [update .gclient]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/chromeos_build_instructions.md#updating-your-gclient-config
 [Chrome OS board name]: https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices
 [GN build configuration]: https://www.chromium.org/developers/gn-build-configuration
@@ -616,3 +628,4 @@ The legacy `GYP` build system is no longer supported.
 [Chrome-related logs]: https://chromium.googlesource.com/chromium/src/+/lkgr/docs/chrome_os_logging.md
 [crbug.com/360342]: https://bugs.chromium.org/p/chromium/issues/detail?id=360342
 [crbug.com/403086]: https://bugs.chromium.org/p/chromium/issues/detail?id=403086
+[web_tests_linux.md]: https://chromium.googlesource.com/chromium/src/+show/master/docs/web_tests_linux.md
