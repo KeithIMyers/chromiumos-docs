@@ -268,6 +268,11 @@ images, but that must no longer be relied upon.
 It creates a test system that does not match the behavior of the code that we
 ship to all our users!
 
+### How to run crouton?
+
+[crouton] is affected in the same way as any other script. The [crouton README]
+has been updated to detail the new recommended steps.
+
 
 [dash]: https://en.wikipedia.org/wiki/Debian_Almquist_shell
 [bash]: https://www.gnu.org/software/bash/
@@ -276,3 +281,5 @@ ship to all our users!
 [mawk]: https://invisible-island.net/mawk/
 [sed]: https://www.gnu.org/software/sed/
 [shebang]: https://en.wikipedia.org/wiki/Shebang_(Unix)
+[crouton]: https://github.com/dnschneid/crouton
+[crouton readme]: https://github.com/dnschneid/crouton/blob/master/README.md
