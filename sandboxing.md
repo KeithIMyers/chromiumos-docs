@@ -3,22 +3,21 @@
 [TOC]
 
 In Chrome OS, OS-level functionality (such as configuring network interfaces)
-is implemented by a collection of system services, and provided to Chrome over
+is implemented by a collection of system services and provided to Chrome over
 D-Bus. These system services have greater system and hardware access than
 the Chrome browser.
 
-Separating functionality like this prevents an attacker exploiting the Chrome
-browser through a malicious website to be able to access OS-level functionality
-directly. If Chrome were able to directly control network interfaces,
-a compromise in Chrome would give the attacker almost full control
-over the system. For example, by having a separate network manager, we can
-reduce the functionality exposed to an attacker to just querying interfaces and
-performing pre-determined actions on them.
+Separating functionality like this aims to prevent malicious websites from
+gaining access to OS-level functionality. If Chrome were able to directly
+control network interfaces, then a compromise in Chrome would give an attacker
+almost full control over the system. For example, by having a separate network
+manager, we can reduce the functionality exposed to an attacker to just querying
+interfaces and performing pre-determined actions on them.
 
 Chrome OS uses a few different mechanisms to isolate system services from Chrome
 and from each other. We use a helper program called Minijail (executable
-`minijail0`). In most cases, Minijail is used in the service's init script.
-In other cases, [Minijail wrappers] are used if a service wants to apply
+`minijail0`). In most cases, Minijail is used in the service's init script. In
+other cases, [Minijail wrappers] are used if a service wants to apply
 restrictions to the programs that it launches, or to itself.
 
 ## Best practices for writing secure system services
