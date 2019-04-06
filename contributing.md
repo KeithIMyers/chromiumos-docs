@@ -281,8 +281,8 @@ It's recommended you do this even if other reviewers set Verified+1 themselves.
 
 Once you've got Code-Review+2 (LGTM & approved) and Verified+1 labels, it's time
 to try to merge it into the tree.
-You'll add the Commit-Queue+1 label so the [CQ] will pick it up.
-If the [CL] doesn't have Code-Review+2, Verified+1, and Commit-Queue+1 labels,
+You'll add the Commit-Queue+2 label so the [CQ] will pick it up.
+If the [CL] doesn't have Code-Review+2, Verified+1, and Commit-Queue+2 labels,
 then the [CL] will never be picked up by the [CQ].
 Further, if someone adds Code-Review-2 or Verified-1, the [CQ] will ignore it.
 
@@ -297,13 +297,10 @@ VM tests) against the [CL] in isolation.
 If a [CL] fails the Pre-CQ, it's a pretty good signal the [CL] is buggy.
 
 The Pre-CQ is triggered automatically when your [CL] is marked Code-Review+2.
-You can trigger this earlier by adding the Trybot-Ready+1 label yourself.
-If the Pre-CQ passes, it will not be required again before the [CQ] runs.
+You can trigger this earlier by adding the Commit-Queue +1 label yourself. If
+the Pre-CQ passes, it will not be required again before the [CQ] runs.
 
-Setting Trybot-Ready+1 is intended just for getting the Pre-CQ to test the [CL].
-Once you've gone through the review and you're ready to submit to the [CQ], you
-don't have to set both Trybot-Ready+1 and Commit-Queue+1 -- setting CQ+1 is all
-you need to merge.
+Setting CQ+1 (Dry run) is intended just for getting the Pre-CQ to test the [CL].
 
 More details on the Pre-CQ can be found in the [Commit Queue Overview][CQ].
 
