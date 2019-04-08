@@ -30,6 +30,10 @@ un-owned bugs, assign proper components to bugs without components. Triage
 Impact, Milestone, and Severity for bugs. Make sure progress is happening on
 High+ severity bugs.
 
+If you see a bug reported in a third-party package, check the
+[security-sensitive package list]. If the package is in the list, make it a
+priority to update the package before your shift ends.
+
 ## Sheriffing and full-chain exploits
 
 ### Ownership
@@ -73,6 +77,7 @@ successfully broken.
 [security sheriff rotation]: https://goto.google.com/chromeos-security-sheriffs
 [incoming security bugs]: https://goto.google.com/chromeos-security-bugs
 [security severity guidelines]: https://chromium.googlesource.com/chromiumos/docs/+/master/security_severity_guidelines.md
+[security-sensitive package list]: https://chromium.googlesource.com/chromiumos/docs/+/master/security/sensitive_chromeos_packages.md
 [chromeos-security@]: https://groups.google.com/a/google.com/forum/#!forum/chromeos-security
 [crash reporter security document]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/crash-reporter/docs/security.md
 [A tale of two Pwnies (part 1)]: https://blog.chromium.org/2012/05/tale-of-two-pwnies-part-1.html
