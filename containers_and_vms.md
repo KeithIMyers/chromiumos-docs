@@ -135,7 +135,6 @@ There's a lot of low-hanging fruit we're working on fleshing out.
 * [Accelerated graphics](https://crbug.com/837073).
 * Video hardware decoding.
 * [IMEs](https://crbug.com/826614).
-* [Timezone syncing](https://crbug.com/829934).
 
 There are more things we're thinking about, but we're being very
 careful/cautious in rolling out features as we want to make sure we aren't
@@ -701,20 +700,22 @@ If you want to back things up, you'll need to do so by hand.
 
 ### Why is the time inside the VM/container out of sync?
 
-The clock inside of the [VM] (and by extension, the containers) are
+The clock inside of the [VM] (and by extension, the containers) is
 automatically kept in sync with Chrome OS's clock.
 So you do not have to run time keeping services yourself (e.g. ntp).
+That clock is based off of [UTC].
 
-However, the timezone in the [VM] and containers are based off of [UTC],
-and most people do not configure Chrome OS to use that.
-So the time might appear to be wrong at a glance.
+Starting with R75, we attempt to sync timezone data into the container via
+[timedatectl](https://www.freedesktop.org/software/systemd/man/timedatectl.html).
+If that doesn't work, we fallback with exporting the `TZ` environment variable.
 
-You should be able to change the timezone in the container yourself using
-[timedatectl](https://www.freedesktop.org/software/systemd/man/timedatectl.html),
-but this won't automatically update if Chrome OS's timezone changes.
+We don't currently update the timezone details inside the [VM] itself.
+We also don't try to update any other timezone setting as they are non-standard
+across distros.
+So the time might appear to be wrong at a glance in those environments, or stale
+if the `TZ` environment variable is used.
 
-We're working on a way to keep these in sync, so feel free to star
-https://crbug.com/829934 to keep track.
+See https://crbug.com/829934 for some extended technical details.
 It's more complicated than you might think!
 
 ### What copy & paste formats are supported?
