@@ -1033,6 +1033,25 @@ settings, but the long-term plan is to remove this knob so things work
 on-demand.
 At which point, there will be no knob for unmanaged devices.
 
+### Why the name Crostini?
+
+It's a play off [crouton] which is a project to easily create full Linux
+environments (including developer tools) for users who turned on developer mode.
+[Crostini] aims to satisfy the majority of use cases covered by [crouton], and
+is a larger & tastier snack than a crouton, hence the name.
+
+### How is Crostini related to Crouton?
+
+[crouton] helped define many of the use cases that developers wanted with
+Chrome OS, so it helped guide [Crostini] from a requirements perspective.
+We wanted to make sure that the majority of [crouton] users would be able to
+use [Crostini] instead for their needs, but in a secure environment.
+
+So [crouton] helped inspire the direction of [Crostini], but no code has been
+shared or reused between the two.
+It's not that [crouton] is bad, it's simply a completely different model.
+
+
 [stable channel]: https://support.google.com/chromebook/answer/1086915
 [beta channel]: https://support.google.com/chromebook/answer/1086915
 [dev channel]: https://support.google.com/chromebook/answer/1086915
@@ -1059,6 +1078,7 @@ At which point, there will be no knob for unmanaged devices.
 [crosh]: https://chromium.googlesource.com/chromiumos/platform2/+/master/crosh/
 [Crostini]: #Crostini
 [crosvm]: https://chromium.googlesource.com/chromiumos/platform/crosvm/
+[crouton]: https://github.com/dnschneid/crouton
 [Debian]: https://www.debian.org/
 [Device Support]: #supported
 [dm-verity]: https://gitlab.com/cryptsetup/cryptsetup/wikis/DMVerity
