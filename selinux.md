@@ -511,7 +511,77 @@ We use the following naming conventions to reduce possibilities of conflicts.
 
 ### Practice in Examples
 
-TODO
+In this section, we'll take an example of steps to confine and enforce tcsd.
+
+1. Define executables
+
+  tcsd has one executable at `/usr/sbin/tcsd`.
+
+  1. We define the type in
+    `sepolicy/policy/chromeos/file.te` like
+    [this](https://chromium.googlesource.com/chromiumos/platform2/+/a5eb780d85b892367a696ff07f0cd8eb1777495d/sepolicy/policy/chromeos/file.te#63)
+
+    `type cros_tcsd_exec, file_type, exec_type, cros_file_type,
+    cros_system_file_type;`
+
+  1. We define the context for /usr/sbin/tcsd in
+    `sepolicy/file_contexts/chromeos_file_contexts` like
+    [this](https://chromium.googlesource.com/chromiumos/platform2/+/a5eb780d85b892367a696ff07f0cd8eb1777495d/sepolicy/file_contexts/chromeos_file_contexts#75)
+
+    `/usr/sbin/tcsd u:object_r:cros_tcsd:exec:s0`
+
+1. Define domains
+
+  Define domains and transitions like
+  [this](https://chromium.googlesource.com/chromiumos/platform2/+/511fe108bd9b9dcfe3ea51665871c58ea669bfbc/sepolicy/policy/chromeos/tpm/cros_tcsd.te)
+
+  ```
+  type cros_tcsd, chromeos_domain, domain;
+  permissive cros_tcsd;
+  domain_auto_trans(cros_init, cros_tcsd_exec, cros_tcsd);
+  ```
+
+  The 1st line defines a new type `cros_tcsd` to be a `chromeos_domain` and a
+  `domain`. These two attributes are mandatory for Chrome OS SELinux policies.
+
+  The 2nd line put the domain into permissive, so any actions performed by this
+  domain will be audited, but not denied. Initially having the domain in
+  permissive mode will allow you to see all the potentially denied actions
+  instead of stopping at the first one. You'll need `USE="selinux_develop"`
+  use flag to make Chrome OS kernel to print permissive audit logs.
+
+  The 3rd line defines an automatic domain transition, when any process at
+  domain `cros_init`, executes a binary labelled as `cros_tcsd_exec`, it
+  automatically transits to domain `cros_tcsd`. The macro will create
+  corresponding `type_transition` and `allow` rules.
+
+  It's time to verify if your process is running under the correct domain.
+
+  - If it's a daemon process, simply `ps auxZ | grep tcsd | grep -v grep`. It
+    will display the process matching `tcsd` with its pid, user, command line,
+    and domain, etc.
+
+  - If it's not a daemon process, but shortlived, you can verify it by
+    - printing `/proc/self/attr/current` in the process to know its domain, or
+    - you can observe the audit log from either dmesg, /var/log/messages, or
+      journald, to grep `scontext=u:r:cros_tcsd:s0`. Unless you program is
+      simply doing some math, therefore doesn't violate any existing SELinux
+      rules, you should be able to see some permissive audit logs if you have
+      `USE="selinux_develop"` use flag enabled.
+
+1. Update SELinux tests
+
+  TODO
+
+1. Write actual rules
+
+  TODO
+
+1. Enforce your domain
+
+  When you're sure your policy fully covers the expected behavior (only behavior
+  used by Chrome OS). You can remove the `permissive cros_tcsd` from the policy.
+
 
 ## Troubleshooting
 
