@@ -452,7 +452,7 @@ FROMLIST: bibble: a patch to fix everything
 ... original description verbatim, including any tags,
 ... e.g. Signed-off-by, Reviewed-by, etc.
 ...
-(am from https://patchwork.kernel.org/patch/0987654/)
+(am from https://lore.kernel.org/patchwork/patch/1060242/)
 ...
 ... any additional downstream information goes here, e.g.
 ... - (also found at A-LINK-BASED-ON-MESSAGE-ID),
@@ -480,13 +480,14 @@ FROMLIST: bibble: a patch to fix everything
     [linux-next](https://www.kernel.org/doc/man-pages/linux-next.html). Always
     source either a maintainer tree or a mailing list post.
 *   When including patches from maintainer trees, be specific about your source
-    tree and branch. For example:
+    tree and branch. For example, for a patch from the for-next branch in the
+    chrome-platform tree:
 
 ```
 FROMGIT: spi: mediatek: Only do dma for 4-byte aligned buffers
 ...
 (cherry picked from commit 1ce24864bff40e11500a699789412115fdf244bf
- git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git topic/dma)
+ git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git for-next)
 ```
 
 *   **BACKPORT: FROMLIST:** or **BACKPORT: FROMGIT:** follow  the same rules as
