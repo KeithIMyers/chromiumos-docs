@@ -226,15 +226,32 @@ Patch checklist: (at 34:30 of the video)
 
 When adding new files to the kernel, please add a regular Google copyright
 header to them. In particular this is true for any code that will eventually
-find its way upstream (which should include practically everything we do).
+find its way upstream (which should include practically everything we do).  The
+main reason for this is that there's no concept of "The Chromium OS Authors"
+outside of our project, since it refers to the AUTHORS file that isn't bundled
+with the kernel.
 
-The main reason for this is that there's no concept of "The Chromium OS
-Authors" outside of our project, since it refers to the AUTHORS file that isn't
-bundled with the kernel.
+Each file type has its own SPDX comment format, [discussed
+here](https://www.kernel.org/doc/html/latest/process/license-rules.html#license-identifier-syntax):
 
+C header files:
+```
+/* SPDX-License-Identifier: GPL-2.0 */
+/*
+ * <short description>
+ *
+ * Copyright 2019 Google LLC.
+ */
+```
+
+C source files:
 ```
 // SPDX-License-Identifier: GPL-2.0
-// Copyright 2018 Google LLC.
+/*
+ * <short description>
+ *
+ * Copyright 2019 Google LLC.
+ */
 ```
 
 For reference, old drivers already existing in upstream might still have the
