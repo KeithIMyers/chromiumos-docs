@@ -513,74 +513,74 @@ We use the following naming conventions to reduce possibilities of conflicts.
 
 In this section, we'll take an example of steps to confine and enforce tcsd.
 
-1. Define executables
+1.  Define executables
 
-  tcsd has one executable at `/usr/sbin/tcsd`.
+    tcsd has one executable at `/usr/sbin/tcsd`.
 
-  1. We define the type in
-    `sepolicy/policy/chromeos/file.te` like
-    [this](https://chromium.googlesource.com/chromiumos/platform2/+/a5eb780d85b892367a696ff07f0cd8eb1777495d/sepolicy/policy/chromeos/file.te#63)
+    1.  We define the type in `sepolicy/policy/chromeos/file.te` like
+        [this](https://chromium.googlesource.com/chromiumos/platform2/+/a5eb780d85b892367a696ff07f0cd8eb1777495d/sepolicy/policy/chromeos/file.te#63)
 
-    `type cros_tcsd_exec, file_type, exec_type, cros_file_type,
-    cros_system_file_type;`
+        `type cros_tcsd_exec, file_type, exec_type, cros_file_type,
+        cros_system_file_type;`
 
-  1. We define the context for /usr/sbin/tcsd in
-    `sepolicy/file_contexts/chromeos_file_contexts` like
-    [this](https://chromium.googlesource.com/chromiumos/platform2/+/a5eb780d85b892367a696ff07f0cd8eb1777495d/sepolicy/file_contexts/chromeos_file_contexts#75)
+    1.  We define the context for /usr/sbin/tcsd in
+        `sepolicy/file_contexts/chromeos_file_contexts` like
+        [this](https://chromium.googlesource.com/chromiumos/platform2/+/a5eb780d85b892367a696ff07f0cd8eb1777495d/sepolicy/file_contexts/chromeos_file_contexts#75)
 
-    `/usr/sbin/tcsd u:object_r:cros_tcsd:exec:s0`
+        `/usr/sbin/tcsd u:object_r:cros_tcsd:exec:s0`
 
-1. Define domains
+1.  Define domains
 
-  Define domains and transitions like
-  [this](https://chromium.googlesource.com/chromiumos/platform2/+/511fe108bd9b9dcfe3ea51665871c58ea669bfbc/sepolicy/policy/chromeos/tpm/cros_tcsd.te)
+    Define domains and transitions like
+    [this](https://chromium.googlesource.com/chromiumos/platform2/+/511fe108bd9b9dcfe3ea51665871c58ea669bfbc/sepolicy/policy/chromeos/tpm/cros_tcsd.te)
 
-  ```
-  type cros_tcsd, chromeos_domain, domain;
-  permissive cros_tcsd;
-  domain_auto_trans(cros_init, cros_tcsd_exec, cros_tcsd);
-  ```
+    ```
+    type cros_tcsd, chromeos_domain, domain;
+    permissive cros_tcsd;
+    domain_auto_trans(cros_init, cros_tcsd_exec, cros_tcsd);
+    ```
 
-  The 1st line defines a new type `cros_tcsd` to be a `chromeos_domain` and a
-  `domain`. These two attributes are mandatory for Chrome OS SELinux policies.
+    The 1st line defines a new type `cros_tcsd` to be a `chromeos_domain` and a
+    `domain`. These two attributes are mandatory for Chrome OS SELinux policies.
 
-  The 2nd line put the domain into permissive, so any actions performed by this
-  domain will be audited, but not denied. Initially having the domain in
-  permissive mode will allow you to see all the potentially denied actions
-  instead of stopping at the first one. You'll need `USE="selinux_develop"`
-  use flag to make Chrome OS kernel to print permissive audit logs.
+    The 2nd line put the domain into permissive, so any actions performed by
+    this domain will be audited, but not denied. Initially having the domain in
+    permissive mode will allow you to see all the potentially denied actions
+    instead of stopping at the first one. You'll need `USE="selinux_develop"`
+    use flag to make Chrome OS kernel to print permissive audit logs.
 
-  The 3rd line defines an automatic domain transition, when any process at
-  domain `cros_init`, executes a binary labelled as `cros_tcsd_exec`, it
-  automatically transits to domain `cros_tcsd`. The macro will create
-  corresponding `type_transition` and `allow` rules.
+    The 3rd line defines an automatic domain transition, when any process at
+    domain `cros_init`, executes a binary labelled as `cros_tcsd_exec`, it
+    automatically transits to domain `cros_tcsd`. The macro will create
+    corresponding `type_transition` and `allow` rules.
 
-  It's time to verify if your process is running under the correct domain.
+    It's time to verify if your process is running under the correct domain.
 
-  - If it's a daemon process, simply `ps auxZ | grep tcsd | grep -v grep`. It
-    will display the process matching `tcsd` with its pid, user, command line,
-    and domain, etc.
+    - If it's a daemon process, simply `ps auxZ | grep tcsd | grep -v grep`. It
+      will display the process matching `tcsd` with its pid, user, command line,
+      and domain, etc.
 
-  - If it's not a daemon process, but shortlived, you can verify it by
-    - printing `/proc/self/attr/current` in the process to know its domain, or
-    - you can observe the audit log from either dmesg, /var/log/messages, or
-      journald, to grep `scontext=u:r:cros_tcsd:s0`. Unless you program is
-      simply doing some math, therefore doesn't violate any existing SELinux
-      rules, you should be able to see some permissive audit logs if you have
-      `USE="selinux_develop"` use flag enabled.
+    - If it's not a daemon process, but shortlived, you can verify it by
+      - printing `/proc/self/attr/current` in the process to know its domain, or
+      - you can observe the audit log from either dmesg, /var/log/messages, or
+        journald, to grep `scontext=u:r:cros_tcsd:s0`. Unless you program is
+        simply doing some math, therefore doesn't violate any existing SELinux
+        rules, you should be able to see some permissive audit logs if you have
+        `USE="selinux_develop"` use flag enabled.
 
-1. Update SELinux tests
+1.  Update SELinux tests
 
-  TODO
+    TODO
 
-1. Write actual rules
+1.  Write actual rules
 
-  TODO
+    TODO
 
-1. Enforce your domain
+1.  Enforce your domain
 
-  When you're sure your policy fully covers the expected behavior (only behavior
-  used by Chrome OS). You can remove the `permissive cros_tcsd` from the policy.
+    When you're sure your policy fully covers the expected behavior (only
+    behavior used by Chrome OS). You can remove the `permissive cros_tcsd` from
+    the policy.
 
 
 ## Troubleshooting
@@ -593,42 +593,42 @@ wrong, and suspect it could be SELinux denying some operations.
 
 There're three approaches to identify an potential SELinux problem.
 
-1. Currently, Chrome OS doesn't register any audit daemon, the `[kauditd]` in
-   kernel will handle audits, and should output to syslog, as well as serial
-   port.  You could dig into the audit log by grepping `avc:` or `audit:`. If
-   there's a denial in non-permissive domain, there should be audit messages
-   being logged, with `permissive=0`.  You could read the audit log to see if
-   it's related to your program.
+1.  Currently, Chrome OS doesn't register any audit daemon, the `[kauditd]` in
+    kernel will handle audits, and should output to syslog, as well as serial
+    port.  You could dig into the audit log by grepping `avc:` or `audit:`. If
+    there's a denial in non-permissive domain, there should be audit messages
+    being logged, with `permissive=0`.  You could read the audit log to see if
+    it's related to your program.
 
-  - If you're on `betty` or other cros_vm instance, serial port output can be
-    found at `/tmp/cros_vm_*/kvm.monitor.serial` in the cros_sdk chroot
-    environment.
-  - syslog will be logged to `/var/log/messages` and systemd-journald. You can
-    read the log by reading `/var/log/messages` or by executing `journalctl`.
-    Please note the messages file could be rotated to
-    `/var/log/messages.{1,2,3,4,...}` if the system is running long term.
+    - If you're on `betty` or other cros_vm instance, serial port output can be
+      found at `/tmp/cros_vm_*/kvm.monitor.serial` in the cros_sdk chroot
+      environment.
+    - syslog will be logged to `/var/log/messages` and systemd-journald. You can
+      read the log by reading `/var/log/messages` or by executing `journalctl`.
+      Please note the messages file could be rotated to
+      `/var/log/messages.{1,2,3,4,...}` if the system is running long term.
 
-  You should be able to find `permissive=0` in above log locations. If you saw
-  some denials with `permissive=1`, it doesn't mean it's denied.  `permissive=1`
-  only mean this access it not allowed by policy, but SELinux is still allowing
-  it because the domain is not enforced.
+    You should be able to find `permissive=0` in above log locations. If you saw
+    some denials with `permissive=1`, it doesn't mean it's denied.
+    `permissive=1` only mean this access it not allowed by policy, but SELinux
+    is still allowing it because the domain is not enforced.
 
-1. A quick command could test whether your program works by putting the whole
-system permissive. By executing `setenforce 0` as root in developer mode, you
-can put the whole system permissive. You'll be able to test if your program
-comes to work.
+1.  A quick command could test whether your program works by putting the whole
+    system permissive. By executing `setenforce 0` as root in developer mode,
+    you can put the whole system permissive. You'll be able to test if your
+    program comes to work.
 
-1. If you program is a daemon process which fails so early before you can have a
-console access, you could change the SELinux config file located at
-`/etc/selinux/config` to
-```
-SELINUX=permissive
-SELINUXTYPE=arc
-```
-Please keep
-`SELINUXTYPE=arc` unchanged, and only changing `SELINUX=` line to `permissive`.
-Please don't change it to `disabled` otherwise your system may fail to boot
-since init will halt when it fails to load an SELinux policy.
+1.  If you program is a daemon process which fails so early before you can have
+    a console access, you could change the SELinux config file located at
+    `/etc/selinux/config` to
+    ```
+    SELINUX=permissive
+    SELINUXTYPE=arc
+    ```
+    Please keep `SELINUXTYPE=arc` unchanged, and only changing `SELINUX=` line
+    to `permissive`.  Please don't change it to `disabled` otherwise your system
+    may fail to boot since init will halt when it fails to load an SELinux
+    policy.
 
 Approach 2 and 3 to put the whole system permissive won't give you any useful
 information on what's wrong. Audit log won't print even the policy says to deny
