@@ -103,26 +103,25 @@ For more details, see [Gerrit]'s [Change-Id] documentation.
 
 ### CL dependencies {#CQ-DEPEND}
 
-Sometimes work will span multiple [CL]s across different repos.
-The `CQ-DEPEND=` lines are used to make sure [CL]s are merged in a specific
-order, or altogether vs none at all.
+Sometimes work will span multiple [CL]s across different repos. The `Cq-Depend:`
+lines are used to make sure [CL]s are merged in a specific order, or altogether
+vs none at all.
 
 *   Specify dependencies in the last paragraph of your change (after `TEST=`
-    lines) using `CQ-DEPEND=CL:12345`.
-*   Each dependency should start with a `CL:` prefix followed by a number
-    (the [Gerrit] [CL] number on the server) or a [Change-Id].
-*   You may specify multiple dependencies.
-    Each dependency should be separated with a comma and a space (e.g.
-    `CQ-DEPEND=CL:12345, CL:4321`).
-    You can also split dependencies into multiple `CQ-DEPEND=` lines.
-*   Use an asterisk prefix to denote internal dependencies (e.g. `CL:*4321`).
-    Otherwise, the [CL] is interpreted as an external change (e.g. `CL:4321`).
-*   You may specify `CQ-DEPEND` loops where "CL A" depends on "CL B", and "CL B"
-    depends on "CL A" (there's no limit to the number of [CL]s).
-    This makes sure the [CQ] will pick up and test them together atomically.
+    lines) using `Cq-Depend: chromium:12345`.
+*   Each dependency should start with a Gerrit instance prefix followed by a
+    number (the [Gerrit][CL] number on the server) or a [Change-Id].
+*   You may specify multiple dependencies. Each dependency should be separated
+    with a comma and a space (e.g. `Cq-Depend: chromium:12345,
+    chrome-internal:4321`).
+*   Use `chrome-internal` prefix to denote internal dependencies (e.g.
+    `chrome-internal:4321`).
+*   You may specify `Cq-Depend` loops where "CL A" depends on "CL B", and "CL B"
+    depends on "CL A" (there's no limit to the number of [CL]s). This makes sure
+    the [CQ] will pick up and test them together atomically.
 *   Atomic transactions within a single repository are supported.
-    *   Merges across repos is not atomic due to [Gerrit] limitations.
-        There is a small window where syncs may pull a partial set of changes.
+    *   Merges across repos is not atomic due to [Gerrit] limitations. There is
+        a small window where syncs may pull a partial set of changes.
 
 Here's an example:
 
@@ -131,7 +130,7 @@ Add file to install to 9999 ebuild file
 
 BUG=chromium:99999
 TEST=Tested with dependent CL's in trybot.
-CQ-DEPEND=CL:12345, CL:*4321
+Cq-Depend: chromium:12345, chrome-internal:4321
 
 Change-Id: I8d7f86d716f1da76f4c85259f401c3ccc9a031ff
 ```
