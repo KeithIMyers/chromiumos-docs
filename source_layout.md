@@ -366,7 +366,7 @@ If the repo is public (i.e. exists on the [Chromium GoB]), then update the
 [full.xml] file in the public [manifest] repo and the [external_full.xml]
 file in the internal [manifest-internal] repo.
 Both files in both repos must be updated together, so make sure to use a
-[CQ-DEPEND] to land them atomically.
+[Cq-Depend] to land them atomically.
 
 If the repo is private (i.e. exists on the [Chrome GoB]), then update the
 [internal_full.xml] file in the internal [manifest-internal] repo.
@@ -468,7 +468,7 @@ See the previous questions in this FAQ for more details.
 [Chromium GoB]: https://chromium.googlesource.com/
 [chromiumos-overlay]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/
 [chroot]: filesystem_layout.md#SDK
-[CQ-DEPEND]: contributing.md#CQ-DEPEND
+[Cq-Depend]: contributing.md#CQ-DEPEND
 [Contact]: contact.md
 [contrib]: https://chromium.googlesource.com/chromiumos/platform/dev-util/+/HEAD/contrib/
 [cros-signing]: https://chrome-internal.googlesource.com/chromeos/cros-signing/
