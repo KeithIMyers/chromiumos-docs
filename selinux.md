@@ -509,6 +509,78 @@ We use the following naming conventions to reduce possibilities of conflicts.
   1. There's one special attribute for domain, named `chromeos_domain`. All
      domains outside ARC container should have this attribute.
 
+### Usage with minijail
+
+Minijail is a tool combined with a library and a wrapper program to apply
+different kind of restrictions (cgroups, caps, seccomps, etc), and
+namespaces(mountns, pidns, IPCns, etc) in a correct way.
+
+There major problem facing on SELinux with minijail wrapper program is:
+
+    By default, minijail use a preload library to hook `__libc_start_main` to
+    apply all kinds of restrictions.
+    This put all the privileges that minijail needs into post-exec, where the
+    kernel can not distinguish the boundary between minijail and the main
+    program without an explicit setcon(3).
+    While setcon(3) is unlikely to be possible for our minijail usage since it
+    usually attempt to mount procfs readonly.
+
+Of course, granting many unnecesary privilege to the domain is discouraged since
+an exploited process will be allowed to do what minijail could do (mknod, mount
+filesystems, etc). And we want to reduce the attack surface if possible.
+
+#### /sbin/minijail0
+
+Minijail wrapper has a static mode that does all the enforcement and lockdowns
+pre-exec. Due to lack of ambient caps in the past and seccomp issue, minijail
+developed a preload mode that runs default for shared-linked ELFs that uses a
+preload library to do the lockdowns post-exec.
+
+But static mode introduces another issue: seccomp.
+
+- If your seccomp filters doesn't have `execve` allowed, minijail0 cannot even
+  execute the target program. One workaround for execve is to allow execve but
+  it's not want we want even minijail has isolated many other resources.
+- seccomp requires either `sys_admin` capabilities or `no_new_privs` bit.
+  Granting `sys_admin` just for install seccomp filter is a terrible idea. But
+  `no_new_privs` prevents SELinux domain transition to arbitary domains pre-4.14
+  kernel.
+
+A common workaround for two problems above is to install seccomp filter
+post-execve, just like what a preload library has been doing. This comes an idea
+to have embedded minijail for quickly installing seccomp rules post-exec since
+installing seccomp rules doesn't need special capabilities on SELinux.
+
+##### Example with minijail0 wrapper
+
+For programs using minijail wrapper `/sbin/minijail0`, the following practice is
+recommended to isolate pre-minijail and post-minijail as much as possible.
+
+1.  Use `-T static` static mode. This puts all the lockdown steps in the
+    minijail0 process.
+
+1.  Use `--ambient` if you have `-c`. Capabilities is not preserved across
+    `execve` without ambient caps. You should use `--ambient` whenever possible,
+    otherwise your caps won't be preserved to the actual process with `-T
+    static`.
+
+1.  Put seccomp into an inner preload minijail. It will look look like this to
+    launch your program
+
+    ```
+    minijail0 -T static --ambient -c 0x999 --somethingelse -- \
+    /sbin/minijail0 -n -S rules.seccomp -- /path/to/your/program
+    ```
+
+SELinux domain remains on minijail when applying all other restrictions. Upon
+first execve to execute inner minijail0, there's no domain transition. And the
+inner minijail simply execute target program with preload library, when the
+domain transition happens before setting nnp bit.
+
+#### Libminijail
+
+TODO
+
 ### Practice in Examples
 
 In this section, we'll take an example of steps to confine and enforce tcsd.
@@ -570,11 +642,41 @@ In this section, we'll take an example of steps to confine and enforce tcsd.
 
 1.  Update SELinux tests
 
-    TODO
+    __New SELinux tests should be written in tast instead of autotest.__
+
+    Tests for SELinux file labels and process domains are located at
+    `src/platform/tast-tests/local_tests/security`
+
+    Usually, you'll need to update `selinux_files_system.go` and
+    `selinux/processes_test_internal.go`.
+
+    In the example case, we'll need to add
+    `
+    {"/usr/sbin/tcsd", "cros_tcsd_exec", false, selinux.SkipNotExist},
+    ` in selinux_files_system.go, and
+    `
+    {exe, "/usr/sbin/tcsd", "cros_tcsd", zeroProcs},
+    ` in selinux/processes_test_internal.go
+
+    The files check checks file at `/usr/sbin/tcsd` has labels
+    `u:object_r:cros_tcsd_exec:s0`, without recursion, ignore if file doesn't
+    exist.
+
+    The domain check checks a process with `/proc/<pid>/exe` to be
+    `/usr/sbin/tcsd` (a.k.a any process running tcsd binary) to be `cros_tcsd`
+    domain. The domain check can also match by cmdline.
 
 1.  Write actual rules
 
     TODO
+
+    Go back to previous step to update SELinux tests for stateful files too.
+
+    If your process relates to after-login behavior, you may also need to update
+    `selinux_files_arc.go` and `selinux_files_non_arc.go`. Non-ARC specified
+    process should present in both. If your process relates to files in home
+    directory, simply modify `selinux/files_test_internal_home.go` instead.
+
 
 1.  Enforce your domain
 
