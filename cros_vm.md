@@ -264,19 +264,11 @@ To run a Tast test:
 --cmd -- local_test_runner ui.ChromeLogin
 ```
 
-To run an arbitrary test (for e.g. base_unittests), you would need to first
-build base_unittests, copy the dependencies (the .so files) to the VM, and run
-the test in the correct working directory:
+To build and run an arbitrary test (e.g. base_unittests):
 ```bash
-(sdk) .../chrome/src $ autoninja -C out_$SDK_BOARD/Release base_unittests
-(sdk) .../chrome/src $ ls out_$SDK_BOARD/Release/base_unittests \
-out_$SDK_BOARD/Release/*.so > /tmp/files.txt
-(sdk) .../chrome/src $ cros_run_vm_test --files-from /tmp/files.txt \
---cwd out_$SDK_BOARD/Release --cmd -- ./base_unittests
+(sdk) .../chrome/src $ cros_run_vm_test --build --chrome-test -- \
+out_$SDK_BOARD/Release/base_unittests
 ```
-The set of files to transfer to the VM is specified via `--files` or
-`--files-from`, a working directory via `--cwd` and the test command to run
-via `--cmd`.
 
 ### In the chroot
 
