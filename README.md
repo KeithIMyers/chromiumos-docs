@@ -74,3 +74,9 @@ To review someone else's changes, apply them locally first, or just click the
 [repo]: https://source.android.com/source/using-repo
 [chromium-review.googlesource.com]: https://chromium-review.googlesource.com/
 [md_browser]: https://chromium.googlesource.com/chromium/src/tools/md_browser/+/master/
+
+## Important section
+
+░█▀▀░█▀▀░█▀█░█▀█░░░█░█░█▀█░█▀▀░░░█░█░█▀▀░█▀▄░█▀▀
+░▀▀█░█▀▀░█▀█░█░█░░░█▄█░█▀█░▀▀█░░░█▀█░█▀▀░█▀▄░█▀▀
+░▀▀▀░▀▀▀░▀░▀░▀░▀░░░▀░▀░▀░▀░▀▀▀░░░▀░▀░▀▀▀░▀░▀░▀▀▀
