@@ -800,8 +800,8 @@ Now that you can build and run Chromium OS, you're ready to start making changes
 to the code.
 
 **NOTE:** If you skipped to this section without building your own system image,
-you may run into hard-to-fix dependency problems if build your own versions of
-system packages and try to deploy them to a system image that was built by a
+you may run into hard-to-fix dependency problems if you build your own versions
+of system packages and try to deploy them to a system image that was built by a
 builder. If you run into trouble, try going through the full [Building Chromium
 OS] process first and installing your own system image.
 
