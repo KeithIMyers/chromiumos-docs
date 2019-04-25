@@ -846,6 +846,32 @@ By looking at the log, the main thinkabout would be"
     mode is strongly recommended to leave all the high privileged permissions to
     minijail.
 
+##### selinux_violation files in /var/spool/crash
+
+/var/spool/crash contains crash reports to be uploaded by `crash_sender` to
+crash.corp. Usually it stores data like core dumps and metadata when a program
+has crashed. But some other anomalies (e.g. selinux violation, service death,
+kernel warnings, etc) also take advantage of the existing crash reporting
+mechanism. See [Crash
+Reporter](https://www.chromium.org/chromium-os/packages/crash-reporting/faq#TOC-Crash-Reporter)
+to know more about how crash reporting works.
+
+
+As mentioned, we take advantage of existing crash reporting mechanism for
+SELinux violation collection for enforced domain. Since any unpermitted access
+will trigger an audit event, to reduce the chance it fills up 32 reports pool,
+we sample audit message at a probability of 0.1% before writing to crash pool
+for acknowledged users on user build. But for developer build, we still write
+all audit events dumped to syslog to crash pool.
+
+If you saw anything `selinux_violation`\* in `/var/spool/crash`, it doesn't mean
+something has crashed. It only means an audit event has occured. SELinux doesn't
+kill any process violating the policy, it just let the corresponding syscall to
+return `-EACCESS` (permission denied). In most cases, you don't need to care
+about what's being stored in /var/spool/crash for selinux violations. If you
+need `/var/log/messages` or `/var/log/audit/audit.log` should provide you the
+information you need.
+
 #### Inspecting the runtime state
 
 - File labels: `ls -Z file` or `ls -Zd directory`
