@@ -666,6 +666,47 @@ NiceMock?"] chromium-dev mailing list threads for more discussion. The ["Friends
 You Can Depend On"] and ["Know Your Test Doubles"] posts on the [Google Testing
 Blog] also include more information about different types of test objects.
 
+## Code coverage
+
+There is currently no standardized way to obtain code coverage reports for
+unit tests, so the exact instructions will differ from package to package.
+Also, note that these instructions assume that your package uses Clang.
+
+The general idea is to run
+`USE=coverage FEATURES="test noclean" emerge-<BOARD> <PKG>`, which runs the
+unit tests and deposits the following two artifacts:
+-   The llvm profiling data, `default.profraw`, which might be found in the
+    package's source directory (the CWD where unit test ran).
+-   The test executable(s), which may be found in a directory under
+    `/build/<BOARD>/tmp/portage/<FULL_PKG_PATH>-9999/work/build/out/Default/`.
+    One way to find the executable would be to determine the unit test
+    executable name from the package's BUILD.gn file and use the find utility.
+
+Once you have identified the two artifacts, you can analyze the code
+coverage using `llvm-cov`.
+
+Here is an example of this workflow for the biod package.
+
+```bash
+export BOARD=nocturne
+USE=coverage ./build_packages --board=$BOARD --skip_chroot_upgrade biod
+cros_workon --board=$BOARD start biod
+cd ~/trunk/src/platform2/biod
+USE=coverage FEATURES="test noclean" emerge-$BOARD biod
+llvm-profdata merge -o default.profdata default.profraw
+
+# Now inspect the ~/trunk/src/platform2/biod/BUILD.gn file to
+# determine the test executable name, which is biod_test_runner in this case.
+# Next, search /build/$BOARD/tmp/portage for that binary name.
+
+# To generate an HTML summary with line-by-line reporting, use the following:
+llvm-cov show -instr-profile=default.profdata -format=html -output-dir=coverage -object=/build/$BOARD/tmp/portage/chromeos-base/biod-9999/work/build/out/Default/biod_test_runner
+# Now, point your web browser to ~/chromiumos/src/platform2/biod/coverage/index.html
+
+# To show console based coverage metrics per file, use the following:
+llvm-cov report -instr-profile=default.profdata -object=/build/$BOARD/tmp/portage/chromeos-base/biod-9999/work/build/out/Default/biod_test_runner
+```
+
 [Unit tests]: https://en.wikipedia.org/wiki/Unit_testing
 [Google Test]: https://github.com/google/googletest
 [unit testing document]: https://www.chromium.org/chromium-os/testing/adding-unit-tests-to-the-build
