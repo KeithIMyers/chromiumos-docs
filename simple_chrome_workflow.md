@@ -565,11 +565,33 @@ See the [Cros Flash page] for more details.
 
 ### Running tests
 
-Chrome's unit and browser tests are compiled into test binaries, but these are
-not meant to be run on a Chrome OS device, even for tests specific to Chrome OS.
-To run them, follow the [instructions for running tests on Linux] using a
-separate GN build directory with `targetos = "chromeos"` in its arguments. (You
-can create one using the `gn args` command.)
+Chrome's unit and browser tests are compiled into test binaries. At the moment,
+not all of them run on a Chrome OS device. Most of the unit tests and part of
+interactive_ui_tests that measure Chrome OS performance should work.
+
+To build and run a chrome test on device (or VM),
+```bash
+(sdk) .../chrome/src $ cros_run_test --build --device=$IP --chrome-test -- \
+out_$SDK_BOARD/Release/interative_ui_tests \
+    --dbus-stub \
+    --enable-pixel-output-in-tests \
+    --gtest_filter=SplitViewTest.SplitViewResize
+```
+
+Alternatively, manually build and use the generated `run_$TEST` scripts to run
+like build bots:
+```bash
+(sdk) .../chrome/src $ autoninja -C out_$SDK_BOARD/Release interactive_ui_tests
+(sdk) .../chrome/src $ out_$SDK_BOARD/Release/bin/run_interactive_ui_tests \
+    --device=$IP \
+    --dbus-stub \
+    --enable-pixel-output-in-tests \
+    --gtest_filter=SplitViewTest.SplitViewResize
+```
+
+To run tests locally on dev box, follow the [instructions for running tests on
+Linux] using a separate GN build directory with `target_os = "chromeos"` in its
+arguments. (You can create one using the `gn args` command.)
 
 If you're running tests which create windows on-screen, you might find the
 instructions for using an embedded X server in [web_tests_linux.md] useful.
