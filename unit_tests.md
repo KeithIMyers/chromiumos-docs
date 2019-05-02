@@ -691,8 +691,8 @@ Here is an example of this workflow for the biod package.
 export BOARD=nocturne
 USE=coverage ./build_packages --board=$BOARD --skip_chroot_upgrade biod
 cros_workon --board=$BOARD start biod
-cd ~/trunk/src/platform2/biod
-USE=coverage FEATURES="test noclean" emerge-$BOARD biod
+LLVM_PROFILE_FILE="/tmp/default.profraw" USE=coverage FEATURES="test noclean" emerge-$BOARD biod
+cd /build/$BOARD/tmp/
 llvm-profdata merge -o default.profdata default.profraw
 
 # Now inspect the ~/trunk/src/platform2/biod/BUILD.gn file to
@@ -700,8 +700,8 @@ llvm-profdata merge -o default.profdata default.profraw
 # Next, search /build/$BOARD/tmp/portage for that binary name.
 
 # To generate an HTML summary with line-by-line reporting, use the following:
-llvm-cov show -instr-profile=default.profdata -format=html -output-dir=coverage -object=/build/$BOARD/tmp/portage/chromeos-base/biod-9999/work/build/out/Default/biod_test_runner
-# Now, point your web browser to ~/chromiumos/src/platform2/biod/coverage/index.html
+llvm-cov show -instr-profile=default.profdata -format=html -output-dir=. -object=/build/$BOARD/tmp/portage/chromeos-base/biod-9999/work/build/out/Default/biod_test_runner
+# Now, point your web browser to ~/chromiumos/chroot/build/$BOARD/tmp/index.html
 
 # To show console based coverage metrics per file, use the following:
 llvm-cov report -instr-profile=default.profdata -object=/build/$BOARD/tmp/portage/chromeos-base/biod-9999/work/build/out/Default/biod_test_runner
