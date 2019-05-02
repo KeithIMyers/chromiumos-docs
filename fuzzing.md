@@ -902,7 +902,7 @@ here's a guide on how to use it to reproduce crashes reported by ClusterFuzz.
     the fuzzer will be on the "Fuzzer:" line. It will begin with
     "libFuzzer_chromeos_" but this prefix is added by ClusterFuzz and isn't
     actually part of the binary name. You can determine the build type from the
-    "Sanitizer" line in the bug report. It will either be "asan" or "ubsan".
+    "Sanitizer" line in the bug report. It will be one of asan/ubsan/msan.
 
 3.  Run the `reproduce` command of `cros_fuzz` from within the Chrome OS SDK
     chroot like so:
@@ -914,6 +914,8 @@ here's a guide on how to use it to reproduce crashes reported by ClusterFuzz.
     ```
 
 You should see a stack trace after running the `reproduce` command.
+Note: For reproducing msan crashes, [a full build](#third-party-crashes) of
+all packages with instrumentation is needed.
 
 For more advanced uses, we will explain the details for the `reproduce` command.
 Below is an explanation of what the options to `reproduce` mean, note that no
@@ -929,7 +931,7 @@ option is mandatory unless explicitly specified.
     then one must also provide the `--build_type` option.
 
 *   `--build_type`: The type of build we want to do. This can either be `asan`,
-    `ubsan`, or `coverage`. Note that `coverage` is not actually used on
+    `msan`, `ubsan`, or `coverage`. Note that `coverage` is not actually used on
     ClusterFuzz. This option may only be used if the `--package` option is used.
 
 Note that once the build needed is in a root it doesn't need to be done again,
@@ -1147,7 +1149,7 @@ trouble passing some check.
     for libFuzzer to mutate, which you then convert into raw bytes. It is not
     yet supported in Chrome OS (follow [issue 853017] for updates).
 
-### How do I reproduce issues found in a third party library?
+### How do I reproduce issues found in a third party library? {#third-party-crashes}
 
 The fuzzing builders instrument most of the packages with sanitizer flags which
 can sometimes find errors in third party libraries.
@@ -1157,12 +1159,12 @@ build the packages with sanitizers flags just like the builders.
 
 ```bash
 # Run setup_board with the fuzzer profile.
-# Use --profile=ubsan-fuzzer for ubsan issues.
+# The example below uses "--profile=fuzzer" which selects asan flags.
+# For msan or ubsan, use "--profile=msan-fuzzer" or "--profile=ubsan-fuzzer".
 $ setup_board --board=amd64-generic --profile=fuzzer
 # Run build_packages to build the package and its dependencies.
-# Use USE="ubsan fuzzer" for ubsan issues.
 # Note that `--nousepkg` must be passed to avoid using prebuilts.
-$ USE="asan fuzzer" ./build_packages --board=amd64-generic --skip_chroot_upgrade --nousepkg <your_package>
+$ ./build_packages --board=amd64-generic --skip_chroot_upgrade --nousepkg <your_package>
 ```
 
 Once the package and its dependencies have been built,
