@@ -356,12 +356,13 @@ going forward.
     process is compromised, and the new code doesn't validate these parameters,
     the feature just added that system call as attack surface exposed to all
     processes that can access the IPC endpoint.
-*   Are new libraries being used? If so, how confident are we about the quality
-    of the code in the library? Do the upstream maintainers patch security bugs?
-    Will the team adding the feature be responsible for updating the library
-    when security bugs get discovered? Library code is subject to the same (or
-    arguably more) scrutiny than code written by Chrome OS engineers: is it
-    robust against malformed or malicious input? Can it be fuzzed?
+*   Are new libraries being used and what new packages are pulled into the
+    image? If so, how confident are we about the quality of the code in the
+    library? Do the upstream maintainers patch security bugs? Will the team
+    adding the feature be responsible for updating the library when security
+    bugs get discovered? Library code is subject to the same (or arguably more)
+    scrutiny than code written by Chrome OS engineers: is it robust against
+    malformed or malicious input? Can it be fuzzed?
 *   Is the code accessible to remote attackers? Is it exposed directly over the
     network? If so, consider whether this is really necessary, and whether it
     can be mitigated with firewall rules or other restrictions.
@@ -391,6 +392,10 @@ going forward.
     experts to make sure that your use of cryptography is correct.
 *   There should be no need for features to roll their own crypto. Use
     well-established cryptographic libraries like BoringSSL or OpenSSL.
+*   Please check any dependencies you add for implementations of cryptographic
+    algorithms or protocols and flag these to the security team before bringing
+    in the dependency. This includes e.g. TLS client implementations, which are
+    highly non-trivial to get right, and incur significant maintenance cost.
 *   Prefer to use high-level primitives. E.g. don't take an AES-CBC
     implementation and add your own padding, use a high-level primitive that
     simply encrypts and decrypts data provided a key.
