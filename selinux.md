@@ -695,20 +695,22 @@ wrong, and suspect it could be SELinux denying some operations.
 
 There're three approaches to identify an potential SELinux problem.
 
-1.  Currently, Chrome OS doesn't register any audit daemon, the `[kauditd]` in
-    kernel will handle audits, and should output to syslog, as well as serial
-    port.  You could dig into the audit log by grepping `avc:` or `audit:`. If
-    there's a denial in non-permissive domain, there should be audit messages
-    being logged, with `permissive=0`.  You could read the audit log to see if
-    it's related to your program.
+1.  From M76, Chrome OS uses auditd to receive audit events from the kernel, and
+    write corresponding audit messages to `/var/log/audit/audit.log`. During the
+    early
+    boot stages before auditd starts, `[kauditd]` will still write audit
+    messages into syslog. Developers are supposed to examine both
+    `/var/log/messages` and `/var/log/audit/audit.log` if they don't know at
+    which stage a denial could occur.
 
-    - If you're on `betty` or other cros_vm instance, serial port output can be
-      found at `/tmp/cros_vm_*/kvm.monitor.serial` in the cros_sdk chroot
-      environment.
-    - syslog will be logged to `/var/log/messages` and systemd-journald. You can
+    - pre-auditd: syslog will be logged to `/var/log/messages` and systemd-journald. You can
       read the log by reading `/var/log/messages` or by executing `journalctl`.
       Please note the messages file could be rotated to
       `/var/log/messages.{1,2,3,4,...}` if the system is running long term.
+    - post-auditd: auditd will receive audit events from kernel via
+      audit netlink socket, and write to `/var/log/audit/audit.log`. Auditd will
+      handle log rotation to rotate the logs to
+      `/var/log/audit/audit.log.{1,2,3,4}`.
 
     You should be able to find `permissive=0` in above log locations. If you saw
     some denials with `permissive=1`, it doesn't mean it's denied.
