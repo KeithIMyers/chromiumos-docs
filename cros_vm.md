@@ -240,33 +240,33 @@ You can also launch the VM from anywhere within your chromeos source tree:
 (shell) .../chromeos $ chromite/bin/cros_vm --start --board $BOARD
 ```
 
-## cros_run_vm_test
+## cros_run_test
 
-`cros_run_vm_test` runs various tests in a VM. It can use an existing VM or
+`cros_run_test` runs various tests in a VM. It can use an existing VM or
 launch a new one.
 
 ### In Simple Chrome
 
 To launch a VM and run a sanity test:
 ```bash
-(sdk) .../chrome/src $ cros_run_vm_test
+(sdk) .../chrome/src $ cros_run_test
 ```
 
 To build chrome, deploy chrome, or both, prior to running tests:
 ```bash
-(sdk) .../chrome/src $ cros_run_vm_test --build --deploy --build-dir \
+(sdk) .../chrome/src $ cros_run_test --build --deploy --build-dir \
 out_$SDK_BOARD/Release
 ```
 
 To run a Tast test:
 ```bash
-(sdk) .../chrome/src $ cros_run_vm_test \
+(sdk) .../chrome/src $ cros_run_test \
 --cmd -- local_test_runner ui.ChromeLogin
 ```
 
 To build and run an arbitrary test (e.g. base_unittests):
 ```bash
-(sdk) .../chrome/src $ cros_run_vm_test --build --chrome-test -- \
+(sdk) .../chrome/src $ cros_run_test --build --chrome-test -- \
 out_$SDK_BOARD/Release/base_unittests
 ```
 
@@ -277,14 +277,14 @@ These examples require a locally build VM, see
 
 To run an individual autotest from within the chroot:
 ```bash
-(chroot) ~/trunk/src/scripts $ cros_run_vm_test --board $BOARD \
+(chroot) ~/trunk/src/scripts $ cros_run_test --board $BOARD \
 --autotest test_LoginCryptohome
 ```
 
 To run the autotest smoke suite:
 ```bash
 (chroot) ~/trunk/src/scripts $ mkdir /tmp/results
-(chroot) ~/trunk/src/scripts $ cros_run_vm_test --board $BOARD \
+(chroot) ~/trunk/src/scripts $ cros_run_test --board $BOARD \
 --results-dir=/tmp/results --autotest suite:smoke
 ```
 
