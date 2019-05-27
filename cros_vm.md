@@ -87,7 +87,7 @@ work as well.
 ```bash
 (sdk) .../chrome/src $ cros_vm --cmd -- /usr/local/autotest/bin/vm_sanity.py
 ```
-The command output on the VM will be output to the console after the command
+The command output in the VM will be output to the console after the command
 completes. Other commands run within an ssh session can also run with `--cmd`.
 
 Note that the CrOS test private RSA key cannot be world readable, so you may
@@ -159,41 +159,42 @@ chromiumos_preflight
 --to=localhost --port=9222
 ```
 
-## Run an autotest in the VM
+## Run a Tast test in the VM
 
-Autotests only exist inside the chromeos checkout, so they require running
-`test_that` directly from the chroot.
-
-From inside your [chroot]:
+Tast tests are typically executed from within a Chrome OS [chroot]:
 ```bash
-(chroot) ~/trunk/src/scripts $ ./build_packages --board=amd64-generic
-(chroot) ~/trunk/src/scripts $ test_that --board=amd64-generic localhost:9222 \
-login_Cryptohome
+(chroot) ~/trunk/src/scripts $ tast run -build=false localhost:9222 ui.ChromeLogin
 ```
 
-## Run an ARC++ test in the VM
+You can also run Tast tests directly in the VM:
+```bash
+(vm) localhost ~ # local_test_runner ui.ScreenLock
+```
+
+See the [Tast: Running Tests] document for more information.
+
+## Run an ARC test in the VM
 
 Download the betty VM:
 ```bash
 (sdk) .../chrome/src $ cros chrome-sdk --board=betty --download-vm
 ```
-vm_sanity will detect and run an ARC++ test:
+Run an ARC test:
 ```bash
-(vm) localhost ~ # /usr/local/autotest/bin/vm_sanity.py
+(vm) localhost ~ # local_test_runner arc.Boot
 ```
-Run a cheets autotest from within your [chroot]:
+Run a different ARC test from within your [chroot]:
 ```bash
-(chroot) ~/trunk/src/scripts $ ./build_packages --board=betty
-(chroot) ~/trunk/src/scripts $ test_that --board=betty localhost:9222 \
-cheets_ContainerMount
+(chroot) ~/trunk/src/scripts $ tast run -build=false localhost:9222 arc.Downloads
 ```
 
 ## Run a Chrome GTest binary in the VM
 
-The following will create a wrapper script at out_$SDK_BOARD/Release/bin/ that
+The following will create a wrapper script at `out_$SDK_BOARD/Release/bin/` that
 can be used to launch a VM, push the test dependencies, and run the GTest. See
 the [chromeos-amd64-generic-rel] builder on Chromium's main waterfall for the
-list of GTests currently running in VMs (eg: base_unittests, ozone_unittests).
+list of GTests currently running in VMs (eg: `base_unittests`,
+`ozone_unittests`).
 ```bash
 (sdk) .../chrome/src $ autoninja -C out_$SDK_BOARD/Release/ $TEST
 (sdk) .../chrome/src $ ./out_$SDK_BOARD/Release/bin/run_$TEST
@@ -203,7 +204,7 @@ list of GTests currently running in VMs (eg: base_unittests, ozone_unittests).
 
 Find a waterfall bot of interest, such as
 [amd64-generic-tot-chromium-pfq-informational], which is a FYI bot that builds
-TOT Chrome with TOT Chrome OS, or [amd64-generic-chromium-pfq], which is
+ToT Chrome with ToT Chrome OS, or [amd64-generic-chromium-pfq], which is
 an internal PFQ builder. Pick a build, click on artifacts, and download
 `chromiumos_qemu_image.tar.xz` to `~/Downloads/`
 
@@ -240,7 +241,7 @@ You can also launch the VM from anywhere within your chromeos source tree:
 (shell) .../chromeos $ chromite/bin/cros_vm --start --board $BOARD
 ```
 
-## cros_run_test
+## `cros_run_test`
 
 `cros_run_test` runs various tests in a VM. It can use an existing VM or
 launch a new one.
@@ -260,11 +261,10 @@ out_$SDK_BOARD/Release
 
 To run a Tast test:
 ```bash
-(sdk) .../chrome/src $ cros_run_test \
---cmd -- local_test_runner ui.ChromeLogin
+(sdk) .../chrome/src $ cros_run_test --cmd -- local_test_runner ui.ChromeLogin
 ```
 
-To build and run an arbitrary test (e.g. base_unittests):
+To build and run an arbitrary test (e.g. `base_unittests`):
 ```bash
 (sdk) .../chrome/src $ cros_run_test --build --chrome-test -- \
 out_$SDK_BOARD/Release/base_unittests
@@ -272,21 +272,23 @@ out_$SDK_BOARD/Release/base_unittests
 
 ### In the chroot
 
-These examples require a locally build VM, see
+These examples require a locally-built VM. See
 [Launch a locally built VM from within the chroot].
 
-To run an individual autotest from within the chroot:
+To run an individual Tast test from within the chroot:
 ```bash
-(chroot) ~/trunk/src/scripts $ cros_run_test --board $BOARD \
---autotest test_LoginCryptohome
+(chroot) ~/trunk/src/scripts $ cros_run_test --board $BOARD --tast ui.ChromeLogin
 ```
 
-To run the autotest smoke suite:
+To run all Tast tests matched by an [attribute expression]:
 ```bash
 (chroot) ~/trunk/src/scripts $ mkdir /tmp/results
 (chroot) ~/trunk/src/scripts $ cros_run_test --board $BOARD \
---results-dir=/tmp/results --autotest suite:smoke
+--results-dir=/tmp/results --tast '(!disabled && !"group:*" && !informational)'
 ```
+
+See [go/tast-infra] (Googler-only) for more information about which Tast tests
+are run by different builders.
 
 This doc is at [go/cros-vm]. Please send feedback to [achuith@chromium.org].
 
@@ -296,9 +298,12 @@ This doc is at [go/cros-vm]. Please send feedback to [achuith@chromium.org].
 [Virtualization enabled]: https://g3doc.corp.google.com/tools/android/g3doc/development/crow/enable_kvm.md
 [Simple Chrome]: https://chromium.googlesource.com/chromiumos/docs/+/master/simple_chrome_workflow.md
 [chroot]: https://www.chromium.org/chromium-os/developer-guide
+[Tast: Running Tests]: https://chromium.googlesource.com/chromiumos/platform/tast/+/HEAD/docs/running_tests.md
 [amd64-generic-tot-chromium-pfq-informational]: https://build.chromium.org/p/chromiumos.chromium/builders/amd64-generic-tot-chromium-pfq-informational
 [amd64-generic-chromium-pfq]: https://uberchromegw.corp.google.com/i/chromeos/builders/amd64-generic-chromium-pfq
 [build Chromium OS]: https://www.chromium.org/chromium-os/developer-guide
+[attribute expression]: https://chromium.googlesource.com/chromiumos/platform/tast/+/HEAD/docs/test_attributes.md
+[go/tast-infra]: https://chrome-internal.googlesource.com/chromeos/chromeos-admin/+/master/doc/tast_integration.md
 [go/cros-vm]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md
 [achuith@chromium.org]: mailto:achuith@chromium.org
 [chromeos-amd64-generic-rel]: https://ci.chromium.org/p/chromium/builders/luci.chromium.ci/chromeos-amd64-generic-rel
