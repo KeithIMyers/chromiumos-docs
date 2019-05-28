@@ -107,8 +107,8 @@ Sometimes work will span multiple [CL]s across different repos. The `Cq-Depend:`
 lines are used to make sure [CL]s are merged in a specific order, or altogether
 vs none at all.
 
-*   Specify dependencies in the last paragraph of your change (after `TEST=`
-    lines) using `Cq-Depend: chromium:12345`.
+*   Specify dependencies in the last paragraph of your change, just before
+    `Change-Id:`, using `Cq-Depend: chromium:12345`.
 *   Each dependency should start with a Gerrit instance prefix followed by a
     number (the [Gerrit][CL] number on the server) or a [Change-Id].
 *   You may specify multiple dependencies. Each dependency should be separated
@@ -130,8 +130,8 @@ Add file to install to 9999 ebuild file
 
 BUG=chromium:99999
 TEST=Tested with dependent CL's in trybot.
-Cq-Depend: chromium:12345, chrome-internal:4321
 
+Cq-Depend: chromium:12345, chrome-internal:4321
 Change-Id: I8d7f86d716f1da76f4c85259f401c3ccc9a031ff
 ```
 
