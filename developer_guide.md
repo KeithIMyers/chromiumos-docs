@@ -304,6 +304,14 @@ and whether you want color in your terminal. This command runs quickly. The
 
 More info can be found in the [working on a branch page].
 
+### Make sure you are authorised to access Google Storage (GS) buckets
+
+Building and testing Chromium OS requires access to Google Storage.
+This is done via [gsutil]. Once configured, an authorisation key is placed in `~/.boto`.
+Everytime you access the [chroot] via `cros_sdk`, the `.boto` file is copied to the [chroot].
+If you run [gsutil] inside the chroot, it will configure the key in the chroot version of `~/.boto`,
+but every time you re-run `cros_sdk`, it will overwrite the `~/.boto` file in the chroot.
+
 ## Building Chromium OS
 
 ### Create a chroot
@@ -1823,12 +1831,13 @@ Below are a few links to external sites that you might also find helpful
 [API Keys]: http://www.chromium.org/developers/how-tos/api-keys
 [working on a branch page]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/working-on-a-branch
 [chroot]: http://en.wikipedia.org/wiki/Chroot
+[gsutil]: gsutil.md
 [crosbug/10048]: http://crosbug.com/10048
 [Tips And Tricks]: https://sites.google.com/a/chromium.org/dev/chromium-os/tips-and-tricks-for-chromium-os-developers
 [something harder]: http://www.google.com/search?q=the+fourth+dimension
 [issues with virtual packages]: http://crosbug.com/5777
 [What does build_packages actually do?]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/portage-build-faq#TOC-What-does-build_packages-actually-do-
-[Cros Flash page]: https://sites.google.com/a/chromium.org/dev/chromium-os/build/cros-flash
+[Cros Flash page]: cros_flash.md
 [Chrome OS Devices]: https://sites.google.com/a/chromium.org/dev/chromium-os/developer-information-for-chrome-os-devices
 [Developer Hardware]: https://sites.google.com/a/chromium.org/dev/chromium-os/getting-dev-hardware/dev-hardware-list
 [crosh]: https://chromium.googlesource.com/chromiumos/platform2/+/master/crosh/
