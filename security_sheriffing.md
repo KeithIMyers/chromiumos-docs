@@ -32,7 +32,17 @@ High+ severity bugs.
 
 If you see a bug reported in a third-party package, check the
 [security-sensitive package list]. If the package is in the list, make it a
-priority to update the package before your shift ends.
+priority to update the package before your shift ends. You can often find newer
+versions of portage packages in
+[upstream Gentoo](https://packages.gentoo.org/categories). Do not worry if
+the version you need to resolve a security issue isn't marked stable. There are
+instructions for upgrading packages in the
+[portage-stable mirror](portage/package_upgrade_process.md).
+
+Sometimes a security bug might be in an unused feature of a third party package.
+If this is the case, you can often disable features during the configuration
+step
+([example](https://crrev.com/c/1641862/1/chromeos/config/env/net-misc/curl)).
 
 ## Sheriffing and full-chain exploits
 
