@@ -1844,7 +1844,7 @@ Below are a few links to external sites that you might also find helpful
 [crbug/710629]: https://bugs.chromium.org/p/chromium/issues/detail?id=710629
 [cros deploy]: https://sites.google.com/a/chromium.org/dev/chromium-os/build/cros-deploy
 [Create a branch for your changes]: #Create-a-branch-for-your-changes
-[Making changes to the Chromium web browser on Chromium OS]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/building-chromium-browser
+[Making changes to the Chromium web browser on Chromium OS]: simple_chrome_workflow.md
 [Remote Debugging in Chromium OS]: http://www.chromium.org/chromium-os/how-tos-and-troubleshooting/remote-debugging
 [cdgb]: https://cgdb.github.io/
 [crbug.com/new]: https://crbug.com/new
