@@ -140,6 +140,7 @@ src_unpack() {
 }
 
 src_compile() {
+	ecargo_build
 	use test && ecargo_test --no-run
 }
 
