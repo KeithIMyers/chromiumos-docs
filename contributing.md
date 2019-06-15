@@ -91,7 +91,7 @@ Some common examples:
 
 ### Change-Id
 
-It is important to note that repo uses the [Change-Id] in your git commit
+It is important to note that Gerrit uses the [Change-Id] in your git commit
 message to track code reviews.
 So if you want to make a change to an existing CL, you'll want to use `git
 commit --amend` rather than making an entirely new commit.
