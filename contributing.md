@@ -139,7 +139,7 @@ Change-Id: I8d7f86d716f1da76f4c85259f401c3ccc9a031ff
 
 Once your changes are committed locally, you upload them using `repo upload`.
 This command takes all of the changes that are unmerged, runs preupload checks
-on them, asks them if you want to upload them, and then publishes them.
+on them, asks if you want to upload them, and then publishes them.
 
 By default, `repo upload` looks across all branches & projects, so most of the
 time you want to restrict this to the local repo instead:
@@ -235,7 +235,7 @@ $ repo upload . --current-branch
 
 ### Getting Code-Review
 
-Ultimately, the point of review is to obtain both look good to me (LGTM) and
+Ultimately, the point of review is to obtain both looks good to me (LGTM) and
 approved statuses in your [CL]s.
 Those are tracked by the Code-Review+1 (LGTM) and Code-Review+2 (LGTM &
 approved) [Gerrit] labels.
@@ -379,7 +379,7 @@ You might also want to look at `git branch -D` or `repo prune`.
 ### Share your changes using the Gerrit sandbox {#sandbox}
 
 It is possible to upload changes to a personal sandbox on [Gerrit].
-This way, changes can be shared between developers before it's ready for review.
+This lets developers share changes with others before they're ready for review.
 
 *** note
 The sandbox spaces are **not** private.
