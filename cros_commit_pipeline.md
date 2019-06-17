@@ -48,7 +48,7 @@ or ensures that the failure was unrelated to their change.
 
 ### The Release (Canary) Builders
 
-The ToT (canary) **[release]** builders are triggered auttomatically according
+The ToT (canary) **[release]** builders are triggered automatically according
 to a schedule, currently 3 times per day.
 
 ### The Chrome PFQ Builders

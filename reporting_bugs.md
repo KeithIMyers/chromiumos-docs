@@ -68,7 +68,7 @@ Debug Logs` button. The resulting `debug-logs` archive file will be placed in
 your Downloads folder. It may contain personally identifiable information, so
 you may want to either:
 
-*   extract only the relevent log files, or
+*   extract only the relevant log files, or
 *   upload the archive to your Drive account and share it only with the
     developer investigating the issue.
 

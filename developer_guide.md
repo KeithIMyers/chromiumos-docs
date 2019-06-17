@@ -304,11 +304,11 @@ and whether you want color in your terminal. This command runs quickly. The
 
 More info can be found in the [working on a branch page].
 
-### Make sure you are authorised to access Google Storage (GS) buckets
+### Make sure you are authorized to access Google Storage (GS) buckets
 
 Building and testing Chromium OS requires access to Google Storage.
-This is done via [gsutil]. Once configured, an authorisation key is placed in `~/.boto`.
-Everytime you access the [chroot] via `cros_sdk`, the `.boto` file is copied to the [chroot].
+This is done via [gsutil]. Once configured, an authorization key is placed in `~/.boto`.
+Every time you access the [chroot] via `cros_sdk`, the `.boto` file is copied to the [chroot].
 If you run [gsutil] inside the chroot, it will configure the key in the chroot version of `~/.boto`,
 but every time you re-run `cros_sdk`, it will overwrite the `~/.boto` file in the chroot.
 
@@ -1773,7 +1773,7 @@ ordered by relevance):
     OS, including recommendations for project organization, importing and
     managing third party packages, and writing ebuilds.
 *   The [SELinux](selinux.md) page provides information on SELinux in Chrome
-    OS, including overview, writing policies, and trouboshooting.
+    OS, including overview, writing policies, and troubleshooting.
 
 ### External documentation
 

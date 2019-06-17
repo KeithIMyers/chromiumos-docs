@@ -155,7 +155,7 @@ requirements for a specific milestone (for example, because they enable key
 hardware support for a new device), but many features can be punted to a later
 milestone if they are not ready in time for the current one.
 
-Your role as the security review lead atteding the launch review meeting is to
+Your role as the security review lead attending the launch review meeting is to
 provide visibility into the *security* readiness of features aimed for the
 current milestone. If your or a team member's security review of a feature
 suggests it will not be ready on time, communicate that in the launch review

@@ -978,7 +978,7 @@ $ ./<your_fuzzer> -merge MINIMIZED_SEED_CORPUS <path_to_your_fuzzers_corpus>
 
 Once you have decided what files you will include in your seed corpus, you can
 upload it to the target's corpus (after the fuzzer has already run for the first
-time, which will probably happen within a day of commiting it) by running this
+time, which will probably happen within a day of committing it) by running this
 command:
 
 ```bash

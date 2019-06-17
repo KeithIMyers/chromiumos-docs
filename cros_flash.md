@@ -234,7 +234,7 @@ update payload for rootfs update. You can fix this with one of the following
 three options.
 
 1.  Update the device to a newer image with a USB stick (see [developer guide]).
-2.  Use `--no-rootfs-update` to update the stateful parition first (with the
+2.  Use `--no-rootfs-update` to update the stateful partition first (with the
     risk that the rootfs/stateful version mismatch may cause some problems).
 3.  Use [cros deploy] to deploy cherrypy package to your device.
 

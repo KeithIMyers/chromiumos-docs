@@ -41,7 +41,7 @@ section.
     - `range`: range contains combinations of security classes and security
       levels. Security classes are independent from each other, while one
       security levels is dominated by another one. Chrome OS doesn't use
-      multi-class security or multi-level security, but ARC container runnning
+      multi-class security or multi-level security, but ARC container running
       Android program is using MCS and MLS.
 - `attributes`: attribute is a named group of types.
 - `rules`: rules defines whether an access request should be allowed, or logged,
@@ -61,10 +61,10 @@ section.
       conflict between `allow` and `neverallow`. Android has CTS to test the
       policy running active in the system break their neverallows or not.
     - `allowxperm`: `allowxperm contextA contextB:class permission args`. It
-      check the args too at permission request. The arg is ususally not file
+      check the args too at permission request. The arg is usually not file
       paths but flags, since file paths should already be reflected in the
       context.  `allowxperm`-only will not grant the access. It must be used in
-      combination of `allow`. Like `allow`, `allowxperm` also has similiar
+      combination of `allow`. Like `allow`, `allowxperm` also has similar
       command in `auditallowxperm, `dontauditxperm`, and `neverallowxperm`.
     - `type_transition`: defines how type will auto change to a different one.
       Common type_transitions are:
@@ -231,7 +231,7 @@ Types can be defined in the following syntax
 type <type_name>[, <attribute1>, <attribute2>, ...];
 ```
 
-This defines a type named `<type_name>`, and optionally add the atributes:
+This defines a type named `<type_name>`, and optionally add the attributes:
 `<attribute1>`, `<attribute2>`, ...
 
 Also, for an already defined type `<type_name>`, it can add an additional
@@ -278,7 +278,7 @@ it either.
 
 #### Runtime Files
 
-Runtime files consistents of persistent runtime files in stateful partition (for
+Runtime files consist of persistent runtime files in stateful partition (for
 example, /var/lib, /var/log), and volatile runtime files in tmpfs (for example,
 /run).
 
@@ -304,7 +304,7 @@ filetrans_pattern(<domain>, <contextA>, <contextB>, file|dir|..., <file name>);
 ```
 
 Above macros, provides ability when `<domain>` create a file|dir|... under
-`<contextA>`, the created file|dir|... will be lablled as `<contextB>`. If the
+`<contextA>`, the created file|dir|... will be labelled as `<contextB>`. If the
 `<file name>` is provided, only created file|dir|... with exact name will be
 labelled as `<contextB>`.
 
@@ -351,7 +351,7 @@ For file type transition, when processes running in `source_type` create a
 `class` (file, dir, etc) under `target_type`, the created object is labeled as
 `new_type` by default.
 
-The same example as bove would be
+The same example as above would be
 
 ```
 type_transition cros_rsyslogd cros_var_log:file cros_syslog "messages";
@@ -481,7 +481,7 @@ We use the following naming conventions to reduce possibilities of conflicts.
 
   1. `/run/a/b/c/...` should be labelled as `cros_run_a_b_c`.
 
-  1. The rule for choosing `c` at which level is not enforced. It's ususally
+  1. The rule for choosing `c` at which level is not enforced. It's usually
   chosen by a level that you want to isolate access. `c` should be at least the
   same depth as `/run/<service-name>` or `/var/{lib, spool}/<service-name>`, but
   can be deeper if a special isolation of some files is necessary.
@@ -525,9 +525,10 @@ There major problem facing on SELinux with minijail wrapper program is:
     While setcon(3) is unlikely to be possible for our minijail usage since it
     usually attempt to mount procfs readonly.
 
-Of course, granting many unnecesary privilege to the domain is discouraged since
-an exploited process will be allowed to do what minijail could do (mknod, mount
-filesystems, etc). And we want to reduce the attack surface if possible.
+Of course, granting many unnecessary privilege to the domain is discouraged
+since an exploited process will be allowed to do what minijail could do
+(mknod, mount filesystems, etc). And we want to reduce the attack surface if
+possible.
 
 #### /sbin/minijail0
 
@@ -543,8 +544,8 @@ But static mode introduces another issue: seccomp.
   it's not want we want even minijail has isolated many other resources.
 - seccomp requires either `sys_admin` capabilities or `no_new_privs` bit.
   Granting `sys_admin` just for install seccomp filter is a terrible idea. But
-  `no_new_privs` prevents SELinux domain transition to arbitary domains pre-4.14
-  kernel.
+  `no_new_privs` prevents SELinux domain transition to arbitrary domains
+  pre-4.14 kernel.
 
 A common workaround for two problems above is to install seccomp filter
 post-execve, just like what a preload library has been doing. This comes an idea
@@ -954,7 +955,7 @@ permissive actor domain (scontext) will not actually being denied.
 But please note, some operation may indicate other permission at runtime. For
 example, file creation will check
 `{ associate } scontext=file_type tcontext=fs_type class=filesystem `, these kind of
-denials may occur. If you saw similiar denials please reach kroot@ or fqj@,
+denials may occur. If you saw similar denials please reach kroot@ or fqj@,
 we'll fix it.
 
 ##### Writing policy fix
@@ -990,7 +991,7 @@ writing policies.
    not suppressed by printk limit.
 
 1. `USE="selinux_experimental"`: build with SELinux mode in permissive by
-   default. This is equivalant to manually changing `SELINUX=permissive` in
+   default. This is equivalent to manually changing `SELINUX=permissive` in
    `/etc/selinux/config`
 
 1. `USE="selinux_audit_all"`: remove all the `dontaudit` rule before compiling

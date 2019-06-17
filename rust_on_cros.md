@@ -9,7 +9,7 @@ SDK's chroot.
 ## Usage
 
 [cros-rust.eclass] is an eclass that supports first-party and third-party crate
-dependencies. Rust projects's ebuild should inherit the eclass to support Rust
+dependencies. Rust project's ebuild should inherit the eclass to support Rust
 building in Chrome OS build system.
 
 > **WARNING**: Some legacy projects are still using [cargo.eclass]. These two
@@ -176,14 +176,14 @@ publish it by using the `cros-rust_publish` command.
 >
 > 2.  From project root directory with `cargo build`
 >
-> We add two macros to resolve conflitcs between these two build system. Check
+> We add two macros to resolve conflicts between these two build system. Check
 > details from the following section.
 
 ### Cargo.toml macros
 
 Using `cros-rust` ebuild could support building crates in Chrome OS build
 system, but it will break local `cargo build` in some situations. We add two
-macros which recognised by ebuild for `Cargo.toml` to keep both build system
+macros which are recognized by ebuild for `Cargo.toml` to keep both build system
 work.
 
 -   Provided by ebuild
@@ -205,7 +205,7 @@ work.
     **Example usage**: Add dependency to first-party crate
 
     1.  Add the dependent crate to DEPEND section in ebuild.
-    2.  Use relative path for impoted crates in `Cargo.toml` but with
+    2.  Use relative path for imported crates in `Cargo.toml` but with
         `# provided by ebuild` macro:
 
     ```toml
@@ -230,7 +230,7 @@ work.
     root crate.
 
     1.  Add the dependent crate to DEPEND section in root crate's ebuild.
-    2.  Use relative path for impoted crates in `[patch.crates-io]` section in
+    2.  Use relative path for imported crates in `[patch.crates-io]` section in
         root crate's `Cargo.toml` but with `# ignored by ebuild` macro:
 
     ```toml

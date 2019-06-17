@@ -572,7 +572,7 @@ interactive_ui_tests that measure Chrome OS performance should work.
 To build and run a chrome test on device (or VM),
 ```bash
 (sdk) .../chrome/src $ cros_run_test --build --device=$IP --chrome-test -- \
-out_$SDK_BOARD/Release/interative_ui_tests \
+out_$SDK_BOARD/Release/interactive_ui_tests \
     --dbus-stub \
     --enable-pixel-output-in-tests \
     --gtest_filter=SplitViewTest.SplitViewResize

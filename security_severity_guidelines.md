@@ -67,7 +67,7 @@ High-severity bugs:
 *   Browser process/`chronos` user code execution
 *   Root (or other more privileged user, such as system service users)
     code execution
-*   Code execution in the kernel that requires local priveleges to exploit
+*   Code execution in the kernel that requires local privileges to exploit
 *   Persistent code execution
 
 Full chain exploits don't always need to break all these layers. For example,

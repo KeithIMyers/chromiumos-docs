@@ -776,7 +776,7 @@ You can also connect to a [VM] via [vsh] and run `cat /etc/lsb-release`.
 ### Do I have to manage container updates?
 
 The Google provided packages in the container that communicate with Chrome OS
-or are required for Chrome OS intergration will be automatically updated on a
+or are required for Chrome OS integration will be automatically updated on a
 regular basis.
 This will install any necessary dependencies automatically.
 
@@ -814,7 +814,7 @@ You can star https://crbug.com/834585 for updates.
 
 Yes, starting with R74 ([Termina] version 11707.0.0+).
 
-If you set up your contaier before audio support was deployed, it might not be
+If you set up your container before audio support was deployed, it might not be
 configured correctly (as the default before was to output to the null device).
 You can try these steps to recover:
 
