@@ -448,29 +448,34 @@ instruction set. Similarly, if your computer has special hardware, you'll want
 to include a matching set of device drivers.
 
 Different classes of computers are referred to by Chromium OS as different
-target "boards" The following are some example boards:
+target "boards". The following are some example boards:
 
-*   **amd64-generic -** builds a generic image suitable for computers with a
-    x86_64-compatible CPU (64 bit)
-    *   Use this board if you're unsure what you want ... most likely this is
-        the one you want!
-*   **x86-generic** - builds a generic image suitable for computers with a
-    x86-compatible CPU (32 bit)
+*   **amd64-generic** - builds a generic image suitable for computers with an
+    x86_64-compatible CPU (64 bit) or for running in a VM
 *   **arm-generic** - builds a generic image suitable for computers with an ARM
     CPU (32 bit)
+*   **arm64-generic** - builds a generic image suitable for computers with an
+    ARM CPU (64 bit)
+*   **samus, eve, \<your board name>** - builds an image specific to the chosen
+    device (find your board name [here][Chrome OS Devices]); recommended for
+    deploying to official hardware
+*   **betty** - (Googlers only) builds an ARC++-enabled image for running in a
+    VM
 
-You need to choose a board for your first build. Don't worry too much about this
-choice – you can always build for another board later. If you want a list of
-known boards, you can look in `~/trunk/src/overlays`.
+You need to choose a board for your first build. Be aware that the generic
+images may not work well (or not at all) when run on official hardware. Don't
+worry too much about this choice, though – you can always build for another
+board later. If you want a list of known boards, you can look in
+`~/trunk/src/overlays`.
 
 Each command in the build processes takes a `--board` parameter. To facilitate
 this, it can be helpful to keep the name of the board in a shell variable. This
 is not strictly necessary, but if you do this, you can simply copy and paste the
 commands below into your terminal program. Enter the following inside your
-chroot (note: change `amd64-generic` to whatever board you want to build for):
+chroot:
 
 ```bash
-(inside) export BOARD=amd64-generic
+(inside) export BOARD=<your pick of board>
 ```
 
 This setting only holds while you stay in the chroot. If you leave and come
@@ -1681,6 +1686,8 @@ mind.
 *   If you use devserver, this will serve the non-test image not the test-image.
 *   This means a machine installed with a test-enabled USB image will update to
     a non-test-enabled one.
+*   As the `*-generic` boards set `USE=tpm`, recovery images built for
+    `*-generic` don't work on devices with H1 chips (which requires `USE=tpm2`).
 
 ## Additional information
 
@@ -1836,7 +1843,7 @@ Below are a few links to external sites that you might also find helpful
 [Creating an image that has been modified for test]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md#W4_Create-and-run-a-test_enabled-image-on-your-device
 [about_os_credits.html]: https://chromium.googlesource.com/chromium/src/+/master/chrome/browser/resources/chromeos/about_os_credits.html
 [devserver]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/using-the-dev-server
-[directory structure]: https://sites.google.com/a/chromium.org/dev/chromium-os/developer-guide/directory-structure
+[directory structure]: https://chromium.googlesource.com/chromiumos/docs/+/master/source_layout.md
 [The Chromium OS developer FAQ]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/developer-faq
 [Chromium OS Portage Build FAQ]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/portage-build-faq
 [rootfs-thread]: https://groups.google.com/a/chromium.org/group/chromium-os-dev/browse_thread/thread/967e783e27dd3a9d/0fa20a1547de2c77?lnk=gst
