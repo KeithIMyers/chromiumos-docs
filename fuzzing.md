@@ -1177,6 +1177,22 @@ $ gdb /build/<board>/usr/libexec/fuzzers/<fuzzer>
   (gdb) set breakpoints, debug as usual.
 ```
 
+### How to suppress errors reported by a fuzzer?
+
+If you want to suppress some errors reported by fuzzer that are not interesting
+or not actionable, a blocklist file can be used for this purpose. The blocklist
+file can be added in the `files` directory of the ebuild or the source
+directory of the package. The blocklist file should have one of the following
+names:
+*    sanitizer_blocklist.txt # A common blocklist for all sanitizer types.
+*    asan_blocklist.txt # Address sanitizer (asan) specific.
+*    msan_blocklist.txt # Memory sanitizer (msan) specific.
+*    ubsan_blocklist.txt # Undefined behavior sanitizer (ubsan) specific.
+
+See the [libchrome blocklist] as an example of suppressing ubsan errors.
+The syntax of the blocklist file is explained in more details at
+[clang's sanitizer special case list page].
+
 ## Getting help/Asking questions
 
 You can send an email to [chromeos-fuzzing@google.com] if you get stuck, or to
@@ -1297,3 +1313,7 @@ ask questions.
 [Configuring Authentication]: gsutil.md#setup
 
 [cros-workon]: developer_guide.md#Making-changes-to-packages-whose-source-code-is-checked-into-Chromium-OS-git-repositories
+
+[libchrome blocklist]: https://cs.corp.google.com/chromeos_public/src/third_party/chromiumos-overlay/chromeos-base/libchrome/files/ubsan_blocklist.txt
+
+[clang's sanitizer special case list page]: https://clang.llvm.org/docs/SanitizerSpecialCaseList.html
