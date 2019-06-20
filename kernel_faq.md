@@ -464,6 +464,11 @@ official release yet?
     ... - etc.
     ...
     ```
+    *   **NOTE:** If a patch is rejected on the list, and it is still suitable
+        for inclusion in the chromium kernel, it must be labeled as
+        "CHROMIUM: FROMLIST:". These patches must have a link to the upstream
+        discussion and must include the reason why we are diverging from
+        upstream.
 
 *   **UPSTREAM:** this tag should be used exclusively for patches that have
     actually landed in Linus' tree, not for cherry-picks from maintainer trees.
