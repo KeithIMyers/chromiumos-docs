@@ -1180,18 +1180,37 @@ $ gdb /build/<board>/usr/libexec/fuzzers/<fuzzer>
 ### How to suppress errors reported by a fuzzer?
 
 If you want to suppress some errors reported by fuzzer that are not interesting
-or not actionable, a blocklist file can be used for this purpose. The blocklist
-file can be added in the `files` directory of the ebuild or the source
-directory of the package. The blocklist file should have one of the following
-names:
-*    sanitizer_blocklist.txt # A common blocklist for all sanitizer types.
-*    asan_blocklist.txt # Address sanitizer (asan) specific.
-*    msan_blocklist.txt # Memory sanitizer (msan) specific.
-*    ubsan_blocklist.txt # Undefined behavior sanitizer (ubsan) specific.
+or not actionable, those errors can be suppressed by:
 
-See the [libchrome blocklist] as an example of suppressing ubsan errors.
-The syntax of the blocklist file is explained in more details at
-[clang's sanitizer special case list page].
+*   (*Preferred*) Using clang's no_sanitize attibute:
+    [Clang's no_sanitize attributes] can be used to suppress the specific error
+    (e.g. [skia error suppression]). This is strongly preferred for cases where
+    source code can be modified.
+    Note: Packages using libchrome can also use the
+    [macros provided in libchrome].
+
+*   Using a blocklist file:
+    If modifying source code is not an option, then a blocklist file can be
+    used to specify compile time supressions. It requires that the package
+    [inherits cros-sanitizers eclass] and [calls sanitizers-setup-env] in
+    the src_configure stage. Packages that [inherit platform eclass] do not
+    need to add this step as the [platform eclass] takes care of calling
+    `sanitizers-setup-env`. The blocklist file can be added in the any of the
+    following locations:
+    1. `files` directory of the ebuild.
+    2. The source directory root of the package i.e. the location pointed by
+      `${S}` variable in the package ebuild.
+
+    The blocklist file should have one of the following names:
+
+    * sanitizer_blocklist.txt:  A common blocklist for all sanitizer types.
+    * asan_blocklist.txt: Address sanitizer (asan) specific.
+    * msan_blocklist.txt: Memory sanitizer (msan) specific.
+    * ubsan_blocklist.txt: Undefined behavior sanitizer (ubsan) specific.
+
+    See the [libchrome blocklist] as an example of suppressing ubsan errors.
+    The syntax of the blocklist file is explained in more details at
+    [clang's sanitizer special case list page].
 
 ## Getting help/Asking questions
 
@@ -1314,6 +1333,20 @@ ask questions.
 
 [cros-workon]: developer_guide.md#Making-changes-to-packages-whose-source-code-is-checked-into-Chromium-OS-git-repositories
 
-[libchrome blocklist]: https://cs.corp.google.com/chromeos_public/src/third_party/chromiumos-overlay/chromeos-base/libchrome/files/ubsan_blocklist.txt
+[Clang's no_sanitize attributes]: https://clang.llvm.org/docs/AttributeReference.html#no-sanitize
+
+[macros provided in libchrome]: https://chromium.googlesource.com/aosp/platform/external/libchrome/+/5ca6b5581735fdb7a46249d4eb587aff936434f5/base/compiler_specific.h#168
+
+[skia error suppression]: https://skia.googlesource.com/skia.git/+/d6f3f18d51ec612d38019ce6cb3021050c6b5a84/include/private/SkFloatingPoint.h#157
+
+[inherits cros-sanitizers eclass]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/645c52be0d4388eb8200f8ef07cc60875dcc5b10/media-libs/virglrenderer/virglrenderer-9999.ebuild#6
+
+[calls sanitizers-setup-env]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/c85a04a77eb8895a4b8ef4ee3619aa539748a590/media-libs/virglrenderer/virglrenderer-0.7.0_p20190401.ebuild#52
+
+[inherit platform eclass]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/c85a04a77eb8895a4b8ef4ee3619aa539748a590/chromeos-base/p2p/p2p-0.0.1-r3038.ebuild#17
+
+[platform eclass]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/c85a04a77eb8895a4b8ef4ee3619aa539748a590/eclass/platform.eclass#183
+
+[libchrome blocklist]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/8c39d9715e86a6a62cc327bf2aefe4a18b430a02/chromeos-base/libchrome/files/ubsan_blocklist.txt
 
 [clang's sanitizer special case list page]: https://clang.llvm.org/docs/SanitizerSpecialCaseList.html
