@@ -477,7 +477,7 @@ $ git checkout ${BRANCH_NAME}
 
 [Adding Reviewers]: #reviewers
 [Change-Id]: https://gerrit-review.googlesource.com/Documentation/user-changeid.html
-[CL]: https://dev.chromium.org/glossary
+[CL]: glossary.md
 [Contact]: contact.md
 [Contributing Code]: https://dev.chromium.org/developers/contributing-code#TOC-Legal-stuff
 [Contributor License Agreement]: https://cla.developers.google.com/
