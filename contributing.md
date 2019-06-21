@@ -82,12 +82,24 @@ There should be a blank line between them and the [Change-Id] tag at the end.
 
 Some common examples:
 
-*   `TEST=None`: Used if the [CL] in question doesn't need testing (e.g. fixing
-    typos in documentation files).
-*   `TEST=ran unittests`: Implies the [unittests] in the package are sufficient
-    to prove functionality.
+*   `TEST=cros_run_unit_tests --board ${BOARD} --packages metrics`: Implies the
+    [unittests] in the package are sufficient to prove functionality.
 *   `TEST=precq passes`: Implies all [unittests]/vmtests/hwtests passed, and
     those tests are sufficient to validate the code.
+*   `TEST=None`: Used if the [CL] in question doesn't need testing (e.g. fixing
+    typos in documentation files).
+
+Avoid:
+
+*   `TEST=manual`: Does not specify which test(s) you actually ran.
+*   `TEST=ran unit tests`: Does not specify which test(s) you actually ran. Did
+    you run "all" the unit tests? A subset?
+
+Prefer instead:
+
+*   `TEST=cros deploy ${DUT} power_manager && restart powerd &&
+powerd_dbus_suspend`: Describes exactly which tests you ran and allows reviewers
+    to verify that the test coverage is sufficient or suggest alternative tests.
 
 ### Change-Id
 
