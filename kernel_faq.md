@@ -422,6 +422,12 @@ BACKPORT: as a new prefix. Use UPSTREAM: if you are applying an upstream patch
 as-is, or BACKPORT: if you had to change the code to make it run with an older
 kernel version.
 
+**NOTE:** Do not make functional changes to backported patches! Downstream
+changes in backports should be strictly limited to resolving conflicts. If you
+need to make a functional change to a backport (ie: changing a delay, tweaking a
+default value, etc), backport the change from upstream as-is and follow up with
+a separate patch with CHROMIUM prefix.
+
 Now, the upstream commit is on its own branch, let's upload it to gerrit, like
 usual:
 
@@ -476,6 +482,10 @@ official release yet?
 *   **BACKPORT:** follow the same rules as UPSTREAM, except that if you have to
     make changes to the patch, you should label it with BACKPORT and document
     what you had to change.
+
+    *   **NOTE:** Do not make functional changes to backported patches!
+        See the note in the previous section for guidance on how to handle
+        functional changes to upstream patches.
 
 *   **FROMGIT**: use this tag for cherry-picks of patches from maintainer
     trees, which have been applied in preparation for an upcoming release.
