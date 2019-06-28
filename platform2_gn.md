@@ -1,17 +1,15 @@
-# GN in platform2
+# GN in Chrome OS
 
 New packages should use
-[GN](https://gn.googlesource.com/gn/+/master/docs/reference.md), not GYP, to
-build binaries.
+[GN](https://gn.googlesource.com/gn/+/master/docs/reference.md) instead of GYP.
 
 See the official [step-by-step introduction](
 https://gn.googlesource.com/gn/+/master/docs/quick_start.md#Step_by_step) for
-the GN basics. This article discusses platform2 specific stuff.
+the GN basics. This article discusses Chrome OS specific stuff.
 
 ## How to build your package with GN
 
-Example: [arc/adbd/BUILD.gn](
-https://chromium.googlesource.com/chromiumos/platform2/+/master/arc/adbd/BUILD.gn)
+Example: [arc/adbd/BUILD.gn](https://chromium.googlesource.com/chromiumos/platform2/+/master/arc/adbd/BUILD.gn)
 
 - Put `BUILD.gn` in your package directory, which is determined by
   `PLATFORM_SUBDIR` in your ebuild. Existence of `BUILD.gn` indicates to the
@@ -25,8 +23,8 @@ https://chromium.googlesource.com/chromiumos/platform2/+/master/arc/adbd/BUILD.g
       package dependencies.
     - `BUILDCONFIG.gn` defines the default configs for each target type (e.g.
       executable). You can remove default configs in individual target with
-      `configs -=` if needed (example: [hammard/BUILD.gn](https://chromium-review.googlesource.com/c/chromiumos/platform2/+/1149942/8/hammerd/BUILD.gn)).
-      (TODO(oka): Replace the URL after the CL is submitted)
+      `configs -=` if needed.
+      ([example](https://crrev.com/d2f92d07e9b0950157b7ce3a0f70cfee72fe76e7/hammerd/BUILD.gn#39))
 
 ## How to write ebuilds
 
@@ -36,18 +34,20 @@ https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/maste
 Note we should add `.gn` in `CROS_WORKON_SUBTREE` so that the platform2 build
 system can access the file.
 
+### Packages outside platform2
+
+For packages outside platform2, use `CROS_WORKON_DESTDIR` to copy the
+package under `<workspace>/platform2/` while building it.
+([example](https://crrev.com/2bee6447043f11d39c61d2c3ea0b02287793dcf9/chromeos-base/update_engine/update_engine-9999.ebuild#8))
+
 ## How to check USE flags in GN
 
-Example: [hammerd/BUILD.gn](
-https://chromium-review.googlesource.com/c/chromiumos/platform2/+/1149942/8/hammerd/BUILD.gn)
-(TODO(oka): update the link after the CL is submitted)
-
 In GN files, USE flags can be referred as `use.foo`.
+([example](https://crrev.com/d2f92d07e9b0950157b7ce3a0f70cfee72fe76e7/hammerd/BUILD.gn#12))
 
-Only whitelisted USE flags can be used. If you need to use new USE flags,
-update the following files:
-- `_IUSE` constant in `platform2/common-mk/platform2.py`
-- IUSE variable in your ebuild file
+Only whitelisted USE flags can be used. If you need to use new USE flags, update:
+- `_IUSE` constant in `platform2/common-mk/platform2.py` ([example](https://crrev.com/c/1605185/5/common-mk/platform2.py))
+- `IUSE` variable in your ebuild file ([example](https://crrev.com/c/1617184))
 
 ## How to write unit tests
 
@@ -56,13 +56,11 @@ update the following files:
 The test targets are typically executables which depend on `//common-mk:test` to
 use gtest and gmock.
 
-
-How to run unit tests is same as before: In chroot, run
+How to run unit tests doesn't change: In chroot, run
 `cros_workon --board=$BOARD start $package_name` if you haven't. Then run
 
 ```
-cros_workon_make --board=$BOARD --test $package_name
+FEATURES=test emerge-$BOARD $package_name
 ```
-.
 
-Prepend VERBOSE=1 to see the commands run by GN (plus other logs).
+Prepend `VERBOSE=1` to see GN and ninja commands (plus other logs).
