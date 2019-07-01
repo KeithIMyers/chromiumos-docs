@@ -268,6 +268,8 @@ can use the **minilayout** option below. This starts you out with a minimum
 amount of source code. This isn't a particularly well tested configuration and
 has been known to break from time-to-time, so we usually recommend against it.)
 
+**Googlers:** See [goto/chromeos-building] for internal notes.
+
 ```shell
 (outside)
 cd ${HOME}/chromiumos
@@ -280,8 +282,6 @@ repo init -u https://chromium.googlesource.com/chromiumos/manifest.git --repo-ur
 # the majority of the source local, using -j16 or so is generally okay).
 repo sync -j4
 ```
-
-**Googlers:** See [goto/chromeos-building] for internal notes.
 
 #### Optionally add Google API keys
 
