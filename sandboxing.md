@@ -322,6 +322,10 @@ NOTICE kernel: [  586.706239] audit: type=1326 audit(1484586246.124:6): ... comm
 *   Then do:
     *   `minijail0 -H | grep <nr>`, where `<nr>` is the `syscall=` number
         above, to find the name of the failing syscall.
+    *   NB: You need to run `minijail0` on the same system as your program as
+        the system call tables might be different from the SDK (e.g. x86 is not
+        the same as arm).
+    *   For an online list of syscalls, check out our [syscalls table].
 
 ## Securely mounting cryptohome daemon store folders
 
@@ -431,3 +435,4 @@ TODO(jorgelo)
 [`syscall_filter.c` source]: https://chromium.googlesource.com/aosp/platform/external/minijail/+/master/syscall_filter.c#239
 [generate_syscall_policy.py script]: https://chromium.googlesource.com/aosp/platform/external/minijail/+/master/tools/generate_seccomp_policy.py
 [shared subtrees]: https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt
+[syscalls table]: ./constants/syscalls.md
