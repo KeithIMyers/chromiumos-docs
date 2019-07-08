@@ -697,10 +697,10 @@ before you run this command.
 ### Disable verified boot
 
 You need to disable verified boot to be able to use your own image. Sometimes it
-can be achieved by holding the reset shortcuts (Esc-F3-Power) for a long
-time. Try with your machine for a while until you figure it out. Disabling
-verified boot takes some time, and is often accompanied by entering developer
-mode.
+can be achieved by holding the [recovery mode shortcuts][Debug Button Shortcuts]
+for a long time. Try with your machine for a while until you figure it out.
+Disabling verified boot takes some time, and is often accompanied by entering
+developer mode.
 
 How this is accomplished for non Google Chrome OS devices depends heavily on the
 BIOS and can vary drastically, so we will not attempt to cover that.
@@ -711,12 +711,8 @@ devices will show how to enter dev mode which will disable verified boot.)
 ### Boot from your USB disk
 
 For Google Chrome OS devices, you must first put the device into developer
-mode. There are two potential ways to do this, depending on your device. If you
-have a physical developer switch, move it to ON position. Otherwise if your
-device is using “keyboard based developer / recovery switch”, do that by first
-Esc-F3-Power to recovery mode, then Ctrl-D and ENTER to activate the virtual
-developer switch (Note if you’re already in developer mode, Ctrl-D won’t do
-anything - just move to next step).
+mode. There are different [Debug Button Shortcuts] to achieve this, depending
+on your device.
 
 Entering developer mode takes a while, the device removes all personal data and
 resets itself.
@@ -1838,6 +1834,7 @@ Below are a few links to external sites that you might also find helpful
 [issues with virtual packages]: http://crosbug.com/5777
 [What does build_packages actually do?]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/portage-build-faq#TOC-What-does-build_packages-actually-do-
 [Cros Flash page]: cros_flash.md
+[Debug Button Shortcuts]: debug_buttons.md
 [Chrome OS Devices]: https://sites.google.com/a/chromium.org/dev/chromium-os/developer-information-for-chrome-os-devices
 [Developer Hardware]: https://sites.google.com/a/chromium.org/dev/chromium-os/getting-dev-hardware/dev-hardware-list
 [crosh]: https://chromium.googlesource.com/chromiumos/platform2/+/master/crosh/
