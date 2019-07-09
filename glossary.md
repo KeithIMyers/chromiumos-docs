@@ -77,6 +77,7 @@
 *   __PFQ__: "Preflight queue", used to describe bot configurations
     in the waterfall that run to test/gate changes before they're
     allowed into the tree for everyone to see.
+*   __PS__: Patchset.  Never used to mean "patch series".
 *   __PSR__: Panel Self Refresh (eDP).
 *   __PTAL__: "Please take a[nother] look", often used when someone
     is happy with the state of a CL and want reviewers to look
