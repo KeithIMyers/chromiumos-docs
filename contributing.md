@@ -487,6 +487,108 @@ within a directory associated with your project:
 $ git checkout ${BRANCH_NAME}
 ```
 
+### Updating CL without rebasing
+
+When going through the review process, it's common to receive feedback that
+requires making changes in your CL and uploading a new patchset (PS).
+If other CLs land in the repo in the meantime, your local checkout has probably
+been updated and your changes been rebased onto the latest master branch.
+To be clear, this isn't a problem: when the CL lands, it will be rebased as
+part of the CQ merge process.
+
+However, when viewing inter-PS differences (e.g. the diff between PS1 & PS2
+rather than the default base & PS2), changes made to the file by other CLs will
+show up too.
+Those diffs might add significant noise for the reviewer who is focusing only on
+the bits that have been changed by you.
+When you keep the parent commit the same between patchsets, even if it isn't the
+latest available commit in the repo, the inter-PS diffs remain stable.
+
+This trick can be applied to another common scenario: when you have a patch
+series and you only want to refresh one CL in the middle without updating all of
+them at the same time (which can generate noise in the CL with rebase).
+This assumes, of course, the change doesn't run into conflicts with later CLs.
+
+*** note
+This flow assumes that you were the author of the CL and that it was uploaded
+from the same checkout that you will be working in here, and that the git object
+directory hasn't been garbage collected.
+Or that the parent commit is one that's been merged into the tree already.
+This is the most common flow, so it's normally OK.
+
+However, if the `git reset` command below fails because it couldn't locate the
+commit you specified, you'll have to manually download the history.
+Follow the extra history download step to resolve that.
+***
+
+Here's the process:
+
+1.  Go to your CL in Gerrit.
+1.  *If you need to download the history first*
+    1.  Click the ⋮ menu.
+    1.  Select "Download patch" section.
+    1.  Copy the "Checkout" code snippet.
+    1.  Run that in your local git checkout.
+    1.  Git will warn you about being in a "detached HEAD" state, but don't
+        worry about it.  The steps below will fix things.
+1.  Get the parent commit id of the latest PS.
+    1.  Look for the "Parent" entry in the summary section in the upper left.
+    1.  Click the copy button next to it.
+1.  In your local checkout, create a new temporary branch.
+    *   e.g. `repo start foo`
+1.  Reset that branch to the parent commit copied earlier.
+    *   This will throw away any history in the branch which is why you want to
+        create a temporary branch.
+    *   e.g. `git reset --hard <parent commit id>`
+1.  Cherry pick the updated commit from your other local branch.
+    *   This will be the change you want to upload.
+    *   e.g. `git cherry-pick <commit id>`
+1.  Make any last changes you want before uploading it like normal.
+    *   e.g. `repo upload --cbr .`
+    *   Any changes that haven't yet been merged will be run through the set of
+        pre-upload hooks even if you didn't author them.
+        If you've verified that your CL passes the hooks, you can use the
+        `--no-verify` flag to bypass the checks.
+        *Use with care.*
+1.  Once you're all done, you can delete the temporary branch.
+    1.   Switch back to your normal branch using `git checkout <branch>`.
+    1.   Delete the branch using `repo abandon foo .`.
+
+The key to this process is that the commits you're building on top of have not
+changed since they were uploaded to Gerrit.
+Gerrit defines "changed" as "has new commit id", not "the diff & commit message
+are the same".
+That is why we got the exact commit id above and used `git reset` to make sure
+the local tree state matched it exactly.
+If you have multiple unmerged commits in this branch (e.g. a patch series), and
+they get rebased (e.g. you ran `git rebase` or `repo sync` rebased for you),
+then uploading changes from that branch will update all the CLs in Gerrit (which
+is what you were trying to avoid in the first place).
+
+Since this does take effort, and many times CLs landed don't touch the files
+you're also working on, developers are not required or generally expected to
+go through this.
+We leave it to your discretion as to when it makes sense.
+
+### Basing your CL on another uploaded CL
+
+If someone else has posted a CL that you want to build on top of, but you don't
+want to take over their CL or have it rebased when you upload your new CL, then
+this is the flow for you.
+
+The flow is largely the same as the "Updating CL without rebasing" process.
+You'll have to make sure to follow the extra history download steps if the CL
+you're basing things on is not your own.
+
+Instead of selecting the Parent commit, you'll want to get the commit of the PS.
+Look for the "Files" header above the list of changed files.
+Next to that is the patchset selection, and next to that is a commit id.
+Click the copy button next to it to get the commit you'll be resetting to.
+
+Be extra aware of the caveat for how this works as noted in the section above:
+the commits you downloaded and are basing things on must not change (i.e. their
+git commit id must be exactly the same).
+
 [Adding Reviewers]: #reviewers
 [Change-Id]: https://gerrit-review.googlesource.com/Documentation/user-changeid.html
 [CL]: glossary.md
