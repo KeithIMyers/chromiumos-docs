@@ -73,44 +73,25 @@ This is the JSON if that file was parsed and exported as such.
 
 If you want to access fields in this file, please do not parse it yourself.
 
-### C++ (Chromium)
+### C++
 
-In browser code, Chromium provides the `SysInfo` class in [base/sys_info.h].
-See the myriad of methods that start with the `Lsb` prefix.
+The `SysInfo` class is provided by libchrome in [base/sys_info.h].
+See the methods that start with the `GetLsb` prefix.
 
-[base/sys_info.h]: https://chromium.googlesource.com/chromium/src/+/master/base/sys_info.h
-
-### C++ (Chromium OS)
-
-In platform code, Chromium OS provides a generic `brillo::KeyValueStore` in
-[brillo/key_value_store.h] that can process this file.
+[base/sys_info.h]: https://chromium.googlesource.com/chromium/src/+/master/base/system/sys_info.h
 
 ```cpp
+#include <base/sys_info.h>
 ...
-#include <brillo/key_value_store.h>
-...
-namespace {
-// Path to lsb-release file.
-constexpr char kLsbReleasePath[] = "/etc/lsb-release";
-}  // namespace
-...
-  brillo::KeyValueStore store;
-  if (!store.Load(kLsbReleasePath)) {
-    LOG(ERROR) << "Could not read lsb-release";
-    return false;
-  }
-
   std::string value;
-  if (!store.GetString(kSomeKey, &value)) {
-    // kSomeKey isn't in lsb-release.
+  if (!base::SysInfo::GetLsbReleaseValue("CHROMEOS_RELEASE_TRACK", &value)) {
+    LOG(ERROR) << "Could not load field from lsb-release";
     return false;
   }
 
   // Do something with |value| now.
 ...
 ```
-
-[brillo/key_value_store.h]: https://chromium.googlesource.com/chromiumos/platform2/+/master/libbrillo/brillo/key_value_store.h
 
 ### Python
 
