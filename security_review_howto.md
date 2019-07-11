@@ -1,9 +1,7 @@
 # Chrome OS security review HOWTO
 
-This document describes the Chrome OS security review process. It attempts to
-comprehensively document the process and thus caters to various audiences, most
-importantly feature owners and security team members. Individual sections call
-out the main target audience where appropriate.
+This document describes the Chrome OS security review process. It's aimed at
+feature owners, tech leads, and product managers.
 
 ## Goals
 
@@ -26,12 +24,11 @@ branch is pushed to devices on the stable channel.
 
 A feature targeting a given milestone will be reviewed during that milestone's
 development cycle, or shortly after the branch is cut. The Chrome OS security
-team tracks features by looking at *Launch bugs* filed in [crbug.com], which are
-also mirrored in [chromefeatures.googleplex.com]. **As long as the feature has
-an associated launch bug, the security team will track it**. The new launch bug
-template allows feature owners to initiate a security review by flipping the
-*Launch-Security* flag to *ReviewRequested*. The security team tracks this
-flag as well.
+team tracks features by looking at *Launch bugs* filed in [crbug.com]. **As long
+as the feature has an associated launch bug, the security team will track it**.
+The new launch bug template allows feature owners to initiate a security review
+by flipping the *Launch-Security* flag to *ReviewRequested*. The security team
+tracks this flag as well.
 
 In order to streamline the process as much as possible, make sure that the
 launch bug links to a design doc that includes a section covering the security
@@ -41,27 +38,37 @@ concerns it should address**.
 
 Launch bugs include a set of cross-functional review flags, which includes the
 *Launch-Security* flag mentioned above. The security team will flip this flag
-to *Yes* after the feature owner has successfully engaged the security team to
-understand (and address or mitigate) the security implications of the feature.
-**Don't think of the security review process as an arbitrary bar set by the
-security team that you have to pass no matter what**. Instead, think of it as
-the process by which you take ownership of the security implications of the
+to *Approved* after the feature owner has successfully engaged the security team
+to understand (and address or mitigate) the security implications of the
+feature. **Don't think of the security review process as an arbitrary bar set by
+the security team that you have to pass no matter what**. Instead, think of it
+as the process by which you take ownership of the security implications of the
 feature, so that you are shipping something that doesn't detract from the
 overall security posture of the product.
 
 Even if you consider that the feature is trivial, or has no security
 implications, **please refrain from flipping the security flag in the launch bug
- to *NA* or *Yes* yourself**. In most cases, features are not as trivial as
+ to *NA* or *Approved* yourself**. In most cases, features are not as trivial as
 they initially appear. More importantly, the security team uses these flags to
-track features and work on our side. We will flip the security flag to *Yes*
-when the feature is ready.
+track features and work on our side. We will flip the security flag to
+*Approved* when the feature is ready.
+
+Fast-track features will still require a full security review if the feature is
+modifying more than one component, where *component* can be understood as a
+single process or service. For example, if the feature is modifying two things
+that communicate over IPC, it would require a full security review. In other
+words, modifying a single component is a necessary but *not sufficient*
+condition for a feature to be fast-tracked from a security perspective. Many
+features that modify a single component are complex enough to require a full
+security review.
 
 If the feature is big or complex, or if you find yourself implementing something
 that needs to go against the recommendations in this document, please reach out
 to the security team as soon as possible. Send email to
 [chromeos-security@google.com], and try to include a design doc, even if it's
 just an early draft. **When in doubt, just reach out**. We are always happy to
-discuss feature design.
+discuss feature design. You can also book [office hours] for any questions or
+discussions.
 
 The Chrome OS security team will normally not look at the implementation details
 of a feature -- there is just not enough time to read through thousands of lines
@@ -95,99 +102,7 @@ that's complete without requiring costly refactoring or rearchitecting.
 In general, a feature that properly addresses the questions and recommendations
 in this document can expect to have its security flag flipped by branch point.
 
-## The role of the security review lead
-
-This section is mostly only relevant for security team members and can be safely
-skipped by feature owners.
-
-The security review lead represents Chrome OS security at Chrome OS Launch
-review meetings. They are responsible for getting features *that are ready to be
-reviewed* actually reviewed in time. Their objective should be to support the
-Chrome OS team shipping features that improve the experience of Chrome OS users
-without compromising the security posture of the product. And remember, security
-is a feature too!
-
-If you're fulfilling the role of security review lead, ensure first and
-foremost that you're invited to Chrome OS Launch review meetings. Ask the Chrome
-OS security leads, or the Launch process lead (currently ovanieva@) to add you
-to the meeting.
-
-Make sure to review outstanding launches before each meeting, by querying
-[crbug.com] or [chromefeatures.googleplex.com] for features aimed for the
-current milestone. Identify features that are in *ReviewRequested* state, and
-make sure that they are actually ready to be reviewed, with the launch bug
-listing a design document that covers security considerations.
-
-Identify as well features that are in *NotReviewed* state. Ping the feature
-owner to confirm whether those features are still aimed at the current
-milestone, and remind them that until the features are changed to
-*ReviewRequested*, they will not be reviewed by the Chrome OS security team.
-
-For features in *NeedInfo* state, consider pinging the feature owner if there
-has been no reply on the launch bug for a while (say a week). Remind the feature
-owner that launches in *NeedInfo* state cannot be reviewed, or approved, by the
-Chrome OS security team until the extra information is provided, or the extra
-mitigations are implemented.
-
-Some tooling can make the role of the security review lead easier:
-
-*   Configure *Saved queries* in [crbug.com] to search for launch bugs in each
-    of the three above states: *ReviewRequested*, *NotReviewed*, *NeedInfo*.
-    This can easily be done in the main [crbug.com] page with the *Saved
-    queries* link to the right of the search box. Create saved queries that
-    **don't** include a milestone since you'll likely be using these queries for
-    several milestones.
-*   Use the [crbug.com] *Bulk edit* functionality to quickly update, for
-    example, all *NotReviewed* bugs still aimed for the current milestone.
-
-In general, strive to communicate early and often. The days after the first
-launch review meeting for a given milestone (check [chromiumdash] for milestone
-schedules) are a good time to follow up on the *NotReviewed* features. *Feature
-freeze* happens **two weeks** before branch point: the days leading to feature
-freeze are a good time to follow up on the *NeedInfo* features to make sure
-there's enough time to improve documents or implementation.
-
-### Launch review meetings
-
-The objective of Launch review meetings is for Chrome OS leads to understand the
-readiness of features aimed for the current milestone. Some features are hard
-requirements for a specific milestone (for example, because they enable key
-hardware support for a new device), but many features can be punted to a later
-milestone if they are not ready in time for the current one.
-
-Your role as the security review lead attending the launch review meeting is to
-provide visibility into the *security* readiness of features aimed for the
-current milestone. If your or a team member's security review of a feature
-suggests it will not be ready on time, communicate that in the launch review
-meeting.
-
-Bear in mind that launch review meetings are not the place for in-depth
-discussions about feature security or concerns discovered during the review.
-Launch review meetings are status tracking meetings. There are a lot of features
-to get through and therefore not a lot of time can be dedicated to individual
-features.
-
-You can discuss security concerns on the launch bug, on the design doc, or by
-scheduling a meeting specifically to that effect.
-
-### Assigning reviews to other team members
-
-Each feature review is assigned to a specific security team member. We track
-assignment using *SECURITY-${username}* labels in [crbug.com]. This bookkeeping
-information helps the security review lead to keep the big picture and is useful
-for future reference in case the feature review becomes relevant for future
-reviews, bugs, etc. You can add the *SECURITY* field as a column to show for the
-search list page to get a quick overview of what feature is assigned to which
-team member for review, and more importantly which features are pending
-assignment.
-
-Consider team members' expertise in the different aspects of Chrome OS when
-assigning security reviews. Work with Chrome OS security leads to validate and
-confirm assignments, and make sure that folks know which features are assigned
-to them. Also, ensure that folks provide feedback to the feature owner before
-launch review meetings.
-
-## Life of a security review
+### Life of a security review
 
 This section describes how we use launch bug labels to determine the status of a
 given launch bug and its progression through various states. It's useful context
@@ -249,7 +164,7 @@ role and responsibility in the review process:
     feature is not really ready for review, flip the review flag to *NeedInfo*
     and explain what's missing.
 9.  Once everything looks good, the security reviewer should flip the review
-    flag to *Launch-Security-Yes* and document conclusions and aspects that were
+    flag to *Approved* and document conclusions and aspects that were
     specifically evaluated in the security review in a bug comment. The [review
     framework] section is useful to structure this. The information in the
     comment is intended for future reference when consulting previous security
@@ -261,9 +176,9 @@ role and responsibility in the review process:
     we can improve the process as needed (for example by adding specific items
     to watch out for to the [review framework]).
 10. In case the review reaches an impasse, the security reviewer shouldn't just
-    mark *Launch-Security-No* as we're committed to engage productively as much
-    as we can. Instead, the current state of things should be surfaced and
-    relevant leads be consulted to figure out a way forward.
+    flip the review flag to *NotApproved* as we're committed to engaging
+    productively as much as we can. Instead, the current state of things should
+    be surfaced and relevant leads be consulted to figure out a way forward.
 
 ## Review framework - things to look at
 
@@ -290,7 +205,7 @@ idea. Existing boundaries include:
     execution (this includes loading untrusted kernel modules). Seccomp (see
     the [sandboxing guide] for details) should be used to secure this boundary.
 *   Kernel to firmware: it should not be possible for a kernel compromise to
-    result in persistent, undetectable firwmare manipulation. This is enforced
+    result in persistent, undetectable firmware manipulation. This is enforced
     by Verified boot.
 
 Are security boundaries still robust after the feature has been implemented?
@@ -442,14 +357,14 @@ help us make consistent decisions. They guide us towards solutions that achieve
 security trade-offs which make sense in the world our users live in. As part of
 the security review process, we evaluate whether new features strike the right
 balance with respect to our principles. This is not exact science - we often
-need to balance legit interest to add a new feature with slight deterioration of
-Chrome OS's overall adherence to the principles. In case of obvious conflicts,
-it is important though to explore whether the feature in question can be
-implemented in an alternative way that is more in line with the principles. If a
-better design is identified, please do make the effort to seriously consider it.
-Design improvements are a triple win: The feature team produces a shinier
-feature, users get something that works better, and the security team has fewer
-things to worry about.
+need to balance legitimate interest to add a new feature with slight
+deterioration of Chrome OS's overall adherence to the principles. In case of
+obvious conflicts, it is important though to explore whether the feature in
+question can be implemented in an alternative way that is more in line with the
+principles. If a better design is identified, please do make the effort to
+seriously consider it. Design improvements are a triple win: The feature team
+produces a shinier feature, users get something that works better, and the
+security team has fewer things to worry about.
 
 These are our security principles:
 
@@ -483,8 +398,8 @@ These are our security principles:
 
 [sandboxing guide]: https://chromium.googlesource.com/chromiumos/docs/+/master/sandboxing.md
 [crbug.com]: https://crbug.com
-[chromefeatures.googleplex.com]: https://chromefeatures.googleplex.com
 [chromeos-security@google.com]: mailto:chromeos-security@google.com
+[office hours]: https://goto.google.com/cros-security-office-hours
 [chromiumdash]: https://chromiumdash.appspot.com/schedule
 [fuzzing documentation]: https://chromium.googlesource.com/chromiumos/docs/+/master/fuzzing.md
 [BaseMessageLoop]: https://chromium.googlesource.com/aosp/platform/external/libbrillo/+/master/brillo/message_loops/base_message_loop.h
