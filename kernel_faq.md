@@ -529,6 +529,15 @@ Do an incremental build of the kernel:
 (chroot) $ FEATURES="noclean" cros_workon_make --board=${BOARD} --install chromeos-kernel-[3_8|3_10|3_14|3_18|4_4]
 ```
 
+To enable debug options like lockdep and KASAN, add `USE="debug"` to the
+command line above. This is highly recommended because the default build
+is optimized for performance rather than debugging purpose. Note that the
+debug build bloats the size of kernel image, and the image may not be able
+to fit into its partition on some older devices. The debug build also takes
+much longer to boot.
+
+You can also enable serial port at the same time by `USE="debug pcserial"`.
+
 Update the kernel on the target:
 
 ```
