@@ -1,65 +1,56 @@
-# How to do fuzz testing on Chrome OS
+# Fuzz testing in Chrome OS
 
-The target audience for this document are developers in Chrome OS who work on
-packages. It explains how to write a fuzz test target for a package, which
-will then be automatically picked up and run regularly by ClusterFuzz. It
-assumes some basic familiarity with the Chrome OS development environment.
+Fuzzing is a testing technique that feeds randomized inputs to
+target code in an attempt to crash it. It's one of the most effective tools we
+have for finding [security bugs] and [non-security bugs]
+(also see [go/fuzzing-success](http://go/fuzzing-success)).
 
+This guide introduces Chrome OS developers to fuzz testing.
+It assumes basic familiarity with the Chrome OS development environment. If
+you're looking for information on fuzz testing code in other projects, like
+Android or Google3, see [go/fuzzing](http://go/fuzzing).
+
+{#top}
 [TOC]
 
-## What is fuzz testing?
+## How does fuzz testing work in Chrome OS? {#how}
 
-Fuzz testing (or "fuzzing") is the process of testing an application by feeding
-invalid, malformed, or malicious inputs to a target program in an attempt to
-crash it. It is particularly useful for testing APIs because it can play the
-part of an attacker sending malicious input to the API.
+Fuzzing takes a set of initial inputs called a *seed corpus* and randomly
+mutates it to try to crash the code under test. Chrome OS fuzz testing is
+*coverage-guided*, which means that when a new input increases the amount of
+code covered by the testing, that input gets added to the corpus.
 
-The input data is created by randomly mutating other inputs. Sometimes the
-initial inputs are provided by the user in what is known as a *seed corpus*,
-otherwise the fuzzer will generate inputs from scratch. Coverage-guided fuzz
-testing is an extension of fuzz testing that explicitly attempts to increase
-code coverage when it generates new tests, adding the new tests to its test
-corpus when it finds tests that increase coverage, i.e. when a new test executes
-a new code path in the target program.
+In Chrome OS, you can fuzz a piece of code (e.g., an API) by creating a program
+called a *fuzz target*. The target gets linked with a fuzzing engine
+([libFuzzer]) and picked up by [ClusterFuzz], Google's cross-platform fuzzing
+infrastructure.
 
-LLVM has a built-in fuzzing engine, [libFuzzer], that is provided as part of
-LLVM's sanitizer instrumentation. Google has a cross-platform fuzzing
-infrastructure, [ClusterFuzz], that works with libFuzzer and aids developers
-by providing an end-to-end pipeline that automatically picks up new (and
-existing) fuzz targets, runs fuzz testing on these targets, reports bugs
-(assigning them to appropriate owners), and even verifies fixes. Chromium on
-Linux and MacOS has been using [libFuzzer and ClusterFuzz] for years, and
-they have proved very useful, finding thousands of [security bugs] and
-[non-security bugs].
+libFuzzer uses your fuzz target to produce an executable (via Clang) called
+the *fuzzer*, which calls the code you want to test. ClusterFuzz then runs the
+fuzzer and makes sure you can act on the results; it picks up new fuzz
+targets, fuzzes them, reports bugs, and even verifies fixes.
 
-A fuzz test target is nothing more than a piece of code that can take a chunk
-of bytes and do something with them by calling the code to be tested. For the
-remainder of this document we will use the word *fuzzer* to refer to a fuzz test
-target that gets linked against libFuzzer to produce an executable that
-exercises the code under test. This is what ClusterFuzz will run.
+[**Return to Top**](#top)
 
-Chrome OS has tooling to support writing fuzzers for Chrome OS packages. This
-document will walk you through the steps necessary to get your fuzzers up and
-running on ClusterFuzz.
+## Quickstart
 
-## Quickstart guide
+This section describes the basic steps to writing a fuzzer in Chrome OS and
+getting ClusterFuzz to pick it up. For more details on each step, see
+[Detailed instructions](#Detailed-instructions).
 
-This section of the document describes the basic steps needed to write a fuzzer
-in Chrome OS and have ClusterFuzz pick it up. For more detailed instructions,
-see the [Detailed instructions](#Detailed-instructions) section.
+*** note
+**Note**: If you're working on a platform package (one that is in the
+`platform` or `platform2` source directory and whose ebuild inherits from the
+`platform` eclass), skip to
+[Build a fuzzer for a platform package](#platform).
+***
 
-If you are working on a platform package (one that is in the `platform` or
-`platform2` source directory and whose ebuild inherits from the `platform`
-eclass), see the
-[Build a fuzzer for a platform package](#Build-a-fuzzer-for-a-platform-package)
-section.
+Quickstart steps:
 
-### Steps to create a new fuzzer in Chrome OS
-
-*   Write a new test program in your package, whose name ends in `_fuzzer` (it
-    would be a good idea, but not required, to prepend your package name to
-    your fuzzer as well, e.g. 'cryptohome_<descriptive-name>_fuzzer') and which
-    defines a function `LLVMFuzzerTestOneInput` with the following signature:
+1.  In your package, write a new test program with a name that ends in `_fuzzer`
+    (it's a good idea to prepend your package name to your fuzzer as well, e.g.
+    `cryptohome_<descriptive-name>_fuzzer`. In the program, define the function
+    `LLVMFuzzerTestOneInput` with the following signature:
 
     ```c
     #include <stddef.h>
@@ -71,73 +62,91 @@ section.
     }
     ```
 
-    Ensure `LLVMFuzzerTestOneInput` calls the function you want to fuzz.
+    *** note
+    **Note**: Make sure `LLVMFuzzerTestOneInput` calls the function you
+    want to fuzz.
+    ***
 
-*   Update the build system for your package to build your `*_fuzzer` binary.
-*   Update your package's ebuild file:
-    1.  Add `fuzzer` to the `IUSE` flags list.
-    2.  Build you new fuzzer (conditioned on `use fuzzer`), with the
-        appropriate flags:
+2.  Update the build system for your package to build your `*_fuzzer` binary.
+
+3.  Update your package's ebuild file:
+
+    *   Add `fuzzer` to the `IUSE` flags list.
+    *   Build your new fuzzer (conditioned on `use fuzzer`), with the appropriate
+        flags:
         1.  [Inherit cros-fuzzer and cros-sanitizers eclasses]
         2.  [Set up flags: call sanitizers-setup-env in src_configure]
         3.  [USE flags: fuzzer]
-    3.  Install your binary in `/usr/libexec/fuzzers/`
-    4.  Build the libraries your fuzzer depends on with the appropriate
-        `-fsanitize` flags (optional).
-*   Build and test your new fuzzer locally. Commit your changes.
-*   Add the package dependency to the `chromium-os-fuzzers` ebuild, and commit
+    *   Install your binary in `/usr/libexec/fuzzers/`
+    *   If applicable, build the libraries your fuzzer depends on with the
+        appropriate `-fsanitize` flags.
+
+4.  Build and test your new fuzzer locally, then commit your changes.
+
+5.  Add the package dependency to the `chromium-os-fuzzers` ebuild, then commit
     the change.
 
 That's it! The continuously running [fuzzer builder] on the Chrome OS waterfall
-will automatically detect your new fuzzer, build it and upload it to
-ClusterFuzz, which will start running it. For more details on what you can do
-with ClusterFuzz, see the [Using ClusterFuzz](#Using-ClusterFuzz) section.
+automatically detects your new fuzzer, builds it, and uploads it to ClusterFuzz,
+which will start running it. For more on what you can do with ClusterFuzz, see
+[Using ClusterFuzz](#Using-ClusterFuzz).
+
+[**Return to Top**](#top)
 
 ## Detailed instructions
 
-This section goes over the steps mentioned in the
-[Quickstart guide](#Quickstart-guide) in more detail. If you're working on a
-platform package, read
-[Build a fuzzer for a platform package](#Build-a-fuzzer-for-a-platform-package).
-Otherwise, read
-[Build a fuzzer for any other package](#Build-a-fuzzer-for-any-other-package).
+This section goes over the [Quickstart](#Quickstart) steps in more detail:
 
-### Build a fuzzer
+*   [Build a fuzzer for a platform package](#platform)
+*   [Build a fuzzer for a non-platform package](#non-platform)
+*   [Write a fuzzer](#Write-a-fuzzer)
+*   [What if my code doesn't simply consume a chunk of bytes?](#bytes)
+    *   [FuzzedDataProvider](#FuzzedDataProvider)
+    *   [Libprotobuf-mutator](#lib)
+*   [Get help modifying ebuild files](#Get-help-modifying-ebuild-files)
 
-It might be counterintuitive to start by building a fuzzer before one is even
-written, but the process of actually writing the fuzzer will be easier with
-a fast compile-test cycle, for which we need to be able to compile the fuzzer.
+[**Return to Top**](#top)
 
-Start with a dummy fuzzer:
+### Build a fuzzer for a platform package {#platform}
 
-```cpp
-// Copyright 2018 The Chromium OS Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+This section describes how to build a fuzzer for a platform package (one that is
+in the `platform` or `platform2` source directory and whose ebuild inherits from
+the `platform` eclass). If you're not working on a platform package, see
+[Build a fuzzer for any other package](#non-platform).
 
-#include <stddef.h>
-#include <stdint.h>
+1.  In your package, write a new test program. Start with a dummy fuzzer:
 
-class Environment {
- public:
-  Environment() {
-    // Set-up code.
-  }
-};
+    ```cpp
+    // Copyright 2018 The Chromium OS Authors. All rights reserved.
+    // Use of this source code is governed by a BSD-style license that can be
+    // found in the LICENSE file.
 
-extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
-  static Environment env;
-  // Fuzzing code. Empty for now.
-  return 0;
-}
-```
+    #include <stddef.h>
+    #include <stdint.h>
 
-#### Build a fuzzer for a platform package
+    class Environment {
+     public:
+      Environment() {
+        // Set-up code.
+      }
+    };
 
-These steps assume that you have at least a dummy fuzzer to compile. Check out
-the previous section for an example.
+    extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+      static Environment env;
+      // Fuzzing code. Empty for now.
+      return 0;
+    }
+    ```
 
-1.  Update the build system for your package to build your `*_fuzzer` binary.
+    *** note
+    **Note**: It might seem counterintuitive to build a fuzzer before it's
+    written, but the process of actually writing the fuzzer will be easier with
+    a fast compile-test cycle. To set this up, we need to be able to compile the
+    fuzzer.
+    ***
+
+2.  Update the build system for your package to build your `*_fuzzer` binary.
+
     *   For packages that are built with GYP files, update your GYP file to
         build the fuzzer binary:
 
@@ -183,39 +192,39 @@ the previous section for an example.
         that your fuzzer binary gets built when a special flag or argument is
         passed to the normal build command.
 
-        If testing this by hand (without the ebuild file changes in step 2
-        below), you will need to manually pass the compiler flags
+        If testing this by hand (without the ebuild file changes in the next
+        step), you will need to manually pass the compiler flags
         `-fsanitize=address -fsanitize=fuzzer-no-link` and the linker flags
-        `-fsanitize=address -fsanitize=fuzzer` to your build. You will not
-        need to pass these flags manually once you have updated the ebuild
-        file.
+        `-fsanitize=address -fsanitize=fuzzer` to your build. You will not need
+        to pass these flags manually once you have updated the ebuild file.
 
-2.  Update your package's ebuild file:
-    1.  Update the ebuild file to build the new binary when the fuzzer
-        USE flag is being used. **For platform packages built with GYP files,
-        you should skip this step and go directly to the next step for
-        installing the fuzzer binary.**
+3.  Update your package's ebuild file:
 
-        1.  Find the `src_compile()` function in your ebuild file. If
-            there isn't one, add one:
+    1.  Update the ebuild file to build the new binary when the fuzzer USE flag
+        is used. **For platform packages built with GYP files, you should
+        skip this step and go directly to the next step for installing the
+        fuzzer binary.**
+
+        *  Find the `src_compile()` function in your ebuild file. If there
+            isn't one, add one:
 
             ```bash
             src_compile() {
             }
             ```
 
-        2.  Add the call to actually build your fuzzer.
+        *  Add the call to actually build your fuzzer.
 
             Find the line in your `src_compile` function that actually builds
             your package (the command will probably look like `emake` or `make`
-            or `cmake`). This is the command that is meant by
-            *original build command* below. Copy the original build command
-            and add whatever flags or arguments you need in order to make it
-            build just your fuzzer binary (see step 1 above).
-            Replace the original build command in the `src_compile` function
-            with a conditional statement similar to the one below, so that when
-            `USE="fuzzer"` is used to build the package, it will build your
-            fuzzer binary, otherwise it will build the package normally.
+            or `cmake`). This is the command that is meant by *original build
+            command* below. Copy the original build command and add whatever
+            flags or arguments you need in order to make it build just your
+            fuzzer binary (see step 2 above). Replace the original build command
+            in the `src_compile` function with a conditional statement similar
+            to the one below, so that when `USE="fuzzer"` is used to build the
+            package, it will build your fuzzer binary, otherwise it will build
+            the package normally.
 
             ```bash
             if use fuzzer ; then
@@ -234,18 +243,22 @@ the previous section for an example.
         platform_fuzzer_install "${S}"/OWNERS "${OUT}"/<your_fuzzer>
         ```
 
-3.  Build and test your new fuzzer locally.
+4.  Build and test your new fuzzer locally.
 
     To build your new fuzzer, once you have updated the ebuild file, it should
     be sufficient to build it with `USE="asan fuzzer"`.
 
-    Note: Fuzzing using undefined behavior sanitizer (ubsan) is also supported.
-    To use ubsan, simply replace `asan` with `ubsan` in the commands below.
+    *** promo
+    **Tip**: Fuzzing using the undefined behavior sanitizer (ubsan) is also
+    supported. To use ubsan, simply replace `asan` with `ubsan` in the commands
+    below.
+    ***
 
-    Note 2: If your package depends on chromeos-chrome, the build_packages
-    command below can take a very long time. In such a case, it would be advisable
-    to adjust the package dependencies to not depend on chromeos-chrome with
-    'USE=fuzzer'.
+    *** note
+    **Note**: If your package depends on chromeos-chrome, the `build_packages`
+    command below can take a very long time. You may want to to adjust the
+    package dependencies to not depend on chromeos-chrome with `USE=fuzzer`.
+    ***
 
     ```bash
     # Run build_packages to build the package and its dependencies.
@@ -271,26 +284,26 @@ the previous section for an example.
     (in board) # /usr/libexec/fuzzers/<your_fuzzer>
     ```
 
-    ***note
-    **Note**: The fuzzer will run forever (or until it finds a bug), so you will
-    want to halt it manually (using Ctrl-C) after a couple of minutes.
+    *** note
+    **Note**: The fuzzer will run forever (or until it finds a bug), so
+    you will want to halt it manually (using Ctrl-C) after a couple of minutes.
     ***
 
-    You can read more about the `cros_fuzz` script in the section
-    [Using cros_fuzz]. You should also verify that your package still builds
-    correctly without `USE="fuzzer"`.
+    You can read more about the `cros_fuzz` script in the
+    [Using cros_fuzz](#script-cros-fuzz) section. You should also verify that
+    your package still builds correctly without `USE="fuzzer"`.
 
     Once you are happy with your new fuzzer, commit your changes.
 
-4.  Add the package dependency to the `chromium-os-fuzzers` ebuild. Inside your
+5.  Add the package dependency to the `chromium-os-fuzzers` ebuild. Inside your
     chroot:
 
     Edit `~/trunk/src/third_party/chromiumos-overlay/virtual/chromium-os-fuzzers/chromium-os-fuzzers-1.ebuild`.
     In that file, find the `RDEPEND` list and add your package/fuzzer (you can
     look at the other packages there, to see how it's done). Don't forget to
-    uprev the ebuild symlink. Commit the changes and upload them for review.
+    [uprev the ebuild] symlink. Commit the changes and upload them for review.
 
-5.  Optional: Verify that the `amd64-generic-fuzzer` builder is happy with your
+6.  Optional: Verify that the `amd64-generic-fuzzer` builder is happy with your
     changes.
 
     Submit a tryjob *outside of the chroot*:
@@ -307,13 +320,53 @@ the previous section for an example.
     changes to be instrumented, you can add a call to `filter_sanitizers` in
     the library's ebuild file.
 
-#### Build a fuzzer for any other package
+[**Return to Top**](#top) > [**Return to Detailed
+instructions**](#Detailed-instructions)
 
-1.  Update the build system for your package to build your `*_fuzzer` binary.
+### Build a fuzzer for a non-platform package {#non-platform}
+
+This section describes how to build a fuzzer for a non-platform package. If
+you're working on a platform package, (one that is in the `platform` or
+`platform2` source directory and whose ebuild inherits from the `platform`
+eclass), see
+[Build a fuzzer for a platform package](#platform).
+
+1.  In your package, write a new test program. Start with a dummy fuzzer:
+
+    ```cpp
+    // Copyright 2018 The Chromium OS Authors. All rights reserved.
+    // Use of this source code is governed by a BSD-style license that can be
+    // found in the LICENSE file.
+
+    #include <stddef.h>
+    #include <stdint.h>
+
+    class Environment {
+     public:
+      Environment() {
+        // Set-up code.
+      }
+    };
+
+    extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+      static Environment env;
+      // Fuzzing code. Empty for now.
+      return 0;
+    }
+    ```
+
+    *** note
+    **Note**: It might seem counterintuitive to build a fuzzer before it's
+    written, but the process of actually writing the fuzzer will be easier with
+    a fast compile-test cycle. To set this up, we need to be able to compile the
+    fuzzer.
+    ***
+
+2.  Update the build system for your package to build your `*_fuzzer` binary.
 
     The exact instructions here are going to vary widely, depending on your
     package and the build system in your package (Make, Ninja, SCons, etc.).
-    In general, you will need to be able to invoke your normal build
+    In general, you must be able to invoke your normal build
     command, passing a special flag or argument or environment variable, so
     that it will build your fuzzer binary and only your fuzzer binary. This
     will involve updating GYP files or Makefiles or whatever other build files
@@ -326,10 +379,11 @@ the previous section for an example.
     to pass these flags manually once you have updated the ebuild file.
 
 3.  Update your package's ebuild file:
+
     1.  Add `fuzzer` to the `IUSE` flags list.
 
         In all probability your package ebuild already contains an IUSE
-        definition. Look for a line starting `IUSE="..."`, and add `fuzzer`
+        definition. Look for a line starting with `IUSE="..."`, and add `fuzzer`
         to the list. If your file does not already contain such a line, add
         one near the top:
 
@@ -339,19 +393,20 @@ the previous section for an example.
 
         See the [puffin ebuild] for a good example.
 
-    2.  Update the ebuild file to build the new binary when the fuzzer
-        USE flag is being used:
-        1.  Find the `inherit` line in  your ebuild (near the top of the
+    2.  Update the ebuild file to build the new binary when the fuzzer USE flag
+        is used:
+
+        *  Find the `inherit` line in your ebuild (near the top of the
             file). Make sure that `cros-fuzzer and cros-sanitizers` are in the
             inherit list. If your file does not have a line that starts with
-           `inherit `, add one near the top (after the `EAPI` line and before
+            `inherit`, add one near the top (after the `EAPI` line and before
             the `KEYWORDS` line):
 
             ```bash
             inherit cros-fuzzer cros-sanitizers
             ```
 
-        2.  Find the `src_configure()` function in your ebuild file. If
+        *  Find the `src_configure()` function in your ebuild file. If
             there isn't one, add one:
 
             ```bash
@@ -359,7 +414,7 @@ the previous section for an example.
             }
             ```
 
-        3.  Add calls `sanitizers-setup-env`, near the top of
+        *  Add calls `sanitizers-setup-env`, near the top of
             `src_configure`, to set the appropriate compiler/linker flags:
 
             ```bash
@@ -369,7 +424,7 @@ the previous section for an example.
             }
             ```
 
-        4.  Find the line in your `src_compile` function that actually builds
+        *  Find the line in your `src_compile` function that actually builds
             your package (the command will probably look like `emake` or
             `make` or `cmake`). This is the command that is meant by *original
             build command* below. Copy the original build command and add
@@ -405,8 +460,9 @@ the previous section for an example.
     To build your new fuzzer, once you have updated the ebuild file, it should
     be sufficient to build it with `USE="asan fuzzer"`:
 
-    Note: Fuzzing using undefined behavior sanitizer (ubsan) is also supported.
-    To use ubsan, simply replace `asan` with `ubsan` in the commands below.
+    **Note**: Fuzzing using undefined behavior sanitizer (ubsan) is also
+    supported. To use ubsan, simply replace `asan` with `ubsan` in the
+    commands below.
 
     ```bash
     # Run build_packages to build the package and its dependencies.
@@ -430,13 +486,14 @@ the previous section for an example.
     (in board) # /usr/libexec/fuzzers/<your_fuzzer>
     ```
 
-    ***note
-    **Note**: The fuzzer will run forever (or until it finds a bug), so you will
-    want to halt it manually (using Ctrl-C) after a couple of minutes.
+    *** note
+    **Note**: The fuzzer will run forever (or until it finds a bug), so
+    you should halt it manually (using Ctrl-C) after a couple of minutes.
     ***
-    You can read more about the `cros_fuzz` script in the section
-    [Using cros_fuzz]. You should also verify that your package still builds
-    correctly without `USE="fuzzer"`.
+
+    You can read more about the `cros_fuzz` script in the
+    [Using cros_fuzz](#script-cros-fuzz) section. You should also verify that
+    your package still builds correctly without `USE="fuzzer"`.
 
     Once you are happy with your new fuzzer, commit your changes.
 
@@ -462,8 +519,11 @@ the previous section for an example.
 
     The builder builds the full system with AddressSanitizer and libFuzzer
     instrumentation. If you do not want a particular library pulled in by your
-    changes to be instrumented, you can add a call to `filter_sanitizers` in
-    the library's ebuild file.
+    changes to be instrumented, you can add a call to `filter_sanitizers` in the
+    library's ebuild file.
+
+[**Return to Top**](#top) > [**Return to Detailed
+instructions**](#Detailed-instructions)
 
 ### Write a fuzzer
 
@@ -516,7 +576,11 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
 }
 ```
 
-### What if my code doesn't simply consume a chunk of bytes?
+[**Return to Top**](#top) > [**Return to Detailed
+instructions**](#Detailed-instructions)
+
+
+### What if my code doesn't simply consume a chunk of bytes? {#bytes}
 
 Odds are that the code that you want to test *doesn't* just take a chunk of
 bytes and a length. You might want to fuzz an API where functions take integers,
@@ -528,6 +592,9 @@ Don't despair! This is actually very common. Most fuzzers end up extracting some
 structure out of the random data received in order to better exercise the code
 under test. Below are two different tools for handling this case. One for
 non-protos and another for protocol buffers.
+
+[**Return to Top**](#top) > [**Return to Detailed
+instructions**](#Detailed-instructions)
 
 #### [FuzzedDataProvider]
 
@@ -575,8 +642,6 @@ public:
 
 Using this API, we can obtain integers and strings to pass to the above API, and
 also use booleans to decide how to call the API:
-
-[firewall_fuzzer]
 
 ```cpp
 // Copyright 2018 The Chromium OS Authors. All rights reserved.
@@ -665,14 +730,17 @@ Running the fuzzer locally will continuously print a measure of coverage that
 can be used (in relative terms) to understand whether skipping an argument
 allows the fuzzer to reach more code:
 
-`#3268  NEW    cov: 218`
+`#3268 NEW    cov: 218`
 
 The `cov` value will increase (unsurprisingly) with increased coverage. In the
 current example, avoiding random strings for the `interface` argument
 significantly increased coverage because both API functions were no longer
 erroring out early.
 
-#### [Libprotobuf-mutator]
+[**Return to Top**](#top) > [**Return to Detailed
+instructions**](#Detailed-instructions)
+
+#### [Libprotobuf-mutator] {#lib}
 
 For cases where your code accepts a protocol buffer as input, there is a library
 [libprotobuf-mutator] that generates mutated protocol buffers for fuzz targets.
@@ -701,8 +769,8 @@ DEFINE_PROTO_FUZZER(const my_package::MyProto& input) {
 ```
 
 Building this fuzz target requires linking against [libprotobuf-mutator]. You
-can add `'libprotobuf-mutator'` under the `deps` section in the GYP/GN build file
-for platform projects ([GYP Example](#build-a-fuzzer-for-a-platform-package)).
+can add `'libprotobuf-mutator'` under the `deps` section in the GYP/GN buildfile
+for platform projects ([GYP Example](#platform)).
 
 Lastly, for both platform and non-platform projects
 `fuzzer? ( dev-libs/libprotobuf-mutator )` should be added to the dependency
@@ -710,10 +778,12 @@ list in the ebuild. This makes sure the `dev-libs/libprotobuf-mutator` package
 is installed on the target and the headers are available at compile time.
 
 For additional tips you can take a look at this chromium document for writing a
-[grammar-based-fuzzer](https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/libprotobuf-mutator.md)
-with libprotobuf-mutator.
+[grammar-based-fuzzer] with libprotobuf-mutator.
 
-### Getting help with modifying ebuild files
+[**Return to Top**](#top) > [**Return to Detailed
+instructions**](#Detailed-instructions)
+
+### Get help modifying ebuild files
 
 Some ebuild files are more complex or confusing than others. There are
 several links in the [References](#References) section of this document that
@@ -722,6 +792,9 @@ having difficulties editing your ebuild file and need more help, please file a
 bug in the [Chromium issue tracker], assign it to the
 *Tools>ChromeOS-Toolchain* component, and send an email to
 [chromeos-fuzzing@google.com]. We will try to help you figure this out.
+
+[**Return to Top**](#top) > [**Return to Detailed
+instructions**](#Detailed-instructions)
 
 ### Using ClusterFuzz
 
@@ -752,6 +825,9 @@ Note that you may need to authenticate to access the corpus and logs buckets
 using `gsutil`. See the documentation on [Configuring Authentication] for how to
 do this.
 
+[**Return to Top**](#top) > [**Return to Detailed
+instructions**](#Detailed-instructions)
+
 ## Using cros_fuzz {#script-cros-fuzz}
 
 `cros_fuzz` is a script we have provided to use within the Chrome OS SDK chroot.
@@ -771,13 +847,15 @@ These include:
 You can get detailed help information on each command by using the command
 argument: `--help`. We explain the more important commands in each subsection.
 
-***note
+*** promo
 **Tip**: Set your `.default_board` to avoid the need to specify `--board` every
 time you run `cros_fuzz`
 
 **Tip**: `cros_fuzz` will print every shell command it runs if you set the
 log-level to debug ("--log-level debug").
 ***
+
+[**Return to Top**](#top)
 
 ### Preparing the environment for fuzzing
 
@@ -810,6 +888,8 @@ these bash commands:
    (board chroot) # ASAN_OPTIONS="log_path=stderr" /usr/libexec/fuzzers/<your_fuzzer>
    ```
 
+[**Return to Top**](#top) > [**Return to Using cros_fuzz**](#script-cros-fuzz)
+
 ### Getting a coverage report for your fuzzer
 
 This section describes the `coverage` command. Coverage reports are a great way
@@ -820,10 +900,10 @@ Before we explain how to use `coverage`, there are two things you should
 understand about the coverage report process.
 
 *   First is the importance of a corpus in generating a coverage report. As
-    explained in the [What is fuzz testing?] section, a testcase is added to the
-    corpus if it increases the fuzzer's coverage of the target code. Thus, if
-    everything works correctly, one can use a fuzzer's corpus from fuzzing to
-    quickly find the code covered by the fuzzer.
+    explained in the [How does fuzz testing work?](#how) section, a testcase is
+    added to the corpus if it increases the fuzzer's coverage of the target
+    code. Thus, if everything works correctly, one can use a fuzzer's corpus
+    from fuzzing to quickly find the code covered by the fuzzer.
 
 *   The second thing to understand is how we generate the report. The report is
     generated by [clang's source based coverage]. This is not the same
@@ -883,6 +963,8 @@ If you want access to some of the data used by this command, it is probably
 stored in the directory: `/build/${BOARD}/tmp/fuzz/` but we make no guarantees
 about this.
 
+[**Return to Top**](#top) > [**Return to Using cros_fuzz**](#script-cros-fuzz)
+
 ### Reproducing crashes from ClusterFuzz
 
 This section explains how to reproduce bugs found by ClusterFuzz. No knowledge
@@ -914,7 +996,8 @@ here's a guide on how to use it to reproduce crashes reported by ClusterFuzz.
     ```
 
 You should see a stack trace after running the `reproduce` command.
-Note: For reproducing msan crashes, [a full build](#third-party-crashes) of
+
+**Note**: For reproducing msan crashes, [a full build](#third-party-crashes) of
 all packages with instrumentation is needed.
 
 For more advanced uses, we will explain the details for the `reproduce` command.
@@ -942,13 +1025,23 @@ To summarize: the reproduce command does a build of the package (if needed),
 copies the testcase into the board, prepares the board for running the fuzzer,
 and then runs the fuzzer on the testcase.
 
+[**Return to Top**](#top) > [**Return to Using cros_fuzz**](#script-cros-fuzz)
+
 ## Improving fuzzer effectiveness
 
-Below are some optional things you can do to improve the effectiveness of your
-fuzzer. Note that these instructions primarily explain how to make these
-improvements for ClusterFuzz to use. Using them locally is explained at the end
-of each section.
+This section describes optional techniques for improving the effectiveness of
+your fuzzer.
 
+*   [Adding a seed corpus](#Adding-a-seed-corpus)
+*   [Adding a dictionary](#Adding-a-dictionary)
+*   [Adding an options file](#Adding-an-options-file)
+
+*** note
+**Note**: These instructions primarily explain how to make improvements
+used by ClusterFuzz. Local use is explained at the end of each section.
+***
+
+[**Return to Top**](#top)
 
 ### Adding a seed corpus
 
@@ -1001,6 +1094,9 @@ To use a corpus in local fuzzing, pass the directory to your fuzzer, like so:
 $ ./<your_fuzzer> <corpus_directory>
 ```
 
+[**Return to Top**](#top) > [**Return to Improving fuzzer
+effectiveness**](#Improving-fuzzer-effectiveness)
+
 ### Adding a dictionary
 
 A dictionary is a file containing tokens that are useful for fuzzing a
@@ -1030,8 +1126,8 @@ platform_fuzzer_install "${S}"/OWNERS "${OUT}"/<your_fuzzer> \
     --dict "${S}"/path/to/<your_fuzzer>.dict
 ```
 
-The ebuild for `preg_parser_fuzzer` can be used as an [example for installing a
-dictionary].
+The ebuild for `preg_parser_fuzzer` can be used as an
+[example for installing a dictionary].
 
 There are many [dictionaries in the Chromium code base], you may be able to
 reuse one if your fuzzer's format is also fuzzed in Chrome.
@@ -1041,6 +1137,9 @@ To use a dictionary in local fuzzing, use the `-dict=` option, like so:
 ```bash
 $ ./<your_fuzzer> -dict=/path/to/your/dictionary
 ```
+
+[Return to Top](#top) > [**Return to Improving fuzzer
+effectiveness**](#Improving-fuzzer-effectiveness)
 
 ### Adding an options file
 
@@ -1065,6 +1164,7 @@ ascii_only = 1
 max_len = 1024
 ```
 
+
 Your options file should be named: `<your_fuzzer>.options`
 You can install the options file by editing your ebuild to use `--options` like
 so:
@@ -1078,9 +1178,20 @@ Note that you do not need to change an options file when adding a dictionary.
 ClusterFuzz automatically passes the dictionary, if named correctly, to
 libFuzzer.
 
+[**Return to Top**](#top) > [**Return to Improving fuzzer
+effectiveness**](#Improving-fuzzer-effectiveness)
+
 ## FAQ
 
-### Will my fuzzer get past checks or conditional statements?
+This section provides answers to common questions:
+* [Will my fuzzer get past checks or conditional statements?](#conditional-statements)
+* [How do I reproduce issues found in a third party library?](#third-party-crashes)
+* [How do I run gdb on a fuzzer?](#gdb)
+* [How do I suppress errors reported by a fuzzer?](#suppress)
+
+[Return to Top](#top)
+
+### Will my fuzzer get past checks or conditional statements? {#conditional-statements}
 
 It depends on the check, but the answer is probably yes. Most checks (such as
 string comparisons against a magic string) are easy for the fuzzer to get past.
@@ -1125,6 +1236,8 @@ trouble passing some check.
     other tools such as libprotobuf-mutator that allow you to specify a format
     for libFuzzer to mutate, which you then convert into raw bytes.
 
+[**Return to Top**](#top) > [**Return to FAQ**](#FAQ)
+
 ### How do I reproduce issues found in a third party library? {#third-party-crashes}
 
 The fuzzing builders instrument most of the packages with sanitizer flags which
@@ -1140,14 +1253,17 @@ build the packages with sanitizers flags just like the builders.
 $ setup_board --board=amd64-generic --profile=fuzzer
 # Run build_packages to build the package and its dependencies.
 # Note that `--nousepkg` must be passed to avoid using prebuilts.
-$ ./build_packages --board=amd64-generic --skip_chroot_upgrade --nousepkg <your_package>
+$ ./build_packages --board=amd64-generic --skip_chroot_upgrade --nousepkg
+<your_package>
 ```
 
 Once the package and its dependencies have been built,
 [cros_fuzz](#script-cros-fuzz) can be used
 to reproduce the issue using the downloaded testcase.
 
-### How do I run gdb on a fuzzer?
+[**Return to Top**](#top) > [**Return to FAQ**](#FAQ)
+
+### How do I run gdb on a fuzzer? {#gdb}
 
 If you want to to debug a fuzzer using gdb, you can do it through gdbserver.
 [cros_fuzz](#script-cros-fuzz) automatically
@@ -1177,7 +1293,9 @@ $ gdb /build/<board>/usr/libexec/fuzzers/<fuzzer>
   (gdb) set breakpoints, debug as usual.
 ```
 
-### How to suppress errors reported by a fuzzer?
+[**Return to Top**](#top) > [**Return to FAQ**](#FAQ)
+
+### How do I suppress errors reported by a fuzzer? {#suppress}
 
 If you want to suppress some errors reported by fuzzer that are not interesting
 or not actionable, those errors can be suppressed by:
@@ -1212,141 +1330,102 @@ or not actionable, those errors can be suppressed by:
     The syntax of the blocklist file is explained in more details at
     [clang's sanitizer special case list page].
 
-## Getting help/Asking questions
+[**Return to Top**](#top) > [**Return to FAQ**](#FAQ)
+
+## Getting help
 
 You can send an email to [chromeos-fuzzing@google.com] if you get stuck, or to
 ask questions.
 
-## See also
+[**Return to Top**](#top)
 
-### References
+## References
 
-[Setting up Fuzzing for Chrome OS](https://docs.google.com/document/d/1tvY4YV6q5RPVGK8hivkSKLPbNufebZ6BBozT0LqbGRA/edit?usp=sharing)
+* [Setting up Fuzzing for Chrome OS](https://docs.google.com/document/d/1tvY4YV6q5RPVGK8hivkSKLPbNufebZ6BBozT0LqbGRA/edit?usp=sharing)
 
-"[Continuous in-process fuzzing for Chrome OS targets](https://docs.google.com/document/d/1sd1IejWzcbQgF7soVVKlqTMk3HZfvPGR7QYP5T6qBYU/edit#heading=h.5irk4csrpu0y)"
+* [Continuous in-process fuzzing for Chrome OS targets](https://docs.google.com/document/d/1sd1IejWzcbQgF7soVVKlqTMk3HZfvPGR7QYP5T6qBYU/edit#heading=h.5irk4csrpu0y)
 
-[libFuzzer - a library for coverage-guided fuzz testing.](https://llvm.org/docs/LibFuzzer.html)
+* [libFuzzer - a library for coverage-guided fuzz testing.](https://llvm.org/docs/LibFuzzer.html)
 
-["Fault injection through unexpected input data (aka Fuzz Testing)"](https://companydoc.corp.google.com/company/teams/security-privacy/docs/secure-coding/archive/deprecated-ISETeamFuzzing.md?cl=head)
+* [Fault injection through unexpected input data (aka Fuzz Testing)](https://companydoc.corp.google.com/company/teams/security-privacy/docs/secure-coding/archive/deprecated-ISETeamFuzzing.md?cl=head)
 
-[Getting Started with libFuzzer in Chromium](https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/getting_started.md)
+* [Getting Started with libFuzzer in Chromium](https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/getting_started.md)
 
-[Gentoo Cheat Sheet](https://wiki.gentoo.org/wiki/Gentoo_Cheat_Sheet)
+* [Gentoo Cheat Sheet](https://wiki.gentoo.org/wiki/Gentoo_Cheat_Sheet)
 
-[Gentoo Ebuild Variables Guide](https://devmanual.gentoo.org/ebuild-writing/variables/)
+* [Gentoo Ebuild Variables Guide](https://devmanual.gentoo.org/ebuild-writing/variables/)
 
-[Gentoo Ebuild Install Functions Reference](https://devmanual.gentoo.org/function-reference/install-functions/)
+* [Gentoo Ebuild Install Functions Reference](https://devmanual.gentoo.org/function-reference/install-functions/)
 
-[Gentoo Ebuild Writing Developers Manual](https://devmanual.gentoo.org/ebuild-writing/index.html)
+* [Gentoo Ebuild Writing Developers Manual](https://devmanual.gentoo.org/ebuild-writing/index.html)
 
-### Useful go links
+[**Return to Top**](#top)
 
-[go/ClusterFuzz](https://sites.google.com/corp/google.com/clusterfuzz/home)
+## Useful go links
 
-[go/libfuzzer-Chrome](https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/README.md)
+* [go/ClusterFuzz](https://sites.google.com/corp/google.com/clusterfuzz/home)
 
-[go/fuzzing](https://g3doc.corp.google.com/security/fuzzing/g3doc/index.md?cl=head)
+* [go/libfuzzer-Chrome](https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/README.md)
 
-[go/whyfuzz](https://docs.google.com/document/d/1jNDjMBrXyCalNDQsHGmXP-Xc2M1_mmE4eptdOBE0tfA/edit#heading=h.6icp69vxzbq)
+* [go/fuzzit](http://go/fuzzit)
+
+* [go/fuzzing](https://g3doc.corp.google.com/security/fuzzing/g3doc/index.md?cl=head)
+
+* [go/whyfuzz](https://docs.google.com/document/d/1jNDjMBrXyCalNDQsHGmXP-Xc2M1_mmE4eptdOBE0tfA/edit#heading=h.6icp69vxzbq)
+
+[**Return to Top**](#top)
 
 [libFuzzer]: https://llvm.org/docs/LibFuzzer.html
-
 [ClusterFuzz]: https://sites.google.com/corp/google.com/clusterfuzz/home
-
 [libFuzzer and ClusterFuzz]: https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/README.md
-
 [security bugs]: https://bugs.chromium.org/p/chromium/issues/list?can=1&q=reporter:clusterfuzz@chromium.org%20-status:duplicate%20-status:wontfix%20type=bug-security
-
 [non-security bugs]: https://bugs.chromium.org/p/chromium/issues/list?can=1&q=reporter%3Aclusterfuzz%40chromium.org+-status%3Aduplicate+-status%3Awontfix+-type%3Dbug-security&sort=modified
-
 [Inherit cros-fuzzer and cros-sanitizers eclasses]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/645c52be0d4388eb8200f8ef07cc60875dcc5b10/media-libs/virglrenderer/virglrenderer-9999.ebuild#6
-
 [Set up flags: call sanitizers-setup-env in src_configure]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/645c52be0d4388eb8200f8ef07cc60875dcc5b10/media-libs/virglrenderer/virglrenderer-9999.ebuild#47
-
 [USE flags: fuzzer]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/07580574deb4409eec940ed582d6139b26094c07/dev-util/puffin/puffin-9999.ebuild#29
-
 [Using ClusterFuzz]: #using-clusterfuzz
-
 [bsdiff fuzzer]: https://android.googlesource.com/platform/external/bsdiff/+/master/bspatch_fuzzer.cc
-
 [puffin_fuzzer]: https://android.googlesource.com/platform/external/puffin/+/master/src/fuzzer.cc
-
 [GURL fuzzer]: https://chromium.googlesource.com/chromium/src/+/master/url/gurl_fuzzer.cc
-
-[midis GYP file]: https://chromium.googlesource.com/chromiumos/platform2/+/master/midis/midis.gyp#139
-
+[midis GYP file]: https://chromium.googlesource.com/chromiumos/platform2/+/refs/heads/release-R72-11316.B/midis/midis.gyp
 [puffin ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/dev-util/puffin/puffin-9999.ebuild
-
 [Chromium issue tracker]: https://crbug.com
-
 [fuzzer builder]: https://cros-goldeneye.corp.google.com/chromeos/legoland/builderHistory?buildConfig=amd64-generic-fuzzer&buildBranch=master
-
 [chromeos-fuzzing@google.com]: mailto:chromeos-fuzzing@google.com
-
 [firewall implementation]: https://chromium.googlesource.com/chromiumos/platform2/+/master/permission_broker/firewall.h#33
-
 [libchrome]: https://chromium.googlesource.com/aosp/platform/external/libchrome/+/master
-
 [FuzzedDataProvider]: https://chromium.googlesource.com/aosp/platform/external/libchrome/+/master/base/test/fuzzed_data_provider.h
-
 [libprotobuf-mutator]: https://github.com/google/libprotobuf-mutator
-
 [firewall_fuzzer]: https://chromium.googlesource.com/chromiumos/platform2/+/master/permission_broker/firewall_fuzzer.cc
-
-[Fuzzer statistics]: https://clusterfuzz.com/v2/fuzzer-stats/by-fuzzer/fuzzer/libFuzzer/job/libfuzzer_asan_chromeos
-
-[Crash statistics]: https://clusterfuzz.com/v2/crash-stats?block=day&days=7&end=423713&fuzzer=libFuzzer&group=platform&job=libfuzzer_asan_chromeos&number=count&sort=total_count
-
+[Fuzzer statistics]: https://clusterfuzz.com/fuzzer-stats/by-fuzzer/fuzzer/libFuzzer/job/libfuzzer_asan_chromeos
+[Crash statistics]: https://clusterfuzz.com/crash-stats?block=day&days=7&end=423713&fuzzer=libFuzzer&group=platform&job=libfuzzer_asan_chromeos&number=count&sort=total_count
 [Fuzzer logs]: https://console.cloud.google.com/storage/browser/chromeos-libfuzzer-logs/
-
 [Fuzzer corpus]: https://console.cloud.google.com/storage/browser/chromeos-corpus/libfuzzer
-
 [example for installing a seed corpus]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/82865b4aa16ca096046eb0a16ddc4b2fb1202be6/chromeos-base/authpolicy/authpolicy-9999.ebuild?pli=1#61
-
 [example for installing a dictionary]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/82865b4aa16ca096046eb0a16ddc4b2fb1202be6/chromeos-base/authpolicy/authpolicy-9999.ebuild?pli=1#62
-
 [dictionaries in the Chromium code base]: https://cs.chromium.org/search/?q=file:.*dict$&sq=package:chromium&type=cs
-
 [libFuzzer docs]: https://llvm.org/docs/LibFuzzer.html#options
-
 [a dictionary]: #adding-a-dictionary
-
 [a seed corpus]: #adding-a-seed-corpus
-
 [issue 853017]: https://bugs.chromium.org/p/chromium/issues/detail?id=853017
-
 [instructions to set up the `gsutil` tool]: https://cloud.google.com/storage/docs/quickstart-gsutil
-
 [Using cros_fuzz]: #using-cros_fuzz
-
 [Preparing the environment for fuzzing]: #preparing-the-environment-for-fuzzing
-
 [Reproducing crashes from ClusterFuzz]: #reproducing-crashes-from-clusterfuzz
-
 [Getting a coverage report for your fuzzer]: #getting-a-coverage-report-for-your-fuzzer
-
 [What is fuzz testing?]: #what-is-fuzz-testing
-
 [clang's source based coverage]: https://clang.llvm.org/docs/SourceBasedCodeCoverage.html
-
 [Configuring Authentication]: gsutil.md#setup
-
 [cros-workon]: developer_guide.md#Making-changes-to-packages-whose-source-code-is-checked-into-Chromium-OS-git-repositories
-
 [Clang's no_sanitize attributes]: https://clang.llvm.org/docs/AttributeReference.html#no-sanitize
-
 [macros provided in libchrome]: https://chromium.googlesource.com/aosp/platform/external/libchrome/+/5ca6b5581735fdb7a46249d4eb587aff936434f5/base/compiler_specific.h#168
-
 [skia error suppression]: https://skia.googlesource.com/skia.git/+/d6f3f18d51ec612d38019ce6cb3021050c6b5a84/include/private/SkFloatingPoint.h#157
-
 [inherits cros-sanitizers eclass]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/645c52be0d4388eb8200f8ef07cc60875dcc5b10/media-libs/virglrenderer/virglrenderer-9999.ebuild#6
-
 [calls sanitizers-setup-env]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/c85a04a77eb8895a4b8ef4ee3619aa539748a590/media-libs/virglrenderer/virglrenderer-0.7.0_p20190401.ebuild#52
-
 [inherit platform eclass]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/c85a04a77eb8895a4b8ef4ee3619aa539748a590/chromeos-base/p2p/p2p-0.0.1-r3038.ebuild#17
-
 [platform eclass]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/c85a04a77eb8895a4b8ef4ee3619aa539748a590/eclass/platform.eclass#183
-
 [libchrome blocklist]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/8c39d9715e86a6a62cc327bf2aefe4a18b430a02/chromeos-base/libchrome/files/ubsan_blocklist.txt
-
 [clang's sanitizer special case list page]: https://clang.llvm.org/docs/SanitizerSpecialCaseList.html
+[grammar-based-fuzzer]: https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/libprotobuf-mutator.md
+[uprev the ebuild]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/portage-build-faq#TOC-How-do-I-uprev-an-ebuild-
+
