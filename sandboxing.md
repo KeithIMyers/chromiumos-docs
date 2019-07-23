@@ -327,6 +327,68 @@ NOTICE kernel: [  586.706239] audit: type=1326 audit(1484586246.124:6): ... comm
         the same as arm).
     *   For an online list of syscalls, check out our [syscalls table].
 
+### Generating seccomp policies on 4.14+ kernels
+
+On kernels 4.14 and above we can use the new `SECCOMP_RET_LOG` return value to
+make policy generation easier. On these kernels, the `-L` Minijail option will
+use `SECCOMP_RET_LOG` as the return value for blocked syscalls: those not listed
+in the policy or whose arguments don't match the policy. Instead of killing the
+process on a blocked syscall, the kernel will log the otherwise blocked syscall
+but will effectively allow it.
+
+The advantage of this mechanism versus what we have available in pre-4.14
+kernels is that instead of having to add syscalls to the policy one by one, you
+can run the process with `-L`, get a list of all the syscalls not included in
+the policy, review them, and add the necessary ones, all in one step.
+
+As an example, say I have an empty policy:
+
+```sh
+# touch empty.policy
+```
+
+Since the policy is empty, all syscalls are blocked and even a trivial binary
+like `true` fails, so Mìnijail returns a non-zero exit code:
+
+```sh
+# minijail0 -S empty.policy -n -- /bin/true
+# echo $?
+253
+```
+
+When adding `-L` to the Minijail command line, this new mode allows all system
+calls, so `true` succeeds:
+
+```sh
+# minijail0 -S empty.policy -n -L -- /bin/true
+# echo $?
+0
+```
+
+Now we can check the logs for the logged-but-allowed syscalls:
+
+```sh
+# journalctl -g SECCOMP | grep true
+Jul 19 10:54:26 audit[5231]: SECCOMP auid=0 uid=0 gid=0 ses=6 subj=u:r:minijail:s0 pid=5231 comm="true" exe="/usr/bin/coreutils" sig=0 arch=c000003e syscall=157 compat=0 ip=0x7f7078eaa9da code=0x7ffc0000
+Jul 19 10:54:26 audit[5231]: SECCOMP auid=0 uid=0 gid=0 ses=6 subj=u:r:minijail:s0 pid=5231 comm="true" exe="/usr/bin/coreutils" sig=0 arch=c000003e syscall=157 compat=0 ip=0x7f7078eaa9da code=0x7ffc0000
+Jul 19 10:54:26 audit[5231]: SECCOMP auid=0 uid=0 gid=0 ses=6 subj=u:r:minijail:s0 pid=5231 comm="true" exe="/usr/bin/coreutils" sig=0 arch=c000003e syscall=231 compat=0 ip=0x7f7078e745e6 code=0x7ffc0000
+```
+
+Looks like `true` needs syscall 157 (`prctl`, called twice) and 231
+(`exit_group`). To find the name of the syscall matching a number you can check
+Chrome OS's [syscalls table] or use Minijail's `-H` command-line option:
+
+```sh
+# minijail0 -H | grep 157
+  prctl [157]
+# minijail0 -H | grep 231
+  exit_group [231]
+```
+
+Our recommendation is to combine this mechanism with the `strace`-based
+mechanism above: run the process to be sandboxed under `strace`, generate a base
+policy using the policy generation script, and then refine it using `-L`.
+
 ## Securely mounting cryptohome daemon store folders
 
 Some daemons store user data on the user's cryptohome under
