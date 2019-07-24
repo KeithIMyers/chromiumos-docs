@@ -1635,7 +1635,7 @@ If you wish to produce a VM image instead, you should omit the --test flag to
 build_image and let `./image_to_vm.sh` produce the test image:
 
 ```shell
-(inside) ./image_to_vm.sh --board=${BOARD}` --test_image
+(inside) ./image_to_vm.sh --board=${BOARD} --test_image
 ```
 
 Note: this difference between `cros flash` and `./image_to_vm.sh` arises because
