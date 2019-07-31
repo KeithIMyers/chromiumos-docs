@@ -56,7 +56,7 @@ Fortunately, the Google Python style guide provides a [reasonable syntax for
 arguments and return values].  We will use that as our standard (adjusted to
 two-space indentation):
 
-```
+```python
 def FetchBigtableRows(big_table, keys, other_silly_variable=None):
   """Fetches rows from a Bigtable.
 
@@ -125,7 +125,7 @@ in [PEP-8]):
 
 All files that are meant to be executed should start with the line:
 
-```
+```python
 #!/usr/bin/env python2
 ```
 
@@ -140,7 +140,7 @@ The [Google style guide] says that the `'{}'.format()` style is permitted.
 That is true, but in CrOS we much more often/always use % instead. You should
 stick to using % in CrOS code to match existing codebases.
 
-```
+```python
 x = 'name: %s; score: %d' % (name, n)
 x = 'name: %(name)s; score: %(score)d' % {'name': name, 'score': n}
 ```
@@ -148,7 +148,7 @@ x = 'name: %(name)s; score: %(score)d' % {'name': name, 'score': n}
 Also keep in mind that for logging type functions, we don't format in place.
 Instead, we pass them as args to the function.
 
-```
+```python
 logging.info('name: %s; score: %d', name, n)
 ```
 
@@ -157,7 +157,7 @@ logging.info('name: %s; score: %d', name, n)
 When using comprehensions & generators, it's best if you stick to "throw away"
 variable names.  "x" tends to be the most common iterator.
 
-```
+```python
 some_var = [x for x in some_list if x]
 ```
 
@@ -165,7 +165,7 @@ While helping with readability (since these expressions are supposed to be kept
 "simple"), it also helps avoid the problem of variable scopes not being as tight
 as people expect.
 
-```
+```python
 # This throws an exception because the variable is undefined.
 print(x)
 
@@ -189,7 +189,7 @@ See also the [Google style guide] here.
 
 All TODOs should be formatted like:
 
-```
+```python
 TODO(username): Revisit this code when the frob feature is done.
 ```
 
