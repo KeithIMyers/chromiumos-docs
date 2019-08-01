@@ -521,6 +521,15 @@ Kernel configuration in Chromium OS has an extra level of indirection from the
 normal .config file. So do the instructions - [see this page for more
 information](https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/kernel-configuration).
 
+### How to get the kernel config from a running system
+
+The kernel config is not loaded by default (to save memory), so you'll need to
+use `modprobe` to load it first:
+
+```bash
+(DUT)# modprobe configs; zcat /proc/config.gz
+```
+
 ## How to quickly test kernel modifications (the fast way)
 
 Do an incremental build of the kernel:
