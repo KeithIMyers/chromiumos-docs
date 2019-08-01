@@ -69,7 +69,7 @@ To upstream, create a remote to track upstream.
 
 For example the main kernel:
 
-```
+```bash
 git remote add upstream git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
 git fetch upstream
 git checkout -b send-upstream upstream/master
@@ -79,7 +79,7 @@ You can then create a commit within this branch. This can be done either by
 cherry-picking the commit from another branch and perhaps changing the commit
 message:
 
-```
+```bash
 git cherry-pick my-change
 git commit --amend
 # edit the message and save
@@ -87,13 +87,13 @@ git commit --amend
 
 or using git am to turn a patch into a commit:
 
-```
+```bash
 git am my-change.patch
 ```
 
 or manually applying a patch, and then committing:
 
-```
+```bash
 patch -p1 < my-change.patch
 git add ...
 git commit
@@ -117,13 +117,13 @@ Series-cc: (anyone you want to Cc all patches in the series to)
 
 Then type:
 
-```
+```bash
 patman -n
 ```
 
 to generate patches, check that they will go to the right place, and send them. Or:
 
-```
+```bash
 patman
 ```
 
@@ -150,7 +150,7 @@ line of each change description.
 
 You can use `get_maintainer.pl` to figure out who to send it to.
 
-```
+```bash
 # turn top commit into a patch
 git format-patch HEAD~
 
@@ -185,7 +185,7 @@ Another flow that might work is to send email directly, without going through
 `git format-patch`. For example you can email the top five commits to the
 mailing list with something like:
 
-```
+```bash
 git send-email --to=... -cc=... --signoff --subject-prefix=... --annotate HEAD~5
 ```
 
@@ -194,7 +194,7 @@ The `--annotate` lets you edit them before they go out, which is probably a good
 When replying to an email thread with an updated patch, use the something like
 the following to attach your email to the thread:
 
-```
+```bash
 git send-email --thread --no-chain-reply-to --in-reply-to=<message id> --to=... --cc=... --signoff --subject-prefix=... --annotate 0002-...
 ```
 
@@ -235,7 +235,7 @@ Each file type has its own SPDX comment format, [discussed
 here](https://www.kernel.org/doc/html/latest/process/license-rules.html#license-identifier-syntax):
 
 C header files:
-```
+```c
 /* SPDX-License-Identifier: GPL-2.0 */
 /*
  * <short description>
@@ -245,7 +245,7 @@ C header files:
 ```
 
 C source files:
-```
+```c
 // SPDX-License-Identifier: GPL-2.0
 /*
  * <short description>
@@ -257,7 +257,7 @@ C source files:
 For reference, old drivers already existing in upstream might still have the
 full text format, which would look like below.
 
-```
+```c
 /*
  * Copyright 2018 Google LLC.
  *
@@ -301,7 +301,7 @@ the Linux Kernel guidelines.
 You should use this perl script to check that your patch conforms to the kernel
 coding standard. It is kept in the linux kernel tree.
 
-```
+```bash
 git format-patch HEAD~
 scripts/checkpatch.pl 0001-my-change.patch
 # make improvements
@@ -316,7 +316,7 @@ This script might be useful also, as it checks a series of patches, checks for
 Chrome OS-specific commit tags and prints a summary at the end. Put it in your
 path and run it from anywhere.
 
-```
+```bash
 #! /bin/sh
 
 KERNEL=./scripts/
@@ -356,7 +356,7 @@ use](https://groups.google.com/a/chromium.org/forum/#!msg/chromium-os-reviews/S6
 
 Otherwise, the follow steps use `git cherry-pick -x` to do most of the work:
 
-```
+```bash
 NAME
         git-cherry-pick - Apply the changes introduced by some existing commits
 
@@ -383,7 +383,7 @@ OPTIONS
 
 First, add Linus's tree as a remote to the chromium-os kernel tree (assuming the chromium-os root is `~/chromiumos`):
 
-```
+```bash
 cd ~/chromiumos/src/third_party/kernel
 git remote add linus git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
 git remote update
@@ -396,13 +396,13 @@ Once the tree is updated, take a brief look at whats been happening upstream
 recently to a particular path (`--oneline` shows short-form upstream hashes and
 the brief commit message):
 
-```
+```bash
 git log --oneline linus/master /path/of/interest
 ```
 
 We can view that juicy commit using its upstream hash:
 
-```
+```bash
 git show <upstream_commit_hash>
 ```
 
@@ -410,7 +410,7 @@ To backport the commit to the chromium-os tree, first start a new branch from
 the current Tip of Tree (ToT). Then cherry-pick with `-x` to preserve the
 original author and hash, and `-s` to sign-off-by the commit:
 
-```
+```bash
 repo sync .
 repo start my_upstream_commit .
 git cherry-pick -x -s <upstream_commit_hash>
@@ -431,7 +431,7 @@ a separate patch with CHROMIUM prefix.
 Now, the upstream commit is on its own branch, let's upload it to gerrit, like
 usual:
 
-```
+```bash
 repo upload .
 ```
 
@@ -534,7 +534,7 @@ use `modprobe` to load it first:
 
 Do an incremental build of the kernel:
 
-```
+```bash
 (chroot) $ FEATURES="noclean" cros_workon_make --board=${BOARD} --install chromeos-kernel-[3_8|3_10|3_14|3_18|4_4]
 ```
 
@@ -549,7 +549,7 @@ You can also enable serial port at the same time by `USE="debug pcserial"`.
 
 Update the kernel on the target:
 
-```
+```bash
 (chroot) $ ~/trunk/src/scripts/update_kernel.sh --remote <ip of target>
 ```
 
@@ -575,7 +575,7 @@ boots, this approach is no longer available. The system is generally
 recoverable by booting physical media (USB stick or SD card) and copying its
 kernel blob over your kernel partition:
 
-```
+```bash
 # Assuming you boot physical media as sdb, and your local disk is sda,
 $ dd if=/dev/sdb2 of=/dev/sda2
 ```
@@ -592,7 +592,7 @@ hour or so, consultation with Bill showed that I really was booting the kernel
 from /dev/sda2, but the kernel found the matching GUID on sda before even
 looking at sdb. This was recovered with:
 
-```
+```bash
 $ a=$(uuidgen)
 $ cgpt add -i 3 -u $a /dev/sda
 ```
@@ -607,7 +607,7 @@ recently built image.
 
 First, to prepare for other steps:
 
-```
+```bash
 # cd to the image directory
 (chroot) $ cd ~/trunk/src/build/images/${BOARD}/latest
 
@@ -619,7 +619,7 @@ First, to prepare for other steps:
 
 If sshd on the target machine complains about missing keys:
 
-```
+```bash
 # Mount stateful partition
 (chroot) $ sudo mount -o loop part_1 stateful_partition/
 
@@ -642,7 +642,7 @@ configuration, might not be present in your image. If that's the case, you will
 be prompted for password during script execution. To fix it, run the following
 commands in your image directory:
 
-```
+```bash
 # Mount root filesystem
 (chroot) $ mkdir rootfs_dir/
 (chroot) $ sudo mount -o loop part_3 rootfs_dir/
@@ -680,7 +680,7 @@ unable to ssh to your target machine. If you encounter this problem, to fix it:
 To build new image after modifications to one or more of the partitions, simply
 run:
 
-```
+```bash
 (chroot) $ ./pack_partitions.sh chromiumos_image.bin
 ```
 
@@ -701,14 +701,14 @@ in case you used mini-layout). See the big picture and instructions in
 Guide](http://www.chromium.org/chromium-os/developer-guide), but as a quick
 reference you are expected to run the following inside `chroot`:
 
-```
+```bash
 ~/trunk/src/scripts $ cros_workon start --board=<your platform> chromeos-kernel
 ~/trunk/src/scripts $ repo sync chromiumos/third_party/kernel
 ```
 
 Then, still inside `chroot`, run this:
 
-```
+```bash
 ~/trunk/src/scripts $ export BUILD_DIR=/tmp/kernel # pick any new directory you like
 ~/trunk/src/scripts $ mkdir ${BUILD_DIR}
 ~/trunk/src/scripts $ cp /build/<your platform>/boot/config ${BUILD_DIR}/.config
@@ -751,7 +751,7 @@ partition 12. The `/efi/boot/grub.cfg` file will look for the kernel called
 `vmlinuz`, but you can edit that config file to add a line to look for your
 test kernel too. For example, here's my USB key's partition 12:
 
-```
+```bash
 blackadder$ mount | grep vfat
 /dev/sdc12 on /media/disk type vfat (rw,nosuid,nodev,uhelper=hal,shortname=mixed,uid=100135,utf8,umask=077,flush)
 
@@ -805,7 +805,7 @@ partition 3. The /boot/extlinux.conf file will look for the kernel called
 `vmlinuz`, but you can edit that config file to add a line to look for your
 test kernel too. For example, here's my USB key's partition 3:
 
-```
+```bash
 blackadder$ mount | grep sdc3
 /dev/sdc3 on /media/C-KEYFOB type ext3 (rw,nosuid,nodev,uhelper=hal)
 
@@ -869,7 +869,7 @@ To create separate builds get per kernel git branch, while in the cloned kernel
 source tree root create a build directory for your current branch, for
 instance:
 
-```
+```bash
 mkdir ../build/<branch_name>
 ```
 
@@ -877,7 +877,7 @@ and then just add `O=../../build/<branch_name>` to make invocations described
 above. Or use the following bash script to take care of all make command line
 parameters other than make targets:
 
-```
+```bash
 kmake () {
   b=$(git branch 2>/dev/null | grep '^\*' | awk '{print $2}')
   if [ "${b}" == "" ]; then
@@ -903,7 +903,7 @@ target or by dismantling `chromiumos_image.bin` generated by build\_image.
 Store the desired kernel command line in a file <new\_cmd\_line> and then use
 the following to change the kernel command line:
 
-```
+```bash
 vbutil_kernel --repack <modified_kernel> --config <new_cmd_line> \
   --signprivate <path_to>/vboot_reference/``tests/devkeys/<key> \
   --oldblob <original_kernel>
@@ -917,7 +917,7 @@ The keys can be found in the [vboot\_reference repository](/). Then `dd` the
 The command line to boot a kernel with verified rootfs disabled can be obtain
 by editing the regular command line as follows:
 
-```
+```bash
 vbutil_kernel --verify <original_kernel> --verbose | tail -1 | sed '
 s/dm_verity[^ ]\+//g
 s|verity /dev/sd%D%P /dev/sd%D%P ||
@@ -939,7 +939,7 @@ one we want to use. Usually we stay with the current pair.
 To sign with the devkey as per the Disk Format doc
 [http://www.chromium.org/chromium-os/chromiumos-design-docs/disk-format#TOC-Quick-development](http://www.chromium.org/chromium-os/chromiumos-design-docs/disk-format#TOC-Quick-development):
 
-```
+```bash
 vbutil_kernel --pack new_kern.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate <keys_path>/kernel_data_key.vbprivk --version 1 --config config.txt --bootloader /lib64/bootstub/bootstub.efi --vmlinuz vmlinuz
 ```
 
@@ -957,13 +957,13 @@ the currently booted kernel partition.
 
 Copy the image to the partition.
 
-```
+```bash
 dd if=new_kern.bin of=/dev/sda2
 ```
 
 `dev_debug_vboot` can be used to verify the kernel partition has a properly signed image. Indeed, it will actually tell you in what modes (ie, development, recovery, neither) your kernel will boot.
 
-```
+```bash
 localhost ~ # dev_debug_vboot
  :
 TEST: verify HD kernel B with firmware A key
@@ -976,7 +976,7 @@ Key block:
 `cgpt` can be used as an alternative to `rootdev` above to find the currently
 preferred kernel partition.
 
-```
+```bash
 localhost ~ # cgpt show /dev/sda
      start      size    part  contents
  :
@@ -997,7 +997,7 @@ localhost ~ # cgpt show /dev/sda
 Run the following commands on the target. This needs to be done just once after
 an install.
 
-```
+```bash
 touch /var/lib/crash_sender_paused
 touch /home/chronos/"Consent To Send Stats"
 chown chronos:chronos /var/lib/crash_sender_paused
@@ -1020,7 +1020,7 @@ lsm.module_locking=0
 Or, on images with dm-verity disabled (--noenable\_rootfs\_verification), the
 restriction can be disabled via the exposed sysctl:
 
-```
+```bash
 echo 0 >/proc/sys/kernel/chromiumos/module_locking
 ```
 
@@ -1032,7 +1032,7 @@ file.
 
 Add the following two lines to the end of the src\_install() function:
 
-```
+```bash
 insinto "/etc/modprobe.d"
 doins "${FILESDIR}/<blacklist file>"
 ```
@@ -1056,7 +1056,7 @@ needs to be blacklisted.
 If given target device is not building kernel-next, you can switch by unmerging
 the standard kernel and then building kernel-next normally:
 
-```
+```bash
 cros_workon --board=${BOARD} stop sys-kernel/chromeos-kernel
 emerge-${BOARD} --unmerge sys-kernel/chromeos-kernel
 cros_workon --board=${BOARD} start sys-kernel/chromeos-kernel-next
@@ -1116,7 +1116,7 @@ cscope or something to know that this is defined in
 drivers/net/wireless-3.8/iwl7000/iwlwifi/mvm/utils.c. Next, enter the cros\_sdk
 chroot and load up the corresponding object file in gdb
 
-```
+```bash
 (cr) user@machine /build/samus $ ./usr/bin/gdb ./var/cache/portage/sys-kernel/chromeos-kernel-3_14/drivers/net/wireless-3.8/iwl7000/iwlwifi/mvm/utils.o
 Reading symbols from
 ./var/cache/portage/sys-kernel/chromeos-kernel-3_14/drivers/net/wireless-3.8/iwl7000/iwlwifi/mvm/utils.o...done.
@@ -1137,7 +1137,7 @@ Reading symbols from
 
 3\. A slightly more tedious way of getting symbols is to symbolize the whole kernel using objdump -
 
-```
+```bash
 cd /build/samus/var/cache/portage/sys-kernel/chromeos-kernel-3_14
 # Pick a proper output location - the resulting file is > 2GB in size!
 objdump -e vmlinux > /tmp/objdump-output.txt
@@ -1154,7 +1154,7 @@ Please verify and remove the TODO.
 One way to do this is by function tracing for the functions/modules you are
 interested in the kernel.
 
-```shell
+```bash
 cd /sys/kernel/debug/tracing
 # Sample output: blk function_graph function nop. These are valid values you can echo into current_tracer
 cat available_tracers
@@ -1201,7 +1201,7 @@ To use KGDB with Chromium OS requires two steps for the test machine:
 
 Step 1 can be done by building with `USE="kgdb"`:
 
-```
+```bash
 USE="kgdb vtconsole" emerge-${BOARD} chromeos-kernel-${VER}
 ```
 
@@ -1219,7 +1219,7 @@ docs](https://www.kernel.org/doc/html/latest/admin-guide/sysrq.html)); e.g.:
 
 then attach to the target console with your cross-targeted GDB:
 
-```
+```bash
 ${CROSS_ARCH}-gdb \
          /build/${BOARD}/usr/lib/debug/boot/vmlinux \
          -ex "set remotebaud 115200" \
@@ -1232,7 +1232,7 @@ everything works well (e.g., stepping and breakpoints) -- YMMV.
 Besides basic GDB commands, you can make use of Linux-specific KDB commands via
 the `monitor` command. For more info, run this while attached:
 
-```shell
+```bash
 (gdb) monitor help
 Command Usage Description
 ----------------------------------------------------------
@@ -1244,7 +1244,7 @@ Command Usage Description
 You can get a list of modules and addresses in kgdb with `monitor` `lsmod`.
 Then you can add symbol files using the base addresses found there:
 
-```
+```bash
 add-symbol-file /build/${BOARD}/usr/lib/debug/lib/modules/3.8.11/kernel/drivers/net/wireless/mwifiex/mwifiex.ko.debug 0xbf077000
 add-symbol-file /build/${BOARD}/usr/lib/debug/lib/modules/3.8.11/kernel/drivers/net/wireless/mwifiex/mwifiex_sdio.ko.debug 0xbf0a0000
 ```
@@ -1268,20 +1268,20 @@ connection. Both can be found at:
 kdmx is probably easier to deal with. If your serial port is at `/dev/pts/80`,
 you can start it with:
 
-```
+```bash
 agent-proxy/kdmx/kdmx -n -b 115200 -p /dev/pts/80 -s /tmp/kdmx_tty_
 ```
 
 You can find the ttys to use for console in `/tmp/kdmx_tty_trm` and for gdb in
 `/tmp/kdmx_tty_gdb`. Thus connect to the terminal with:
 
-```
+```bash
 cu --nostop -l $(cat /tmp/kdmx_tty_trm)
 ```
 
 and attach gdb with:
 
-```
+```bash
 ${CROSS_ARCH}-gdb \
 	/build/${BOARD}/usr/lib/debug/boot/vmlinux \
 	-ex "target remote $(cat /tmp/kdmx_tty_gdb)"
@@ -1289,19 +1289,19 @@ ${CROSS_ARCH}-gdb \
 
 If telnet is more your style, use agent-proxy with:
 
-```
+```bash
 agent-proxy 127.0.0.1:5510^127.0.0.1:5511 0 /dev/pts/80,115200
 ```
 
 Then connect to the terminal with:
 
-```
+```bash
 telnet localhost 5510
 ```
 
 and attach gdb with:
 
-```
+```bash
 ${CROSS_ARCH}-gdb \
          /build/${BOARD}/usr/lib/debug/boot/vmlinux \
          -ex "target remote localhost:5511"
