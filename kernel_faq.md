@@ -553,19 +553,24 @@ Update the kernel on the target:
 (chroot) $ ~/trunk/src/scripts/update_kernel.sh --remote <ip of target>
 ```
 
-Note that using cros\_workon\_make leaves build artifacts in your source
-directory under the "build" directory. When you do a regular emerge of the
-kernel (and are cros\_work'ed on) this will slow things down because the entire
-source directory gets copied. So delete the "build" directory when you're done.
+*** note
+Note that using `cros_workon_make` leaves build artifacts in your source
+directory under the `build` directory. When you do a regular emerge of the
+kernel (and are `cros_workon`-ed) this will slow things down because the
+entire source directory gets copied. So delete the `build` directory when
+you're done.
+***
 
+*** note
 Note: Please ensure that verity is disabled on the target before running the
-update\_kernel.sh script, otherwise the script won't be able to copy over
+`update_kernel.sh` script, otherwise the script won't be able to copy over
 kernel modules and the target will be rebooted with just the kernel image
 updated. Since the network drivers are built as modules, this leaves machine in
 a state where there is no way to connect to the network after the reboot.
 Verity can be disabled using the command
-"/usr/share/vboot/bin/make\_dev\_ssd.sh --remove\_rootfs\_verification
---partition <partition number>" on the target followed by a reboot.
+`/usr/share/vboot/bin/make_dev_ssd.sh --remove_rootfs_verification --partition <partition number>`
+on the target followed by a reboot.
+***
 
 ### Dealing with a bad kernel installation
 
