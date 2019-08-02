@@ -847,8 +847,10 @@ pick the one I want by entering the label.
 
 ## Debugging messages
 
-**FIXME: We don't have** **CONFIG\_DRM\_FBDEV\_EMULATION set in our kernel
-configs, so this might not work anymore.**
+*** note
+**FIXME: We don't have `CONFIG_DRM_FBDEV_EMULATION` set in our kernel configs,
+so this might not work anymore.**
+***
 
 With either bootloader, you can debug early kernel failures by increasing the
 verbosity and location of kernel debug messages. You can modify the config
