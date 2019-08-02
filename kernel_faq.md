@@ -864,6 +864,54 @@ Using args like these instead may be helpful:
 console=tty1 loglevel=7
 ```
 
+## Dynamic Debugging (dev_dbg / pr_debug)
+
+Dynamic debugging allows one to enable/disable debugging messages in kernel
+code at runtime (e.g., calls to `dev_dbg` or `pr_debug`).
+
+### Enabling
+
+Using dynamic debugging requires the `CONFIG_DYNAMIC_DEBUG` config option to be
+enabled. By default [dynamic debug is disabled on Chrome OS].
+
+If using `menuconfig`, the following enables it:
+
+```
+Kernel hacking
+     ---> printk and dmesg options
+          ---> [*] Enable dynamic printk() support
+```
+
+Once the kernel is compiled with `CONFIG_DYNAMIC_DEBUG`, you can use the
+following commands to control the output.
+
+### Enable all dynamic debugging
+
+```bash
+echo "+p" > /sys/kernel/debug/dynamic_debug/control
+```
+
+### Disable all dynamic debugging
+
+```bash
+echo "-p" > /sys/kernel/debug/dynamic_debug/control
+```
+
+### Enable dynamic debugging for specific modules
+
+```bash
+echo "module cros_ec_spi +p" > /sys/kernel/debug/dynamic_debug/control
+echo "module cros_ec_proto +p" > /sys/kernel/debug/dynamic_debug/control
+```
+
+### View all of the individual statements that can be enabled
+
+```bash
+cat /sys/kernel/debug/dynamic_debug/control
+```
+
+See [Dynamic Debug] for complete details and syntax.
+
 ## Working on several kernel issues
 
 `git` supports multiple branches coexisting in the same directory tree, and
@@ -1330,3 +1378,6 @@ development](http://dev.chromium.org/chromium-os/how-tos-and-troubleshooting/net
 While setting up your environment might appear to be harder and more time
 consuming, in many cases it will allow to test kernel modifications much faster
 and easier than the ways described below.
+
+[Dynamic Debug]: https://www.kernel.org/doc/html/v4.19/admin-guide/dynamic-debug-howto.html
+[dynamic debug is disabled on Chrome OS]: https://crbug.com/188825
