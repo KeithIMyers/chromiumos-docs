@@ -250,7 +250,7 @@ accessible for download:
 > **WARNING**: localmirror is shared by all Chrome OS developers. If you break
 > it, everybody will have a bad day.
 
-```shell
+```bash
 curl -L 'https://crates.io/api/v1/crates/<crate_name>/<crate_version>/download' >/tmp/crates/<crate_name>-<crate_version>.crate
 gsutil cp -a public-read /tmp/crates/<crate_name>-<crate_version>.crate gs://chromeos-localmirror/distfiles/
 ```
@@ -269,7 +269,7 @@ The toolchain that is installed by default is targetable to the following triple
 When building Rust projects for development, a non-default target can be
 selected as follows:
 
-```shell
+```bash
 cargo build --target=<target_triple>
 ```
 
@@ -277,7 +277,7 @@ If a specific board is being targeted, that board's sysroot can be used for
 compiling and linking purposes by setting the `SYSROOT` environment variable as
 follows:
 
-```shell
+```bash
 export SYSROOT="/build/<board>"
 ```
 
@@ -285,7 +285,7 @@ If C files are getting compiled with a build script that uses the `cc` or `gcc`
 crates, you may also need to set the `TARGET_CC` environment variable to point
 at the appropriate C compiler.
 
-```shell
+```bash
 export TARGET_CC="<target_triple>-clang"
 ```
 
@@ -294,7 +294,7 @@ If a C/C++ package is being pulled in via `pkg-config`, the
 variable should be exposed. Without this, you might see `CrossCompilation`
 as part of an error message during build script execution.
 
-```shell
+```bash
 export PKG_CONFIG_ALLOW_CROSS=1
 ```
 

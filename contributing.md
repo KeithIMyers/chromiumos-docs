@@ -203,7 +203,7 @@ If there are no OWNERS files, you can use `git log` to find people.
 You can use it on the specific files you're touching, or on the entire project.
 Simply type the commands below in a directory related to your project:
 
-```shell
+```bash
 $ git log <file>
 $ git log <directory>
 ```
@@ -217,7 +217,7 @@ changes for code review.
 
 You can amend your changes to your git commit and re-run `repo upload`.
 
-```shell
+```bash
 # <make some changes>
 $ git add -u .
 $ git commit --amend
@@ -227,7 +227,7 @@ If you have a chain of commits (which `repo upload .` converts to a chain of
 [CL]s), and you need to modify any commits that are not at the top of the chain,
 use interactive rebase:
 
-```shell
+```bash
 $ git rebase -i
 # This shows a list of cherry-picks into a temporary branch.
 # Change some of the "pick" keywords to "edit".  Then exit the editor.
@@ -372,7 +372,7 @@ After you're done with your changes, you're ready to clean up.
 You'll want to delete the branch that repo created.
 There are a number of ways to do so; here is one way:
 
-```shell
+```bash
 # Command most people will use most of the time; run it in the project.
 $ repo abandon ${BRANCH_NAME} .
 
@@ -412,14 +412,14 @@ You can push to any path under `refs/sandbox/`, but we've all agreed to restrict
 ourselves to the `${USER}` subdir.
 ***
 
-```shell
+```bash
 $ project_url="https://chromium.googlesource.com/$(git config remote.cros.projectname)"
 $ git push ${project_url} HEAD:refs/sandbox/${USER}/${BRANCH_NAME}
 ```
 
 Other developers can then fetch your changes using the following commands:
 
-```shell
+```bash
 $ project_url="https://chromium.googlesource.com/$(git config remote.cros.projectname)"
 $ git fetch ${project_url} refs/sandbox/${USER}/${BRANCH_NAME}
 $ git checkout FETCH_HEAD
@@ -427,7 +427,7 @@ $ git checkout FETCH_HEAD
 
 In a given repository, you can explore sandboxes using the `ls-remote` command:
 
-```shell
+```bash
 $ git ls-remote cros "refs/sandbox/${USER}/*"
 $ git ls-remote cros "refs/sandbox/*"
 ```
@@ -442,7 +442,7 @@ If you want to preview markdown changes (e.g. `README.md`), check out
 
 Once you're finished with a sandbox, you can delete it:
 
-```shell
+```bash
 $ project_url="https://chromium.googlesource.com/$(git config remote.cros.projectname)"
 $ git push $project_url :refs/sandbox/${USER}/${BRANCH_NAME}
 ```
@@ -464,13 +464,13 @@ project is using for its current development branch.
 Thus `m/master` should point to the right branch regardless.
 ***
 
-```shell
+```bash
 $ git checkout m/master
 ```
 
 When you're done, you can get back to your changes by running:
 
-```shell
+```bash
 $ git checkout ${BRANCH_NAME}
 ```
 
@@ -483,7 +483,7 @@ review, you can `repo start` to create another branch.
 When you want to get back to your first branch, run the following command from
 within a directory associated with your project:
 
-```shell
+```bash
 $ git checkout ${BRANCH_NAME}
 ```
 

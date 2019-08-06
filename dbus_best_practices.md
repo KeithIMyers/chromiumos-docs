@@ -494,7 +494,7 @@ contents and reboot the system:
 The `dbus-send` program sends D-Bus messages. For example, the following command
 makes a method call to the `powerd` process asking it to suspend the system:
 
-```shell
+```bash
 dbus-send --system --print-reply --type=method_call \
   --dest=org.chromium.PowerManager \
   /org/chromium/PowerManager \
