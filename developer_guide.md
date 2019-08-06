@@ -263,25 +263,36 @@ installed `repo` when you [installed `depot_tools` above][install depot_tools].
 **Make sure you have followed the gerrit credentials setup instructions
 [here][gerrit-guide].**
 
-(**Note:** If you are on a slow network connection or have low disk space, you
-can use the **minilayout** option below. This starts you out with a minimum
-amount of source code. This isn't a particularly well tested configuration and
-has been known to break from time-to-time, so we usually recommend against it.)
-
-**Googlers:** See [goto/chromeos-building] for internal notes.
-
+**Public:**
 ```bash
 (outside)
 cd ${HOME}/chromiumos
-# Note: Add the "-g minilayout" option to do a minilayout checkout.
-repo init -u https://chromium.googlesource.com/chromiumos/manifest.git --repo-url https://chromium.googlesource.com/external/repo.git [-g minilayout]
-# Note: -j4 tells repo to concurrently sync up to 4 repositories at once.
-# You can adjust the number based on how fast your internet connection
-# is. For the initial sync, it's generally requested that you use no
-# more than 8 concurrent jobs. (For later syncs, when you already have
-# the majority of the source local, using -j16 or so is generally okay).
+repo init -u https://chromium.googlesource.com/chromiumos/manifest.git --repo-url https://chromium.googlesource.com/external/repo.git
 repo sync -j4
 ```
+
+**Googlers/internal manifest:**
+```shell
+(outside)
+cd ${HOME}/chromiumos
+repo init -u https://chrome-internal.googlesource.com/chromeos/manifest-internal.git --repo-url https://chromium.googlesource.com/external/repo.git
+repo sync -j4
+```
+
+*** note
+**Note:** `-j4` tells `repo` to concurrently sync up to 4 repositories at once.
+You can adjust the number based on how fast your internet connection is. For
+the initial sync, it's generally requested that you use no more than 8
+concurrent jobs. (For later syncs, when you already have the majority of the
+source local, using -j16 or so is generally okay.)
+***
+
+*** note
+**Note:** If you are on a slow network connection or have low disk space, you
+can use the `-g minilayout` option. This starts you out with a minimum
+amount of source code. This isn't a particularly well tested configuration and
+has been known to break from time-to-time, so we usually recommend against it.
+***
 
 #### Optionally add Google API keys
 
