@@ -1,4 +1,4 @@
-# GN in Chrome OS
+# GN in Chrome OS (go/chromeos-gn)
 
 New packages should use
 [GN](https://gn.googlesource.com/gn/+/master/docs/reference.md) instead of GYP.
