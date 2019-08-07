@@ -64,3 +64,12 @@ FEATURES=test emerge-$BOARD $package_name
 ```
 
 Prepend `VERBOSE=1` to see GN and ninja commands (plus other logs).
+
+## FAQ
+
+### How to create standalone static library?
+
+Static libraries are compiled with thin archive enabled by default i.e. not standalone.
+Remove `use_thin_archive` from configs and add `nouse_thin_archive` to generate a standalone static library ([example](https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/glib-bridge/BUILD.gn#25)).
+
+TODO(crbug.com/991440): consider making standalone library the default and replace static_library with source_set whenever possible.
