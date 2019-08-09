@@ -5,7 +5,8 @@ Even if you're already familiar with [Gerrit], how the Chromium project uses it
 might be different due to the [CQ]/trybot integration and different labels.
 
 For a general [Gerrit] overview, check out Android's [Life of a Patch].
-This helpfully applies to everyone using [Gerrit].
+This helpfully applies to everyone using [Gerrit]. If you're not familiar with
+Git at all, check out the [Git & Gerrit Intro].
 
 If you haven't checked out the source code yet, please start with the
 [Developer Guide].
@@ -600,6 +601,7 @@ git commit id must be exactly the same).
 [Developer Guide]: developer_guide.md
 [Gerrit]: https://gerrit-review.googlesource.com/Documentation/
 [Gerrit Guide]: https://dev.chromium.org/chromium-os/developer-guide/gerrit-guide
+[Git & Gerrit Intro]: git_and_gerrit_intro.md
 [Gitiles]: https://gerrit.googlesource.com/gitiles/
 [internal CLA documentation]: https://chrome-internal.googlesource.com/chromeos/docs/+/master/signcla.md
 [issue tracker]: https://developers.google.com/issue-tracker/
