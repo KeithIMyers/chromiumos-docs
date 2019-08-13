@@ -101,7 +101,7 @@ items are not listed but can be added as needed by the project.
 Name              |   tag  | type     | sticky | required |  description
 ------------------|--------|----------|--------|----------|---------------------------------
 BOARD\_VERSION    | 0      | integer  | yes    | yes      | Board version (0, 1, 2, ...)
-OEM\_ID           | 1      | integer  | yes    | yes      | OEM ID
+OEM\_ID           | 1      | integer  | yes    | no       | OEM ID
 MODEL\_ID         | 5      | integer  | no     | no       | ID assigned to each model.
 SKU\_ID           | 2      | integer  | no     | yes      | ID assigned to each SKU.
 DRAM\_PART\_NUM   | 3      | string   | yes    | no       | DRAM part name in ascii characters
@@ -125,9 +125,9 @@ phase).
 
 ### OEM\_ID
 
-A number assigned to each OEM. Software stack can use this field to select
-customizations specific to an OEM. It’s commonly used to control power LEDs
-because OEMs tend to prefer a consistent LED behavior across the brand.
+A number assigned to each OEM. Software shared by multiple OEMs can use this
+field to select a customization common to a particular OEM. For example, it can
+be used to control LEDs, which tend to follow an OEM's preference.
 
 ### MODEL\_ID
 
