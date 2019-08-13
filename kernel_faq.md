@@ -1164,16 +1164,25 @@ marks in the stack trace, something like the below.
 ```
 
 There are a few ways you can resolve the "? some\_symbol + 0xoffset" format
-into a line of source code. For example, if you want to find what line of
-source code the "? iwl\_mvm\_send\_lq\_cmd+0x8e/0x9c" corresponds to, first use
-cscope or something to know that this is defined in
-drivers/net/wireless-3.8/iwl7000/iwlwifi/mvm/utils.c. Next, enter the cros\_sdk
-chroot and load up the corresponding object file in gdb
+into a line of source code. For example, you can enter the cros\_sdk
+chroot and load up the vmlinux file in gdb.
+
+Be careful to use the gdb binary from the cross-toolchain of the $BOARD you are
+debugging on. TODO(crbug.com/995661): Chromium OS runs 32-bit ARM userspace on
+ARM64 boards and there is no good programmatic way of getting the right gdb
+tuple in such case, so just use aarch64-cros-linux-gnu-gdb with them for the
+time being.
 
 ```bash
-(cr) user@machine /build/samus $ ./usr/bin/gdb ./var/cache/portage/sys-kernel/chromeos-kernel-3_14/drivers/net/wireless-3.8/iwl7000/iwlwifi/mvm/utils.o
-Reading symbols from
-./var/cache/portage/sys-kernel/chromeos-kernel-3_14/drivers/net/wireless-3.8/iwl7000/iwlwifi/mvm/utils.o...done.
+(cr) user@machine /build/samus $ gdb="$(portageq-$BOARD envvar CHOST)-gdb"
+(cr) user@machine /build/samus $ file /build/$BOARD/usr/lib/debug/boot/vmlinux | grep -q aarch64 && gdb="aarch64-cros-linux-gnu-gdb"
+(cr) user@machine /build/samus $ ${gdb} /build/$BOARD/usr/lib/debug/boot/vmlinux
+```
+
+Next, use the list command to print the code at given address
+
+```bash
+Reading symbols from /build/samus/usr/lib/debug/boot/vmlinux...done.
 (gdb) list *( iwl_mvm_send_lq_cmd+0x8e)
 0x12b5 is in iwl_mvm_send_lq_cmd (/mnt/host/source/src/third_party/kernel/v3.14/drivers/net/wireless-3.8/iwl7000/iwlwifi/mvm/utils.c:752).
 747  };
