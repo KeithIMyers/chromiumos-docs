@@ -535,10 +535,10 @@ You will be prompted for a password, which will be stored in encrypted form in
 *   If you don't set a shared user password, the password for the chronos
     account may end up being any number of things depending on some complicated
     (and constantly evolving) formula that includes whether you build a
-    developer image, whether you boot into developer mode, and the current state
-    of the scripts. The password might be empty, or a well-known string (such as
-    `"test0000"` on test images), or it might be impossible to login with
-    chronos. It is strongly recommended that you simply set a shared user
+    developer image, whether you boot into [Developer Mode], and the current
+    state of the scripts. The password might be empty, or a well-known string
+    (such as `"test0000"` on test images), or it might be impossible to login
+    with chronos. It is strongly recommended that you simply set a shared user
     password. TODO: put a link to some place with more info about this.
 
 ### Build the packages for your board
@@ -705,31 +705,18 @@ before you run this command.
 *   If you want to create a test image (used for integration testing), see the
     [Running Tests] section.
 
-### Disable verified boot
+### Enter Developer Mode
 
-You need to disable verified boot to be able to use your own image. Sometimes it
-can be achieved by holding the [recovery mode shortcuts][Debug Button Shortcuts]
-for a long time. Try with your machine for a while until you figure it out.
-Disabling verified boot takes some time, and is often accompanied by entering
-developer mode.
-
-How this is accomplished for non Google Chrome OS devices depends heavily on the
-BIOS and can vary drastically, so we will not attempt to cover that.
-
-For Google Chrome OS devices, see the [Developer Hardware] page. (Pages of each
-devices will show how to enter dev mode which will disable verified boot.)
+See the [Developer Mode] documentation.
 
 ### Boot from your USB disk
 
-For Google Chrome OS devices, you must first put the device into developer
-mode. There are different [Debug Button Shortcuts] to achieve this, depending
-on your device.
+After enabling [Developer Mode], you should set your system to boot from USB.
 
-Entering developer mode takes a while, the device removes all personal data and
-resets itself.
+Let the device boot, login and open a shell (or switch to terminal 2 via
+Ctrl+Alt+F2).
 
-Then you should set your system to boot from USB. Let it boot, login and open a
-shell (or switch to terminal 2 via Ctrl+Alt+F2). Run the following command:
+Run the following command:
 
 ```bash
 (device) sudo crossystem
@@ -741,11 +728,8 @@ You should see `"dev_boot_usb"` equal to 0. Set it to 1 to enable USB boot:
 (device) sudo crossystem dev_boot_usb=1
 ```
 
-Now reboot. In the white screen (developer mode enabled) screen, plug-in the USB
-and press Ctrl+U (or whatever key boots from USB on your device).
-
-For specific information about what works on various different machines, see the
-[Developer Hardware][Chrome OS Devices] page.
+Now reboot. On the white screen (indicating [Developer Mode] is enabled),
+plug-in the USB disk and press `Ctrl+U` ([Debug Button Shortcuts]).
 
 ### Installing your Chromium OS image to your hard disk
 
@@ -1723,26 +1707,6 @@ current default one, do:
 *   For x86: `i686-pc-linux-gnu-gcc -v`
 *   For amd64: `x86_64-cros-linux-gnu-gcc -v`
 
-### Developer mode
-
-It can be confusing to figure out what "developer mode" means: Some parts of
-this document talk about switching your hardware to developer mode, while other
-parts talk about entering developer mode by running an image built with the
-`--withdev` flag. For the most part, the two actions enable the same set of
-things (like the shell command in crosh). Thus, you can think of either action
-as enabling developer mode.
-
-To provide some details:
-
-*   Putting your hardware into developer mode makes `/bin/cros_boot_mode` print
-    `developer`. It also makes the file
-    `/mnt/stateful_partition/.developer_mode` appear.
-*   Building with the `--withdev` flag creates a file called `/root/.dev_mode`
-    (in addition to adding a whole bunch of useful developer tools to your
-    stateful partition). The presence of the `/root/.dev_mode` file enables
-    developer mode and also prevents wiping of the stateful partition when you
-    switch your hardware between developer mode and release mode.
-
 ### Attribution requirements
 
 When you produce a Chromium OS image, you need to fulfill various attribution
@@ -1901,3 +1865,4 @@ Below are a few links to external sites that you might also find helpful
 [Gentoo Package Manager Specification]: http://www.gentoo.org/proj/en/qa/pms.xml
 [repo user docs]: https://source.android.com/source/using-repo
 [repo-discuss group]: http://groups.google.com/group/repo-discuss
+[Developer Mode]: ./developer_mode.md

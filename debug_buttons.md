@@ -51,11 +51,11 @@ keyboard attached.
     *   From here, follow the instructions at
         https://google.com/chromeos/recovery to recover your device using
         external media.
-*   **Developer mode**: To enter [developer mode], first enter recovery mode,
+*   **Developer mode**: To enter [Developer Mode], first enter recovery mode,
     then press `Ctrl + D`, followed by `Enter` to accept.
-    *   Note that developer mode disables security features and may leave your
+    *   Note that [Developer Mode] disables security features and may leave your
         device open to attack. Only enable if you understand the risks.
-    *   Devices in developer mode will show a warning screen on every boot. The
+    *   Devices in [Developer Mode] will show a warning screen on every boot. The
         screen will time out after 30 seconds, playing a warning beep.
     *   From the warning screen, the following keyboard shortcuts are available:
         *   `Ctrl + D`: Boot the system from the internal disk.
@@ -65,7 +65,7 @@ keyboard attached.
         *   `Ctrl + L`: Chain-load an included legacy bootloader (e.g. SeaBIOS).
             This may allow booting other Operating Systems more easily. Not all
             devices are shipped with legacy bootloaders. New legacy bootloaders
-            can be manually installed on the device from developer mode. The
+            can be manually installed on the device from [Developer Mode]. The
             option `crossystem dev_boot_legacy=1` must be set from the command
             line before this option is available.
     *   The option `crossystem dev_boot_default=usb` can be set to override the
@@ -75,10 +75,10 @@ Some devices do not support `Esc + Power + Refresh` for entering Recovery Mode:
 
 *   Chromeboxes have a recovery button. To enter Recovery Mode, hold down the
     recovery button and press `Power`.
-    *   To enter developer mode on a Chromebox, first enter recovery mode and
+    *   To enter [Developer Mode] on a Chromebox, first enter recovery mode and
         press `Ctrl + D` on the keyboard, then push the physical recovery button
         on the Chromebox to accept.
-*   Older devices have a physical developer mode switch. You can read up on
+*   Older devices have a physical [Developer Mode] switch. You can read up on
     your particular device under the [device-specific developer information]
     table.
 
@@ -144,9 +144,9 @@ with keyboards; on keyboardless devices, the following methods are supported:
         selected with the power button.
 *   **Developer mode**: Enter recovery mode and press `Volume-Up + Volume-Down`
     simultaneously, then select "Confirm Enabling Developer Mode" in the menu.
-    *   Note that developer mode disables security features and may leave your
+    *   Note that [Developer Mode] disables security features and may leave your
         device open to attack. Only enable if you understand the risks.
-    *   Devices in developer mode display a similar menu on every boot that
+    *   Devices in [Developer Mode] display a similar menu on every boot that
         allows selecting developer boot options. The menu will time out and boot
         after no key has been pressed for 30 seconds, playing a warning beep.
     *   The "USB or SD card" and "Legacy BIOS" boot menu options need to be
@@ -189,7 +189,7 @@ volume button press.
 [official support page]: https://support.google.com/chromebook/answer/183101
 [firmware keyboard UI]: #Firmware-Keyboard-Interface
 [Magic SysRq]: https://www.kernel.org/doc/html/latest/admin-guide/sysrq.html
-[developer mode]: https://www.chromium.org/chromium-os/poking-around-your-chrome-os-device
+[Developer Mode]: ./developer_mode.md
 [convertible]: https://en.wikipedia.org/wiki/Laptop#Convertible
 [firmware menu UI]: #Firmware-Menu-Interface
 [EC debug mode]: #EC-Debug-Mode
