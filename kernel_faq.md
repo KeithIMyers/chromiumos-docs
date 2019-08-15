@@ -349,9 +349,8 @@ repository maintainers appreciate it if the cherry-picked commit still contains
 the original author and git hash of the original upstream commit.
 
 For "simple" UPSTREAM cherry-picks, one should first try using
-[fromupstream.py](https://chromium.googlesource.com/chromiumos/platform/dev-util/+/master/contrib/)
-script to prepare CLs "automagically". Doug Anderson (author) provided
-[examples for
+[fromupstream.py] script to prepare CLs "automagically". Doug Anderson (author)
+provided [examples for
 use](https://groups.google.com/a/chromium.org/forum/#!msg/chromium-os-reviews/S6eICwvbvbg/zEcikcTVAAAJ).
 
 Otherwise, the follow steps use `git cherry-pick -x` to do most of the work:
@@ -1381,5 +1380,6 @@ While setting up your environment might appear to be harder and more time
 consuming, in many cases it will allow to test kernel modifications much faster
 and easier than the ways described below.
 
+[fromupstream.py]: https://chromium.googlesource.com/chromiumos/platform/dev-util/+/master/contrib/fromupstream.py
 [Dynamic Debug]: https://www.kernel.org/doc/html/v4.19/admin-guide/dynamic-debug-howto.html
 [dynamic debug is disabled on Chrome OS]: https://crbug.com/188825
