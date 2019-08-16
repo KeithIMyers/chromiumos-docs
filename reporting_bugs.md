@@ -9,7 +9,7 @@ discussion of bugs and feature requests. It's a great place to ask for help, and
 there's a good chance that your question has already been asked (and answered,
 hopefully).
 
-## Feedback reports
+## Feedback reports {#feedback}
 
 Feedback reports are the primary mechanism by which Chrome OS users can send
 feedback about the project. Reports are clustered into categories that are used
@@ -23,7 +23,7 @@ checked. You can click the links within the checkbox text to see the information
 that will be attached to the report. See the [official feedback documentation]
 for more information.
 
-## Public issue tracker
+## Public issue tracker {#public}
 
 The Chromium project's [public issue tracker] is used by developers to track
 Chrome OS bugs and feature requests. New issues submitted here are periodically
@@ -38,7 +38,7 @@ Issues are publicly-viewable by default, but the `Restrict-View-Google` label
 restricts the issue to Google employees. [go/newcrosbug] (internal link) may be
 used to start a new issue with this label.
 
-## Security bugs
+## Security bugs {#security}
 
 If you want to report a security bug, please follow [Reporting Security Bugs].
 
@@ -59,7 +59,7 @@ Also note that we do not handle account compromises with your Google account
 [Google Account Help document](https://support.google.com/accounts/answer/7539929)
 and related articles instead.
 
-## Collecting full debug logs
+## Collecting full debug logs {#logs}
 
 It's also possible to collect extensive system logs rather than the subset
 that's included in feedback reports. To do this, enter
@@ -72,7 +72,7 @@ you may want to either:
 *   upload the archive to your Drive account and share it only with the
     developer investigating the issue.
 
-## Taking screenshots
+## Taking screenshots {#screenshots}
 
 Screenshots are extremely helpful when debugging UI-related issues. To capture a
 screenshot on a Chrome OS device, hold Ctrl and hit the Switch Window (a.k.a. `[
@@ -82,7 +82,7 @@ be accessed by browsing to `file:///tmp` after logging in) if captured at the
 login screen. To take a screenshot of a limited region of the screen, use
 Ctrl+Shift+Switch Window and drag a rectangle using the touchpad.
 
-## Crash reports
+## Crash reports {#crash}
 
 When the Chrome process, some other system process, or the Linux kernel crashes,
 a crash report will be generated and sent if the `Automatically send diagnostic
@@ -97,7 +97,7 @@ including:
 If you give the ID to a Chrome OS developer, they can look up more details about
 the report that will hopefully help them determine the crash's cause.
 
-## Reporting system hangs
+## Reporting system hangs {#hang}
 
 If the entire UI (including the cursor) freezes or hangs, it can indicate
 various problems, including:
@@ -121,7 +121,7 @@ If you were able to trigger a Chrome crash or kernel panic, you may be able to
 find the crash ID at `chrome://crashes` after logging in again. Full debug logs
 may also contain more information about what went wrong.
 
-## Recommendations for reporting bugs
+## Recommendations for reporting bugs {#recommendations}
 
 If you think you've identified a bug in Chrome OS, please do the following:
 
