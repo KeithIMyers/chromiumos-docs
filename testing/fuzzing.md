@@ -1428,4 +1428,3 @@ ask questions.
 [clang's sanitizer special case list page]: https://clang.llvm.org/docs/SanitizerSpecialCaseList.html
 [grammar-based-fuzzer]: https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/libprotobuf-mutator.md
 [uprev the ebuild]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/portage-build-faq#TOC-How-do-I-uprev-an-ebuild-
-
