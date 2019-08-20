@@ -177,5 +177,5 @@ cros flash ${DUT_IP} xbuddy://${XBUDDY_PATH}
 
 See [cros flash] page for more details.
 
-[cros flash]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_flash.md
+[cros flash]: cros_flash.md
 [Using The Devserver]: https://chromium.googlesource.com/chromiumos/chromite/+/master/docs/devserver.md

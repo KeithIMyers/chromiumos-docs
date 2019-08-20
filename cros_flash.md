@@ -273,6 +273,6 @@ start update-engine
 [SSH Access]: https://www.chromium.org/chromium-os/testing/autotest-developer-faq/ssh-test-keys-setup
 [SimpleChrome]: http://www.chromium.org/chromium-os/how-tos-and-troubleshooting/building-chromium-browser
 [developer guide]: http://www.chromium.org/chromium-os/developer-guide
-[xbuddy doc]: http://www.chromium.org/chromium-os/how-tos-and-troubleshooting/using-the-dev-server/xbuddy-for-devserver
+[xbuddy doc]: xbuddy.md
 [cros deploy]: https://sites.google.com/a/chromium.org/dev/chromium-os/build/cros-deploy
 [update your chroot]: #Update-Your-Chroot
