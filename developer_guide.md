@@ -151,7 +151,7 @@ tools. On Ubuntu, the magic incantation to do this is (all on one line):
 ```bash
 (outside)
 sudo apt-get install git-core gitk git-gui curl lvm2 thin-provisioning-tools \
-     python-pkg-resources python-virtualenv python-oauth2client
+     python-pkg-resources python-virtualenv python-oauth2client xz-utils
 ```
 
 This command also installs git's graphical front end (`git gui`) and revision
