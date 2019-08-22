@@ -164,6 +164,68 @@ inventory.
 
 OEM name in ascii string.
 
+## Hardware
+
+### Firmware Write Protection
+
+Chrome OS devices have the global write protect line, `WP_L`, which is
+controlled by Cr50 and a servo, and used to protect various firmware images
+(AP, EC, FPMCU, etc.). The WP pin of an EEPROM should be connected to WP_L.
+CBI data will be protected as securely as other RO firmware images and can be
+changed at RMA center or by developers for special needs.
+
+While AP SPI flash and EC SPI flash also combine the internal status registers
+to determine the WP state, WP of CBI EEPROMs will be controlled by the WP signal
+only. When write protect is enabled, the EEPROM must protect entirely or
+partially the region where CBI data is stored.
+
+We'll make a change with Cr50 such that when AP SPI WP is deasserted, Cr50
+accepts a special host command which disables `WP_L` (only until the next
+reboot). This allows CBI to be modified in the factory before the board is
+finalized, that is, before the AP SPI WP is enabled.
+
+### I2C bus
+
+It is recommended to select an I2C bus, which is quiet during power on after
+reset. An I2C device can wedge a bus. CrOS EC is capable of unwedging a bus but
+it doesn't always work.
+
+### Circuitry
+
+WP should be connected to the same wire as the write-protect pin of the EC SPI
+flash.
+
+![wp_circuitry_1](../images/wp_circuitry_1.png)
+
+The power well should be the same as the EC. When the WP is high, the data is
+write protected. If the WP pin of an EC SPI Flash has active low logic
+(low = protect), a MOSFET can be used to reverse the voltage:
+
+![wp_circuitry_2](../images/wp_circuitry_2.png)
+
+The following EEPROM parts have been tested and deployed on the past projects:
+
+*   M24C02-WMN6TP
+*   M34E02-FMC6TG
+
+They are pin-to-pin compatible. M34E02 has a capability to protect only the top
+half but this feature is not currently used.
+
+### Testing
+
+You can evaluate implementation as follows:
+
+*   Boot the device multiple times. Verify the data is consistently printed
+    every time.
+*   Try cbi command on EC console multiple times. It reads the whole EEPROM
+    data and dumps it. If I2C bus has a low quality signal, you may observe
+    failed reads.
+*   Try enable and disable hardware write protection. Verify `ectool cbi set`
+    command fails or succeeds as expected.
+*   Verify default values and errors are handled. If CBI is for some reason
+    broken, the software stack should choose the default values which have the
+    least impact on the system stability.
+
 ## Software
 
 ### EC firmware
@@ -172,10 +234,10 @@ CBI should be read up to two times (back-to-back) per boot per image. That is,
 on normal boot, EC RO should read it and EC RW should read it once. Once reads
 are attempted, the result is preserved even if both reads fail. This would
 prevent the system from running in an inconsistent state. [b/80236608] explains
-why we don’t let the EC keep reading CBI.
+why we don't let the EC keep reading CBI.
 
-The earliest timing CBI can be read is at HOOK\_INIT with
-HOOK\_PRIO\_INIT\_I2C + 1.
+The earliest timing CBI can be read is at `HOOK_INIT` with
+`HOOK_PRIO_INIT_I2C` + 1.
 
 ### cbi-util
 
