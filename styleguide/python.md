@@ -239,12 +239,34 @@ modules (they're available in the chroot as well):
 
 *   [unittest] (`import unittest`) for unit test suites and methods for testing
 
-### Main Modules
+### Main Modules {#main}
 
-*   All main modules require a `main` method.  Use
-    `if __name__ == '__main__': sys.exit(main(sys.argv[1:]))` to invoke (not on
-    one line of course).
-
+*   All main modules require a `main` method.  Use this boilerplate at the end:
+    ```python
+    if __name__ == '__main__':
+      sys.exit(main(sys.argv[1:]))
+    ```
+    *   Having `main` accept the arguments instead of going through the implicit
+        global `sys.argv` state allows for better reuse & unittesting: other
+        modules are able to import your module and then invoke it with
+        `main(['foo', 'bar'])`.
+    *   The `sys.exit` allows `main` to return values which makes it easy to
+        unittest, and easier to reason about behavior in general: you can always
+        use `return` and not worry if you're in a func that expects a `sys.exit`
+        call.  If your func doesn't explicitly return, then you still get the
+        default behavior of `sys.exit(0)`.
+    *   If you want a stable string for prefixing output, you shouldn't rely on
+        `sys.argv[0]` at all as the caller can set that to whatever it wants (it
+        is never guaranteed to be the basename of your script).  You should set
+        a constant in your module, or you should base it off the filename.
+        ```python
+        # A constant string that is guaranteed to never change.
+        _NAME = 'foo'
+        # The filename which should be stable (respects symlink names).
+        _NAME = os.path.basename(__file__)
+        # The filename which derefs symlinks.
+        _NAME = os.path.basename(os.path.realpath(__file__))
+        ```
     *   If your main func wants `argv[0]`, you should use `sys.argv[0]`
         directly. If you're trying to print an error message, then usually you
         want to use `argparse` (see below) and the `parser.error()` helper
