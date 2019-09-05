@@ -23,17 +23,17 @@ the time a branch is cut to the time a new software image built from that
 branch is pushed to devices on the stable channel.
 
 A feature targeting a given milestone will be reviewed during that milestone's
-development cycle, or shortly after the branch is cut. The Chrome OS security
-team tracks features by looking at *Launch bugs* filed in [crbug.com]. **As long
-as the feature has an associated launch bug, the security team will track it**.
-The new launch bug template allows feature owners to initiate a security review
-by flipping the *Launch-Security* flag to *ReviewRequested*. The security team
-tracks this flag as well.
+development cycle. The Chrome OS security team tracks features by looking at
+*Launch bugs* filed in [crbug.com]. **As long as the feature has an associated
+launch bug, the security team will track it**. The new launch bug template
+allows feature owners to initiate a security review by flipping the
+*Launch-Security* flag to *ReviewRequested*. The security team tracks this flag
+as well.
 
 In order to streamline the process as much as possible, make sure that the
 launch bug links to a design doc that includes a section covering the security
 implications of the feature. **The rest of this document describes what
-questions such a "Security implications" section should answer and what
+questions such a "Security considerations" section should answer and what
 concerns it should address**.
 
 Launch bugs include a set of cross-functional review flags, which includes the
@@ -85,12 +85,11 @@ system service will be fully sandboxed) by the time the branch is cut**. Merging
 CLs that implement security features to release branches is risky, so we avoid
 it.
 
-If the feature is enabled by default, the security flag in the launch bug
-tracking the feature must be flipped before the milestone containing the feature
-is promoted to the **beta channel**. This means that all the relevant
-information (e.g. a design doc with a "Security considerations" section) must be
-available before the milestone reaches the beta channel. Ideally, however, the
-design doc will be finalized before the branch point.
+If the feature is enabled by default, **the security flag in the launch bug
+tracking the feature must be flipped before branch point**. This means that all
+the relevant information (e.g. a design doc with a "Security considerations"
+section) must be available well before the branch is cut, to give time for the
+security team to review the feature and flip the flag before branch point.
 
 If the feature is kept behind a flag, the security bit in the launch bug must
 be flipped before the flag is enabled by default. This means that the feature
