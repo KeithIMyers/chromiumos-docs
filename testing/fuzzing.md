@@ -1,9 +1,10 @@
 # Fuzz testing in Chrome OS
 
-Fuzzing is a testing technique that feeds randomized inputs to
-target code in an attempt to crash it. It's one of the most effective tools we
-have for finding [security bugs] and [non-security bugs]
-(also see [go/fuzzing-success](http://go/fuzzing-success)).
+Fuzzing is a testing technique that feeds auto-generated inputs to a piece of
+target code in an attempt to crash the code. It's one of the most effective tools we
+have for finding [security] and [non-security bugs] (also see
+[go/fuzzing-success](http://go/fuzzing-success)). You can learn more about the
+benefits of fuzzing at [go/why-fuzz](http://go/why-fuzz).
 
 This guide introduces Chrome OS developers to fuzz testing.
 It assumes basic familiarity with the Chrome OS development environment. If
@@ -1378,7 +1379,7 @@ ask questions.
 [libFuzzer]: https://llvm.org/docs/LibFuzzer.html
 [ClusterFuzz]: https://sites.google.com/corp/google.com/clusterfuzz/home
 [libFuzzer and ClusterFuzz]: https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/README.md
-[security bugs]: https://bugs.chromium.org/p/chromium/issues/list?can=1&q=reporter:clusterfuzz@chromium.org%20-status:duplicate%20-status:wontfix%20type=bug-security
+[security]: https://bugs.chromium.org/p/chromium/issues/list?can=1&q=reporter:clusterfuzz@chromium.org%20-status:duplicate%20-status:wontfix%20type=bug-security
 [non-security bugs]: https://bugs.chromium.org/p/chromium/issues/list?can=1&q=reporter%3Aclusterfuzz%40chromium.org+-status%3Aduplicate+-status%3Awontfix+-type%3Dbug-security&sort=modified
 [Inherit cros-fuzzer and cros-sanitizers eclasses]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/645c52be0d4388eb8200f8ef07cc60875dcc5b10/media-libs/virglrenderer/virglrenderer-9999.ebuild#6
 [Set up flags: call sanitizers-setup-env in src_configure]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/645c52be0d4388eb8200f8ef07cc60875dcc5b10/media-libs/virglrenderer/virglrenderer-9999.ebuild#47
