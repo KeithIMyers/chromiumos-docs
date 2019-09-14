@@ -1416,8 +1416,8 @@ ask questions.
 [Getting a coverage report for your fuzzer]: #getting-a-coverage-report-for-your-fuzzer
 [What is fuzz testing?]: #what-is-fuzz-testing
 [clang's source based coverage]: https://clang.llvm.org/docs/SourceBasedCodeCoverage.html
-[Configuring Authentication]: gsutil.md#setup
-[cros-workon]: developer_guide.md#Making-changes-to-packages-whose-source-code-is-checked-into-Chromium-OS-git-repositories
+[Configuring Authentication]: ../gsutil.md#setup
+[cros-workon]: ../developer_guide.md#Making-changes-to-packages-whose-source-code-is-checked-into-Chromium-OS-git-repositories
 [Clang's no_sanitize attributes]: https://clang.llvm.org/docs/AttributeReference.html#no-sanitize
 [macros provided in libchrome]: https://chromium.googlesource.com/aosp/platform/external/libchrome/+/5ca6b5581735fdb7a46249d4eb587aff936434f5/base/compiler_specific.h#168
 [skia error suppression]: https://skia.googlesource.com/skia.git/+/d6f3f18d51ec612d38019ce6cb3021050c6b5a84/include/private/SkFloatingPoint.h#157
