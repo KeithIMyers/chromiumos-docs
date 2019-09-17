@@ -328,9 +328,9 @@ TARGET             SOURCE                                      FSTYPE OPTIONS
 *   If startup needs to be tested (i.e. before deploy_chrome can be run), a
     symbolic link will need to be created instead:
     *   ssh to device
-        *   `mkdir /home/chrome`
+        *   `mkdir /usr/local/chrome`
         *   `rm -R /opt/google/chrome`
-        *   `ln -s /home/chrome /opt/google/chrome`
+        *   `ln -s /usr/local/chrome /opt/google/chrome`
      *   `deploy_chrome --build-dir=out_${SDK_BOARD}/Release --to=$IP_ADDR
          --nostrip`
      *   The device can then be rebooted and the unstripped version of Chrome
