@@ -303,6 +303,7 @@ This doc is at [go/cros-vm]. Please send feedback to [achuith@chromium.org].
 [amd64-generic-chromium-pfq]: https://uberchromegw.corp.google.com/i/chromeos/builders/amd64-generic-chromium-pfq
 [build Chromium OS]: https://www.chromium.org/chromium-os/developer-guide
 [attribute expression]: https://chromium.googlesource.com/chromiumos/platform/tast/+/HEAD/docs/test_attributes.md
+[Launch a locally built VM from within the chroot]: #Launch-a-locally-built-VM-from-within-the-chroot
 [go/tast-infra]: https://chrome-internal.googlesource.com/chromeos/chromeos-admin/+/master/doc/tast_integration.md
 [go/cros-vm]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md
 [achuith@chromium.org]: mailto:achuith@chromium.org
