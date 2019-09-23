@@ -172,7 +172,6 @@ the `platform` eclass). If you're not working on a platform package, see
                   ],
                   'variables': {
                     'deps': [
-                      'libchrome-test-<(libbase_ver)',  # For FuzzedDataProvider (optional)
                       'libprotobuf-mutator', # For fuzzing with Protobufs (optional)
                     ],
                   },
@@ -613,7 +612,10 @@ bool DeleteAcceptRules(ProtocolEnum protocol,
                        const std::string& interface);
 ```
 It's not really straightforward to feed a chunk of bytes to this API. To address
-this, we can use code provided by [libchrome]: [FuzzedDataProvider].
+this, we can use code provided by [FuzzedDataProvider]. In order to use it, add
+`#include <fuzzer/FuzzedDataProvider.h>` to your fuzz target source file. To
+learn more about `FuzzedDataProvider`, check out the
+[google/fuzzing documentation page] on it.
 
 `FuzzedDataProvider` will consume fuzzing input and allow extracting structure
 out of it:
@@ -622,21 +624,17 @@ out of it:
 class FuzzedDataProvider {
 public:
   ...
-  std::string ConsumeBytes(size_t num_bytes);
+  std::string ConsumeBytesAsString(size_t num_bytes);
 
-  std::string ConsumeRemainingBytes();
+  std::string ConsumeRemainingBytesAsString();
 
   std::string ConsumeRandomLengthString(size_t max_length);
 
-  uint32_t ConsumeUint32InRange(uint32_t min, uint32_t max);
-  int ConsumeInt32InRange(int min, int max);
+  template <typename T> T ConsumeIntegralInRange(T min, T max);
+
+  template <typename T> T ConsumeIntegral();
 
   bool ConsumeBool();
-
-  uint8_t ConsumeUint8();
-
-  uint16_t ConsumeUint16();
-
   ...
 };
 ```
@@ -645,62 +643,22 @@ Using this API, we can obtain integers and strings to pass to the above API, and
 also use booleans to decide how to call the API:
 
 ```cpp
-// Copyright 2018 The Chromium OS Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-#include <set>
-
-#include "base/logging.h"
-#include "base/test/fuzzed_data_provider.h"
-
-#include "permission_broker/firewall.h"
-
+#include <fuzzer/FuzzedDataProvider.h>
 ...
-
-class Environment {
- public:
-  Environment() {
-    logging::SetMinLogLevel(logging::LOG_FATAL);
-  }
-};
-
-extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
-  static Environment env;
-
-  permission_broker::FakeFirewall fake_firewall;  // <- Mocks out system calls.
-  base::FuzzedDataProvider data_provider(data, size);
-
-  std::set<uint16_t> tcp_ports;
-  std::set<uint16_t> udp_ports;
-
-  // How many ports should we try?
-  uint8_t num_ports = data_provider.ConsumeUint8();
+...
+  uint8_t num_ports = data_provider.ConsumeIntegral<uint8_t>();
   for (size_t i = 0; i < num_ports; i++) {
     bool is_tcp = data_provider.ConsumeBool();
-    uint16_t port = data_provider.ConsumeUint16();
+    uint16_t port = data_provider.ConsumeIntegral<uint16_t>();
 
     if (!is_tcp && port == 0) {
       // Did we run out of data? Consume another bool to check.
       if (!data_provider.ConsumeBool())
         break;
+      }
     }
-
-    bool do_add = true;
-
-    if ((is_tcp && tcp_ports.count(port) == 0) ||
-        (!is_tcp && udp_ports.count(port) == 0)) {
-      // Port does not exist.
-      // With small probability, hit the error case: delete a port that doesn't
-      // exist.
-      do_add = data_provider.ConsumeUint8() < 0xFF;
-    } else {
-      // Port exists.
-      // With small probability, hit the error case: add a port that already
-      // exists.
-      do_add = data_provider.ConsumeUint8() == 0xFF;
-    }
-
+...
+...
     if (do_add) {
       fake_firewall.AddAcceptRules(is_tcp ? permission_broker::kProtocolTcp
                                           : permission_broker::kProtocolUdp,
@@ -710,9 +668,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
                                              : permission_broker::kProtocolUdp,
                                       port, "iface");
     }
-  }
-  return 0;
-}
+...
 ```
 
 The fuzzer is using its input to decide what to do and which functions to call.
@@ -737,6 +693,11 @@ The `cov` value will increase (unsurprisingly) with increased coverage. In the
 current example, avoiding random strings for the `interface` argument
 significantly increased coverage because both API functions were no longer
 erroring out early.
+
+Note that it's not recommended to use `FuzzedDataProvider` unless you actually
+need to split the fuzz input. If you need to convert the fuzz input into a
+vector or string object, for example, simply initialize that object by passing
+`const uint8_t* data, size_t size` to its constructor.
 
 [**Return to Top**](#top) > [**Return to Detailed
 instructions**](#Detailed-instructions)
@@ -1394,8 +1355,8 @@ ask questions.
 [fuzzer builder]: https://cros-goldeneye.corp.google.com/chromeos/legoland/builderHistory?buildConfig=amd64-generic-fuzzer&buildBranch=master
 [chromeos-fuzzing@google.com]: mailto:chromeos-fuzzing@google.com
 [firewall implementation]: https://chromium.googlesource.com/chromiumos/platform2/+/master/permission_broker/firewall.h#33
-[libchrome]: https://chromium.googlesource.com/aosp/platform/external/libchrome/+/master
-[FuzzedDataProvider]: https://chromium.googlesource.com/aosp/platform/external/libchrome/+/master/base/test/fuzzed_data_provider.h
+[FuzzedDataProvider]: https://github.com/llvm/llvm-project/blob/d2af368aee56abf77f4a6ca3fd57ebdb697c48f2/compiler-rt/include/fuzzer/FuzzedDataProvider.h
+[google/fuzzing documentation page]: https://github.com/google/fuzzing/blob/master/docs/split-inputs.md#fuzzed-data-provider
 [libprotobuf-mutator]: https://github.com/google/libprotobuf-mutator
 [firewall_fuzzer]: https://chromium.googlesource.com/chromiumos/platform2/+/master/permission_broker/firewall_fuzzer.cc
 [Fuzzer statistics]: https://clusterfuzz.com/fuzzer-stats/by-fuzzer/fuzzer/libFuzzer/job/libfuzzer_asan_chromeos
