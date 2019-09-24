@@ -44,6 +44,8 @@ Here is its ebuild:
 
 EAPI="6"
 
+CROS_RUST_REMOVE_DEV_DEPS=1
+
 inherit cros-rust
 
 DESCRIPTION="An example library"
@@ -55,9 +57,9 @@ SLOT="${PV}/${PR}"
 KEYWORDS="*"
 
 DEPEND="
-	=dev-rust/crate1-0.4*:=
+	>=dev-rust/crate1-0.4:=
 	>=dev-rust/crate2-1.2:=
-	!>=dev-rust/crate2-2
+	<dev-rust/crate2-2.0
 	=dev-rust/crate3-1.3*:=
 "
 ```
@@ -72,6 +74,12 @@ DEPEND="
 
 After creating the ebuild file, running `emerge-${BOARD} <crate_name>` will
 install the crate's package to `cros-rust-registry`.
+
+Many third party crates have dev dependencies that are not actually needed
+for Chrome OS. To keep dev dependencies from being enforced
+`cros-rust.eclass` provides, `CROS_RUST_REMOVE_DEV_DEPS` which can be set to
+remove the dev dependencies during `src_prepare`. This is especially useful when
+there would otherwise be circular dependencies.
 
 ### Empty crates
 
