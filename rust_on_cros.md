@@ -131,7 +131,7 @@ DESCRIPTION="An example first party project"
 HOMEPAGE="home_page_url"
 
 LICENSE="BSD-Google"
-SLOT="${PV}/${PR}"
+SLOT="0/${PVR}"
 KEYWORDS="~*"
 IUSE="test"
 
