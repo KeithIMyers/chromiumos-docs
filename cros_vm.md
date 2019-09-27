@@ -62,6 +62,8 @@ From within the [Simple Chrome] environment:
 ```bash
 (sdk) .../chrome/src $ cros_vm --start
 ```
+> To avoid having to type your password everytime you launch a VM, add yourself
+> to the kvm group: `sudo usermod -a -G kvm $USER`
 
 ### Viewing the VM
 To view the VM in a window, you may need to launch `vncviewer`:
