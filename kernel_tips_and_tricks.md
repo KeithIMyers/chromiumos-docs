@@ -40,10 +40,28 @@ So the first step is to figure out _what_ are the problems:
 *   Stress tests:
     *   Single iteration suspend test: `powerd_dbus_suspend`
     *   Multi-iteration suspend test: `suspend_stress_test`
-    *   Reboot loops:
+    *   Reboot loops, keeping ramoops at each reboot to analyse failures (setup
+	    [SSH keys] first):
 
         ```bash
-        while true; do ssh "${IP}" reboot; sleep 20; done
+		#!/bin/bash
+
+		IP=$1
+		i=0
+		while true; do
+			while ! scp root@$IP:/sys/fs/pstore/console-ramoops-0 ramoops-$i; do
+			sleep 1
+			done
+			ssh root@$IP reboot
+			sleep 20
+			i=$((i+1))
+		done
+        ```
+
+		Then run this to extract out the bad ramoops
+		```bash
+		mkdir bad; ls ramoops-* | xargs -I{} sh -c \
+		    'tail -n 1 {} | grep -v "reboot: Restarting system" && cp {} bad/{}'
         ```
 
     *   `restart ui` in a loop.
@@ -329,3 +347,4 @@ To fetch the email into your IMAP/gmail account:
 [KASan]: https://www.kernel.org/doc/html/v4.14/dev-tools/kasan.html
 [kernel_faq]: ./kernel_faq.md
 [UPSTREAM, BACKPORT and FROMLIST]: ./kernel_faq.md#UPSTREAM_BACKPORT_FROMLIST_and-you
+[SSH keys]: http://www.chromium.org/chromium-os/testing/autotest-developer-faq/ssh-test-keys-setup
