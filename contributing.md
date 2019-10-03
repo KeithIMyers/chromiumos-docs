@@ -607,6 +607,6 @@ git commit id must be exactly the same).
 [issue tracker]: https://developers.google.com/issue-tracker/
 [issuetracker.google.com]: https://issuetracker.google.com/
 [Life of a Patch]: https://source.android.com/setup/contribute/life-of-a-patch
-[unittests]: unit_tests.md
+[unittests]: testing/unit_tests.md
 [Uploading Changes]: https://gerrit-review.googlesource.com/Documentation/user-upload.html
 [Work-in-Progress (WIP)]: https://gerrit-review.googlesource.com/Documentation/intro-user.html#wip

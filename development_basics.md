@@ -224,7 +224,7 @@ and mailing lists rather than the internal versions.
 [Why Google C++ Testing Framework?]: https://github.com/google/googletest/blob/master/googletest/docs/primer.md
 [Google Test FAQ]: https://github.com/google/googletest/blob/master/googletest/docs/FAQ.md
 [unit testing document]: https://www.chromium.org/chromium-os/testing/adding-unit-tests-to-the-build
-[Best practices for writing Chrome OS unit tests]: unit_tests.md
+[Best practices for writing Chrome OS unit tests]: testing/unit_tests.md
 [Autotest]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md
 [Chromium code review policy]: https://chromium.googlesource.com/chromium/src/+/master/docs/code_reviews.md
 [Developer Guide's code review instructions]: https://www.chromium.org/chromium-os/developer-guide#TOC-Upload-your-changes-and-get-a-code-review
