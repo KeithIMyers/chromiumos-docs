@@ -628,7 +628,7 @@ void DoSomething() {
 This pattern also makes it easier to move away from preprocessor-based
 configuration in the future.
 
-## Use Google Mock sparingly (if at all)
+## Use Google Mock judiciously
 
 [Google Mock] (formerly "gmock", and now part of [Google Test]) is "an extension
 to Google Test for writing and using C++ mock classes". It can be used to create
@@ -665,6 +665,51 @@ See the 2012 ["Should we officially deprecate GMock?"] and 2016 ["Using
 NiceMock?"] chromium-dev mailing list threads for more discussion. The ["Friends
 You Can Depend On"] and ["Know Your Test Doubles"] posts on the [Google Testing
 Blog] also include more information about different types of test objects.
+
+### Best Practices
+
+*   Use [`MOCK_METHOD`] macros instead of `MOCK_METHOD1`, `MOCK_METHOD2`, etc.
+*   Use `override` in `MOCK_METHOD` on a virtual method so that you get a
+    compiler error if the declarations in the class and mock do not match.
+
+***note
+**NOTE:** `clang-format` sometimes formats `Bar* bar` as `Bar * bar` in
+ `MOCK_METHOD`. See https://crbug.com/1006323.
+***
+
+```c++
+class Task {
+ public:
+  Task() = default;
+  virtual ~Task() = default;
+  virtual bool IsDone() const = 0;
+  virtual bool DoIt(const std::map<int, int>& arguments,
+                    std::string* result,
+                    const base::Closure& error_callback) = 0;
+};
+
+// Old way
+class MockTask : public Task {
+ public:
+  MOCK_CONST_METHOD0(IsDone, bool());
+  MOCK_METHOD3(DoIt,
+               bool(const std::map<int, int>&,
+                    std::string*,
+                    const base::Closure&));
+  MOCK_METHOD0(OnError, void());
+};
+
+// New preferred way
+class MockTask : public Task {
+ public:
+  MOCK_METHOD(bool, IsDone, (), (const, override));  // NOTE: const and override
+  MOCK_METHOD(bool,
+              DoIt,
+              ((const std::map<int, int>&), std::string*, const base::Closure&),
+              (override));  // NOTE: override specified
+  MOCK_METHOD(void, OnError, ());
+};
+```
 
 ## Code coverage
 
@@ -721,3 +766,4 @@ llvm-cov report -instr-profile=default.profdata -object=/build/$BOARD/tmp/portag
 ["Friends You Can Depend On"]: https://testing.googleblog.com/2008/06/tott-friends-you-can-depend-on.html
 ["Know Your Test Doubles"]: https://testing.googleblog.com/2013/07/testing-on-toilet-know-your-test-doubles.html
 [Google Testing Blog]: https://testing.googleblog.com/
+[`MOCK_METHOD`]: https://github.com/google/googletest/blob/master/googlemock/docs/cook_book.md#creating-mock-classes
