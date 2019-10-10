@@ -118,7 +118,7 @@ the `platform` eclass). If you're not working on a platform package, see
 1.  In your package, write a new test program. Start with a dummy fuzzer:
 
     ```cpp
-    // Copyright 2018 The Chromium OS Authors. All rights reserved.
+    // Copyright 2019 The Chromium OS Authors. All rights reserved.
     // Use of this source code is governed by a BSD-style license that can be
     // found in the LICENSE file.
 
@@ -334,7 +334,7 @@ eclass), see
 1.  In your package, write a new test program. Start with a dummy fuzzer:
 
     ```cpp
-    // Copyright 2018 The Chromium OS Authors. All rights reserved.
+    // Copyright 2019 The Chromium OS Authors. All rights reserved.
     // Use of this source code is governed by a BSD-style license that can be
     // found in the LICENSE file.
 
@@ -716,7 +716,7 @@ protos. Repeated fields can be used in cases where more than one action needs to
 be performed multiple times to get good code coverage from a fuzz target.
 
 ```cpp
-// Copyright 2018 The Chromium OS Authors. All rights reserved.
+// Copyright 2019 The Chromium OS Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
