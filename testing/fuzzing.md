@@ -268,7 +268,7 @@ the `platform` eclass). If you're not working on a platform package, see
     Then run your fuzzer:
 
     ```bash
-    (in board) # /usr/libexec/fuzzers/<your_fuzzer>
+    (board chroot) # /usr/libexec/fuzzers/<your_fuzzer>
     ```
 
     *** note
@@ -453,9 +453,9 @@ eclass), see
 
     ```bash
     # Run build_packages to build the package and its dependencies.
-    $ USE="asan fuzzer" ./build_packages --board=${BOARD} --skip_chroot_upgrade <your_package>
+    (chroot) $ USE="asan fuzzer" ./build_packages --board=${BOARD} --skip_chroot_upgrade <your_package>
     # If you make more changes to your fuzzer or build, you can rebuild the package by:
-    $ USE="asan fuzzer" emerge-${BOARD} <your_package>
+    (chroot) $ USE="asan fuzzer" emerge-${BOARD} <your_package>
     ```
 
     You should verify that your fuzzer was built and that it was installed in
@@ -464,13 +464,13 @@ eclass), see
     prepare the environment and get a shell ready for fuzzing:
 
     ```bash
-    $ cros_fuzz --board=${BOARD} shell
+    (chroot) $ cros_fuzz --board=${BOARD} shell
     ```
 
     Then run your fuzzer:
 
     ```bash
-    (in board) # /usr/libexec/fuzzers/<your_fuzzer>
+    (board chroot) # /usr/libexec/fuzzers/<your_fuzzer>
     ```
 
     *** note
@@ -790,7 +790,7 @@ These include:
 `cros_fuzz` is used like so:
 
    ```bash
-   $ cros_fuzz --board=${BOARD} <command> <command arguments>
+   (chroot) $ cros_fuzz --board=${BOARD} <command> <command arguments>
    ```
 
 You can get detailed help information on each command by using the command
@@ -818,7 +818,7 @@ things that will not be available on ClusterFuzz. Instead you should run the
 then chroot into the board giving you a shell. It is simple to use:
 
    ```bash
-   $ cros_fuzz --board=${BOARD} shell
+   (chroot) $ cros_fuzz --board=${BOARD} shell
    (board chroot) # /usr/libexec/fuzzers/<your_fuzzer>
    ```
 
@@ -832,8 +832,8 @@ bug. You can use the `setup` command to run your fuzzer using this sequence of
 these bash commands:
 
    ```bash
-   $ cros_fuzz --board=${BOARD} setup
-   $ sudo chroot /build/${BOARD}
+   (chroot) $ cros_fuzz --board=${BOARD} setup
+   (chroot) $ sudo chroot /build/${BOARD}
    (board chroot) # ASAN_OPTIONS="log_path=stderr" /usr/libexec/fuzzers/<your_fuzzer>
    ```
 
@@ -926,7 +926,7 @@ here's a guide on how to use it to reproduce crashes reported by ClusterFuzz.
     it to the board.
 
     ```bash
-    $ cp ~/Downloads/<testcase_name> /path/to/chromiumos-checkout/chroot/build/${BOARD}/tmp/
+    (outside) $ cp ~/Downloads/<testcase_name> /path/to/chromiumos-checkout/chroot/build/${BOARD}/tmp/
     ```
 
 2.  Identify the package, build type, and the name of the fuzzer. The name of
@@ -939,8 +939,7 @@ here's a guide on how to use it to reproduce crashes reported by ClusterFuzz.
     chroot like so:
 
     ```bash
-    (chromeos_sdk) $
-    cros_fuzz --board=${BOARD} reproduce --fuzzer <your_fuzzer> --testcase /path/to/testcase/<testcase_name> \
+    (chroot) $ cros_fuzz --board=${BOARD} reproduce --fuzzer <your_fuzzer> --testcase /path/to/testcase/<testcase_name> \
               --package <package_of_fuzzer> --build-type <build_type>
     ```
 
@@ -1014,8 +1013,8 @@ You can minimize the size of your seed corpus (but not individual testcases) by
 running these commands:
 
 ```bash
-$ mkdir MINIMIZED_SEED_CORPUS
-$ ./<your_fuzzer> -merge MINIMIZED_SEED_CORPUS <path_to_your_fuzzers_corpus>
+(board chroot) $ mkdir MINIMIZED_SEED_CORPUS
+(board chroot) $ ./<your_fuzzer> -merge MINIMIZED_SEED_CORPUS <path_to_your_fuzzers_corpus>
 ```
 
 Once you have decided what files you will include in your seed corpus, you can
@@ -1025,9 +1024,9 @@ command:
 
 ```bash
 # Verify that your fuzzer's seed corpus directory exists.
-$ gsutil ls -l gs://chromeos-corpus/libfuzzer/chromeos_<your_fuzzer_name>
+(outside) $ gsutil ls -l gs://chromeos-corpus/libfuzzer/chromeos_<your_fuzzer_name>
 # Upload new seed corpus files.
-$ gsutil -m cp <path_to_your_fuzzers_corpus>/* gs://chromeos-corpus/libfuzzer/chromeos_<your_fuzzer_name>
+(outside) $ gsutil -m cp <path_to_your_fuzzers_corpus>/* gs://chromeos-corpus/libfuzzer/chromeos_<your_fuzzer_name>
 ```
 
 You can upload newer corpus files to this location any time. Files uploaded to
@@ -1040,7 +1039,7 @@ the corpus.
 To use a corpus in local fuzzing, pass the directory to your fuzzer, like so:
 
 ```bash
-$ ./<your_fuzzer> <corpus_directory>
+(board chroot) $ ./<your_fuzzer> <corpus_directory>
 ```
 
 [**Return to Top**](#top) > [**Return to Improving fuzzer
@@ -1084,7 +1083,7 @@ reuse one if your fuzzer's format is also fuzzed in Chrome.
 To use a dictionary in local fuzzing, use the `-dict=` option, like so:
 
 ```bash
-$ ./<your_fuzzer> -dict=/path/to/your/dictionary
+(board chroot) $ ./<your_fuzzer> -dict=/path/to/your/dictionary
 ```
 
 [Return to Top](#top) > [**Return to Improving fuzzer
@@ -1199,11 +1198,10 @@ build the packages with sanitizers flags just like the builders.
 # Run setup_board with the fuzzer profile.
 # The example below uses "--profile=fuzzer" which selects asan flags.
 # For msan or ubsan, use "--profile=msan-fuzzer" or "--profile=ubsan-fuzzer".
-$ setup_board --board=amd64-generic --profile=fuzzer
+(chroot) $ setup_board --board=amd64-generic --profile=fuzzer
 # Run build_packages to build the package and its dependencies.
 # Note that `--nousepkg` must be passed to avoid using prebuilts.
-$ ./build_packages --board=amd64-generic --skip_chroot_upgrade --nousepkg
-<your_package>
+(chroot) $ ./build_packages --board=amd64-generic --skip_chroot_upgrade --nousepkg <your_package>
 ```
 
 Once the package and its dependencies have been built,
@@ -1220,7 +1218,7 @@ copies `/usr/bin/gdbserver` to the board if present. `gdbserver` is provided by
 the chroot package `sys-devel/gdb` and can be installed as:
 
 ```bash
-$ sudo emerge sys-devel/gdb
+(chroot) $ sudo emerge sys-devel/gdb
 ```
 
 To debug a fuzzer binary using `gdbserver`, two separate cros_sdk chroot shells
@@ -1229,14 +1227,14 @@ are needed.
 Shell 1:
 Start gdbserver on port 8888 with the binary.
 ```bash
-$ cros_fuzz --board=<board> shell
-$ gdbserver :8888 /usr/libexec/fuzzers/<fuzzer>
+(chroot) $ cros_fuzz --board=<board> shell
+(chroot) $ gdbserver :8888 /usr/libexec/fuzzers/<fuzzer>
 ```
 
 Shell 2:
 Run gdb on the binary and attach to the gdbserver session.
 ```bash
-$ gdb /build/<board>/usr/libexec/fuzzers/<fuzzer>
+(chroot) $ gdb /build/<board>/usr/libexec/fuzzers/<fuzzer>
   (gdb) target remote :8888
   (gdb) set sysroot /build/<board>
   (gdb) set breakpoints, debug as usual.
