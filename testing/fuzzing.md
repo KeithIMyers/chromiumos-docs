@@ -53,9 +53,9 @@ Quickstart steps:
     `cryptohome_<descriptive-name>_fuzzer`. In the program, define the function
     `LLVMFuzzerTestOneInput` with the following signature:
 
-    ```c
-    #include <stddef.h>
-    #include <stdint.h>
+    ```cpp
+    #include <cstddef>
+    #include <cstdint>
 
     extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
         <your test code goes here>
@@ -122,8 +122,8 @@ the `platform` eclass). If you're not working on a platform package, see
     // Use of this source code is governed by a BSD-style license that can be
     // found in the LICENSE file.
 
-    #include <stddef.h>
-    #include <stdint.h>
+    #include <cstddef>
+    #include <cstdint>
 
     class Environment {
      public:
@@ -325,8 +325,8 @@ eclass), see
     // Use of this source code is governed by a BSD-style license that can be
     // found in the LICENSE file.
 
-    #include <stddef.h>
-    #include <stdint.h>
+    #include <cstddef>
+    #include <cstdint>
 
     class Environment {
      public:
