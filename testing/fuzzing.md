@@ -148,47 +148,31 @@ the `platform` eclass). If you're not working on a platform package, see
 
 2.  Update the build system for your package to build your `*_fuzzer` binary.
 
-    *   For packages that are built with GYP files, update your GYP file to
+    *   For packages that are built with GN files, update your GN file to
         build the fuzzer binary:
 
         ```
-        {
-          'targets': [
-            ...
-          ],
-          'conditions': [
-            # Fuzzer target.
-            ['USE_fuzzer == 1', {
-              'targets': [
-                {
-                  'target_name': 'your_fuzzer',
-                  'type': 'executable',
-                  'includes': [
-                    '../common-mk/common_fuzzer.gypi',
-                  ],
-                  'dependencies': [
-                    # This could be an intermediate static library target in your
-                    # package.
-                  ],
-                  'variables': {
-                    'deps': [
-                      'libprotobuf-mutator', # For fuzzing with Protobufs (optional)
-                    ],
-                  },
-                  'sources': [
-                    'your_fuzzer.cc',
-                  ],
-                },
-              ],
-            }],
-          ],
+        if (use.fuzzer) {
+          executable("your_fuzzer") {
+            configs += [
+              "//common-mk/common_fuzzer",
+              ":target_defaults",
+            ]
+            sources = [
+              "your_fuzzer.cc",
+            ]
+            deps = [
+              "libprotobuf-mutator", # For fuzzing with Protobufs (optional)
+               # any other library dependencies in your package
+            ]
+          }
         }
         ```
 
-        See the [midis GYP file] for a complete example.
+        See the [midis GN file] for a complete example.
 
-    *   If your package is not built with a GYP file, then you will need to
-        update your Makefile (or whatever build system you use), in such a way
+    *   If your package is not built with a GN file, then you will need to
+        update your `Makefile` (or whatever build system you use), in such a way
         that your fuzzer binary gets built when a special flag or argument is
         passed to the normal build command.
 
@@ -200,8 +184,8 @@ the `platform` eclass). If you're not working on a platform package, see
 
 3.  Update your package's ebuild file:
 
-    1.  Update the ebuild file to build the new binary when the fuzzer USE flag
-        is used. **For platform packages built with GYP files, you should
+    1.  Update the ebuild file to build the new binary when the fuzzer `USE` flag
+        is used. **For platform packages built with GN files, you should
         skip this step and go directly to the next step for installing the
         fuzzer binary.**
 
@@ -261,21 +245,24 @@ the `platform` eclass). If you're not working on a platform package, see
     ***
 
     ```bash
+    (chroot) $ cros_workon-${BOARD} start <your_package>
     # Run build_packages to build the package and its dependencies.
-    $ USE="asan fuzzer" ./build_packages --board=${BOARD} --skip_chroot_upgrade <your_package>
+    (chroot) $ USE="asan fuzzer" ./build_packages --board=${BOARD} --skip_chroot_upgrade <your_package>
     # If you make more changes to your fuzzer or build, you can rebuild the package with:
-    $ USE="asan fuzzer" emerge-${BOARD} <your_package>
+    (chroot) $ USE="asan fuzzer" emerge-${BOARD} <your_package>
     ```
 
-    For more details on cros-workon packages, see the [Developer Guide][cros-workon].
+    For more details on `cros-workon` packages, see the [Developer Guide][cros-workon].
 
     You should verify that your fuzzer was built and that it was installed in
-    `/build/${BOARD}/usr/libexec/fuzzers/` (make sure the owners file was
-    installed there as well). To run your fuzzer locally, run this command to
-    prepare the environment and get a shell ready for fuzzing:
+    `/build/${BOARD}/usr/libexec/fuzzers/` (make sure the `.owners` file was
+    installed there as well).
+
+    To run your fuzzer locally, run this command to prepare the environment
+    and get a shell ready for fuzzing:
 
     ```bash
-    $ cros_fuzz --board=${BOARD} shell
+    (chroot) $ cros_fuzz --board=${BOARD} shell
     ```
 
     Then run your fuzzer:
@@ -308,7 +295,7 @@ the `platform` eclass). If you're not working on a platform package, see
 
     Submit a tryjob *outside of the chroot*:
     ```bash
-    $ cros tryjob -g 'CL1 CL2' amd64-generic-fuzzer-tryjob
+    (outside) $ cros tryjob -g 'CL1 CL2' amd64-generic-fuzzer-tryjob
     ```
     Replace *CL1* and *CL2* with the actual CL numbers.
 
@@ -369,7 +356,7 @@ eclass), see
     In general, you must be able to invoke your normal build
     command, passing a special flag or argument or environment variable, so
     that it will build your fuzzer binary and only your fuzzer binary. This
-    will involve updating GYP files or Makefiles or whatever other build files
+    will involve updating GN files or Makefiles or whatever other build files
     your package uses.
 
     If testing this by hand (without the ebuild file changes in step 3 below),
@@ -510,7 +497,7 @@ eclass), see
 
     Submit a tryjob *outside of the chroot* as:
     ```bash
-    $ cros tryjob -g 'CL1 CL2' amd64-generic-fuzzer-tryjob
+    (outside) $ cros tryjob -g 'CL1 CL2' amd64-generic-fuzzer-tryjob
     ```
     Replace *CL1* and *CL2* with the actual CL numbers.
 
@@ -731,8 +718,8 @@ DEFINE_PROTO_FUZZER(const my_package::MyProto& input) {
 ```
 
 Building this fuzz target requires linking against [libprotobuf-mutator]. You
-can add `'libprotobuf-mutator'` under the `deps` section in the GYP/GN buildfile
-for platform projects ([GYP Example](#platform)).
+can add `'libprotobuf-mutator'` under the `deps` section in the GN buildfile
+for platform projects ([GN Example](#platform)).
 
 Lastly, for both platform and non-platform projects
 `fuzzer? ( dev-libs/libprotobuf-mutator )` should be added to the dependency
@@ -1349,7 +1336,7 @@ ask questions.
 [bsdiff fuzzer]: https://android.googlesource.com/platform/external/bsdiff/+/master/bspatch_fuzzer.cc
 [puffin_fuzzer]: https://android.googlesource.com/platform/external/puffin/+/master/src/fuzzer.cc
 [GURL fuzzer]: https://chromium.googlesource.com/chromium/src/+/master/url/gurl_fuzzer.cc
-[midis GYP file]: https://chromium.googlesource.com/chromiumos/platform2/+/refs/heads/release-R72-11316.B/midis/midis.gyp
+[midis GN file]: https://chromium.googlesource.com/chromiumos/platform2/+/547320548b8bd6cd1b4d78dfdeefdc720882e1dc/midis/BUILD.gn#83
 [puffin ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/dev-util/puffin/puffin-9999.ebuild
 [Chromium issue tracker]: https://crbug.com
 [fuzzer builder]: https://cros-goldeneye.corp.google.com/chromeos/legoland/builderHistory?buildConfig=amd64-generic-fuzzer&buildBranch=master
