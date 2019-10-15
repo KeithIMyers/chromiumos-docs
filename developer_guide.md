@@ -275,9 +275,15 @@ repo sync -j4
 ```shell
 (outside)
 cd ${HOME}/chromiumos
-repo init -u https://chrome-internal.googlesource.com/chromeos/manifest-internal.git --repo-url https://chromium.googlesource.com/external/repo.git
+repo init -u https://chrome-internal.googlesource.com/chromeos/manifest-internal.git --repo-url https://chromium.googlesource.com/external/repo.git -b stable
 repo sync -j4
 ```
+
+For Googlers: the instructions above add `-b stable` to the init instructions vs
+the external version without. This feature is known as "sync-to-green"; the
+version of the source that you will sync to is 5-10 hours old but is guaranteed
+to be verified by our CI system and have prebuilt binaries available. For more
+information about this see [Sync to Green].
 
 *** note
 **Note:** `-j4` tells `repo` to concurrently sync up to 4 repositories at once.
@@ -1713,6 +1719,50 @@ current default one, do:
 *   For ARM: `armv7a-cros-linux-gnueabi-gcc -v`
 *   For x86: `i686-pc-linux-gnu-gcc -v`
 *   For amd64: `x86_64-cros-linux-gnu-gcc -v`
+
+### Sync to Green
+
+Googlers/internal users may work from either the stable ref or from tip-of-tree
+(ToT) like external contributors; both are fully supported.
+
+It's always the case that `repo sync` could sync to a broken tree in ChromeOS.
+There's been many bug reports of this happening to folks over the years. There
+are two structural sources of this: chumped CL's and mutually incompatible CL's
+landing at the same time.
+
+If you have previously run `repo init` without the `-b stable`, you can convert an
+existing checkout to stable (or vice versa):
+
+```
+repo init -b stable
+repo sync
+```
+
+This stable ref is updated anytime that postsubmit-orchestrator passes all build
+and unit test stages (it ignores hardware tests so that the stables updates are
+more frequent). It should vary from 5-10 hours old, so long as ToT is not broken
+(which is rare).
+
+You can continue to use master (switch back with `repo init -b master` or just
+`repo init`), if you prefer. You would want to do this if you want to see a
+change that just landed on ToT and don't want to wait for the stable ref to be
+updated to include the change you are interested in building off of. On the
+downside, master may be broken and may not have all binaries available,
+including Chrome (which typically takes 45 minutes to build).
+
+We guarantee that binary prebuilt packages are available for everything at the
+stable ref including Chrome. Conversely, we don't guarantee Chrome binary
+prebuilts are available at master/ToT (they will be available there about 85% of
+the time). When building from stable, this should result in <10 min
+`build_packages && build_image` times in most cases.
+
+In summary:
+
+*   Stable pros: binaries always available; never broken
+*   Stable cons: 5-10 hours old
+*   Master pros: always has ToT changes
+*   Master cons: more frequently broken, may need to build packages in the
+    depgraph including Chrome which could add ~1 hours to build times
 
 ### Attribution requirements
 
