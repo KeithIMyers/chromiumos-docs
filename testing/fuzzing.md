@@ -621,6 +621,10 @@ public:
 
   template <typename T> T ConsumeIntegral();
 
+  template <typename T> T ConsumeFloatingPointInRange(T min, T max)
+
+  template <typename T> T ConsumeFloatingPoint();
+
   bool ConsumeBool();
   ...
 };
