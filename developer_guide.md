@@ -1165,6 +1165,13 @@ For example, if you want to build dash to test on your device:
 
 To install the package to the device, see [cros deploy].
 
+**SIDE NOTE:**
+
+*   Typically, when building a package with `emerge-${BOARD}`, the dependencies have
+    already been built. However, in some situations dependencies will need to be built
+    as well. When that happens, `-jN` can be passed to `emerge-${BOARD}` to build
+    different packages in parallel.
+
 ### Making changes to the Chromium web browser on Chromium OS
 
 If you just want to make modifications to the Chromium web browser and quickly
