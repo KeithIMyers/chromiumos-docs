@@ -912,6 +912,10 @@ If you don't specify one, the script will specify a timeout of 30 seconds. You
 can specify a limit by passing one of the `-max_total_time` or `-runs` libFuzzer
 options in `--fuzz-args`.
 
+Please note that in order to get the report with the detailed information about
+line by line coverage in source files, you would need to build the packages with
+the related libraries with `FEATURES="noclean"`.
+
 If you want access to some of the data used by this command, it is probably
 stored in the directory: `/build/${BOARD}/tmp/fuzz/` but we make no guarantees
 about this.
