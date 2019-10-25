@@ -202,6 +202,13 @@ list of GTests currently running in VMs (eg: `base_unittests`,
 (sdk) .../chrome/src $ ./out_$SDK_BOARD/Release/bin/run_$TEST
 ```
 
+## Login and navigate to a webpage in the VM
+
+```bash
+(vm) localhost ~ # /usr/local/autotest/bin/autologin.py \
+--url "http://www.google.com/chromebook"
+```
+
 ## Launch a VM built by a waterfall bot
 
 Find a waterfall bot of interest, such as
