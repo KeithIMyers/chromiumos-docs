@@ -963,9 +963,9 @@ option is mandatory unless explicitly specified.
 *  `--fuzzer`: The fuzzer to run the testcase on. Mandatory.
 
 *   `--package`: The package of the fuzzer to build. If this option is provided
-    then one must also provide the `--build_type` option.
+    then one must also provide the `--build-type` option.
 
-*   `--build_type`: The type of build we want to do. This can either be `asan`,
+*   `--build-type`: The type of build we want to do. This can either be `asan`,
     `msan`, `ubsan`, or `coverage`. Note that `coverage` is not actually used on
     ClusterFuzz. This option may only be used if the `--package` option is used.
 
