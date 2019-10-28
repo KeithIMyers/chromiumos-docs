@@ -28,9 +28,9 @@ comes in handy when you don't have a Chromium OS checkout:
 
 ```
 git clone https://chromium.googlesource.com/chromiumos/docs
+cd docs
 curl -Lo .git/hooks/commit-msg https://gerrit-review.googlesource.com/tools/hooks/commit-msg
 chmod +x .git/hooks/commit-msg
-cd docs
 git checkout -b changes
 (make some changes)
 git commit -a
