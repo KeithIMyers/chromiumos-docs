@@ -183,6 +183,9 @@ For more information, consult the [upstream gtest documentation].
 ## Further reading
 
 * [GN] on Google Git
+* (internal) Introduction to GN tech talk [GN video]/[GN slides]
 
 [GN]: https://gn.googlesource.com/gn/
+[GN video]: https://goto.google.com/gn-intro-tech-talk
+[GN slides]: https://goto.google.com/gn-intro-slides
 [upstream gtest documentation]: https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#running-a-subset-of-the-tests
