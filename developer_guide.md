@@ -1871,7 +1871,7 @@ Below are a few links to external sites that you might also find helpful
 [Tips And Tricks]: https://sites.google.com/a/chromium.org/dev/chromium-os/tips-and-tricks-for-chromium-os-developers
 [something harder]: http://www.google.com/search?q=the+fourth+dimension
 [issues with virtual packages]: http://crosbug.com/5777
-[What does build_packages actually do?]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/portage-build-faq#TOC-What-does-build_packages-actually-do-
+[What does build_packages actually do?]: ./portage/ebuild_faq.md#what-does-build-packages-do
 [Cros Flash page]: cros_flash.md
 [Debug Button Shortcuts]: debug_buttons.md
 [Chrome OS Devices]: https://sites.google.com/a/chromium.org/dev/chromium-os/developer-information-for-chrome-os-devices
