@@ -204,10 +204,10 @@ and mailing lists rather than the internal versions.
 [Google C++ style guide]: https://google.github.io/styleguide/cppguide.html
 [Chromium C++ style guide]: https://chromium.googlesource.com/chromium/src/+/master/styleguide/c++/c++.md
 [C++11 use in Chromium]: https://chromium-cpp.appspot.com/
-[platform2 repository]: https://dev.chromium.org/chromium-os/getting-started-with-platform2
+[platform2 repository]: platform2_primer.md
 [Linux kernel coding style]: https://github.com/torvalds/linux/blob/master/Documentation/process/coding-style.rst
 [Kernel FAQ]: kernel_faq.md
-[EC Development page]: https://www.chromium.org/chromium-os/ec-development
+[EC Development page]: https://chromium.googlesource.com/chromiumos/platform/ec/+/master/README.md
 [src/platform2/init]: https://chromium.googlesource.com/chromiumos/platform2/+/master/init/
 [init STYLE file]: https://chromium.googlesource.com/chromiumos/platform2/+/master/init/STYLE
 [init README file]: https://chromium.googlesource.com/chromiumos/platform2/+/master/init/README
@@ -215,19 +215,19 @@ and mailing lists rather than the internal versions.
 [Ebuild Writing]: https://devmanual.gentoo.org/ebuild-writing/index.html
 [Ebuild File Format]: https://devmanual.gentoo.org/ebuild-writing/file-format/index.html
 [Google shell style guide]: https://google.github.io/styleguide/shell.xml
-[Chromium OS shell style guidelines]: https://www.chromium.org/chromium-os/shell-style-guidelines
+[Chromium OS shell style guidelines]: styleguide/shell.md
 [Google Python style guide]: https://google.github.io/styleguide/pyguide.html
-[Chromium OS Python style guidelines]: https://www.chromium.org/chromium-os/python-style-guidelines
+[Chromium OS Python style guidelines]: styleguide/python.md
 [autotest coding style]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/coding-style.md
 [Chromium OS testing site]: https://www.chromium.org/chromium-os/testing
 [Google Test]: https://github.com/google/googletest
 [Why Google C++ Testing Framework?]: https://github.com/google/googletest/blob/master/googletest/docs/primer.md
-[Google Test FAQ]: https://github.com/google/googletest/blob/master/googletest/docs/FAQ.md
+[Google Test FAQ]: https://github.com/google/googletest/blob/master/googletest/docs/faq.md
 [unit testing document]: https://www.chromium.org/chromium-os/testing/adding-unit-tests-to-the-build
 [Best practices for writing Chrome OS unit tests]: testing/unit_tests.md
 [Autotest]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md
 [Chromium code review policy]: https://chromium.googlesource.com/chromium/src/+/master/docs/code_reviews.md
-[Developer Guide's code review instructions]: https://www.chromium.org/chromium-os/developer-guide#TOC-Upload-your-changes-and-get-a-code-review
+[Developer Guide's code review instructions]: developer_guide.md#Upload-your-changes-and-get-a-code-review
 [Gerrit notification settings]: https://chromium-review.googlesource.com/settings/#Notifications
 [chromium issue tracker]: https://bugs.chromium.org/p/chromium/issues/list
 [Chromium bug reporting guidelines]: https://www.chromium.org/for-testers/bug-reporting-guidelines

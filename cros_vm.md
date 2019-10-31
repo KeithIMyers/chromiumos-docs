@@ -299,11 +299,11 @@ This doc is at [go/cros-vm]. Please send feedback to [achuith@chromium.org].
 [Linux Chromium checkout]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md
 [Virtualization enabled]: https://g3doc.corp.google.com/tools/android/g3doc/development/crow/enable_kvm.md
 [Simple Chrome]: https://chromium.googlesource.com/chromiumos/docs/+/master/simple_chrome_workflow.md
-[chroot]: https://www.chromium.org/chromium-os/developer-guide
+[chroot]: developer_guide.md
 [Tast: Running Tests]: https://chromium.googlesource.com/chromiumos/platform/tast/+/HEAD/docs/running_tests.md
 [amd64-generic-tot-chromium-pfq-informational]: https://build.chromium.org/p/chromiumos.chromium/builders/amd64-generic-tot-chromium-pfq-informational
 [amd64-generic-chromium-pfq]: https://uberchromegw.corp.google.com/i/chromeos/builders/amd64-generic-chromium-pfq
-[build Chromium OS]: https://www.chromium.org/chromium-os/developer-guide
+[build Chromium OS]: developer_guide.md
 [attribute expression]: https://chromium.googlesource.com/chromiumos/platform/tast/+/HEAD/docs/test_attributes.md
 [Launch a locally built VM from within the chroot]: #Launch-a-locally-built-VM-from-within-the-chroot
 [go/tast-infra]: https://chrome-internal.googlesource.com/chromeos/chromeos-admin/+/master/doc/tast_integration.md
