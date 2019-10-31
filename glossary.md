@@ -59,6 +59,8 @@
     (below), the last build that compiled.
 *   __LKGM__: "Last known good manifest", the last manifest version
     that passed a minimal set of tests.
+*   __LKGR__: "Last known good revision", the last build that passed
+    all tests.
 *   __LOEM__: Local OEM, process model that different OEMs share
     exactly same device (with no difference) that uses same firmware
     code and disk image. Only OEM is different.
