@@ -110,7 +110,7 @@ Chrome OS image and runs several test suites against the result.
           try to download.
 
 
-[contributing code]: https://www.chromium.org/developers/contributing-code
+[contributing code]: contributing.md
 [commit queue]: https://chromium.googlesource.com/chromium/src/+/master/docs/infra/cq.md
 [chromium.org]: http://www.chromium.org
 [codereview]: https://codereview.chromium.org/

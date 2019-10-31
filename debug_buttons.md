@@ -195,4 +195,4 @@ volume button press.
 [EC debug mode]: #EC-Debug-Mode
 [smart battery]: http://sbs-forum.org/specs/sbdat110.pdf
 [device-specific developer information]: https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices
-[boot firmware screen]: https://www.chromium.org/chromium-os/poking-around-your-chrome-os-device
+[boot firmware screen]: developer_mode.md

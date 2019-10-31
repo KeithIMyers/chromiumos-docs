@@ -89,7 +89,7 @@ they would pick any CA. That has changed now and as explained above
 `app-misc/ca-certificates` now takes the certificates directly from NSS.
 Therefore chromeos-base/root-certificates was deleted.
 
-[libchrome]: https://www.chromium.org/chromium-os/packages/libchrome
+[libchrome]: packages/libchrome.md
 [Mozilla NSS store]: https://wiki.mozilla.org/CA
 [pki.goog/roots.pem]: https://pki.google.com
 [ca-certificates]: https://packages.debian.org/sid/ca-certificates

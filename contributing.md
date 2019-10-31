@@ -594,7 +594,7 @@ git commit id must be exactly the same).
 [Change-Id]: https://gerrit-review.googlesource.com/Documentation/user-changeid.html
 [CL]: glossary.md
 [Contact]: contact.md
-[Contributing Code]: https://dev.chromium.org/developers/contributing-code#TOC-Legal-stuff
+[Contributing Code]: contributing.md#TOC-Legal-stuff
 [Contributor License Agreement]: https://cla.developers.google.com/
 [CQ]: https://dev.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/commit-queue-overview
 [crbug.com]: https://crbug.com/

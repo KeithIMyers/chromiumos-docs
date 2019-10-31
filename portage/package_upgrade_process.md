@@ -454,5 +454,5 @@ package is the same thing as upgrading it from `<none>`.
 [upgrading to unstable versions]: #Upgrading-to-unstable-version
 [the Chrome OS development mailing list]: https://chromium.googlesource.com/chromiumos/docs/+/refs/heads/master/contact.md
 [trybot]: https://www.chromium.org/chromium-os/build/local-trybot-documentation
-[USE flags]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/portage-build-faq
+[USE flags]: ebuild_faq.md
 [eclasses]: https://wiki.gentoo.org/wiki/Eclass

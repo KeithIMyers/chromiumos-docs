@@ -1302,7 +1302,7 @@ ask questions.
 
 * [libFuzzer - a library for coverage-guided fuzz testing.](https://llvm.org/docs/LibFuzzer.html)
 
-* [Fault injection through unexpected input data (aka Fuzz Testing)](https://companydoc.corp.google.com/company/teams/security-privacy/docs/secure-coding/archive/deprecated-ISETeamFuzzing.md?cl=head)
+* [Fault injection through unexpected input data (aka Fuzz Testing)](go/fuzzing)
 
 * [Getting Started with libFuzzer in Chromium](https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/getting_started.md)
 
@@ -1382,4 +1382,4 @@ ask questions.
 [libchrome blocklist]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/8c39d9715e86a6a62cc327bf2aefe4a18b430a02/chromeos-base/libchrome/files/ubsan_blocklist.txt
 [clang's sanitizer special case list page]: https://clang.llvm.org/docs/SanitizerSpecialCaseList.html
 [grammar-based-fuzzer]: https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/libprotobuf-mutator.md
-[uprev the ebuild]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/portage-build-faq#TOC-How-do-I-uprev-an-ebuild-
+[uprev the ebuild]: ../portage/ebuild_faq.md#TOC-How-do-I-uprev-an-ebuild-

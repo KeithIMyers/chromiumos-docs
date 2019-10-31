@@ -490,7 +490,7 @@ See the previous questions in this FAQ for more details.
 [manifest]: https://chromium.googlesource.com/chromiumos/manifest/
 [manifest-internal]: https://chrome-internal.googlesource.com/chromeos/manifest-internal/
 [board-overlays]: https://chromium.googlesource.com/chromiumos/overlays/board-overlays/
-[Package Upgrade Process]: https://dev.chromium.org/chromium-os/gentoo-package-upgrade-process
+[Package Upgrade Process]: portage/package_upgrade_process.md
 [platform2]: https://chromium.googlesource.com/chromiumos/platform2/
 [portage-stable]: https://chromium.googlesource.com/chromiumos/overlays/portage-stable/
 [portage_tool]: https://chromium.googlesource.com/chromiumos/third_party/portage_tool/

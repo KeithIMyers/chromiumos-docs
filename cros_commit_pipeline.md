@@ -66,10 +66,10 @@ canary build (generally the most recent).
 
 
 [chromium-review]: https://chromium-review.googlesource.com
-[developer guide]: http://www.chromium.org/chromium-os/developer-guide
+[developer guide]: developer_guide.md
 [precommit queue]: https://luci-milo.appspot.com/buildbot/chromiumos.tryserver/pre_cq/
 [paladin]: https://luci-milo.appspot.com/buildbot/chromeos/master-paladin/
 [release]: https://uberchromegw.corp.google.com/i/chromeos/builders/master-release
 [PFQ]: https://uberchromegw.corp.google.com/i/chromeos/builders/master-chromium-pfq
-[Simple Chrome]: http://www.chromium.org/chromium-os/how-tos-and-troubleshooting/building-chromium-browser
+[Simple Chrome]: simple_chrome_workflow.md
 [Chrome LKGM]: https://yaqs.googleplex.com/eng/q/5254238507106304

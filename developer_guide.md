@@ -1807,7 +1807,7 @@ ordered by relevance):
 *   The [Go in Chromium OS] page provides information on using [Go] in Chromium
     OS, including recommendations for project organization, importing and
     managing third party packages, and writing ebuilds.
-*   The [SELinux](selinux.md) page provides information on SELinux in Chrome
+*   The [SELinux](security/selinux.md) page provides information on SELinux in Chrome
     OS, including overview, writing policies, and troubleshooting.
 
 ### External documentation
@@ -1864,14 +1864,14 @@ Below are a few links to external sites that you might also find helpful
 [git]: http://git-scm.com/
 [goto/chromeos-building]: http://goto/chromeos-building
 [API Keys]: http://www.chromium.org/developers/how-tos/api-keys
-[working on a branch page]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/working-on-a-branch
+[working on a branch page]: work_on_branch.md
 [chroot]: http://en.wikipedia.org/wiki/Chroot
 [gsutil]: gsutil.md
 [crosbug/10048]: http://crosbug.com/10048
 [Tips And Tricks]: https://sites.google.com/a/chromium.org/dev/chromium-os/tips-and-tricks-for-chromium-os-developers
 [something harder]: http://www.google.com/search?q=the+fourth+dimension
 [issues with virtual packages]: http://crosbug.com/5777
-[What does build_packages actually do?]: ./portage/ebuild_faq.md#what-does-build-packages-do
+[What does build_packages actually do?]: portage/ebuild_faq.md#what-does-build-packages-do
 [Cros Flash page]: cros_flash.md
 [Debug Button Shortcuts]: debug_buttons.md
 [Chrome OS Devices]: https://sites.google.com/a/chromium.org/dev/chromium-os/developer-information-for-chrome-os-devices
@@ -1899,17 +1899,17 @@ Below are a few links to external sites that you might also find helpful
 [Seeing which Autotest tests are implemented by an ebuild]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md#Q4_I-have-an-ebuild_what-tests-does-it-build
 [Creating an image that has been modified for test]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md#W4_Create-and-run-a-test_enabled-image-on-your-device
 [about_os_credits.html]: https://chromium.googlesource.com/chromium/src/+/master/chrome/browser/resources/chromeos/about_os_credits.html
-[devserver]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/using-the-dev-server
+[devserver]: https://chromium.googlesource.com/chromiumos/chromite/+/refs/heads/master/docs/devserver.md
 [directory structure]: https://chromium.googlesource.com/chromiumos/docs/+/master/source_layout.md
 [The Chromium OS developer FAQ]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/developer-faq
-[Chromium OS Portage Build FAQ]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/portage-build-faq
+[Chromium OS Portage Build FAQ]: portage/ebuild_faq.md
 [rootfs-thread]: https://groups.google.com/a/chromium.org/group/chromium-os-dev/browse_thread/thread/967e783e27dd3a9d/0fa20a1547de2c77?lnk=gst
 [Running Smoke Suite on a VM Image]: https://sites.google.com/a/chromium.org/dev/chromium-os/testing/running-smoke-suite-on-a-vm-image
 [Debugging Tips]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/debugging-tips
-[Working on a Branch]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/working-on-a-branch
+[Working on a Branch]: work_on_branch.md
 [Git server-side information]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/git-server-side-information
-[Portage Package Upgrade Process]: https://sites.google.com/a/chromium.org/dev/chromium-os/gentoo-package-upgrade-process
-[Chromium OS Sandboxing]: https://sites.google.com/a/chromium.org/dev/chromium-os/developer-guide/chromium-os-sandboxing
+[Portage Package Upgrade Process]: portage/package_upgrade_process.md
+[Chromium OS Sandboxing]: sandboxing.md
 [Go in Chromium OS]: https://sites.google.com/a/chromium.org/dev/chromium-os/developer-guide/go-in-chromium-os
 [Go]: http://golang.org
 [Chromium OS dev group]: http://groups.google.com/a/chromium.org/group/chromium-os-dev
@@ -1924,8 +1924,8 @@ Below are a few links to external sites that you might also find helpful
 [Git Manual]: http://schacon.github.com/git/user-manual.html
 [Gentoo Development Guide]: http://devmanual.gentoo.org/
 [Gentoo Embedded Handbook]: https://wiki.gentoo.org/wiki/Embedded_Handbook
-[Gentoo Cross Development Guide]: http://www.gentoo.org/proj/en/base/embedded/handbook/
-[Gentoo Wiki on Cross-Compiling]: http://en.gentoo-wiki.com/wiki/Crossdev
+[Gentoo Cross Development Guide]: https://wiki.gentoo.org/wiki/Embedded_Handbook
+[Gentoo Wiki on Cross-Compiling]: https://wiki.gentoo.org/wiki/Crossdev
 [Gentoo Package Manager Specification]: http://www.gentoo.org/proj/en/qa/pms.xml
 [repo user docs]: https://source.android.com/source/using-repo
 [repo-discuss group]: http://groups.google.com/group/repo-discuss

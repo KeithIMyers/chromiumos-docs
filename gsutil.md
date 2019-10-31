@@ -124,7 +124,7 @@ These buckets are used for [Containers/VM/Crostini](./containers_and_vms.md).
 
 ### ClusterFuzz buckets
 
-See the [fuzzing documentation](./fuzzing.md#using-clusterfuzz) for details
+See the [fuzzing documentation](testing/fuzzing.md#using-clusterfuzz) for details
 on the buckets used by ClusterFuzz.
 
 ### Old/dead buckets

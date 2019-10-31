@@ -1035,11 +1035,11 @@ Instructions for building Chromium OS can be found
 
 [Working with Gentoo]: https://www.gentoo.org/doc/en/handbook/handbook-x86.xml?part=2
 [Gentoo Development Guide]: https://devmanual.gentoo.org/
-[Portage]: https://en.gentoo-wiki.com/wiki/Portage
+[Portage]: https://wiki.gentoo.org/wiki/Portage
 [Gentoo]: https://www.gentoo.org/
 [localmirror]: ../archive_mirrors.md
-[devserver]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/using-the-dev-server
-[devserver-single-package]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/using-the-dev-server#TOC-How-to-build-a-single-package-and-i
+[devserver]: https://chromium.googlesource.com/chromiumos/chromite/+/refs/heads/master/docs/devserver.md
+[devserver-single-package]: https://chromium.googlesource.com/chromiumos/chromite/+/refs/heads/master/docs/devserver.md#TOC-How-to-build-a-single-package-and-i
 [gentoo-blockers]: https://devmanual.gentoo.org/general-concepts/dependencies/#blockers
 [virtual/editor from upstream portage]: https://chromium.googlesource.com/chromiumos/overlays/portage/+/master/virtual/editor/editor-0.ebuild
 [Chromium OS's virtual/linux-sources ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/virtual/linux-sources/

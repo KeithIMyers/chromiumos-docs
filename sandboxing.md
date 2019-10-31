@@ -505,7 +505,7 @@ TODO(jorgelo)
 [UNIX _abstract_ sockets]: http://man7.org/linux/man-pages/man7/unix.7.html
 [security.SandboxedServices]: https://chromium.googlesource.com/chromiumos/platform/tast-tests/+/refs/heads/master/src/chromiumos/tast/local/bundles/cros/security/sandboxed_services.go
 
-[libchrome]: http://www.chromium.org/chromium-os/packages/libchrome
+[libchrome]: packages/libchrome.md
 [libbrillo]: http://www.chromium.org/chromium-os/packages/libchromeos
 [shell command-injection bugs]: http://en.wikipedia.org/wiki/Code_injection#Shell_injection
 [Chrome OS user accounts README]: https://chromium.googlesource.com/chromiumos/overlays/eclass-overlay/+/master/profiles/base/accounts/README.md

@@ -114,7 +114,7 @@ repo init -u <URL> -b <branchname> [-g minilayout] [--reference /path/to/existin
 repo sync
 ```
 
-Example (See [go/chromeos-building] if you are doing an internal build and
+Example (See [developer_guide.md] if you are doing an internal build and
 replace the manifest.git link with the appropriate one).
 
 ```bash
@@ -266,6 +266,6 @@ This is why we only support the methods listed above.
 [drover]: https://dev.chromium.org/developers/how-tos/drover
 [developer-guide]: ./developer_guide.md
 [experimental-branches]: https://dev.chromium.org/developers/experimental-branches
-[go/chromeos-building]: https://goto.google.com/chromeos-building
+[developer_guide.md]: developer_guide.md
 [merge request]: https://chromium.googlesource.com/chromium/src/+/master/docs/process/merge_request.md
 [using-remote-tryjobs]: https://dev.chromium.org/chromium-os/build/using-remote-trybots

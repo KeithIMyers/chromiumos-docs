@@ -400,7 +400,7 @@ These are our security principles:
 [chromeos-security@google.com]: mailto:chromeos-security@google.com
 [office hours]: https://goto.google.com/cros-security-office-hours
 [chromiumdash]: https://chromiumdash.appspot.com/schedule
-[fuzzing documentation]: https://chromium.googlesource.com/chromiumos/docs/+/master/fuzzing.md
+[fuzzing documentation]: testing/fuzzing.md
 [BaseMessageLoop]: https://chromium.googlesource.com/aosp/platform/external/libbrillo/+/master/brillo/message_loops/base_message_loop.h
 [newer list of cryptographic right answers]: http://latacora.singles/2018/04/03/cryptographic-right-answers.html
 [older reference of cryptographic right answers]: https://www.daemonology.net/blog/2009-06-11-cryptographic-right-answers.html

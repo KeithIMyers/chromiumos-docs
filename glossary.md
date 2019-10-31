@@ -260,7 +260,7 @@
     for examples.
 *   __devserver__: System for updating packages on a Chromium OS device
     without having to use a USB stick or doing a full reimage. See the
-    [Dev Server page](https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/using-the-dev-server).
+    [Dev Server page](https://chromium.googlesource.com/chromiumos/chromite/+/refs/heads/master/docs/devserver.md).
 *   __powerwash__: Wiping of the stateful partition (system & all users) to
     get a device back into a pristine state. The TPM is not cleared, and Lockbox
     is kept intact (thus it is not the same as a factory reset). See the

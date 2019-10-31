@@ -633,7 +633,7 @@ The legacy `GYP` build system is no longer supported.
 [quick start guide]: https://gn.googlesource.com/gn/+/master/docs/quick_start.md
 [device-specific instructions]: https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices
 [generic instructions]: https://www.chromium.org/a/chromium.org/dev/chromium-os/developer-information-for-chrome-os-devices/generic
-[rootfs has been removed]: https://www.chromium.org/chromium-os/poking-around-your-chrome-os-device#TOC-Making-changes-to-the-filesystem
+[rootfs has been removed]: developer_mode.md#TOC-Making-changes-to-the-filesystem
 [remounted as read-write]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips#TOC-Setting-up-the-device
 [additional debugging tips]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips#TOC-Enabling-core-dumps
 [chromite repo]: https://chromium.googlesource.com/chromiumos/chromite/
@@ -647,7 +647,7 @@ The legacy `GYP` build system is no longer supported.
 [go/chrome-build-instructions]: https://companydoc.corp.google.com/company/teams/chrome/chrome_build_instructions.md
 [api-keys]: https://www.chromium.org/developers/how-tos/api-keys
 [install-build-deps-android.sh]: https://chromium.googlesource.com/chromium/src/+/master/build/install-build-deps-android.sh
-[Goma]: https://sites.google.com/a/google.com/goma/
+[Goma]: https://chromium.googlesource.com/infra/goma/client/
 [Chrome-related logs]: https://chromium.googlesource.com/chromium/src/+/lkgr/docs/chrome_os_logging.md
 [crbug.com/360342]: https://bugs.chromium.org/p/chromium/issues/detail?id=360342
 [crbug.com/403086]: https://bugs.chromium.org/p/chromium/issues/detail?id=403086

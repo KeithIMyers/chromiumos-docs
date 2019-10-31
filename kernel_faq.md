@@ -702,7 +702,7 @@ that key with our testing kernel.
 At this point you need to `cros_workon` the kernel (and clone the kernel tree
 in case you used mini-layout). See the big picture and instructions in
 [Chromium OS Developer
-Guide](http://www.chromium.org/chromium-os/developer-guide), but as a quick
+Guide](developer_guide.md), but as a quick
 reference you are expected to run the following inside `chroot`:
 
 ```bash
@@ -739,7 +739,7 @@ kernel image you want to try. The next step varies depending on whether your
 hardware has an EFI BIOS, legacy BIOS or u-boot. You can ether copy the kernel
 to your USB stick and tell the bootloader to use your new kernel, possibly with
 extra debugging arguments, or use netboot/NFS for u-boot equipped targets (see
-[network\_based\_development](http://www.chromium.org/network-based-development)
+[network based development]
 for details).
 
 If you need your module to be present on the target, you can scp it from the
@@ -1255,7 +1255,7 @@ here:
 
 *   [https://www.kernel.org/pub/linux/kernel/people/jwessel/kdb/](https://www.kernel.org/pub/linux/kernel/people/jwessel/kdb/)
 *   [http://elinux.org/Kgdb](http://elinux.org/Kgdb)
-*   [http://events.linuxfoundation.org/sites/events/files/slides/ELC-E%20Linux%20Awareness.pdf](http://events.linuxfoundation.org/sites/events/files/slides/ELC-E%20Linux%20Awareness.pdf)
+*   https://events.static.linuxfound.org/sites/events/files/slides/ELC-E%20Linux%20Awareness.pdf
 
 To use KGDB with Chromium OS requires two steps for the test machine:
 
@@ -1383,8 +1383,7 @@ ${CROSS_ARCH}-gdb \
 **FIXME: The instructions the link leads to seem to apply only to ancient
 boards running U-Boot.**
 
-Please take a look at doc on [network-based
-development](http://dev.chromium.org/chromium-os/how-tos-and-troubleshooting/network-based-development).
+Please take a look at doc on [network based development].
 While setting up your environment might appear to be harder and more time
 consuming, in many cases it will allow to test kernel modifications much faster
 and easier than the ways described below.
@@ -1392,3 +1391,4 @@ and easier than the ways described below.
 [fromupstream.py]: https://chromium.googlesource.com/chromiumos/platform/dev-util/+/master/contrib/fromupstream.py
 [Dynamic Debug]: https://www.kernel.org/doc/html/v4.19/admin-guide/dynamic-debug-howto.html
 [dynamic debug is disabled on Chrome OS]: https://crbug.com/188825
+[network based development]: http://www.chromium.org/chromium-os/how-tos-and-troubleshooting/network-based-development
