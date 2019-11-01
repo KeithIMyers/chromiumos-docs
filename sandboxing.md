@@ -325,7 +325,29 @@ NOTICE kernel: [  586.706239] audit: type=1326 audit(1484586246.124:6): ... comm
     *   NB: You need to run `minijail0` on the same system as your program as
         the system call tables might be different from the SDK (e.g. x86 is not
         the same as arm).
+    *   If you do not want to allow an entire syscall, you can only allow
+        certain parameters, e.g. `ioctl: arg1 == FDGETPRM`. When the program
+        crashes due to a seccomp filter failure, you can use the minidump to
+        find the arguments to allow using the [syscall calling conventions].
     *   For an online list of syscalls, check out our [syscalls table].
+
+*   Sometimes Minijail will fail to compile the seccomp filter with an error
+    similar to:
+
+```
+WARNING minijail0[32315]: libminijail[32315]: trailing garbage after constant: 'LOOP_GET_STATUS64'
+WARNING minijail0[32315]: libminijail[32315]: compile_atom: /usr/share/policy/e2fsck-seccomp.policy(13): invalid constant 'LOOP_GET_STATUS64'
+WARNING minijail0[32315]: libminijail[32315]: could not allocate filter block
+WARNING minijail0[32315]: libminijail[32315]: compile_filter: compile_file() failed
+ERR minijail0[32315]: libminijail[32315]: failed to compile seccomp filter BPF program in '/usr/share/policy/e2fsck-seccomp.policy'
+```
+
+   * This means that one of the constant parameters provided to a syscall could
+     not be resolved: e.g. `ioctl: arg1 == LOOP_GET_STATUS64`.
+   * To fix this, look up the hex value of the constant and substitute the
+     constant e.g. `ioctl: arg1 == 0x4C05`.
+   * Minijail resolves these constants based on headers that are in
+     [gen_constants-inl.h].
 
 ### Generating seccomp policies on 4.14+ kernels
 
@@ -498,3 +520,5 @@ TODO(jorgelo)
 [generate_syscall_policy.py script]: https://chromium.googlesource.com/aosp/platform/external/minijail/+/master/tools/generate_seccomp_policy.py
 [shared subtrees]: https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt
 [syscalls table]: ./constants/syscalls.md
+[syscall calling conventions]: ./constants/syscalls.md#calling-conventions
+[gen_constants-inl.h]: https://android.googlesource.com/platform/external/minijail/+/refs/heads/master/gen_constants-inl.h
