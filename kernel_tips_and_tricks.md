@@ -153,7 +153,7 @@ Other tricks:
     this is useful to debug hangs/crashes:
 
     ```bash
-    echo 1 > /proc/sys/kernel/ftrace\_dump\_on\_oops.
+    echo 1 > /proc/sys/kernel/ftrace_dump_on_oops.
     ```
 
 *   Dumping the whole buffer may take an enormous amount of time at serial rate,
