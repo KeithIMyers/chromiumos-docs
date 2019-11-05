@@ -513,6 +513,8 @@ chroot (you should be in the `~/trunk/src/scripts` directory):
 This command sets up the board target with a default sysroot of
 `/build/${BOARD}`. The command downloads a small amount of stuff and takes a few
 minutes to complete.
+`setup_board` also calls `update_chroot`, which will update the toolchain if
+`repo sync` has been run and the toolchain is out of date.
 
 **SIDE NOTES:**
 
@@ -522,8 +524,7 @@ minutes to complete.
     makes it so that you don't need to specify a `--board` argument to
     subsequent commands. These instructions do not use the `--default` flag so
     that you can explicitly see what commands are board-specific.
-*   If you have previously set up this board, the `setup_board` command will
-    fail. If you really want to clobber your old board files and start fresh,
+*   If you want to clobber your old board files and start fresh,
     try passing the `--force` flag, which deletes the old `/build/${BOARD}`
     directory for you. Like `cros_sdk`, most people only re-run `setup_board`
     when told to (they don't re-run it even after a `repo sync`).
@@ -577,6 +578,9 @@ your local sources. See below for information about `cros_workon`.
 
 **SIDE NOTES:**
 
+*   Like `setup_board`, `build_packages` also calls `update_chroot`, which will
+    update the toolchain if `repo sync` has been run and the toolchain is
+    out of date.
 *   Even though there are some flags that can optimize your build (like
     `--nowithdev`, --nowithautotest, etc), you **should not** use these flags
     (even if you don't plan on building a developer / test image). There are
@@ -1745,17 +1749,14 @@ mind.
 
 ### Updating the chroot
 
-If you run `setup_board` or `build_packages` very infrequently, changes
-don't apply to your chroot, despite regularly running `repo_sync` (which
-updates your _source tree_). In this situation, you should periodically run
-`update_chroot` inside your chroot, else things may break if you
-run `repo sync` and run a few emerge commands without updating the SDK.
-`setup_board` and `build_packages` implicitly call `update_chroot`, keeping
-the SDK up-to-date.
+You should run `update_chroot` after `repo sync`.
+`repo sync` only updates the source code, `update_chroot` is required to apply
+those changes to the chroot.
+`update_chroot` can be run manually, alternatively it is run as part of
+`setup_board` and `build_packages`.
 
 ```bash
-(inside)
-(cr) ((...)) johnnyrotten@flyingkite ~/trunk/src/scripts $ ./update_chroot
+(inside) ./update_chroot
 ```
 
 ### Toolchain Compilers
