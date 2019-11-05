@@ -134,12 +134,11 @@ cros flash ${DUT_IP} path_to_payload_directory
 `cros flash` looks for `update.gz` and/or `stateful.tgz` in the payload
 directory and uses them to update the device.
 
-## Testing OS Updates
+## Testing OS updates without reboot
 
-`cros flash` can be used to test Chromium OS update process by uploading a
-new image in the device without rebooting, option **`--no-reboot`**. This will
-show the restart to finish update in the notification area and in the
-**`Settings -> Chromium OS`**.
+`cros flash` can be used to test Chromium OS update process without rebooting
+using option `--no-reboot`. This is useful when testing the update UI
+repeatedly.
 
 ```bash
 cros flash --no-reboot ssh://${DUT_IP} path/to/image
