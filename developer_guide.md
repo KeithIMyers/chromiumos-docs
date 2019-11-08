@@ -1600,6 +1600,28 @@ $ sudo sh stateful_update --stateful_change=clean
 $ sudo reboot
 ```
 
+### Disabling Enterprise Enrollment
+
+Some devices may be configured with a policy that only allows logging in with
+enterprise credentials, which will prevent you from logging in with a
+non-enterprise Google account (e.g., `foo@gmail.com`). To disable the enterprise
+enrollment setting:
+
+*   Enable [Developer Mode].
+*   Disable the enterprise enrollment check:
+
+    ```bash
+    (dut) $ vpd -i RW_VPD -scheck_enrollment=0
+    (dut) $ dump_vpd_log --force
+    (dut) $ crossystem clear_tpm_owner_request=1
+    (dut) $ reboot
+    ```
+
+***note
+**NOTE:** The enterprise policy can also prevent transitioning to
+[Developer Mode], in which case you won't be able to perform the above commands.
+***
+
 ## Running Tests
 
 Chromium OS integration (or "functional") tests are written using the [Tast] or
