@@ -585,7 +585,7 @@ instructions**](#Detailed-instructions)
 
 #### [FuzzedDataProvider]
 
-FuzzedDataProvider is a class that can genating many things such as integers
+FuzzedDataProvider is a class that can generate many things, such as integers
 or strings from the fuzz target input data.
 
 Consider the interface of the `permission_broker` [firewall implementation]:
@@ -815,7 +815,7 @@ log-level to debug ("--log-level debug").
 This section describes the `shell`, `cleanup`, `setup` and commands, in that
 order. To run a fuzzer, you should not just chroot into the board where it was
 built and run it since libFuzzer needs certain special files that are present on
-most systems but not on the board. You also should also not run the fuzzer
+most systems but not on the board. You should also not run the fuzzer
 outside of the board because that environment will contain devices and other
 things that will not be available on ClusterFuzz. Instead you should run the
 `shell` command from `cros_fuzz`. `shell` will prepare the board for fuzzing and

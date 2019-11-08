@@ -215,7 +215,7 @@ Pylint is notoriously picky and sometimes warns about things that are really OK.
 Because of this, we:
 
 *   Disable certain warnings in the Chromium OS pylintrc.
-*   Don't consider it an problem to locally disable warnings parts of code.
+*   Don't consider it a problem to locally disable warnings parts of code.
     **NOTE**: There should be a high bar for disabling warnings.
     Specifically, you should first think about whether there's a way to rewrite
     the code to avoid the warning before disabling it.

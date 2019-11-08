@@ -1078,7 +1078,7 @@ synced down.
 
 ## Making changes to non-cros_workon-able packages
 
-If you want to make to changes to something other than packages whose source is
+If you want to make changes to something other than packages which source is
 checked into the Chromium OS source control system, you can follow the
 instructions in the previous section, but skip the `cros_workon` step. Note
 specifically that you still need to run `repo start` to [Create a branch for
@@ -1097,6 +1097,9 @@ The types of changes that fall into this category include:
     *   `chromeos-bsp-link-0.0.2-r29.ebuild` is a symlink that points to
         `chromeos-bsp-link-0.0.2.ebuild`. To uprev the package, simply increment the
         revision (r29) number.
+    *   Note: Upreving should not be done when there is an ebuild for the
+        package that ends with  `9999.ebuild`. Changes to the ebuild should
+        usually be done in the `9999.ebuild` file.
 *   adding small patches to existing packages whose source code is NOT checked
     into Chromium OS git repositories
 *   changes to `eclass` files (like the ones in
