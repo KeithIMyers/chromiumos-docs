@@ -103,7 +103,7 @@ Here's a quick run down of how to get started.
 *   Buy a [Google Pixelbook](https://store.google.com/product/google_pixelbook).
     It is our objectively biased opinion that it's a nice piece of hardware.
     *   Or see the [Supported Now](#Supported-Now) section below.
-*   Make sure you're running at least R69.
+*   Make sure you're running at least R72 (released Feb 2019).
     *   Start a [system update] if need be and reboot.
     *   This should work in the [stable channel].
     *   You do **not** need to put it into developer mode.
@@ -244,36 +244,37 @@ We don't want to compromise system stability and security here.
 
 These are the initial set of boards that we're supporting.
 They're a mix of `x86_64` and `aarch64` kernels.
+Make sure you're running at least R72 as we no longer document older releases.
 
 You can look up the board name in our public [device list].
 
-* atlas (R70)
-* banon (R70)
-* bob (R69)
-* celes (R70)
-* coral (R69)
-* cyan (R70)
-* edgar (R70)
-* elm (R72)
-* eve (R69)
-* fizz (R69)
-* hana (R72)
-* kefka (R70)
-* kevin (R69)
-* nami (R69)
-* nautilus (R69)
-* nocturne (R70)
-* pyro (R69)
-* reef (R69)
-* reks (R70)
-* relm (R70)
-* sand (R69)
-* setzer (R70)
-* snappy (R69)
-* soraka (R69)
-* terra (R70)
-* ultima (R70)
-* wizpig (R70)
+* atlas
+* banon
+* bob
+* celes
+* coral
+* cyan
+* edgar
+* elm
+* eve
+* fizz
+* hana
+* kefka
+* kevin
+* nami
+* nautilus
+* nocturne
+* pyro
+* reef
+* reks
+* relm
+* sand
+* setzer
+* snappy
+* soraka
+* terra
+* ultima
+* wizpig
 
 ### Hardware Requirements
 
