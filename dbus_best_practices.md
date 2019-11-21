@@ -423,7 +423,7 @@ Unintuitively, `send_destination="org.example.Service"` matches all calls to
 so additionally specifying `send_interface="org.example.ServiceInterface"`
 ensures that only those handled by the intended service will be permitted.
 
-## Limit use of D-Bus to start services on-demand.
+## Always delegate service startup to Upstart.
 
 D-Bus has the ability to [start a service] when a message is sent to its
 well-known name. This functionality is controlled by configuration files in
@@ -435,11 +435,14 @@ them. Start your services via Upstart unless there are compelling reasons to use
 D-Bus activation.
 
 If D-Bus activation still seems like the best tool (e.g. you're writing a
-[sandboxed] daemon for a rarely-used feature), consider using Upstart to manage
-your daemon and using D-Bus activation to start the Upstart job when it's
-needed. This approach lets you use Upstart to do things like terminate your
-daemon when the user logs out (via `stop on stopping ui` in its Upstart config
-file).
+[sandboxed] daemon for a rarely-used feature), use Upstart to manage
+your daemon and use D-Bus activation to start the Upstart job when it's
+needed. This approach allows Upstart to manage the lifecycle of the service,
+for example, terminate your daemon when the user logs out (via `stop on stopping
+ui` in its Upstart config file). Another example is during shutdown: an active
+service can prevent the filesystem(s) from getting unmounted cleanly and
+delegating the lifecycle of the service to Upstart helps prevent such
+situations.
 
 For example, for a service named `org.chromium.MyService`, create a
 `/usr/share/dbus-1/system-services/org.chromium.MyService.service` file:
