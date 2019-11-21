@@ -365,9 +365,8 @@ factored out into library files shared across multiple packages. If an
 ebuild file includes an inherit statement, then it uses an eclass. You
 don't have to check for this before you upgrade. The upgrade script will
 attempt to detect when an eclass must be upgraded along with a package
-upgrade, but if it is unable to, then you must upgrade the eclass yourself.
-If you are not sure how to do that, please consult with a member of the
-build team.
+upgrade, but if it is unable to,
+[then you must upgrade the eclass yourself](#eclass-upgrade).
 
 ### Upgrading to unstable version
 
@@ -445,6 +444,20 @@ abandon the branch to return to your previous state.
 
 Make sure you pass `--upgrade` to the script since installing a new
 package is the same thing as upgrading it from `<none>`.
+
+### How do you manually upgrade an eclass? {#eclass-upgrade}
+
+Assuming that you have already run `cros_portage_upgrade` and let it
+fail, repeat the following procedure for each eclass in need of upgrade:
+
+1.  In your chroot, look under `/tmp/portage/eclass/` for the upstream
+    copy.
+1.  Copy said upstream version out of `/tmp/portage/eclass/` into
+    `portage-stable/eclass/` in your source tree.
+1.  Create a CL and pass it through the CQ.
+
+If this procedure appears incomplete, then please reach out to the build
+team for additional guidance.
 
 [portage-stable]: https://chromium.googlesource.com/chromiumos/overlays/portage-stable/
 [chromiumos-overlay]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/
