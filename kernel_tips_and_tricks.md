@@ -35,6 +35,8 @@ So the first step is to figure out _what_ are the problems:
     *   `USE=kmemleak`
     *   `USE=failslab`. Then configure in `/sys/kernel/debug/failslab` (setting
         `probability` to `10` and `times` to `1000` is a good start).
+    *   `FAIL_MMC_REQUEST`
+        * Turn on the Kconfig, `CONFIG_FAIL_MMC_REQUEST`, `CONFIG_FAULT_INJECTION` and `CONFIG_FAULT_INJECTION_DEBUG_FS`, and then configure in `/sys/kernel/debug/mmc{n}/fail_mmc_request/`
     *   Others? (memory debugging? Please add here!)
 
 *   Stress tests:
