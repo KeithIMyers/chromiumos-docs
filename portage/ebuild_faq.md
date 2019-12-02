@@ -700,7 +700,7 @@ looks like the following:
 RDEPEND="!<chromeos-base/pkgname-0.0.2"
 ```
 
-## What does `build_packages` actually do? {#what-does-build-packages-do}
+## What does "build_packages" actually do? {#what-does-build-packages-do}
 
 ```bash
 emerge-arm-generic virtual/target-os
