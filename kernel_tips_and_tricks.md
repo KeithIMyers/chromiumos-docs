@@ -341,6 +341,10 @@ To fetch the email into your IMAP/gmail account:
 1.  Use @chromium.org account.
 1.  Find the email in your mailbox, and reply!
 
+mbox downloaded from patchwork doesn't include replies to the patch (e.g.
+reviewer comments). To obtain mbox containing replies, download mbox.gz files
+from https://lore.kernel.org/lkml/ instead.
+
 [crbug.com/468342]: https://bugs.chromium.org/p/chromium/issues/detail?id=468342
 [Debugging with KGDB/KDB]: ./kernel_faq.md#debugging-with-kgdb_kdb
 [example CL]: https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/1325821
