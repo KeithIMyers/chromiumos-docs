@@ -42,11 +42,12 @@ the tasks in sequence. The tasks are grouped into the following sections:
     (2) the chroot on your build computer, or (3) your Chromium OS computer (the
     device on which you run the images you build):
 
-| Label         | Commands                                               |
-|---------------|--------------------------------------------------------|
-|  (outside)    | on your build computer, outside the chroot             |
-|  (inside)     | inside the chroot on your build computer               |
-|  (device)     | your Chromium OS computer                              |
+Label | Commands
+--- | ---
+`(outside)` | on your build computer, outside the chroot
+`(inside)` | inside the chroot on your build computer
+`(in/out)` | on your build computer, either inside or outside the chroot
+`(device)` | on your Chromium OS computer
 
 *   **Notes** are shown using the following conventions:
     *   **IMPORTANT NOTE** describes required actions and critical information
@@ -231,14 +232,14 @@ ls -la ~/foo
 ### Decide where your source will live
 
 Chromium OS developers commonly put their source code in
-`${HOME}/chromiumos`. If you feel strongly, put your own source elsewhere, but
+`~/chromiumos`. If you feel strongly, put your own source elsewhere, but
 note that **all commands in this document assume that your source code is in**
-`${HOME}/chromiumos`.
+`~/chromiumos`.
 
 Create the directory for your source code with this command:
 
 ```bash
-(outside) mkdir -p ${HOME}/chromiumos
+(outside) mkdir -p ~/chromiumos
 ```
 
 **IMPORTANT NOTE:** If your home directory is on NFS, you **must** place your
@@ -251,7 +252,7 @@ symbolic link to it from your home directory (this is suggested), like so:
 ```bash
 (outside)
 mkdir -p /usr/local/path/to/source/chromiumos
-ln -s /usr/local/path/to/source/chromiumos ${HOME}/chromiumos
+ln -s /usr/local/path/to/source/chromiumos ~/chromiumos
 ```
 
 ### Get the source code
@@ -266,7 +267,7 @@ installed `repo` when you [installed `depot_tools` above][install depot_tools].
 **Public:**
 ```bash
 (outside)
-cd ${HOME}/chromiumos
+cd ~/chromiumos
 repo init -u https://chromium.googlesource.com/chromiumos/manifest.git --repo-url https://chromium.googlesource.com/external/repo.git
 repo sync -j4
 ```
@@ -274,7 +275,7 @@ repo sync -j4
 **Googlers/internal manifest:**
 ```shell
 (outside)
-cd ${HOME}/chromiumos
+cd ~/chromiumos
 repo init -u https://chrome-internal.googlesource.com/chromeos/manifest-internal.git --repo-url https://chromium.googlesource.com/external/repo.git -b stable
 repo sync -j4
 ```
@@ -337,7 +338,7 @@ To make sure everyone uses the same exact environment and tools to build
 Chromium OS, all building is done inside a [chroot]. This chroot is its own
 little world: it contains its own compiler, its own tools (its own copy of bash,
 its own copy of sudo), etc. Now that you've synced down the source code, you
-need to create this chroot. Assuming you're already in `${HOME}/chromiumos` (or
+need to create this chroot. Assuming you're already in `~/chromiumos` (or
 wherever your source lives), the command to download and install the chroot is:
 
 ```bash
@@ -358,7 +359,7 @@ chroot, and downloads some additional items (around 300MB). While it is building
 you will see a regular update of the number of packages left to build. Once the
 command finishes, the chroot will take up total disk space of a little over 3GB.
 
-The chroot lives by default at `${HOME}/chromiumos/chroot`. Inside that
+The chroot lives by default at `~/chromiumos/chroot`. Inside that
 directory you will find system directories like `/usr/bin` and `/etc`. These are
 local to the chroot and are separate from the system directories on your
 machine. For example, the chroot has its own version of the `ls` utility. It
@@ -372,10 +373,10 @@ you use on your machine.
     email telling them to recreate their chroot.
 *   The `cros_sdk` command currently doesn't work behind a proxy server, but
     there is a [workaround][crosbug/10048].
-*   To help personalizing your chroot, the file `${HOME}/.cros_chroot_init` is
+*   To help personalizing your chroot, the file `~/.cros_chroot_init` is
     executed (if it exists) _when the chroot is created_. The path to the chroot
     is passed as its argument (`$1`). (If you want to modify the chroot
-    environment you can modify the `${HOME}/scripts/bash_completion` file).
+    environment you can modify the `~/scripts/bash_completion` file).
 
 ### Enter the chroot
 
@@ -405,7 +406,7 @@ Note in particular that the `src/scripts` directory is the same `src/scripts`
 directory found within the Chromium OS directory you were in before you entered
 the chroot, even though it looks like a different location. That's because when
 you enter the chroot, the `~/trunk` directory in the chroot is mounted such that
-it points to the main Chromium OS directory `${HOME}/chromiumos`. That means
+it points to the main Chromium OS directory `~/chromiumos`. That means
 that changes that you make to the source code outside of the chroot immediately
 take effect inside the chroot.
 
@@ -438,7 +439,7 @@ course this command will build emacs from source so allow 5-10mins.
     outside chroot, etc.), read [Tips and Tricks].
 *   There is a file system loop because inside `~/trunk` you will find the
     chroot again. Don't think about this for too long. If you try to use `du -s
-    ${HOME}/chromiumos/chroot/home` you might get a message about a corrupted
+    ~/chromiumos/chroot/home` you might get a message about a corrupted
     file system. This is nothing to worry about, and just means that your
     computer doesn't understand this loop either. (If you _can_ understand this
     loop, try [something harder].)
@@ -635,8 +636,7 @@ need. Every time you run `build_image`, the command creates files that take up
 The preferred way to mount the image you just built to look at its contents is:
 
 ```bash
-(inside)
-./mount_gpt_image.sh --board=${BOARD} --safe --most_recent
+(inside) ./mount_gpt_image.sh --board=${BOARD} --safe --most_recent
 ```
 
 If you built a test image, also make sure to add `-i chromiumos_test_image.bin`
@@ -886,11 +886,10 @@ This command:
 After running `cros_workon`, sync down the sources. This is critical if you're
 using the `minilayout`, but is probably a good idea in any case to make sure
 that you're working with the latest code (it'll help avoid merge conflicts
-later). Run the command below from outside the chroot, anywhere under your
-`~/chromiumos` directory:
+later). Run the command below anywhere under your `~/chromiumos` directory:
 
 ```bash
-repo sync
+(in/out) repo sync
 ```
 
 ### Find out which ebuilds map to which directories
@@ -960,7 +959,7 @@ name that is meaningful to you and that describes your changes (nobody else will
 see this name):
 
 ```bash
-repo start ${BRANCH_NAME} .
+(in/out) repo start ${BRANCH_NAME} .
 ```
 
 The branch that this creates will be based on the remote branch (which one?
@@ -1046,7 +1045,7 @@ be able to commit your changes by running something like the command below from
 the project directory:
 
 ```bash
-git commit -a
+(in/out) git commit -a
 ```
 
 The git commit command brings up a text editor. You should describe your
@@ -1186,7 +1185,7 @@ OS image, set the `--chrome_root` flag appropriately when entering the chroot,
 e.g.
 
 ```bash
-(outside) cros_sdk --chrome_root=${HOME}/chrome
+(outside) cros_sdk --chrome_root=~/chrome
 ```
 
 Within the chroot, you'll also need to either start working on the
@@ -1281,7 +1280,7 @@ It should already be installed in your chroot. If you do not have the script,
 update your repository to get the latest changes, then re-build your packages:
 
 ```bash
-repo sync
+(in/out) repo sync
 
 (inside) ./build_packages --board=...
 ```
@@ -1416,7 +1415,7 @@ chroot. If you do not have the script, update your repository to get the latest
 changes, then re-build your packages:
 
 ```bash
-repo sync
+(in/out) repo sync
 
 (inside) ./build_packages --board=...
 ```
@@ -1473,6 +1472,7 @@ gdb on your desktop to the gdbserver on the remote device.
 If you want to edit code and debug it on the DUT you can follow this procedure
 
 ```bash
+(inside)
 $ CFLAGS="-ggdb" FEATURES="noclean" emerge-${BOARD} -v sys-apps/mosys
 $ cros deploy --board=${BOARD} ${IP} sys-apps/mosys
 $ gdb-${BOARD} --cgdb --remote "${IP}" \
@@ -1740,6 +1740,7 @@ run `repo sync` and run a few emerge commands without updating the SDK.
 the SDK up-to-date.
 
 ```bash
+(inside)
 (cr) ((...)) johnnyrotten@flyingkite ~/trunk/src/scripts $ ./update_chroot
 ```
 
@@ -1765,7 +1766,8 @@ landing at the same time.
 If you have previously run `repo init` without the `-b stable`, you can convert an
 existing checkout to stable (or vice versa):
 
-```
+```shell
+(in/out)
 repo init -b stable
 repo sync
 ```
