@@ -555,12 +555,13 @@ USB for you. It's very convenient, but for now it requires a full Chrome OS
 checkout and must be run inside the Chrome OS chroot. ([issue 437877])
 
 ```
-(chroot) cros flash usb:// xbuddy://remote/$BOARD/<version>/test
+(chroot) cros flash usb:// xbuddy://remote/$BOARD/<version>
+(chroot) cros flash $IP_ADDR xbuddy://remote/$BOARD/<version>
 ```
 
-Replace `$BOARD` and `<version>` with the right values. Both can be seen in your
-SDK prompt (e.g. `(sdk lumpy R27-3789.0.0)` is the lumpy board using version
-R27-3789.0.0).
+Replace `$BOARD`, `$IP_ADDR`, `<version>` with the right values. The board and
+version can be seen in your SDK prompt (e.g. `(sdk kevin R80-12734.0.0)` is the
+kevin board using version R80-12734.0.0).
 
 See the [Cros Flash page] for more details.
 
