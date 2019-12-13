@@ -373,10 +373,6 @@ you use on your machine.
     email telling them to recreate their chroot.
 *   The `cros_sdk` command currently doesn't work behind a proxy server, but
     there is a [workaround][crosbug/10048].
-*   To help personalizing your chroot, the file `~/.cros_chroot_init` is
-    executed (if it exists) _when the chroot is created_. The path to the chroot
-    is passed as its argument (`$1`). (If you want to modify the chroot
-    environment you can modify the `~/scripts/bash_completion` file).
 
 ### Enter the chroot
 
