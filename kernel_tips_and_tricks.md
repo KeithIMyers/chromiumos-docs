@@ -308,6 +308,9 @@ default=kernel
 
 [kernel]
 url=https://patchwork.kernel.org/
+
+[lore]
+url=https://lore.kernel.org/patchwork/xmlrpc/
 ```
 
 Then run:
