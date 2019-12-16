@@ -253,11 +253,12 @@
     should file a bug.
 *   __PGO__: Profile Guided Optimization; see AFDO & FDO.
 
-# Chromium OS
+## Chromium OS
 
 *   __board__: The name of the system you're building Chromium OS for; see the
     [official Chrome OS device list](https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices)
     for examples.
+*   __build_target__: The new, preferred term for board.
 *   __devserver__: System for updating packages on a Chromium OS device
     without having to use a USB stick or doing a full reimage. See the
     [Dev Server page](https://chromium.googlesource.com/chromiumos/chromite/+/refs/heads/master/docs/devserver.md).
@@ -265,6 +266,29 @@
     get a device back into a pristine state. The TPM is not cleared, and Lockbox
     is kept intact (thus it is not the same as a factory reset). See the
     [Powerwash design doc](https://www.chromium.org/chromium-os/chromiumos-design-docs/powerwash).
+
+
+## Chromium OS Build {#cros-build}
+
+Terms related to building ChromiumOS.
+
+*   __buildroot__: The buildroot refers to the
+    source root of the checkout that is being built. This term is rarely used,
+    but in certain contexts is necessary to distinguish between the current
+    process' source root, and that of the checkout that is actually being built.
+*   __chroot__: A chroot jail is used to isolate the CrOS SDK. The term chroot
+    refers to an instance of the SDK for our contexts.
+*   __sysroot__: The term sysroot comes from portage. With respect to ChromeOS,
+    a sysroot is where a build target (board) is built. When completed, sysroots
+    essentially have the filesystem you will find on a device's root partitions.
+    By default, they can be found in /build/ inside your chroot.
+*   __uprev__: The process of updating the revision (or version) of a package.
+    The purpose is to produce a new ebuild with a higher overall version number
+    to allow the build system to pick up changes made to the package. Packages
+    that inherit from `cros-workon` can be automatically uprevved by the
+    builders. There is a generic process that covers most packages, and some
+    specialized processes for a few specific packages (e.g. chrome, android).
+
 
 [Chromium CQ]: https://chromium.googlesource.com/chromium/src/+/master/docs/infra/cq.md
 [Chromium OS CQ]: https://www.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/commit-queue-overview
