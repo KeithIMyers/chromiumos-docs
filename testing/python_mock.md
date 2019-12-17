@@ -48,12 +48,11 @@ Here's a code snippet of a function we want to test:
 ```python
 def func():
   try:
-    result = cros_build_lib.RunCommand(
-        ['./some_command'], redirect_stdout=True, redirect_stderr=True)
-    return 'passcode' in result.output
+    result = cros_build_lib.run(['./some_command'], stdout=True, stderr=True)
+    return 'passcode' in result.stdout
   except RunCommandError as e:
     if (e.result.returncode == 2 and
-        'monkey' in e.result.error):
+        'monkey' in e.result.stderr):
       return False
     raise
 ```
@@ -64,17 +63,17 @@ Here's how we'd test it with the RunCommandMock partial mock:
 from cros_build_lib_unittest import RunCommandMock, RunCommandError
 
 with RunCommandMock() as pmock:
-  pmock.AddCmdResult(['./some_command'], returncode=2, error='12 monkeys')
+  pmock.AddCmdResult(['./some_command'], returncode=2, stderr='12 monkeys')
   assertEquals(func(), False)
   pmock.AddCmdResult(['./some_command'], returncode=1)
   assertRaises(RunCommandError, func)
-  pmock.AddCmdResult(['./some_command'], output='passcode')
+  pmock.AddCmdResult(['./some_command'], stdout='passcode')
   assertEquals(func(), True)
 ```
 
 No mucking with setting up mock `CommandResults`, or mock `RunCommandErrors`, or
 testing for the right `redirect_*` or `error_code_ok=True` arguments. The
-partial mock handles all of that for you by using RunCommand logic directly.
+partial mock handles all of that for you by using `run` logic directly.
 
 It's also easy to write your own partial mocks that can then be used by other
 unit tests.  Having a corpus of re-usable mocks will make the barrier to testing

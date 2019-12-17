@@ -1346,7 +1346,7 @@ positional arguments:
 ...
 
 (cr) $ gdb-daisy /bin/grep shebang /bin/ls
-15:51:06: INFO: RunCommand: file /build/daisy/bin/grep
+15:51:06: INFO: run: file /build/daisy/bin/grep
 Reading symbols from /bin/grep...Reading symbols from /usr/lib/debug/bin/grep.debug...done.
 done.
 (daisy-gdb) b main
@@ -1514,9 +1514,9 @@ Example 1:
 (inside)
 $ gdb-lumpy --remote=123.45.67.809 --attach=gpu-process
 
-14:50:07: INFO: RunCommand: ping -c 1 -w 20 123.45.67.809
-14:50:09: INFO: RunCommand: file /build/lumpy/opt/google/chrome/chrome
-14:50:10: INFO: RunCommand: x86_64-cros-linux-gnu-gdb --quiet '--eval-command=set sysroot /build/lumpy' '--eval-command=set solib-absolute-prefix /build/lumpy' '--eval-command=set solib-search-path /build/lumpy' '--eval-command=set debug-file-directory /build/lumpy/usr/lib/debug' '--eval-command=set prompt (lumpy-gdb) ' '--eval-command=file /build/lumpy/opt/google/chrome/chrome' '--eval-command=target remote localhost:38080'
+14:50:07: INFO: run: ping -c 1 -w 20 123.45.67.809
+14:50:09: INFO: run: file /build/lumpy/opt/google/chrome/chrome
+14:50:10: INFO: run: x86_64-cros-linux-gnu-gdb --quiet '--eval-command=set sysroot /build/lumpy' '--eval-command=set solib-absolute-prefix /build/lumpy' '--eval-command=set solib-search-path /build/lumpy' '--eval-command=set debug-file-directory /build/lumpy/usr/lib/debug' '--eval-command=set prompt (lumpy-gdb) ' '--eval-command=file /build/lumpy/opt/google/chrome/chrome' '--eval-command=target remote localhost:38080'
 Reading symbols from /build/lumpy/opt/google/chrome/chrome...Reading symbols from/build/lumpy/usr/lib/debug/opt/google/chrome/chrome.debug...done.
 (lumpy-gdb) bt
 #0  0x00007f301fad56ad in poll () at ../sysdeps/unix/syscall-template.S:81
@@ -1541,9 +1541,9 @@ Example 2:
 ```bash
 (inside)
 $ gdb-daisy --pid=626 --remote=123.45.98.765
-14:50:07: INFO: RunCommand: ping -c 1 -w 20 123.45.98.765
-14:50:09: INFO: RunCommand: file /build/daisy/usr/sbin/cryptohomed
-14:50:10: INFO: RunCommand: armv7a-cros-linux-gnueabi-gdb --quiet '--eval-command=set sysroot /build/daisy' '--eval-command=set solib-absolute-prefix /build/daisy' '--eval-command=set solib-search-path /build/daisy' '--eval-command=set debug-file-directory /build/daisy/usr/lib/debug' '--eval-command=set prompt (daisy-gdb) ' '--eval-command=file /build/daisy/usr/sbin/cryptohomed' '--eval-command=target remote localhost:38080'
+14:50:07: INFO: run: ping -c 1 -w 20 123.45.98.765
+14:50:09: INFO: run: file /build/daisy/usr/sbin/cryptohomed
+14:50:10: INFO: run: armv7a-cros-linux-gnueabi-gdb --quiet '--eval-command=set sysroot /build/daisy' '--eval-command=set solib-absolute-prefix /build/daisy' '--eval-command=set solib-search-path /build/daisy' '--eval-command=set debug-file-directory /build/daisy/usr/lib/debug' '--eval-command=set prompt (daisy-gdb) ' '--eval-command=file /build/daisy/usr/sbin/cryptohomed' '--eval-command=target remote localhost:38080'
 Reading symbols from /build/daisy/usr/sbin/cryptohomed...Reading symbols from/build/daisy/usr/lib/debug/usr/bin/cryptohomed.debug...done.
 (daisy-gdb)
 ```
@@ -1553,9 +1553,9 @@ Example 3:
 ```bash
 (inside)
 $ gdb-lumpy --remote=:vm: --attach=browser
-15:18:28: INFO: RunCommand: ping -c 1 -w 20 localhost
-15:18:31: INFO: RunCommand: file /build/lumpy/opt/google/chrome/chrome
-15:18:33: INFO: RunCommand: x86_64-cros-linux-gnu-gdb --quiet '--eval-command=setsysroot /build/lumpy' '--eval-command=set solib-absolute-prefix /build/lumpy' '--eval-command=set solib-search-path /build/lumpy' '--eval-command=set debug-file-directory /build/lumpy/usr/lib/debug' '--eval-command=set prompt (lumpy-gdb) ' '--eval-command=file /build/lumpy/opt/google/chrome/chrome' '--eval-command=target remote localhost:48062'
+15:18:28: INFO: run: ping -c 1 -w 20 localhost
+15:18:31: INFO: run: file /build/lumpy/opt/google/chrome/chrome
+15:18:33: INFO: run: x86_64-cros-linux-gnu-gdb --quiet '--eval-command=setsysroot /build/lumpy' '--eval-command=set solib-absolute-prefix /build/lumpy' '--eval-command=set solib-search-path /build/lumpy' '--eval-command=set debug-file-directory /build/lumpy/usr/lib/debug' '--eval-command=set prompt (lumpy-gdb) ' '--eval-command=file /build/lumpy/opt/google/chrome/chrome' '--eval-command=target remote localhost:48062'
 Reading symbols from /build/lumpy/opt/google/chrome/chrome...Reading symbols from /build/lumpy/usr/lib/debug/opt/google/chrome/chrome.debug...done.
 done.
 Remote debugging using localhost:48062
