@@ -97,7 +97,21 @@ the full path.
 
 ## Create an official release with a trybot
 
-Consult the [mini-branch] guide.
+The `--production` flag allows triggering an official release build. You should
+consult with the [Chrome OS CI Bobby][goldeneye] before using.
+
+Trigger a release build using ToT for the `hatch` board:
+
+```bash
+$ cros tryjob --production hatch-release
+```
+
+Trigger a release build using the R79 branch (`release-R79-12607.B`) for the
+`hatch` board:
+
+```bash
+$ cros tryjob --production --branch release-R79-12607.B hatch-release
+```
 
 ## Finding your trybot runs
 
@@ -120,8 +134,8 @@ You can also search for jobs created by a
 [specific user (email address)][Tryjobs User].
 
 [Gerrit]: https://chromium-review.googlesource.com/
-[mini-branch]: https://sites.google.com/a/google.com/chromeos/for-team-members/chronos-download/pmo/cros-releasetasks/stabilize
 [Tryjobs List]: https://cros-goldeneye.corp.google.com/chromeos/legoland/builderSummary?buildConfig=&builderGroups=tryjob
 [Tryjobs User]: https://cros-goldeneye.corp.google.com/chromeos/legoland/builderSummary?buildConfig=&builderGroups=tryjob&email=tomhughes%40chromium.org
 [`chromite/config/config_dump.json`]: https://chromium.googlesource.com/chromiumos/chromite/+/master/config/config_dump.json
 [`chromite/config/chromeos_config.py`]: https://chromium.googlesource.com/chromiumos/chromite/+/master/config/chromeos_config.py
+[goldeneye]: http://go/goldeneye
