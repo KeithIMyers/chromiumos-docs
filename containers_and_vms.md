@@ -125,7 +125,8 @@ OK, so you've got your container going, but what exactly can you expect to work?
 * Unaccelerated Graphics.
 * [Wayland] programs (preferred; via [Sommelier]).
 * [X] programs (compatibility via [Sommelier] and [XWayland]).
-* Audio output (not [capture/microphone](https://crbug.com/932268)) in R74+.
+* Audio output in R74+ and experimental
+  [capture/microphone](httpe://crbug.com/932268) in R79+ images.
 
 ### Missing Features
 
@@ -838,8 +839,14 @@ crosh> vmc stop termina
 
 ### Is audio capture (e.g. microphone) supported?
 
-Currently, no.
-You can star https://crbug.com/932268 for updates.
+It's an experimental feature in R79+ images. You need to enable audio
+capture (*without* permission model) from [crosh].
+```sh
+# Use Ctrl-Alt-T to open crosh
+crosh> vmc stop termina
+crosh> vmc start termina --enable-audio-capture
+```
+You can star https://crbug.com/932268 for more updates.
 
 ### Can I access hardware (e.g. USB/Bluetooth/serial)?
 
