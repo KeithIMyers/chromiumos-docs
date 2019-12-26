@@ -689,10 +689,19 @@ image on a USB flash disk (sometimes called a USB key), and boot the target
 computer from the flash disk.
 
 The first step is to disable auto-mounting of USB devices on your build computer
-as it may corrupt the disk image while it's being written. Next, insert a USB
-flash disk (4GB or bigger) into your build computer. **This disk will be
-completely erased, so make sure it doesn't have anything important on it**. Wait
-~10 seconds for the USB disk to register, then type the following command:
+as it may corrupt the disk image while it's being written. On systems that use
+GNOME or Cinnamon, run the following:
+```bash
+gsettings set org.gnome.desktop.media-handling automount false
+gsettings set org.gnome.desktop.media-handling automount-open false
+gsettings set org.cinnamon.desktop.media-handling automount false
+gsettings set org.cinnamon.desktop.media-handling automount-open false
+```
+
+Next, insert a USB flash disk (4GB or bigger) into your build computer. **This
+disk will be completely erased, so make sure it doesn't have anything important
+on it**. Wait ~10 seconds for the USB disk to register, then type the following
+command:
 
 ```bash
 (inside) cros flash usb:// ${BOARD}/latest
