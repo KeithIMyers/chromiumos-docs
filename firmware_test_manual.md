@@ -380,8 +380,8 @@ manipulated for ease of developer and testing experience:
 *   [Reset EC](#reset-ec) and restart the system.
 *   Remove all USB devices(in particular security keys will block keyboard
     input)
-*   Press the tab key to see why the device failed to boot. See the firmware
-    troubleshooting document on how to resolve.(TODO add link).
+*   Press the tab key to see why the device failed to boot. See the
+    [troubleshooting](#troubleshooting) section on how to resolve.
 *   [Reset TPM](#reset-tpm-values) values if there is an error message
     indicating TPM mismatch between `tpm_fwver` and `tpm_kernver`.
 *   Your device may already be in developer mode.
@@ -451,7 +451,7 @@ that page has links to requirements for other form factors.
 Before putting away the device for long term storage, open VT2 and run
 `ectool batterycutoff`.
 
-## Chrome OS Firmware Troubleshooting
+## Chrome OS Firmware Troubleshooting {#troubleshooting}
 
 ### Checking Failure Status
 
@@ -509,11 +509,86 @@ Here is the list of well-known recovery reasons and possible solutions.
 *   0x54: **TPM read error in readwritable firmware**
     *   Need to reboot (refresh+power) or power cycle > 30 times to wipe TPM
 *   0x5b: **No bootable kernel found on disk**
-    *   Usually can be solved by installing Recovery image.
+    *   Can be solved by installing Recovery image.
     *   Or try to re-key your firmware (make sure write protection removed, or
         already CCD open):
         *   Switch DUT to developer mode and boot
         *   Run `chromeos-firmwareupdate --mode=recovery --force`
+    *   See the next section for further debugging details.
+
+## Debugging "No bootable kernel found on disk" (0x5B)
+
+This error indicates that internal storage has been detected properly, but that
+there is no kernel partition found that can be booted from.
+
+This error message can be particularly frustrating to debug, as there are many
+potential causes. This section will guide you through steps to detect the
+specific cause of this symptom.
+
+When on the error screen, press `[tab]` to get debug information.
+
+### OS image key mismatch
+
+In normal mode, firmware and storage partitions must be signed with matching
+keys for boot to succeed. If the keys mismatch, you may encounter this error.
+
+The debug screen contains key information in the following fields:
+-   `gbb.rootkey`
+-   `gbb.recovery_key`
+
+These keys correspond to entries in the `platform/chromeos-hwid` repository.
+For newer boards, the corresponding file is `v3/${BOARD}`.
+See entries under the `firmware_keys` section for valid values for a given
+device.
+
+To change the keys on a device, disable hardware write-protect and flash a
+recovery image with the desired key. See the [Firmware Write Protection]
+document for details.
+
+### Corrupted image on storage
+
+The simplest cause of this error is that there is no valid image on the disk.
+To confirm if this is the case, you should follow the following steps:
+-   Flash an OS image onto a USB stick, and attach it to the DUT.
+-   On VT2, run the following commands:
+-   `dd if=/dev/mmcblk0p2 of=/usr/local/dump_2.bin bs=8 count=1` and `hexdump -n 8 /usr/local/dump_2.bin -c`
+-   `dd if=/dev/mmcblk0p4 of=/usr/local/dump_4.bin bs=8 count=1` and `hexdump -n 8 /usr/local/dump_4.bin -c`
+
+Both should return with the string "CHROMEOS". If not, the partition is
+corrupted, and that is what is preventing boot.
+
+Consult the Chrome OS [Disk format] document for more details on expected image
+format.
+
+### eMMC/NVMe/SATA communication errors
+
+Data corruption from storage can cause signature checking to fail. This is a
+good case to check for if using a new storage part or the hardware design is
+early in development. This is especially suspicious if the system boots
+reliably over USB.
+
+To diagnose this potential issue, boot an image from a USB stick and test
+storage via using the test used for hardware qualification:
+`test_that --iterations 100 $IP hardware_StorageFio.hwqual`
+
+### Communication errors with cr50
+
+#### Bad straps
+
+Bad hardware strap information for H1 can disrupt communication between cr50 and
+the AP (Application processor). The cr50 console will log strapping information
+at boot, with a line like this:
+`[0.006304 Valid strap: 0x2 properties: 0x21]`
+
+If the strapping configuration is invalid, instead, a line like this will be
+emitted:
+`[0.006244 Invalid strap pins! Default properties = 0x46]`
+
+#### Pulse width too short for SoC
+
+cr50 sends pulses on the interrupt line that are ~2.6us in length. SoCs should be
+careful to manage clock gating registers to ensure that pulses that short may
+be detected, otherwise TPM communication may fail.
 
 ## Chrome OS Installation Troubleshoot Guide
 
@@ -676,11 +751,13 @@ Device in dev mode
 [Configuring Automounting]: https://help.ubuntu.com/community/Mount/USB#Configuring_Automounting
 [data_fmap_expect_p.txt]: https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/master/tests/futility/data_fmap_expect_p.txt
 [developer-guide]: ./developer_guide.md
+[Disk format]: https://www.chromium.org/chromium-os/chromiumos-design-docs/disk-format
 [EC documentation]: https://chromium.googlesource.com/chromiumos/platform/ec/+/master/README.md
 [FAFT]: https://dev.chromium.org/for-testers/faft
 [firmware_LockedME]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/HEAD/client/site_tests/firmware_LockedME/control
 [Firmware Updater]: https://chromium.googlesource.com/chromiumos/platform/firmware/+/master/README.md
 [Firmware Updater Package]: https://chromium.googlesource.com/chromiumos/platform/firmware/+/master/pack/README.md
+[Firmware Write Protection]: ./write_protection.md
 [GBB flags]: https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/master/firmware/2lib/include/2gbb_flags.h
 [Latest Chromebook requirements]: https://chromeos.google.com/partner/dlm/docs/latest-requirements/chromebook.html
 [Put your image on a USB disk]: https://chromium.googlesource.com/chromiumos/docs/+/master/developer_guide.md#put-your-image-on-a-usb-disk
