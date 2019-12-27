@@ -266,69 +266,10 @@ see a message "`Using firmware preamble flag: --flag 0`" during execution of
 *   Note that if you transition from a locked ME firmware back to an unlocked ME
     firmware you must firmware flash via servo.
 
-## Write Protection
+## Write Protect
 
-### Software Write Protect
-
-To check software write protection status, run the following commands. Make
-sure that the write protect range length is not 0.
-*   EC: `flashrom -p ec --wp-status`
-*   Host: `flashrom -p host --wp-status`
-
-If pd firmware is present, these additional commands can be run:
-*   Samus: `flashrom -p ec:dev=1 --wp-status`
-*   Glados: `flashrom -p ec:type=pd --wp-status`
-
-To disable software write protect:
-*   Run `flashrom -p host --wp-disable`.
-*   Run `flashrom -p ec --wp-disable`. If `RO_AT_ROOT is not clear` message
-    is displayed, check if the write protect screw has been removed. Do an
-    [EC Reset](#reset-ec).
-*   For devices with PD,
-    *   Samus: `flashrom -p ec:dev=1,block=0x800 -w pd.bin`.
-    *   Glados: `flashrom -p ec:type=pd --wp-disable` followed by
-    `ectool --name=cros_pd reboot_ec RO at-shutdown` and `reboot`.
-
-To enable software write protect:
-*   Check WP Range.
-    Run `mosys eeprom map | grep WP_RO`.
-    Example output:
-    `host_firmware | WP_RO | 0x00000000 | 0x00200000 | static`
-*   Alternately run,
-    `flashrom -p host -r /tmp/bios.bin`
-    `hexdump -C /tmp/bios.bin >> bios.txt`
-    `fmap_decode /tmp/bios.bin`
-*   Run `flashrom -p host --wp-enable --wp-range START_RANGE END_RANGE`.
-    Example output:
-    `flashrom -p host --wp-enable --wp-range 0x00000000 0x00200000`
-
-### Hardware Write Protect
-
-To check hardware write protection status, run the following commands:
-`crossystem wpsw_boot wpsw_cur`
-
-A return value of 1 indicates that hardware write-protect is enabled.
-
-*   For devices with CR-50, start servod and run
-    `dut-control fw_wp_state:force_off`.
-*   Disable write protect
-    *   Power down the device and open the case
-    *   Locate and remove the write protect screw on the motherboard.
-    *   restart the device
-    *   `crossystem wpsw_boot wpsw_cur` should now return 0
-*   Enable write protect
-    *   power down system and open the case
-    *   Replace the screw on the motherboard
-    *   restart the system `crossystem wpsw_boot wpsw_cur` should now return 1
-*   Refer to [EC documentation] for more information on EC.
-    *   Program the servo keyboard map by running
-        `test_that --board={BOARD} {IP} `
-        `f:.*firmware_FlashServoKeyboardMap/control`
-        from chroot. The DUT needs to be running test image.  The test only
-        need to be done once to program the servo keyboard emulator. Once you
-        program the servo, you can launch servod as normal.
-*   Alternately [FAFT](https://dev.chromium.org/for-testers/faft) explains how
-    to use usbkm232 cable.
+For details about write protect, and how to enable and disable the feature,
+please read [Write Protection].
 
 ## Power Delivery
 
@@ -743,3 +684,4 @@ Device in dev mode
 [GBB flags]: https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/master/firmware/2lib/include/2gbb_flags.h
 [Latest Chromebook requirements]: https://chromeos.google.com/partner/dlm/docs/latest-requirements/chromebook.html
 [Put your image on a USB disk]: https://chromium.googlesource.com/chromiumos/docs/+/master/developer_guide.md#put-your-image-on-a-usb-disk
+[Write Protection]: ./write_protection.md
