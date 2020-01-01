@@ -17,7 +17,7 @@ pulling in that third-party package. The Chrome OS security team maintains a
 be prioritized by the teams owning or pulling in the package.
 
 This is consistent with the Chrome OS position that teams are ultimately
-responsible for all aspects of their features, includign security; while the
+responsible for all aspects of their features, including security; while the
 Chrome OS security team maintains security-critical features and services,
 develops tools, and provides advice and support.
 
