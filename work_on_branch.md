@@ -127,9 +127,7 @@ repo init \
 Next, follow steps in the [developer guide][developer-guide] to
 sync/edit/modify files i.e `repo sync`, `cros_workon start`, `repo start`, etc.
 After you've cherry-picked or made the changes you want, upload the changes for
-review. If cherry-picking, make sure to recreate the Change-Id in the commit
-message so that you get a new one - simply delete the line and git will create
-a new one for you when committing.
+review.
 
 ## Check out a single repository (with repo)
 
