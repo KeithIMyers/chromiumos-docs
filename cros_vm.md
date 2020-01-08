@@ -303,7 +303,7 @@ This doc is at [go/cros-vm]. Please send feedback to [achuith@chromium.org].
 
 [depot_tools installed]: https://www.chromium.org/developers/how-tos/install-depot-tools
 [go/cros-qemu]: https://storage.cloud.google.com/achuith-cloud.google.com.a.appspot.com/qemu.tar.gz
-[Linux Chromium checkout]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md
+[Linux Chromium checkout]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux/build_instructions.md
 [Virtualization enabled]: https://g3doc.corp.google.com/tools/android/g3doc/development/crow/enable_kvm.md
 [Simple Chrome]: https://chromium.googlesource.com/chromiumos/docs/+/master/simple_chrome_workflow.md
 [chroot]: developer_guide.md

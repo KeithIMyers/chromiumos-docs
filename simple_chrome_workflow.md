@@ -626,8 +626,8 @@ The legacy `GYP` build system is no longer supported.
 [Create a bootable USB stick]: #create-a-bootable-usb-stick
 [Set up the Chrome OS device]: #set-up-the-chrome-os-device
 [OS development guide]: https://chromium.googlesource.com/chromiumos/docs/+/master/developer_guide.md
-[Chrome source code and depot_tools]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md
-[instructions for running tests on Linux]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md#Running-test-targets
+[Chrome source code and depot_tools]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux/build_instructions.md
+[instructions for running tests on Linux]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux/build_instructions.md#Running-test-targets
 [update .gclient]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/chromeos_build_instructions.md#updating-your-gclient-config
 [Chrome OS board name]: https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices
 [GN build configuration]: https://www.chromium.org/developers/gn-build-configuration
