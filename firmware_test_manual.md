@@ -503,7 +503,10 @@ Here is the list of well-known recovery reasons and possible solutions.
 *   0x2b: **Secure NVRAM TPM initialization error**
     *   Close the lid/ shutdown the DUT, then power on after 20 seconds
 *   0x43: **OS kernel failed signature check**
-    *   refresh + power solve the issue.
+    *   The kernel looks invalid. This is usually caused by key mismatch,
+        data corruption, or memory / driver / IO error in last boot.
+    *   Can be solved by installing Recovery image, or re-key your firmware.
+    *   See the next section for further debugging details.
 *   0x48: **No bootable disk found**
     *   Installing Recovery image will fix this issue.
 *   0x54: **TPM read error in readwritable firmware**
@@ -516,16 +519,167 @@ Here is the list of well-known recovery reasons and possible solutions.
         *   Run `chromeos-firmwareupdate --mode=recovery --force`
     *   See the next section for further debugging details.
 
-## Debugging "No bootable kernel found on disk" (0x5B)
+## Debugging "OS missing" failures (0x43, 0x5b)
 
-This error indicates that internal storage has been detected properly, but that
-there is no kernel partition found that can be booted from.
+To boot into system, the verified firmware must complete following:
 
-This error message can be particularly frustrating to debug, as there are many
-potential causes. This section will guide you through steps to detect the
-specific cause of this symptom.
+1.  Find internal storage (eMMC, SSD, or NVMe).
+2.  Read and parse a valid GPT (Partition table).
+3.  Find a partition with "Chrome OS kernel" type and is marked as "good and
+    ready for booting" (by GPT attributes).
+4.  Load the kernel contents into memory and verify its digital signature.
+5.  Jump into loaded kernel.
 
-When on the error screen, press `[tab]` to get debug information.
+The verified boot firmware has changed the recovery code several times. For
+old devices, failure in step 1~4 may result in error code 0x48, 0x5a, 0x42, or
+other values. For most devices today the error codes for each steps listed
+above are:
+
+1. Failed finding storage: `0x5a VB2_RECOVERY_RW_NO_DISK`
+2. Failed getting GPT: `0x5b VB2_RECOVERY_RW_NO_KERNEL`
+3. Failed finding kernel entry: `0x5b VB2_RECOVERY_RW_NO_KERNEL`
+4. Failed verifying kernel: `0x43 VB2_RECOVERY_RW_INVALID_OS`
+
+The difference between 0x5b "No bootable kernel found on disk" and 0x43 "OS
+kernel or rootfs failed signature check" is if the firmware can find at least
+one partition table entry with "Chrome OS kernel" type and proper boot priority
+attributes. However, the two errors can be particularly frustrating to debug, as
+there are many potential causes:
+
+*   **KEY MISMATCH**: Kernel signing key is different from firmware (for example
+    disk image is MP signed and firmware is DEV signed).
+*   **CORRUPTED**: Kernel partition itself is never provisioned (i.e., empty),
+    damaged or corrupted for some unknown reason.
+*   **DMVERROR**: The Device Mapper Verity driver, which Chrome OS used for
+    checking rootfs correctness, detected some error (by I/O or memory failure,
+    data corruption or malicious attack) in last boot - which will trigger
+    kernel marking the kernel partition with "DMVERROR" and refuse to keep
+    booting that partition. This is often found on devices with bugs in storage
+    drivers or improper memory calibration. Many devices in early build phase
+    may have memory issues and resulting this error, especially during Run-In
+    tests.
+
+### Collect information
+When on the error screen, press `[tab]` to get debug information and collect.
+
+Since there are three potential reasons to the failure, to debug we need to read
+back the firmware and disk contents of the device. Connect servo (or enable CCD)
+and then:
+
+*   Read back firmware using Servo (or CCD), save to a file as `image.bin`.
+*   Create a firmware image to turn on booting from USB by setting GBB flags.
+    ```
+    # Copy the image file readback from device to a new one.
+    cp image.bin image_0x38.bin
+    # inside chroot
+    futility gbb -s --flags 0x38 image_0x38.bin
+    ```
+*   Flash the `image_0x38.bin` back to the device using Servo (or CCD).
+*   Prepare a USB stick with test image (so we can enter shell) and attach to
+    device, and boot from it (press Ctrl-U when you see developer screen).
+*   Enter shell to collect partition table and kernel partition contents:
+    ```
+    # Find the right internal storage on your device. That can be:
+    # eMMC = /dev/mmcblk0, mmcblk0p2, mmcblk0p4
+    # SATA/SSD = /dev/sda, sda2, sda4
+    # NVMe = /dev/nvme0n1, nvme0n1p2, nvmp0n1p4
+    # The example below is assuming you have eMMC:
+    cgpt show /dev/mmcblk0 >/tmp/gpt.txt
+    dd if=/dev/mmcblk0p2 bs=1M | gzip -c >/tmp/kern.2.gz
+    dd if=/dev/mmcblk0p4 bs=1M | gzip -c >/tmp/kern.4.gz
+    ```
+*   Now, pack everything (`image.bin`, `gpt.txt`, `kern.2.gz`, `kern.4.gz`) and
+    upload them to report the issue for analysis.
+
+### Failure in Finalization
+
+If the device goes to the recovery page with "OS missing" errors immediately
+after running factory finalization, that may be caused by "unexpected reboot or
+failure during finalization", since in the process we will de-active test image
+partitions (2) and enable release partition (4). Check the factory logs for
+this.
+
+As a reference, we have seen few finalization issues that failed after GBB was
+cleared (and before the new release partition was activated):
+
+- [147722589](https://issuetracker.google.com/147722589): Failed creating logs.
+- [147314850](https://issuetracker.google.com/147314850): Failed (to enter or complete wipe-in-place.
+
+### Failure during run-in
+
+If the DUT goes to 0x43 during run-in tests, it's usually caused by DMVERROR
+or other storage driver issues. The following sections will help you to get more
+details.
+
+### Find active partition
+
+Read `gpt.txt` and look for partition 2 and 4, which should look like
+```
+
+          69       65536       2  Label: "KERN-A"
+                                  Type: ChromeOS kernel
+                                  UUID: 8AF3A85D-AC80-A44F-AA0A-CA8C73E66811
+                                  Attr: priority=1 tries=0 successful=1
+...
+       65605       65536       4  Label: "KERN-B"
+                                  Type: ChromeOS kernel
+                                  UUID: 0BC160CA-E154-1749-9F79-D5838FAAD064
+                                  Attr: priority=0 tries=15 successful=0
+```
+There must be at least one partition with priority > 0 and (tries > 0 or
+successful = 1). Use that partition for the following tests.
+
+Note for devices failed immediately after factory finalization, they should
+have active = 4. For devices failed recovery, active = 2. For failure after
+OOBE or Auto Update, both partitions may be active, so choose the one with
+higher priority.
+
+The examples below will assume your active one is 4 (`kern.4.gz`).
+
+### Check kernel integrity
+Run the command in chroot to check:
+```
+gunzip kern.4.gz
+futility vbutil_kernel --verify kern.4
+```
+
+If the kernel looks good you should see some information like:
+```
+  Signature:           ignored
+  Size:                0x4b8
+  Flags:               7  !DEV DEV !REC
+  Data key algorithm:  4 RSA2048 SHA256
+  Data key version:    1
+  Data key sha1sum:    d6170aa480136f1f29cf339a5ab1b960585fa444
+Preamble:
+  Size:                0xfb48
+  Header version:      2.2
+  Kernel version:      1
+  Body load address:   0x100000
+  Body size:           0x7d7000
+  Bootloader address:  0x8d6000
+  Bootloader size:     0x1000
+  Flags          :       0
+Body verification succeeded.
+Config:
+console= loglevel=7 init=/sbin/init cros_secure root=/dev/dm-0 ......
+```
+Otherwise, the kernel is either corrupted with unknown reason or by DMVERROR.
+
+### Check DMVERROR
+Print the first 8 bytes of kernel blob to check.
+```
+dd if=kern.4 bs=1 count=8 2>/dev/null
+```
+A real Chrome OS kernel should have `CHROMEOS`.
+
+For devices failed due to DM verity error, that will be `DMVERROR`. You will
+want to run a memory stress test (stressapptest) to see if this is caused by
+memory issues. Otherwise, it may be failure by storage driver, or even hardware
+failure inside storage.
+
+If you see anything else (or nothing), it is probably fully corrupted or an
+empty partition.
 
 ### OS image key mismatch
 
@@ -535,15 +689,55 @@ keys for boot to succeed. If the keys mismatch, you may encounter this error.
 The debug screen contains key information in the following fields:
 -   `gbb.rootkey`
 -   `gbb.recovery_key`
-
 These keys correspond to entries in the `platform/chromeos-hwid` repository.
 For newer boards, the corresponding file is `v3/${BOARD}`.
 See entries under the `firmware_keys` section for valid values for a given
-device.
+device. Also, if you see `b11d74edd286c144e1135b49e7f0bc20cf041f10` as root key
+then your firmware is using DEV (also known as "unsigned") keys.
 
 To change the keys on a device, disable hardware write-protect and flash a
 recovery image with the desired key. See the [Firmware Write Protection]
 document for details.
+
+If you can't access chromeos-hwid or are not sure which keys were installed on
+the DUT and just want to know if the boot failure is caused by keys mismatch,
+follow the steps:
+```
+futility gbb --rootkey=rk.bin image.bin
+futility dump_fmap image.bin -x VBLOCK_A:vb.a VBLOCK_B:vb.b FW_MAIN_A:fw.a FW_MAIN_B:fw.b
+futility vbutil_firmware --verify vb.a --signpubkey rk.bin --fv fw.a --kernelkey kk.a
+futility vbutil_firmware --verify vb.b --signpubkey rk.bin --fv fw.b --kernelkey kk.b
+futility vbutil_kernel --verify kern.4 --signpubkey kk.a
+futility vbutil_kernel --verify kern.4 --signpubkey kk.b
+```
+
+At least one of `kk.a` or `kk.b` should decode kernel partition properly with
+something like:
+```
+
+Keyblock:
+  Signature:           valid
+  Size:                0x4b8
+  Flags:               7  !DEV DEV !REC
+  Data key algorithm:  4 RSA2048 SHA256
+  Data key version:    1
+  Data key sha1sum:    d6170aa480136f1f29cf339a5ab1b960585fa444
+Preamble:
+  Size:                0xfb48
+  Header version:      2.2
+  Kernel version:      1
+  Body load address:   0x100000
+  Body size:           0x7d7000
+  Bootloader address:  0x8d6000
+  Bootloader size:     0x1000
+  Flags          :       0
+Body verification succeeded.
+Config:
+console= loglevel=7 init=/sbin/init cros_secure root=/dev/dm-0 ...
+```
+
+If you can't verify the active kernel by either firmware (in A or B), then it's
+probably caused by firmware key mismatch.
 
 ### Corrupted image on storage
 
@@ -551,8 +745,8 @@ The simplest cause of this error is that there is no valid image on the disk.
 To confirm if this is the case, you should follow the following steps:
 -   Flash an OS image onto a USB stick, and attach it to the DUT.
 -   On VT2, run the following commands:
--   `dd if=/dev/mmcblk0p2 of=/usr/local/dump_2.bin bs=8 count=1` and `hexdump -n 8 /usr/local/dump_2.bin -c`
--   `dd if=/dev/mmcblk0p4 of=/usr/local/dump_4.bin bs=8 count=1` and `hexdump -n 8 /usr/local/dump_4.bin -c`
+    `dd if=/dev/mmcblk0p2 of=/usr/local/dump_2.bin bs=8 count=1` and `hexdump -n 8 /usr/local/dump_2.bin -c`
+    `dd if=/dev/mmcblk0p4 of=/usr/local/dump_4.bin bs=8 count=1` and `hexdump -n 8 /usr/local/dump_4.bin -c`
 
 Both should return with the string "CHROMEOS". If not, the partition is
 corrupted, and that is what is preventing boot.
