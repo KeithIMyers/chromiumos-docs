@@ -99,7 +99,8 @@ Entering the Simple Chrome environment does the following:
     extra gn args, e.g. 'dcheck_always_on=true'.
 *   `--log-level=info` Sets the log level to 'info' or 'debug' (default is
     'warn').
-*   `--nogn-gen` Do not run 'gn gen' automatically.
+*   `--nogn-gen` Do not run 'gn gen' automatically. Use this option to persist
+    changes made to a previous session's gn args.
 
 **Chrome OS developers**: Please set `dcheck_always_on=true` and file bugs if
 you encounter any DCHECK crashes.
