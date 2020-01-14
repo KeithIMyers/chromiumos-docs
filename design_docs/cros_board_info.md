@@ -12,17 +12,19 @@ When we talk about CBI, we use the following definitions:
     hardware features (e.g. chassis, motherboard). They’re grouped as a model
     and usually given a code name (e.g. Teemo, Sion). Within a model, devices
     are distinguished by SKU.
-*   SKU: Numeric value describing customizable hardware features (e.g. CPU,
-    memory, storage, touch panel, keyboard, etc.)
+*   SKU: Numeric value used to differentiate builds within same Model/Family.
+    The SKU will change based on the build configuration of non-probable HW
+    features (e.g. which daughter board is connected, convertible/clamshell,
+    which audio codec HW is populated, etc.)
 *   Project: Avoided in this doc for its (too) wide usage.
 
 ## Background
 
 It’s desired to make a single firmware image support different board versions
-and variants to simplify development and manufacturing. To do so, firmware
-needs to identify the hardware, first. Chrome OS devices historically encoded
-such information in resistor straps. Today we store such information in EEPROM
-and call it CrOS board info (a.k.a. CBI). This page describes CBI data format,
+and variants to simplify development and manufacturing. To do so, firmware needs
+to identify the hardware, first. Chrome OS devices historically encoded such
+information in resistor straps. Today we store such information in EEPROM and
+call it CrOS board info (a.k.a. CBI). This page describes CBI data format,
 implementation, advantages, and caveats.
 
 One of the obvious advantages is that EEPROMs can store more data using fewer
@@ -41,20 +43,20 @@ resistor strapping.
 Since EEPROMs are physically separated from other data storage, if we choose,
 they can be locked down. Chrome OS already has this ‘write-protect’ feature
 built in the design. Data stored in write-protected storage can be changed only
-through authorized access. We can simply hook an EEPROM’s WP pin to this wire
-to get the access control aligned to other firmware storage and provide the same
+through authorized access. We can simply hook an EEPROM’s WP pin to this wire to
+get the access control aligned to other firmware storage and provide the same
 level of tamper resistance.
 
 ## CBI Image Format
 
- Offset| # bytes | data name        |  description
--------|---------|------------------|---------------------------------------------------
- 0     | 3       |MAGIC             | 0x43, 0x42, 0x49 (‘CBI’)
- 3     | 1       |CRC               | 8-bit CRC of everything after CRC through ITEM\_n
- 4     | 1       |FORMAT\_VER\_MINOR| The data format version. It’s 0.0 (0x00, 0x00) for the initial version.
- 5     | 1       |FORMAT\_VER\_MAJOR|
- 6     | 2       |TOTAL\_SIZE       | Total number of bytes in the entire data.
- 8     | x       |ITEM\_0,..ITEM\_n | List of data items. The format is explained below.
+Offset | # bytes | data name          | description
+------ | ------- | ------------------ | -----------
+0      | 3       | MAGIC              | 0x43, 0x42, 0x49 (‘CBI’)
+3      | 1       | CRC                | 8-bit CRC of everything after CRC through ITEM\_n
+4      | 1       | FORMAT\_VER\_MINOR | The data format version. It’s 0.0 (0x00, 0x00) for the initial version.
+5      | 1       | FORMAT\_VER\_MAJOR |
+6      | 2       | TOTAL\_SIZE        | Total number of bytes in the entire data.
+8      | x       | ITEM\_0,..ITEM\_n  | List of data items. The format is explained below.
 
 ### MAGIC
 
@@ -84,31 +86,32 @@ compute proper CRC without knowledge on the new data items. The max is 0xFFFF.
 Following after the header fields are data items. They are stored in an array
 where each element uses the following format:
 
- Offset| # bytes | data name        |  description
--------|---------|------------------|---------------------------------------------------
- 0     | 1       | \<tag\>          | A numeric value uniquely assigned to each item.
- 1     | 1       | \<size\>         | Total size of the item (i.e. \<tag\>\<size\>\<data\>)
- 2     | x       | \<value\>        | Value can be a string, raw data, or an integer.
+Offset | # bytes | data name | description
+------ | ------- | --------- | -----------
+0      | 1       | \<tag\>   | A numeric value uniquely assigned to each item.
+1      | 1       | \<size\>  | Total size of the item (i.e. \<tag\>\<size\>\<data\>)
+2      | x       | \<value\> | Value can be a string, raw data, or an integer.
 
-Integer values are stored in the little endian format.
-They are written using the smallest size to fit the value and on read, padded
-with as many zeros as the reader expects.
+Integer values are stored in the little endian format. They are written using
+the smallest size to fit the value and on read, padded with as many zeros as the
+reader expects.
 
-Here are a list of standard data items. See `ec/include/cros_board_info.h`
-for the latest information. Data sizes can vary project to project. Optional
-items are not listed but can be added as needed by the project.
+Here are a list of standard data items. See `ec/include/cros_board_info.h` for
+the latest information. Data sizes can vary project to project. Optional items
+are not listed but can be added as needed by the project.
 
-Name              |   tag  | type     | sticky | required |  description
-------------------|--------|----------|--------|----------|---------------------------------
-BOARD\_VERSION    | 0      | integer  | yes    | yes      | Board version (0, 1, 2, ...)
-OEM\_ID           | 1      | integer  | yes    | no       | OEM ID
-MODEL\_ID         | 5      | integer  | no     | no       | ID assigned to each model.
-SKU\_ID           | 2      | integer  | no     | yes      | ID assigned to each SKU.
-DRAM\_PART\_NUM   | 3      | string   | yes    | no       | DRAM part name in ascii characters
-OEM\_NAME         | 4      | string   | yes    | no       | OEM name in ascii characters
+Name            | tag | type    | sticky | required | description
+--------------- | --- | ------- | ------ | -------- | -----------
+BOARD\_VERSION  | 0   | integer | yes    | yes      | Board version (0, 1, 2, ...)
+OEM\_ID         | 1   | integer | yes    | no       | OEM ID
+SKU\_ID         | 2   | integer | no     | yes      | ID assigned to each SKU.
+DRAM\_PART\_NUM | 3   | string  | yes    | no       | DRAM part name in ascii characters
+OEM\_NAME       | 4   | string  | yes    | no       | OEM name in ascii characters
+FW\_CONFIG      | 6   | integer | no     | yes      | Bit-field that encodes information that the firmware needs to make decisions on.
 
-Sticky fields are those which are set before SMT and prefrashed to EEPROMs.
-They're not expected to be changed after boards are manufactured. Non-sticky fields can be changed for example at RMA center if write protect is disabled.
+Sticky fields are those which are set before SMT and preflashed to EEPROMs.
+They're not expected to be changed after boards are manufactured. Non-sticky
+fields can be changed for example at RMA center if write protect is disabled.
 
 Required fields are expected to exist on all devices.
 
@@ -118,8 +121,8 @@ The number assigned to each hardware version. This field ideally should be
 synchronously incremented as the project progresses and should not differ among
 models.
 
-Assignment can be different from project to project but it’s recommended to be
-a single-byte field (instead of two-byte field where the upper half describes
+Assignment can be different from project to project but it’s recommended to be a
+single-byte field (instead of two-byte field where the upper half describes
 phases (EVT, DVT, PVT) and the lower half describes numeric versions in each
 phase).
 
@@ -129,50 +132,70 @@ A number assigned to each OEM. Software shared by multiple OEMs can use this
 field to select a customization common to a particular OEM. For example, it can
 be used to control LEDs, which tend to follow an OEM's preference.
 
-### MODEL\_ID
-
-A number assigned to each model. Numbering is managed within each OEM. So,
-\<OEM\_ID, MODEL\_ID\> should form a unique ID within the family. This allows a
-host tool such as mosys to share the code to derive a model name among variants
-in the family. It also allows EC to identify a battery pack, which is usually a
-per-model configuration.
-
 ### SKU\_ID
 
 The number used to describe hardware configuration or hardware features.
-Assignment varies family to family and usually is shared among all models in
-the same family.
+Assignment varies family to family and usually is shared among all models in the
+same family.
 
-Some family uses it as an index for a SKU table where hardware features are
-described for SKUs. An array of C struct can be auto-generated
-([go/cros-publish-hw-config-runtime]).
+In the past, some families use it as an index for a SKU table where hardware
+features are described for SKUs, or it has also been a bitmap where each bit or
+set of bits represents one hardware feature. For example, it can contain
+information such as CPU type, form factor, touch panel, camera, keyboard
+backlight, etc. Top 8 bits can be reserved for OEM specific features to allow
+OEMs to customize devices independently.
 
-It can also be a bitmap where each bit or set of bits represents one hardware
-feature. For example, it can contain information such as CPU type, form factor,
-touch panel, camera, keyboard backlight, etc. Top 8 bits can be reserved for
-OEM specific features to allow OEMs to customize devices independently.
+Now, the SKU\_ID is not used by the firmware to make any decisions. The firmware
+code will use the FW\_CONFIG field to make any branching decisions. This allows
+us to decouple the hardware identity (SKU\_ID) from how the firmware needs to
+react (FW\_CONFIG). A particular SKU\_ID value implies one and only one value
+for FW\_CONFIG. When HW identity is decoupled from firmware behavior, we can add
+new permutations of hardware (and thus new SKU values) without affecting the
+firmware code if the firmware code can treat the hardware the same (meaning two
+different SKU\_IDs could have the same value for FW\_CONFIG).
 
 ### DRAM\_PART\_NUM ([go/octopus-dram-part-number-retrieval])
 
 A string value that is used to identify a DRAM. This is different from RAM ID,
 which is an index to a table where RAM configuration parameters are stored. RAM
-ID is encoded in resistor strapping. This makes RAM ID visually validatable
-(as opposed to being a field in CBI). DRAM\_PART\_NUM is used to track the
+ID is encoded in resistor strapping. This makes RAM ID visually validatable (as
+opposed to being a field in CBI). DRAM\_PART\_NUM is used to track the
 inventory.
 
 ### OEM\_NAME (TBD)
 
 OEM name in ascii string.
 
+## FW\_CONFIG
+
+A bit field that tracks the different permutations of HW that the firmware needs
+to be able to handle. The FW\_CONFIG only contains the information that the
+firmware strictly needs to make a branching decision. Any other information
+about a device should be captured and stored in the higher level configuration
+system.
+
+Below are a few, non-exhaustive examples of how the firmware configuration bits
+could be portioned.
+
+Bits | Features                              | Use
+---- | ------------------------------------- | ---
+1    | Enabled sensors in EC (1b : yes)      | EC enables sensor monitoring based on this bit. This should be set to 1b when the sensors are stuffed on a design (e.g. convertible) and 0b when the sensors are not stuffed (e.g. clamshell)
+1    | Has internal keypad (1b: yes)         | Update keyscan_config based on presence of keypad on internal keyboard
+1    | Has AR camera (1b: yes)               | Enables interrupts and updates drivers for AR based camera.
+3    | GPIO customization for SoC            | 8 unique GPIO configurations. Values are assigned on a per-firmware build basis.
+2    | SARs customization for SoC            | 4 unique SARs customization files. Values are assigned on a per-firmware build basis
+2    | VBT customization for SoC             | 4 unique VBT customization files. Values are assigned on a per-firmware build basis
+1    | Touchscreen enabled for SoC (1b: yes) | AP enables bus and configures GPIOs for touchscreen device
+
 ## Hardware
 
 ### Firmware Write Protection
 
 Chrome OS devices have the global write protect line, `WP_L`, which is
-controlled by Cr50 and a servo, and used to protect various firmware images
-(AP, EC, FPMCU, etc.). The WP pin of an EEPROM should be connected to WP_L.
-CBI data will be protected as securely as other RO firmware images and can be
-changed at RMA center or by developers for special needs.
+controlled by Cr50 and a servo, and used to protect various firmware images (AP,
+EC, FPMCU, etc.). The WP pin of an EEPROM should be connected to WP_L. CBI data
+will be protected as securely as other RO firmware images and can be changed at
+RMA center or by developers for special needs.
 
 While AP SPI flash and EC SPI flash also combine the internal status registers
 to determine the WP state, WP of CBI EEPROMs will be controlled by the WP signal
@@ -198,8 +221,8 @@ flash.
 ![wp_circuitry_1](../images/wp_circuitry_1.png)
 
 The power well should be the same as the EC. When the WP is high, the data is
-write protected. If the WP pin of an EC SPI Flash has active low logic
-(low = protect), a MOSFET can be used to reverse the voltage:
+write protected. If the WP pin of an EC SPI Flash has active low logic (low =
+protect), a MOSFET can be used to reverse the voltage:
 
 ![wp_circuitry_2](../images/wp_circuitry_2.png)
 
@@ -217,9 +240,9 @@ You can evaluate implementation as follows:
 
 *   Boot the device multiple times. Verify the data is consistently printed
     every time.
-*   Try cbi command on EC console multiple times. It reads the whole EEPROM
-    data and dumps it. If I2C bus has a low quality signal, you may observe
-    failed reads.
+*   Try cbi command on EC console multiple times. It reads the whole EEPROM data
+    and dumps it. If I2C bus has a low quality signal, you may observe failed
+    reads.
 *   Try enable and disable hardware write protection. Verify `ectool cbi set`
     command fails or succeeds as expected.
 *   Verify default values and errors are handled. If CBI is for some reason
@@ -236,8 +259,8 @@ are attempted, the result is preserved even if both reads fail. This would
 prevent the system from running in an inconsistent state. [b/80236608] explains
 why we don't let the EC keep reading CBI.
 
-The earliest timing CBI can be read is at `HOOK_INIT` with
-`HOOK_PRIO_INIT_I2C` + 1.
+The earliest timing CBI can be read is at `HOOK_INIT` with `HOOK_PRIO_INIT_I2C`
++ 1.
 
 ### cbi-util
 
@@ -258,7 +281,8 @@ The data of existing fields can be changed and resized.
 Mosys is a tool which runs on the host to provide various information of the
 host. One of its sub-command, platform, retrieves board information (e.g. SKU,
 OEM) from SMBIOS, which is populated by coreboot. We’ll update coreboot so that
-it’ll fetch board information from EEPROM (via EC) instead of resistor strapping.
+it’ll fetch board information from EEPROM (via EC) instead of resistor
+strapping.
 
 ### cbi\_info
 
@@ -269,8 +293,8 @@ Currently, it prints only BOARD\_VERSION, OEM\_ID, and SKU\_ID.
 
 It requires the EC to initialize an I2C controller and its driver. There may be
 rare cases where board info is needed before these are initialized. To handle
-such cases, we may need to add simplified I2C API. Simplified I2C API would
-have the following features:
+such cases, we may need to add simplified I2C API. Simplified I2C API would have
+the following features:
 
 *   Does not do write
 *   May only read a single byte at a time
