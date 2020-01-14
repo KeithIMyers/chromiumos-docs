@@ -148,6 +148,15 @@ Cq-Depend: chromium:12345, chrome-internal:4321
 Change-Id: I8d7f86d716f1da76f4c85259f401c3ccc9a031ff
 ```
 
+### Signed-off-by
+
+A limited number of projects, such as Linux Kernel and Coreboot, require
+a `Signed-off-by: Random J Developer <random@developer.example.org>` line in
+the commit message.
+Please follow the rules defined by that project when adding this line.
+This line can be added automatically by specifying the `--signoff`
+option when committing.
+
 ## Upload changes
 
 Once your changes are committed locally, you upload them using `repo upload`.
