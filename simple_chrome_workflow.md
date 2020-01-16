@@ -158,45 +158,38 @@ You need the following:
 
 Before you can deploy your build of Chrome to the device, it needs to have a
 "test" OS image loaded on it. A test image has tools like rsync that are not
-part of the end-user image.
+part of the base image.
 
 Chrome should be deployed to a recent Chrome OS test image, ideally the
 version shown in your SDK prompt (or `(sdk) echo $SDK_VERSION`).
 
 ### Create a bootable USB stick
 
-**Googlers**: Images for all boards are available on [go/goldeneye]:
-
-1.  Find the matching Chrome OS version and click on the column for 'Canary'
-    or 'Dev'.
-1.  Click on the dropdown icon in the 'Images' column and click on 'Unsigned
-    test image'.
-
 **Non-Googlers**: The build infrastructure is currently in flux. See
 [crbug.com/360342] for more details. You may need to build your own Chrome OS
 image.
 
-After you download the compressed tarball containing the test image (it should
-have "test" somewhere in the file name), extract the image by running:
+Flash the latest canary test image to your USB stick using `cros flash`:
 
 ```
-(sdk) tar xvf ~/Downloads/<image-you-downloaded>
+(sdk) cros flash usb:// xbuddy://remote/${SDK_BOARD}/latest-canary
 ```
 
-Copy the image to your USB stick using `cros flash`:
+You can also flash an image with the sdk version (the SDK prompt has the
+full version, for instance, R81-12750.0.0):
 
 ```
-(sdk) cros flash usb:// chromiumos_test_image.bin
+(sdk) cros flash usb:// xbuddy://remote/${SDK_BOARD}/R81-12750.0.0
 ```
 
-> **Tip:** If you have a Chrome OS checkout, the following can be used to
-update a device that already has a test image installed. Star
-[crbug.com/403086] for updates on a proposal to support this without a
-Chrome OS checkout.
+> **Tip:** If the device already has a test image installed, the following
+can be used to update the device directly.
 
 ```
-.../chromeos/src $ cros flash $IP_ADDR chromiumos_test_image.bin
+(sdk) $ cros flash $IP_ADDR xbuddy://remote/${SDK_BOARD}/latest-canary
 ```
+
+See the [CrOS Flash page] for more details.
 
 ### Put your Chrome OS device in dev mode
 
@@ -549,23 +542,6 @@ option:
 (shell) cros chrome-sdk --board=$BOARD --chroot=/path/to/chromiumos/chroot
 ```
 
-### Using cros flash with xbuddy to download images
-
-`cros flash` with `xbuddy` will automatically download an image and write it to
-USB for you. It's very convenient, but for now it requires a full Chrome OS
-checkout and must be run inside the Chrome OS chroot. ([issue 437877])
-
-```
-(chroot) cros flash usb:// xbuddy://remote/$BOARD/<version>
-(chroot) cros flash $IP_ADDR xbuddy://remote/$BOARD/<version>
-```
-
-Replace `$BOARD`, `$IP_ADDR`, `<version>` with the right values. The board and
-version can be seen in your SDK prompt (e.g. `(sdk kevin R80-12734.0.0)` is the
-kevin board using version R80-12734.0.0).
-
-See the [Cros Flash page] for more details.
-
 ### Running tests
 
 Chrome's unit and browser tests are compiled into test binaries. At the moment,
@@ -640,10 +616,9 @@ The legacy `GYP` build system is no longer supported.
 [additional debugging tips]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips#TOC-Enabling-core-dumps
 [chromite repo]: https://chromium.googlesource.com/chromiumos/chromite/
 [issue 437877]: https://bugs.chromium.org/p/chromium/issues/detail?id=403086
-[Cros Flash page]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_flash.md
+[CrOS Flash page]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_flash.md
 [VM]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md
 [Running a Chrome Google Test binary in the VM]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md#Run-a-Chrome-GTest-binary-in-the-VM
-[go/goldeneye]: https://cros-goldeneye.corp.google.com/chromeos/console/listBuild
 [go/shortleash]: https://goto.google.com/shortleash
 [debugging tips]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips
 [go/chrome-build-instructions]: https://companydoc.corp.google.com/company/teams/chrome/chrome_build_instructions.md
