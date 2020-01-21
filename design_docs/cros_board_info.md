@@ -166,7 +166,7 @@ inventory.
 
 OEM name in ascii string.
 
-## FW\_CONFIG
+### FW\_CONFIG
 
 A bit field that tracks the different permutations of HW that the firmware needs
 to be able to handle. The FW\_CONFIG only contains the information that the
