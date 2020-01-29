@@ -1,5 +1,7 @@
 # Life of a Chrome OS commit
 
+[TOC]
+
 This document provides a brief overview of how Chrome OS changes get committed
 and tested.
 
@@ -20,36 +22,64 @@ Once a change is completed and tested locally, upload it to [chromium-review]:
 
 Use [chromium-review] to review your change and prepare it for the commit queue.
 
-See the [developer guide] for details.
+See the [gerrit workflow] for details.
 
 ## The Chrome OS commit pipeline
 
-### The Pre-Commit Queue
+As of January 2020, Chrome OS is using the parallel CQ. The documentation has
+been updated to reflect how that behaves.
 
-When a change is marked 'Trybot-Ready' or when it has been approved, it will be
-submitted to the **[precommit queue]** which runs on a handful of buildbots
-depending on the patch.
+A gross simplification of the Chrome OS CI looks like this:
+![Simplified diagram of Chrome OS CQ pipeline](images/simplified_cq_pipeline.png)
 
-### The Commit Queue
+The CQ collects all changes in the patch series, along with any changes linked
+via Cq-Depend in the commit messages, and applies them to tip of tree (ToT). The
+result is then built and tested by the `cq-orchestrator`.
+
+The cq-orchestrator starts jobs to compile and unit test your changes across
+a variety of boards. All of the jobs run in parallel and the cq-orchestator will
+collect all the results. If there are failures, the cq-orchestrator is a good
+place to start debugging what went wrong.
+
+Once all the builds are done, the cq-orchestrator kicks off
+`cros_test_platform` which kicks off all the hardware tests. Tests run by
+*cros_test_platform* require hardware resources and they will request this from
+the lab infrastructure that is currently in place (Skylab as of Jan 2020). If
+the hardware resource needed by the test isn't available, the test will wait for
+it to become available or timeout after several hours.
+
+To get additional help debugging issues with CQ you can ask for help in the
+Sheriffs' chat channel. This is currently available at [go/cros-oncall].
+
+### Dry-run
+
+Once a change is marked CQ+1, the CQ will trigger a dry-run. The dry-run will
+trigger the cq-orchestrator and it will only run the compile + unit test tasks.
+The hardware tests will not be run.
+
+### The Commit-Queue
 
 When a change is marked verified, approved and marked Commit-Queue ready, it
 will be sent to the commit queue.
 
-This takes the current set of approved changes, applies them to the tip-of-tree,
-and runs the entire suite of **[paladin]** builders (currently 57).
+It will follow the procedure described above, compiling the code, running unit
+tests and running hardware tests.
 
-If the [paladin] builder succeeds then the changes will be committed and the
-LKGM version of Chrome OS will be updated for devs and builders (e.g. the
-[PFQ]).
+### Post-submit builders
 
-Otherwise it will need to be re-submitted once the developer fixes the failure
-or ensures that the failure was unrelated to their change.
-
+[Post-submit builders] are triggered roughly every 7-10 hours. It will run on
+the same subset of boards that CQ builders run. Chrome OS sheriffs monitor these
+builders to catch any regressions that made it through CQ.
 
 ### The Release (Canary) Builders
 
 The ToT (canary) **[release]** builders are triggered automatically according
-to a schedule, currently 3 times per day.
+to a schedule, currently 3 times per day. The release builders will run on all
+boards (not just a subset) and so may catch issues that may be missed by the
+post-submit builders.
+
+When you view [goldeneye], the builds and test results you see are from the
+release builders.
 
 ### The Chrome PFQ Builders
 
@@ -64,12 +94,13 @@ It uses the results of the [Chrome LKGM] builder to identify a recent stable
 canary build (generally the most recent).
 
 
-
 [chromium-review]: https://chromium-review.googlesource.com
 [developer guide]: developer_guide.md
-[precommit queue]: https://luci-milo.appspot.com/buildbot/chromiumos.tryserver/pre_cq/
-[paladin]: https://luci-milo.appspot.com/buildbot/chromeos/master-paladin/
+[gerrit workflow]: https://chromium.googlesource.com/chromiumos/docs/+/master/contributing.md#Going-through-review
+[go/cros-oncall]: https://goto.corp.google.com/cros-oncall
 [release]: https://uberchromegw.corp.google.com/i/chromeos/builders/master-release
+[goldeneye]: https://goto.corp.google.com/goldeneye
+[Post-submit builders]: https://ci.chromium.org/p/chromeos/g/chromeos.postsubmit/builders
 [PFQ]: https://uberchromegw.corp.google.com/i/chromeos/builders/master-chromium-pfq
 [Simple Chrome]: simple_chrome_workflow.md
 [Chrome LKGM]: https://yaqs.googleplex.com/eng/q/5254238507106304
