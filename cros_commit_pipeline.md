@@ -81,10 +81,6 @@ post-submit builders.
 When you view [goldeneye], the builds and test results you see are from the
 release builders.
 
-### The Chrome PFQ Builders
-
-Once a commit lands, it will be picked up by the next **[PFQ]** build.
-
 ### Simple Chrome
 
 [Simple Chrome] is intended to provide developers with a reasonably stable
@@ -98,9 +94,8 @@ canary build (generally the most recent).
 [developer guide]: developer_guide.md
 [gerrit workflow]: https://chromium.googlesource.com/chromiumos/docs/+/master/contributing.md#Going-through-review
 [go/cros-oncall]: https://goto.corp.google.com/cros-oncall
-[release]: https://uberchromegw.corp.google.com/i/chromeos/builders/master-release
+[release]: https://cros-goldeneye.corp.google.com/chromeos/legoland/builderSummary?builderGroups=release&buildBranch=master
 [goldeneye]: https://goto.corp.google.com/goldeneye
 [Post-submit builders]: https://ci.chromium.org/p/chromeos/g/chromeos.postsubmit/builders
-[PFQ]: https://uberchromegw.corp.google.com/i/chromeos/builders/master-chromium-pfq
 [Simple Chrome]: simple_chrome_workflow.md
 [Chrome LKGM]: https://yaqs.googleplex.com/eng/q/5254238507106304
