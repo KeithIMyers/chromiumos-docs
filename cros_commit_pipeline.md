@@ -26,36 +26,40 @@ See the [gerrit workflow] for details.
 
 ## The Chrome OS commit pipeline
 
-As of January 2020, Chrome OS is using the parallel CQ. The documentation has
+As of January 2020, Chrome OS is using the parallel CQ. This documentation has
 been updated to reflect how that behaves.
 
-A gross simplification of the Chrome OS CI looks like this:
+A gross simplification of the Chrome OS Continous Integration (CI):
 ![Simplified diagram of Chrome OS CQ pipeline](images/simplified_cq_pipeline.png)
 
 The CQ collects all changes in the patch series, along with any changes linked
-via Cq-Depend in the commit messages, and applies them to tip of tree (ToT). The
-result is then built and tested by the `cq-orchestrator`.
+via [Cq-Depend] in the commit messages, and applies them to tip of tree (ToT).
+The result is then built and tested by the `cq-orchestrator`.
 
-The cq-orchestrator starts jobs to compile and unit test your changes across
-a variety of boards. All of the jobs run in parallel and the cq-orchestator will
-collect all the results. If there are failures, the cq-orchestrator is a good
-place to start debugging what went wrong.
+The `cq-orchestrator` starts jobs to compile and unit test a CL across a variety
+of boards (see [chromeos-cq builders]). All of the jobs run in parallel and the
+`cq-orchestator` will collect all the results. If there are failures, the
+`cq-orchestrator` is a good place to start debugging what went wrong.
 
-Once all the builds are done, the cq-orchestrator kicks off
-`cros_test_platform` which kicks off all the hardware tests. Tests run by
-*cros_test_platform* require hardware resources and they will request this from
-the lab infrastructure that is currently in place (Skylab as of Jan 2020). If
+Once all the jobs are done, the `cq-orchestrator` kicks off `cros_test_platform`
+which starts and monitors all the hardware tests. Tests run by
+`cros_test_platform` require hardware resources and they will request this from
+the lab infrastructure that is currently in place ([Skylab] as of Jan 2020). If
 the hardware resource needed by the test isn't available, the test will wait for
-it to become available or timeout after several hours.
+it to become available or timeout after several hours (exact time depends on the
+current state of builds and the health of the lab; ask in [go/cros-oncall] if
+you need a more accurate number).  Gerrit displays all the jobs started by
+`cq-orchestrator` but not the jobs started by `cros_test_platform` so you will
+need to click through that chip to monitor the tests.
 
-To get additional help debugging issues with CQ you can ask for help in the
-Sheriffs' chat channel. This is currently available at [go/cros-oncall].
+To get additional help debugging issues with the CQ you can ask for help at
+[go/cros-oncall].
 
 ### Dry-run
 
 Once a change is marked CQ+1, the CQ will trigger a dry-run. The dry-run will
-trigger the cq-orchestrator and it will only run the compile + unit test tasks.
-The hardware tests will not be run.
+trigger the `cq-orchestrator` and it will only run the compile + unit test
+tasks.  The hardware tests will not be run.
 
 ### The Commit-Queue
 
@@ -67,7 +71,7 @@ tests and running hardware tests.
 
 ### Post-submit builders
 
-[Post-submit builders] are triggered roughly every 7-10 hours. It will run on
+[Post-submit builders] are triggered roughly every 7-10 hours. They will run on
 the same subset of boards that CQ builders run. Chrome OS sheriffs monitor these
 builders to catch any regressions that made it through CQ.
 
@@ -93,6 +97,9 @@ canary build (generally the most recent).
 [chromium-review]: https://chromium-review.googlesource.com
 [developer guide]: developer_guide.md
 [gerrit workflow]: https://chromium.googlesource.com/chromiumos/docs/+/master/contributing.md#Going-through-review
+[Cq-Depend]: https://chromium.googlesource.com/chromiumos/docs/+/master/contributing.md#CQ-DEPEND
+[chromeos-cq builders]: https://ci.chromium.org/p/chromeos/g/chromeos.cq/builders
+[Skylab]: https://goto.corp.google.com/chromeos-skylab-doc
 [go/cros-oncall]: https://goto.corp.google.com/cros-oncall
 [release]: https://cros-goldeneye.corp.google.com/chromeos/legoland/builderSummary?builderGroups=release&buildBranch=master
 [goldeneye]: https://goto.corp.google.com/goldeneye
