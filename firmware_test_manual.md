@@ -947,7 +947,7 @@ Device in dev mode
 [developer-guide]: ./developer_guide.md
 [Disk format]: https://www.chromium.org/chromium-os/chromiumos-design-docs/disk-format
 [EC documentation]: https://chromium.googlesource.com/chromiumos/platform/ec/+/master/README.md
-[FAFT]: https://dev.chromium.org/for-testers/faft
+[FAFT]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/refs/heads/master/docs/faft-how-to-run-doc.md
 [firmware_LockedME]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/HEAD/client/site_tests/firmware_LockedME/control
 [Firmware Updater]: https://chromium.googlesource.com/chromiumos/platform/firmware/+/master/README.md
 [Firmware Updater Package]: https://chromium.googlesource.com/chromiumos/platform/firmware/+/master/pack/README.md
