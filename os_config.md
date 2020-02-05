@@ -183,7 +183,6 @@ code and projects.
 | dev_enable_udc          | RO  | Enable USB Device Controller |
 | fw_vboot2               | RO  | If firmware was selected by vboot2 |
 | kernel_max_rollforward  | R/W | Max kernel version to store into TPM |
-| recoverysw_is_virtual   | RO  | Recovery switch is virtual |
 | tpm_attack              | R/W | TPM was interrupted since this flag was cleared |
 | tpm_fwver               | RO  | Firmware version stored in TPM |
 | tpm_kernver             | RO  | Kernel version stored in TPM |
