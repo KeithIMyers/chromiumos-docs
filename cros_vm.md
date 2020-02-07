@@ -211,11 +211,10 @@ list of GTests currently running in VMs (eg: `base_unittests`,
 
 ## Launch a VM built by a waterfall bot
 
-Find a waterfall bot of interest, such as
-[amd64-generic-tot-chromium-pfq-informational], which is a FYI bot that builds
-ToT Chrome with ToT Chrome OS, or [amd64-generic-chromium-pfq], which is
-an internal PFQ builder. Pick a build, click on artifacts, and download
-`chromiumos_qemu_image.tar.xz` to `~/Downloads/`
+Select a [full] or [release] canary builder of interest. Note that not all
+of these bots build an image compatible with QEMU, so you'll likely want some
+flavor of [amd64-generic] or [betty]. Pick one of their builds, click on
+artifacts, and download `chromiumos_qemu_image.tar.xz` to `~/Downloads/`
 
 Unzip:
 ```bash
@@ -308,8 +307,10 @@ This doc is at [go/cros-vm]. Please send feedback to [achuith@chromium.org].
 [Simple Chrome]: https://chromium.googlesource.com/chromiumos/docs/+/master/simple_chrome_workflow.md
 [chroot]: developer_guide.md
 [Tast: Running Tests]: https://chromium.googlesource.com/chromiumos/platform/tast/+/HEAD/docs/running_tests.md
-[amd64-generic-tot-chromium-pfq-informational]: https://build.chromium.org/p/chromiumos.chromium/builders/amd64-generic-tot-chromium-pfq-informational
-[amd64-generic-chromium-pfq]: https://uberchromegw.corp.google.com/i/chromeos/builders/amd64-generic-chromium-pfq
+[full]: https://cros-goldeneye.corp.google.com/chromeos/legoland/builderSummary?builderGroups=full
+[release]: https://cros-goldeneye.corp.google.com/chromeos/legoland/builderSummary?builderGroups=release
+[amd64-generic]: https://cros-goldeneye.corp.google.com/chromeos/legoland/builderHistory?buildConfig=amd64-generic-full&buildBranch=master
+[betty]: https://cros-goldeneye.corp.google.com/chromeos/legoland/builderHistory?buildConfig=betty-release&buildBranch=master
 [build Chromium OS]: developer_guide.md
 [attribute expression]: https://chromium.googlesource.com/chromiumos/platform/tast/+/HEAD/docs/test_attributes.md
 [Launch a locally built VM from within the chroot]: #Launch-a-locally-built-VM-from-within-the-chroot
