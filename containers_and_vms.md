@@ -796,10 +796,12 @@ You can run `sudo apt-get update && sudo apt-get dist-upgrade`.
 
 ### Can I use IPv6?
 
-Unfortunately, only IPv4 is currently supported.
-Yes, we're fully aware that everything should be IPv6-compatible in 2018.
+Yes, starting with R81. Both dual-stack and IPv6-only networks are supported.
 
-You can star https://crbug.com/863260 for updates.
+Chrome OS only supports SLAAC; read more in the support page for [IPv6 support
+on Chrome OS].
+
+[IPv6 support on Chrome OS]: https://support.google.com/chrome/a/answer/9211990
 
 ### Can I access layer 2 networking?
 
