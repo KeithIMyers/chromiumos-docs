@@ -658,6 +658,22 @@ For more details, see the [Security] section in this doc.
 Nope!
 See the previous questions, and the [Security] section.
 
+### Can I set environment variables for my container?
+
+Sure! There are a few ways to do this.
+
+*   [environment.d] lets you set environment variables for your `systemd --user`
+    session, which includes the [Terminal] and all GUI apps. You may need a
+    newer container, [Debian] 10 "buster", to use this method.
+*   If you just want environment variables in your [Terminal], set those in your
+    shell's config file, such as `~/.bashrc` or `~/.zshrc`.
+
+Changes to environment variables only take effect for newly started programs.
+You may also need to restart programs or the entire container for any changes to
+take effect.
+
+[environment.d]: https://www.freedesktop.org/software/systemd/man/environment.d.html
+
 ### Is multiprofile supported?
 
 No, [Terminal] is only supported in the primary profile (*).
