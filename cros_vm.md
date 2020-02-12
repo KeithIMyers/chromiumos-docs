@@ -118,9 +118,9 @@ root@localhost -p 9222
 (vm) localhost ~ # /usr/local/autotest/bin/vm_sanity.py
 ```
 
-## Run telemetry unit tests
+## Run Telemetry Tests
 
-To run telemetry unit tests, or perf unit tests:
+To run telemetry functional or performance tests:
 ```bash
 (shell) .../chrome/src $ third_party/catapult/telemetry/bin/run_tests \
 --browser=cros-chrome --remote=localhost --remote-ssh-port=9222 [test]
