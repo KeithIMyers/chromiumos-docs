@@ -252,6 +252,7 @@ You can look up the board name in our public [device list].
 * atlas
 * banon
 * bob
+* buddy (R82)
 * celes
 * coral
 * cyan
@@ -259,21 +260,28 @@ You can look up the board name in our public [device list].
 * elm
 * eve
 * fizz
+* gandof (R82)
 * grunt
 * hana
+* hatch
+* kalista
 * kefka
 * kevin
+* lulu (R82)
 * nami
 * nautilus
 * nocturne
 * oak
 * octopus
+* paine (R82)
 * pyro
 * rammus
 * reef
 * reks
 * relm
+* samus (R81)
 * sand
+* sarien
 * scarlet
 * setzer
 * snappy
@@ -281,6 +289,7 @@ You can look up the board name in our public [device list].
 * terra
 * ultima
 * wizpig
+* yuna (R82)
 
 ### Hardware Requirements
 
