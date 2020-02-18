@@ -625,7 +625,7 @@ will be symlinked to `~/trunk/src/build/images/${BOARD}/latest`.
 
 **IMPORTANT NOTE:** It's up to you to delete old builds that you don't
 need. Every time you run `build_image`, the command creates files that take up
-**over 4GB of space(!)**.
+to **8GB of space(!)**.
 
 ### Look at your disk image (optional)
 
@@ -698,7 +698,7 @@ gsettings set org.cinnamon.desktop.media-handling automount false
 gsettings set org.cinnamon.desktop.media-handling automount-open false
 ```
 
-Next, insert a USB flash disk (4GB or bigger) into your build computer. **This
+Next, insert a USB flash disk (8GB or bigger) into your build computer. **This
 disk will be completely erased, so make sure it doesn't have anything important
 on it**. Wait ~10 seconds for the USB disk to register, then type the following
 command:
