@@ -620,6 +620,9 @@ installed simultaneously with `e2fsprogs-libs-1.41.7` or older. Since
 declare the blocker in DEPEND.
 
 ```bash
+# It's helpful to future readers if you document why the blocker is needed. For
+# example:
+# File /x/y/z moved from e2fsprogs-libs.
 RDEPEND="!<sys-libs/e2fsprogs-libs-1.41.7
 
     ...other runtime dependency stuff...
