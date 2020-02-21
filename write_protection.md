@@ -119,7 +119,6 @@ To check hardware write protection status, run the following command:
 
 ```
 localhost ~ # crossystem | grep wpsw
-wpsw_boot               = 1                              # [RO/int] Firmware write protect hardware switch position at boot
 wpsw_cur                = 1                              # [RO/int] Firmware write protect hardware switch current position
 ```
 
@@ -145,7 +144,7 @@ For systems that do not have cr50:
 *   Power down the device and open the case
     *   Locate and remove the write protect screw on the motherboard.
 *   Restart the device
-*   `crossystem wpsw_boot wpsw_cur` should now output `0 0`
+*   `crossystem wpsw_cur` should now output `0`
 
 For systems that have cr50:
 *   Use [Servo] to connect to the cr50 console
@@ -193,7 +192,7 @@ For systems with a write-protect screw:
 *   Power down the device and open the case
 *   Insert the write protect screw on the motherboard.
 *   Restart the device
-*   `crossystem wpsw_boot wpsw_cur` should now output `1 1`
+*   `crossystem wpsw_cur` should now output `1`
 
 For systems that use cr50:
 *   Use [Servo] to connect to the cr50 console

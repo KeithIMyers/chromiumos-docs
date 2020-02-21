@@ -170,7 +170,6 @@ a bit of an exception as they're tightly integrated.
 | recoverysw_boot         | RO  | Recovery switch position at boot |
 | recoverysw_cur          | RO  | Recovery switch current position |
 | ro_fwid                 | RO  | Read-only firmware ID |
-| wpsw_boot               | RO  | Firmware write protect hardware switch position at boot |
 | wpsw_cur                | RO  | Firmware write protect hardware switch current position |
 
 ### Specific-Use Fields
