@@ -53,8 +53,18 @@ exceptions raised, and restrictions. However, it doesn't specify any details of
 what this should look like.
 
 Fortunately, the Google Python style guide provides a [reasonable syntax for
-arguments and return values].  We will use that as our standard (adjusted to
-two-space indentation):
+arguments and return values].  We will use that as our standard.
+
+The content of each subsection (e.g. `Args`, `Returns`, etc...) should use the
+same indentation level as the file.  If the file is using 2 spaces, then the
+subsection content should use 2 space indents (as seen in the example below).
+If the file is using 4 space indents, then the subsection content should use
+4 space indents as well.  In both situations, use 4 space hanging indentation
+for long argument descriptions (as seen with `keys:` below).
+
+All docstring content should use full sentences (proper capitalization &
+periods), including argument descriptions (as seen below).  This applies even
+when the docstring is a one-liner.
 
 ```python
 def FetchBigtableRows(big_table, keys, other_silly_variable=None):
@@ -99,8 +109,14 @@ Specifically:
     above.
     *   Ordering of descriptions should match order of parameters in function.
     *   For two-line descriptions, indent the 2nd line 4 spaces.
-*   If present, `Args:`, `Returns:`, and `Raises:` should be the last three
-    things in the docstring, separated by a blank line each.
+*   For functions, if present, `Examples:`, `Args:`, `Returns:` (or `Yields:`
+    with generators), and `Raises:` should be in that order and come last in the
+    docstring, each separated by a blank line.
+*   For classes, only `Examples:` and `Attributes:` are permitted.  When the
+    the `__init__` method arguments line up with the class's attributes (e.g.,
+    the function does a lot of `self.foo = foo`), there is no need to duplicate
+    argument documentation in the `__init__` docstring.  Putting information in
+    the class's attributes is preferred.
 
 ## Imports
 
