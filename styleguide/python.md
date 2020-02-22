@@ -107,13 +107,6 @@ Specifically:
 The following rules apply to imports (in addition to rules already talked about
 in [PEP-8]):
 
-*   It is OK to import packages, modules, and things within a module. This is
-    mentioned solely because it contradicts the [section on imports in the
-    Google Style Guide] (which, remember, is not an authority for Chromium OS).
-    *   Said another way, this is completely OK:
-        `from subprocess import Popen, PIPE`
-    *   **NOTE**: Although not required, we still may want to encourage people
-        to only import packages and modules.
 *   Relative imports are forbidden ([PEP-8] only "highly discourages" them).
     Where absolutely needed, the `from __future__ import absolute_import`
     syntax should be used (see [PEP-328]).
