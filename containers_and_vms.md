@@ -252,7 +252,7 @@ You can look up the board name in our public [device list].
 * atlas
 * banon
 * bob
-* buddy (R82)
+* buddy ([R82/experimental](#exp-chrome-flags))
 * celes
 * coral
 * cyan
@@ -260,25 +260,27 @@ You can look up the board name in our public [device list].
 * elm
 * eve
 * fizz
-* gandof (R82)
+* gandof ([R82/experimental](#exp-chrome-flags))
 * grunt
+* guado ([R82/experimental](#exp-chrome-flags))
 * hana
 * hatch
 * kalista
 * kefka
 * kevin
-* lulu (R82)
+* lulu ([R82/experimental](#exp-chrome-flags))
 * nami
 * nautilus
 * nocturne
 * oak
 * octopus
-* paine (R82)
+* paine ([R82/experimental](#exp-chrome-flags))
 * pyro
 * rammus
 * reef
 * reks
 * relm
+* rikku ([R82/experimental](#exp-chrome-flags))
 * samus (R81)
 * sand
 * sarien
@@ -287,9 +289,34 @@ You can look up the board name in our public [device list].
 * snappy
 * soraka
 * terra
+* tidus ([R82/experimental](#exp-chrome-flags))
 * ultima
 * wizpig
-* yuna (R82)
+* yuna ([R82/experimental](#exp-chrome-flags))
+
+#### Experimental Flags {#exp-chrome-flags}
+
+We roll out initial support for some devices behind a flag (`chrome://flags`).
+If your device is in such a state, you won't see the "Linux (Beta)" settings
+option until you turn on this flag.
+
+*** note
+**Warning**: This is behind a flag because we're still testing the feature to
+make sure it's stable & ready for wider release, so turning this on yourself
+might lead to system instability.  YMMV.
+***
+
+To turn it on:
+* Go to `chrome://flags` in your browser.
+* Search for `enable-experimental-kernel-vm-support`.
+* Enable the flag.
+* Reboot.
+* Follow the [Quickstart guide](#Quickstart).
+
+If you wish to turn it off:
+* Go to `chrome://flags` in your browser.
+* Click the "Reset all" button to reset all flags back to the default.
+* Reboot.
 
 ### Hardware Requirements
 
