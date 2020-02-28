@@ -176,11 +176,11 @@ Other tricks:
 *   You need `--install` though if you want to deploy the resulting kernel (and
     in that case emerge is equally fast).
 
-### Recover from USB
+### Recover from a bad kernel update
 
 One issue is often to figure out how to recover if you flash a bad kernel.
 Booting from USB and running `chromeos-install` is one solution, but that's
-slow.
+slow. There are a couple approaches that can be useful to recover quickly.
 
 *   Always have a good USB stick connected to the device.
 *   Make sure you use a serial-enabled coreboot firmware.
@@ -209,6 +209,20 @@ slow.
         ```
 
     1.  System should boot from internal storage again
+
+Alternatively flash a known good working image to the device and then use
+update_kernel.sh to target the other kernel partition (typically KERN-B)
+instead of the live kernel partition. Boot the device into the A slot kernel
+(KERN-A) and then run update_kernel.sh like this:
+
+```bash
+(chroot) ./update_kernel.sh --remote=$IP --rootfs=/dev/sda5 --partition=/dev/sda4 --bootonce
+```
+
+The bootloader will attempt to boot the kernel on the sda4 partition (KERN-B)
+and kernel modules will be updated to the sda5 rootfs partition (ROOT-B). If
+the kernel crashes early on then a reboot will fallback to the A slot kernel
+and rootfs that is known to be good and working.
 
 ### Inspect kernel config
 
