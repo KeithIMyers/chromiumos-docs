@@ -280,7 +280,7 @@ Chromium OS repos allow anyone to give Code-Review+1 on [CL]s, but restrict
 access to Code-Review+2 to developers (and partners in specific repos).
 
 For Googlers, if you don't have Code-Review+2 but think you should, check to
-make sure you're listed in a Chrome OS sheriff rotation.
+make sure you're listed in a [Chrome OS sheriff rotation].
 If you're still having troubles, e-mail [chromeos-chatty-eng][Contact].
 
 For partners, raise an issue through your partner contact channels.
@@ -601,6 +601,7 @@ git commit id must be exactly the same).
 
 [Adding Reviewers]: #reviewers
 [Change-Id]: https://gerrit-review.googlesource.com/Documentation/user-changeid.html
+[Chrome OS sheriff rotation]: https://www.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os#TOC-How-do-I-join-or-leave-the-rotation-
 [CL]: glossary.md
 [Contact]: contact.md
 [Contributing Code]: contributing.md#TOC-Legal-stuff
