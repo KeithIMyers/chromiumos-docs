@@ -93,7 +93,7 @@ the policy.
 Please note: *SELinux is only enabled on ARC-enabled boards, or amd64-generic
 based boards.*
 
-1. init loads the selinux policy based on configs in /etc/selinuc/config, and
+1. init loads the selinux policy based on configs in /etc/selinux/config, and
    mounts the selinuxfs to /sys/fs/selinux. init will be assigned with initial
    contexts (kernel).
 
