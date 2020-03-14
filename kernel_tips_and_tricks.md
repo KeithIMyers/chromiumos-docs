@@ -250,13 +250,14 @@ and rootfs that is known to be good and working.
 vi /src/platform/depthcharge/src/board/${board}/board.c
 ```
 
-Add the following function containing your command line addition:
+Call the `commandline_append()` function containing your command line addition:
 
 ```C
-const char *mainboard_commandline(void)
+#include "boot/commandline.h"
+
+static int board_setup(void)
 {
-     /* Make sure there are spaces at the start and end of the string. */
-     return " earlycon=uart,mmio32,0xfedc6000,115200,48000000  ";
+	commandline_append("earlycon=uart,mmio32,0xfedc6000,115200,48000000");
 }
 ```
 
