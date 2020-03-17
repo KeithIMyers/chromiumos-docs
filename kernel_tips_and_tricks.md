@@ -149,6 +149,19 @@ Sometimes gdb is more useful (aarch64, update as needed):
     cat trace
     ```
 
+*   `trace-cmd`, available on test images, provides a nice frontend to the
+    tracing infrstructure. With `trace-cmd`, the above becomes:
+
+    ```bash
+    # 'record' configures ftrace and writes to trace-cmd.dat (default file).
+    trace-cmd record -p function -l 'rt5677*' -l 'mtk_spi_*'
+    # Hit Ctrl^C to stop recording
+    # 'report' formats trace-cmd.dat, dumps to stdout.
+    trace-cmd report
+    ```
+
+    See the [trace-cmd man pages] or the [LWN trace-cmd HOWTO] for more info.
+
 Other tricks:
 
 *   It is also possible to start tracing on boot by adding kernel parameters
@@ -374,3 +387,5 @@ from https://lore.kernel.org/lkml/ instead.
 [kernel_faq]: ./kernel_faq.md
 [UPSTREAM, BACKPORT and FROMLIST]: ./kernel_faq.md#UPSTREAM_BACKPORT_FROMLIST_and-you
 [SSH keys]: http://www.chromium.org/chromium-os/testing/autotest-developer-faq/ssh-test-keys-setup
+[trace-cmd man pages]: http://man7.org/linux/man-pages/man1/trace-cmd.1.html
+[LWN trace-cmd HOWTO]: https://lwn.net/Articles/410200/
