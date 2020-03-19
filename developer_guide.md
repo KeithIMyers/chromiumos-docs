@@ -1886,7 +1886,7 @@ Below are a few links to external sites that you might also find helpful
 [Building Chromium OS]: #Building-Chromium-OS
 [Installing Chromium OS on your Device]: #Installing-Chromium-OS-on-your-Device
 [Making changes to packages whose source code is checked into Chromium OS git repositories]: #Making-changes-to-packages-whose-source-code-is-checked-into-Chromium-OS-git-repositories
-[Making changes to non-cros_workon-able packages]: #Making-changes-to-non-cros_workon-able-packages
+[Making changes to non-cros_workon-able packages]: #Making-changes-to-non_cros_workon_able-packages
 [Using Clang to get better compiler diagnostics]: #Using-Clang-to-get-better-compiler-diagnostics
 [Local Debugging]: #Local-Debugging
 [Remote Debugging]: #Remote-Debugging
