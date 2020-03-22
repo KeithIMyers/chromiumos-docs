@@ -818,7 +818,7 @@ but it won't automatically sync with the rest of the system.
 
 [web-copy-paste]: https://developers.google.com/web/updates/2018/03/clipboardapi#security_and_permissions
 
-### Do I have to manage VM updates?
+### Do I have to manage VM updates? {#faq-manage-vm-updates}
 
 Nope!
 The [Termina] [VM] is a [component] that is updated automatically.
@@ -832,19 +832,29 @@ and look for `cros-termina`.
 
 You can also connect to a [VM] via [vsh] and run `cat /etc/lsb-release`.
 
-### Do I have to manage container updates?
+### Do I have to manage container updates? {#faq-manage-container-updates}
 
 The Google provided packages in the container that communicate with Chrome OS
 or are required for Chrome OS integration will be automatically updated on a
 regular basis.
-This will install any necessary dependencies automatically.
+This will install/upgrade any necessary dependencies automatically.
+
+Package updates due to security fixes will automatically be installed for you.
 
 There is no automatic upgrading of other installed packages in the container.
 We'd rather avoid updating packages that might break programs already installed.
 The container is like any other Linux distro out there, so you'll need to update
 it from time to time if you want newer software.
+But if you're happy with things as they are, and stable is better than shiny,
+then you don't need to worry about ever having to manually manage the system.
 
-You can run `sudo apt-get update && sudo apt-get dist-upgrade`.
+If you're looking for a quick recipe to pull in the latest shiny versions, run
+`sudo apt-get update && sudo apt-get dist-upgrade`.
+
+If you want to control any automatic package updates, edit the file
+`~/.config/cros-garcon.conf`.
+It is automatically installed for new users, and includes documentation inline.
+**Be warned**: disabling automatic updates can break integration with CrOS.
 
 ### Can I use IPv6?
 
