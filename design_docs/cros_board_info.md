@@ -108,6 +108,7 @@ SKU\_ID         | 2   | integer | no     | yes      | ID assigned to each SKU.
 DRAM\_PART\_NUM | 3   | string  | yes    | no       | DRAM part name in ascii characters
 OEM\_NAME       | 4   | string  | yes    | no       | OEM name in ascii characters
 FW\_CONFIG      | 6   | integer | no     | yes      | Bit-field that encodes information that the firmware needs to make decisions on.
+PCB\_SUPPLIER   | 7   | integer | yes    | no       | ID assigned to each PCB manufacturer (per-board)
 
 Sticky fields are those which are set before SMT and preflashed to EEPROMs.
 They're not expected to be changed after boards are manufactured. Non-sticky
@@ -186,6 +187,11 @@ Bits | Features                              | Use
 2    | SARs customization for SoC            | 4 unique SARs customization files. Values are assigned on a per-firmware build basis
 2    | VBT customization for SoC             | 4 unique VBT customization files. Values are assigned on a per-firmware build basis
 1    | Touchscreen enabled for SoC (1b: yes) | AP enables bus and configures GPIOs for touchscreen device
+
+### PCB\_SUPPLIER
+
+This field identifies the printed-circuit-board manufacturer for a device. The
+ID assignment is specific to a board.
 
 ## Hardware
 
