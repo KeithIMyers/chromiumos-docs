@@ -351,12 +351,13 @@ Then run:
 
 ### Submitting patch series by gerrit cmd tool
 
-In CrOS chroot:
+In CrOS chroot (`gerrit deps` prints dependencies from top to bottom, so its
+better to use `tac` so that the bottom-most CL is set to ready first):
 
 ```bash
-gerrit deps ${CL_NUMBER} --raw
-gerrit verify `gerrit deps ${CL\_NUMBER} --raw` 1
-gerrit ready `gerrit deps ${CL\_NUMBER} --raw` 2
+gerrit deps ${CL} --raw | tee deps-${CL}
+gerrit verify `tac deps-${CL}` 1
+gerrit ready `tac deps-${CL}` 2
 ```
 
 ### Downloading a patch from patchwork into IMAP
