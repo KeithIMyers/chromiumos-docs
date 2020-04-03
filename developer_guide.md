@@ -39,7 +39,7 @@ the tasks in sequence. The tasks are grouped into the following sections:
 
 *   **Commands** are shown with different labels to indicate whether they apply
     to (1) your build computer (the computer on which you're doing development),
-    (2) the chroot on your build computer, or (3) your Chromium OS computer (the
+    (2) the [chroot] (Chrome OS SDK) on your build computer, or (3) your Chromium OS computer (the
     device on which you run the images you build):
 
 Label | Commands
