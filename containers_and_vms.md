@@ -2,8 +2,10 @@
 
 Welcome to the containers project where we support running arbitrary code inside
 of [VM]s in Chrome OS.
-This is a heavily-technical document, but more user-friendly information will be
-coming in the future.
+This is a heavily-technical document; for user-friendly information, see
+[The Keyword](https://blog.google/products/chromebooks/linux-on-chromebooks/) &
+[Set up Linux (Beta) on your Chromebook
+documentation](https://support.google.com/chromebook/answer/9145439).
 
 We won't get into technical details for specific projects as each one already
 has relevant documentation.
@@ -97,6 +99,11 @@ See [cros-container-guest-tools] for more details.
 In this flow, the [VM] is named `termina` and the container is `penguin`.
 
 ## Quickstart
+
+*** aside
+See the [official Set up Linux (Beta) on your Chromebook
+documentation](https://support.google.com/chromebook/answer/9145439) too.
+***
 
 Here's a quick run down of how to get started.
 
