@@ -884,7 +884,7 @@ onto it.
 1.  disable software write protect, `flashrom -p [ host | ec ] --wp-status`
     should return disabled
     *   For device with PD you should also check with
-        `flashrom -p ec:dev=1 --wp-status`
+        `flashrom -p ec:type=pd --wp-status`
 1.  boot from USB
     *   change device to dev mode
     *   set `crossystem dev_boot_usb=1`

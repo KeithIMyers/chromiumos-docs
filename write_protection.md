@@ -131,10 +131,8 @@ sure that the write protect range length is not 0.
 *   EC: `flashrom -p ec --wp-status`
 *   Host: `flashrom -p host --wp-status`
 
-If PD (Power Delivery) firmware is present, these additional commands can be
-run:
-*   Samus: `flashrom -p ec:dev=1 --wp-status`
-*   Glados: `flashrom -p ec:type=pd --wp-status`
+If PD (Power Delivery) firmware is present, this additional command can be run:
+*   EC: `flashrom -p ec:type=pd --wp-status`
 
 ## Disabling write protect
 
@@ -175,7 +173,7 @@ enabled.
     is displayed, check if the write protect screw has been removed. Do an
     [EC Reset](#reset-ec).
 *   For devices with PD,
-    *   Samus: `flashrom -p ec:dev=1,block=0x800 -w pd.bin`.
+    *   Samus: `flashrom -p ec:type=pd,block=0x800 -w pd.bin`.
     *   Glados: `flashrom -p ec:type=pd --wp-disable` followed by
     `ectool --name=cros_pd reboot_ec RO at-shutdown` and `reboot`.
 
