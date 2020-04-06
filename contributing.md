@@ -22,10 +22,6 @@ Once that is all set up, you can come back here.
 ### Sign a Contributor License Agreement
 
 Before uploading [CL]s, you'll need to submit a [Contributor License Agreement].
-Review the "Legal stuff" section in [Contributing Code] document for more info.
-
-For Googlers, please see the [internal CLA documentation] for more details,
-especially when working with partners.
 
 ## Commit messages
 
@@ -604,7 +600,6 @@ git commit id must be exactly the same).
 [Chrome OS sheriff rotation]: https://www.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os#TOC-How-do-I-join-or-leave-the-rotation-
 [CL]: glossary.md
 [Contact]: contact.md
-[Contributing Code]: contributing.md#TOC-Legal-stuff
 [Contributor License Agreement]: https://cla.developers.google.com/
 [CQ]: https://dev.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/commit-queue-overview
 [crbug.com]: https://crbug.com/
@@ -613,7 +608,6 @@ git commit id must be exactly the same).
 [Gerrit Guide]: https://dev.chromium.org/chromium-os/developer-guide/gerrit-guide
 [Git & Gerrit Intro]: git_and_gerrit_intro.md
 [Gitiles]: https://gerrit.googlesource.com/gitiles/
-[internal CLA documentation]: https://chrome-internal.googlesource.com/chromeos/docs/+/master/signcla.md
 [issue tracker]: https://developers.google.com/issue-tracker/
 [issuetracker.google.com]: https://issuetracker.google.com/
 [Life of a Patch]: https://source.android.com/setup/contribute/life-of-a-patch
