@@ -448,6 +448,23 @@ Wiki](https://selinuxproject.org/page/TypeRules)
     domain_auto_trans(cros_init, cros_unconfined_exec, chromeos);
     ```
 
+- from_minijail_preload
+
+  - Syntax:
+
+    ```
+    from_minijail_preload(new_domain, exec_type)
+    ```
+
+  - Explanation:
+
+    This covers the common special case of minijail executing a file labelled as
+    `exec_type` and thereby transitioning to `new_domain`.  It is equivalent to
+    `domain_auto_trans(minijail, exec_type, new_domain)`, but makes the
+    intention more obvious.  See
+    [minijail_te_macros](https://chromium.googlesource.com/chromiumos/platform2/+/master/sepolicy/policy/chromeos/minijail_te_macros)
+    for more minijail-specific macros.
+
 ### Naming Conventions
 
 Chrome OS policies will be combined with Android policy before compiling into
