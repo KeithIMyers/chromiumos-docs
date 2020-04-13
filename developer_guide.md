@@ -1128,13 +1128,14 @@ not a `cros_workon`-able package), you need to do the following:
 
 First, find the package ebuild file under `third_party/chromiumos-overlay`.
 
-Then, create a patch file from the exact version of the package that is used by
-the current ebuild. If other patches are already in the ebuild, you'll want to
-add your patch LAST, and build the patch off of the source that has already had
-the existing patches applied (either do it by hand, or set `FEATURES=noclean`
-and build your patch off of the temp source). Note that patch order is
-significant, since the ebuild expects each patch line number to be accurate
-after the previous patch is applied.
+Then, [create a patch file](portage/how_to_patch_an_ebuild.md) from the exact
+version of the package that is used by the current ebuild. If other patches
+are already in the ebuild, you'll want to add your patch LAST, and build the
+patch off of the source that has already had the existing patches applied
+(either do it by hand, or set `FEATURES=noclean` and build your patch off of
+the temp source). Note that patch order is significant, since the ebuild
+expects each patch line number to be accurate after the previous patch is
+applied.
 
 Place your patch in the "files" subdir of the directory that contains the ebuild
 file
