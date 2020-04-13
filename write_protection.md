@@ -186,13 +186,24 @@ Hardware write protect can be controlled by 3 different mechanisms:
 *   Cr50 firmware, when present, and
 *   A pin on the servo header, when present
 
+#### Write Protect Screw
+
 For systems with a write-protect screw:
 *   Power down the device and open the case
 *   Insert the write protect screw on the motherboard.
 *   Restart the device
 *   `crossystem wpsw_cur` should now output `1`
 
-For systems that use cr50:
+#### cr50
+
+For systems that use cr50, you can control it on the device itself:
+*   Run `gsctool -a --wp` to check the current system (look for "Flash WP").
+*   If CCD factory mode was enabled, run `gsctool -a -F` to enable WP protect.
+    *    This command will fail if factory mode is not enabled.
+*   See also the internal
+    [crosops docs](https://support.google.com/crosops/answer/9790616).
+
+Or you can control it with a suzyQ:
 *   Use [Servo] to connect to the cr50 console
     *   Enter the chroot with `cros_sdk --no-ns-pid`
     *   Ensure servod is running with `sudo servod &` if necessary.
@@ -200,6 +211,8 @@ For systems that use cr50:
     *   Connect to that console with minicom, cu, or screen.
 *   Perform the ["CCD open"] process to enable functionality.
     *    Run `wp enable` or `wp follow_batt_pres` on the [Cr50 console].
+
+#### servo header
 
 For systems with a servo header:
 *   Enter the chroot with `cros_sdk --no-ns-pid`
