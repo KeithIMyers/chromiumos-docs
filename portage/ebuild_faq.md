@@ -24,51 +24,42 @@ Good Gentoo Documentation:
 
 ## How does the cross compiling setup work?
 
-*** promo
-TODO: this section needs to be aimed more at portage / Chromium OS newbie level.
-***
+The chroot is used for cross-compiling. Portage, the chroot’s package
+management system, is designed to compile packages from source and install the
+resulting binaries into a root directory. Unlike Debian, where build rules are
+found only in source code, Portage keeps build instructions in dedicated files
+called ebuilds.
 
-Running `make_chroot` sets up a standard Portage build environment and installs
-some build dependencies. The portage tree contains build recipes (called
-ebuilds) for packages. Unlike Debian where the build rules live in the source
-code, the portage approach is to keep build instructions separate from source
-code in the portage tree. We use the `chromiumos_overlay` to keep new ebuilds
-and changes to existing ebuilds separate from the upstream source.
+In our chroot, Portage installs packages into multiple directories:
 
-Portage is designed to compile packages from source and install them into a root
-directory. We take advantage of this to make a distinction between `host` and
-our `target` when building. For the host, the root directory where things get
-installed is `/`, for a given target board this is `/build/<board_name>`. You
-can think of each as a mini Linux system, although they start off with hardly
-any packages installed.
+* `/` for the SDK/chroot itself
+* `/build/<board_name>` (aka sysroots) for a target board
 
-In order to cross-compile, you need some tools that are run on the host in order
-to build individual packages. When we set up the system, we install the
-`virtual/target-chromium-os-sdk` package to cover these. When additional host
-tools are needed we can update the package and re-merge it on the host, which
-will pull in any new tools that are needed -- the `build_packages` script does
-this automatically. Notice that since we are updating the host, we use the
-standard `emerge` command that installs packages at the root and uses the host's
-configuration:
+To cross-compile, the SDK requires special tools which are installed via the
+`virtual/target-chromium-os-sdk` package. When additional tools are needed,
+this package can be upgraded and re-merged. The `build_packages` script ensures
+that re-merging will add required tools automatically. Notice that since we are
+updating the chroot/host, we use the standard `emerge` command that installs
+packages at the root and uses the host's configuration:
 
 ```bash
 sudo emerge -a virtual/target-chromium-os-sdk
 ```
 
-We set up a new sysroot per target board that we want to cross compile for.
-First we make sure that the desired toolchain is installed on the host and set
-up `--sysroot` wrappers for the toolchain binaries that set the sysroot on
-compile. We use the toolchain headers and libraries to bootstrap the board
-target sysroot in `/build/<board_name>`. When we set up the board, we can
-optionally set up a Portage overlay for that individual board. This allows us to
-customize or add packages on a per-board basis. The board overlay can also
-include a `make.conf` that overrides some of our defaults such as compiler
-`CFLAGS`.
+Each target board requires a distinct sysroot. First, we ensure the host has
+the necessary toolchain installed and then we set up sysroot wrappers for the
+toolchain binaries that set the sysroot location during compilation. We use the
+toolchain headers and libraries to bootstrap the board target sysroot in
+`/build/<board_name>`. When we set up a sysroot for a board, we select an
+overlay corresponding to that board and link it in to the sysroot. This allows
+us to customize or add packages & configuration on a per-board basis. The board
+overlay can also include a `make.conf` that overrides some default settings
+such as compiler `CFLAGS`.
 
-When cross-compiling, you also need packages that correspond to the target, such
-as header files and libraries. Our strategy is to install them in the target's
-root using the `--root-deps` option. These are only used for compilation and
-will not be placed into images that are built via `build_image`.
+When cross-compiling, you also need packages that correspond to the target,
+such as header files and libraries. All build-time dependencies for a target
+are installed in to that target's sysroot. These are only used for compilation
+and will not be placed into images that are built via `build_image`.
 
 Once a board is set up, we can start building packages for the board target. We
 use the board target specific version of emerge to do this.
