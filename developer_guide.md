@@ -1203,10 +1203,10 @@ e.g.
 ```
 
 Within the chroot, you'll also need to either start working on the
-`chromeos-chrome` package:
+`chromeos-chrome` and `chrome-icu` packages:
 
 ```bash
-(inside) cros_workon --board=${BOARD} start chromeos-chrome
+(inside) cros_workon --board=${BOARD} start chromeos-chrome chrome-icu
 ```
 
 or set the `CHROME_ORIGIN` environment variable appropriately:
