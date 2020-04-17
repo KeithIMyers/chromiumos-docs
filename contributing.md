@@ -119,7 +119,12 @@ vs none at all.
 *   Specify dependencies in the last paragraph of your change, just before
     `Change-Id:`, using `Cq-Depend: chromium:12345`.
 *   Each dependency should start with a Gerrit instance prefix followed by a
-    number (the [Gerrit][CL] number on the server) or a [Change-Id].
+    number (the [Gerrit][CL] number on the server).
+    *   Specifically it should be noted that there is no way currently to
+        express `Cq-Depend` by referencing another patch's [Change-Id].  If
+        you are trying to express circular dependencies that means the only
+        way to do it is to upload at least one of your patches twice because
+        you need gerrit to assign a CL number before you can reference it.
 *   You may specify multiple dependencies. Each dependency should be separated
     with a comma and a space (e.g. `Cq-Depend: chromium:12345,
     chrome-internal:4321`).
