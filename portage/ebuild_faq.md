@@ -1,19 +1,26 @@
 # Ebuild FAQ
 
+
+This document aims to answer common questions about building packages used in
+developing Chromium OS.
+
+The CrOS SDK chroot environment uses the [Portage] package management system.
+Portage, from the Gentoo Linux distribution, consists of two main components:
+the tree of ebuild overlays and `emerge`. The ebuild system is a tree of bash
+scripts (ebuilds) that contain build instructions responsible for building and
+installing packages. Emerge is the user interface to interacting with ebuilds.
+
+Portage via the CrOS SDK chroot enables the creation of different
+cross-compilation environments which are used to build system images for
+Chromebooks.
+
+Good Gentoo Documentation:
+
+* [Working with Gentoo]
+* [Gentoo Development Guide]
+
+
 [TOC]
-
-## Introduction
-
-*** promo
-TODO: Needs an introduction that someone who's a bit more of a newbie can
-understand.
-***
-
-Good Gentoo documentation:
-
-[Working with Gentoo]
-
-[Gentoo Development Guide]
 
 ## How does the cross compiling setup work?
 
@@ -1036,6 +1043,7 @@ is a good writeup describing Gentoo ebuild system.
 Instructions for building Chromium OS can be found
 [here][chromium-os-dev-guide].
 
+[Portage]: https://wiki.gentoo.org/wiki/Portage
 [Working with Gentoo]: https://www.gentoo.org/doc/en/handbook/handbook-x86.xml?part=2
 [Gentoo Development Guide]: https://devmanual.gentoo.org/
 [Portage]: https://wiki.gentoo.org/wiki/Portage
