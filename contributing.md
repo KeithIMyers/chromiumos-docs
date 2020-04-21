@@ -151,7 +151,11 @@ Change-Id: I8d7f86d716f1da76f4c85259f401c3ccc9a031ff
 
 ### Signed-off-by
 
-A limited number of projects, such as Linux Kernel and Coreboot, require
+The majority of, but not all, projects in CrOS do not use `Signed-off-by` tags.
+They do not serve any function in general since we require everyone to sign a
+[Contributor License Agreement] before uploading CLs.
+
+A limited number of projects, such as Linux Kernel, EC, and Coreboot, require
 a `Signed-off-by: Random J Developer <random@developer.example.org>` line in
 the commit message.
 Please follow the rules defined by that project when adding this line.
