@@ -23,6 +23,52 @@ Once that is all set up, you can come back here.
 
 Before uploading [CL]s, you'll need to submit a [Contributor License Agreement].
 
+## Policies {#policies}
+
+CrOS uses code review systems to try and improve changes and catch bugs/problems
+before they're ever merged, but we also have some strict policies that underlie
+the system, and for good reason.
+Some of these polices are not enforced by the system, so we rely on developers
+to be aware of these and make sure they abide by them until we can get more
+automation in place.
+
+Keep the following high level principles in mind.
+They are meant to guide developers to the spirit of the review/approval system,
+not necessarily provide the full rule set.
+That means we expect everyone to try align (and even do better!) than what we
+outline here, not try and find loopholes that haven't been explicitly banned.
+
+*   Every change should have a reason, which is appropriately documented.
+    ([Write good commit messages](#Commit-messages)!)
+*   All changes should be agreed upon by two trusted persons (i.e. Googlers).
+    *   Authors, if they are trusted, count as one.
+    *   Upstream developers, even if you personally know them, do not count.
+    *   Automatic processes may count towards this requirement if the
+        infrastructure is maintained by the infra team, and the projects being
+        imported automatically have policies adhering to these principles.
+        *   If the projects are themselves Google managed and follow this same
+            two party approval system, we can allow automatic merging into our
+            project.  For example, Chromium commits.
+        *   If the projects are external 3rd party projects, then the creation
+            of automatic merge CLs are allowed, but will require one trusted
+            person to review+approve them.  For example, most GitHub projects.
+    *   NB: We currently allow 1 trusted person to approve, as long as that
+        person is not the author.
+*   Google & CrOS process a lot of user data that we must keep secure, and as
+    such, makes us targets by a wide range of potential attackers.
+    We need to protect our systems not only from obvious "bad actors", but
+    also from [insider threats].
+    You shouldn't assume your peers are malicious, obviously, but we need to
+    make sure we design things such that we are resilient even if they were.
+
+Any code that ends up in a build signed with production keys, or code in
+services that facilitate the creation of that build, must abide by these rules.
+
+See the [FAQ] below for some concrete questions.
+
+Googlers should also see https://goto.google.com/change-management-policy for a
+lot more in-depth detail & company wide policies that CrOS is subject to.
+
 ## Commit messages
 
 For general documentation for how to write git commit messages, check out
@@ -607,7 +653,95 @@ Be extra aware of the caveat for how this works as noted in the section above:
 the commits you downloaded and are basing things on must not change (i.e. their
 git commit id must be exactly the same).
 
+## FAQ
+
+### Do I have to upload every single upstream commit for individual code review?
+
+Certainly not!
+
+If you create a merge commit, that single CL is the only thing that needs to be
+uploaded & approved during code review.
+It is the reviewers responsibility to validate the changes pulled in via that
+merge commit using whatever means is appropriate, and the approval of the merge
+commit applies transitively to all of its children.
+
+This would also apply to requesting a new branch be created from a specific
+starting point -- getting it into the overall build would require code review
+at some point (e.g. updating ebuilds or repo manifests), and those approvals
+would implicitly apply to the new source history being pulled in.
+
+### Do I have to review every commit going into upstream 3rd party releases?
+
+While that would be great, it is definitely not required by our [Policies].
+Like merge commits or branch creation, the approval of the version bump of a
+package (e.g. ebuild) is sufficient to cover the entire codebase in one go.
+
+### What about binary firmwares from partners?
+
+While we might request 3rd party audits/reviews of firmware source, we do not
+need to approve the code directly ourselves.
+Just like the questions above, the CL that integrates that firmware into our
+build will undergo review+approval, and that satisifies our [Policies].
+
+Reviewers are still responsible for verifying the integrity & provenance of the
+binary, as well as the trust of the organization/partner providing it.
+
+### What about artifacts uploaded to our GS mirrors?
+
+The act of uploading files to our [archive mirrors] does not require any review
+(any CrOS dev can update these files directly), but simply uploading them there
+does not get them into production.
+A commit to an ebuild/Manifest file is still required to go through review, and
+it is the responsibility of reviewers at that time to check the source files.
+
+If you're worried about people modifying files on the mirrors and bypassing all
+of our reviews, worry not!
+The [archive mirrors] FAQ has a section specifically documenting security risks
+and how we prevent them.
+
+### Can I push directly to git repositories?
+
+The answer is almost always no.
+Consistent with our [Policies], all code that ends up in a signed build must
+undergo code review & approval before being merged.
+If you were able to push directly to a git repository, you would be able to
+bypass those requirements, and thus be able to push whatever changes you want
+without anyone noticing.
+
+If you have a repository that is not used in any way to produce a signed build,
+then you might be granted direct push access.
+This is exceedingly uncommon though; see the next question.
+
+### What about git repositories marked 'notdefault' in the repo manifest?
+
+If your `<project>` is marked with `groups=notdefault`, then we might allow
+direct access to the git repository.
+Keep in mind that any source that is used in signed builds/production must
+be kept secure even if it isn't directly part of a device build.
+
+For example, projects that have a CI pipeline independent of the main CrOS CQ
+and produce release artifacts that go into signed components -- they might not
+be in our manifest, but they still must follow our [Policies].
+
+### Can I rewrite repository history?
+
+The answer is largely the same as "can I push directly to git repositories":
+if the source code is used in signed builds, then history must be kept forever.
+
+If your development process plans on rewriting history regularly, then it might
+not be a good design, and you should strongly rethink your approach.
+
+### What about images not automatically released to users?
+
+Our [Policies] do not differentiate between intended target audiences.
+That is to say, we protect the artifacts that are signed by production keys.
+Trying to do "internal-only" production signed builds does not work as we have
+no way of enforcing those builds are never used or leaked externally, and this
+wouldn't protect from [insider threats].
+
+
 [Adding Reviewers]: #reviewers
+[archive mirrors]: archive_mirrors.md
 [Change-Id]: https://gerrit-review.googlesource.com/Documentation/user-changeid.html
 [Chrome OS sheriff rotation]: https://www.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os#TOC-How-do-I-join-or-leave-the-rotation-
 [CL]: glossary.md
@@ -616,13 +750,16 @@ git commit id must be exactly the same).
 [CQ]: https://dev.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/commit-queue-overview
 [crbug.com]: https://crbug.com/
 [Developer Guide]: developer_guide.md
+[FAQ]: #faq
 [Gerrit]: https://gerrit-review.googlesource.com/Documentation/
 [Gerrit Guide]: https://dev.chromium.org/chromium-os/developer-guide/gerrit-guide
 [Git & Gerrit Intro]: git_and_gerrit_intro.md
 [Gitiles]: https://gerrit.googlesource.com/gitiles/
+[insider threats]: https://en.wikipedia.org/wiki/Insider_threat
 [issue tracker]: https://developers.google.com/issue-tracker/
 [issuetracker.google.com]: https://issuetracker.google.com/
 [Life of a Patch]: https://source.android.com/setup/contribute/life-of-a-patch
+[Policies]: #policies
 [unittests]: testing/unit_tests.md
 [Uploading Changes]: https://gerrit-review.googlesource.com/Documentation/user-upload.html
 [Work-in-Progress (WIP)]: https://gerrit-review.googlesource.com/Documentation/intro-user.html#wip
