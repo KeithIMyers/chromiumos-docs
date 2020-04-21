@@ -162,7 +162,27 @@ Please follow the rules defined by that project when adding this line.
 This line can be added automatically by specifying the `--signoff`
 option when committing.
 
+When using `repo upload`, the tool will automatically check the project's
+configuration and then require or reject the tag accordingly.
+
 ## Upload changes
+
+*** note
+Please do not use `git push` or `git cl upload` when developing in CrOS.
+That bypasses our preupload hooks that run automatically via `repo upload`
+which makes it easy to accidentally introduce breakage to the tree.
+You might not notice the problem when you always ignore the hooks, but that
+breakage affects every other developer using the proper tooling.
+
+Similarly, never use the `--no-verify` option.  If you find preupload checks
+hooks are causing problems or are broken, you should file a bug so that they
+can be fixed (or disabled) as makes sense.
+You can use `--ignore-hooks` to still upload even if the hooks fail, but you
+must review the output to make sure your CLs are not adding more breakage.
+
+Mistakes have a network effect on your fellow developers and can significantly
+slow them down.
+***
 
 Once your changes are committed locally, you upload them using `repo upload`.
 This command takes all of the changes that are unmerged, runs preupload checks
