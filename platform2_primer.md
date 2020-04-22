@@ -110,10 +110,7 @@ of a `USE` flag at the time of build. This is useful, for example, if
 certain targets must only be built if a certain feature (controlled by a
 `USE` flag) is enabled.
 
-* Make sure the `USE` flag is listed in the `${package_name}-9999.ebuild`
-  in `IUSE`.
-* Add the `USE` flag to `src/platform2/common-mk/use.gni`.
-* `USE_flagname` may now be used in the package's GN file.
+See the instructions in [GN in ChromeOS](https://chromium.googlesource.com/chromiumos/docs/+/refs/heads/master/chromeos_gn.md#how-to-check-use-flags-in-gn).
 
 ## Rapid development
 
@@ -182,9 +179,11 @@ For more information, consult the [upstream gtest documentation].
 
 ## Further reading
 
+* [GN in ChromeOS] further describes using GN
 * [GN] on Google Git
 * (internal) Introduction to GN tech talk [GN video]/[GN slides]
 
+[GN in ChromeOS]: https://chromium.googlesource.com/chromiumos/docs/+/refs/heads/master/chromeos_gn.md
 [GN]: https://gn.googlesource.com/gn/
 [GN video]: https://goto.google.com/gn-intro-tech-talk
 [GN slides]: https://goto.google.com/gn-intro-slides
