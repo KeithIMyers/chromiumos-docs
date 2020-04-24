@@ -51,6 +51,14 @@ keyboard attached.
     *   From here, follow the instructions at
         https://google.com/chromeos/recovery to recover your device using
         external media.
+
+*   **Recovery mode**: Engage the small `Reset` pinhole with a paperclip,
+    hit `Power` and continue engaging `Reset` for 2 seconds. Typically (only?)
+    for chromeboxes with a QWERTY keyboard attached.
+    *   From here, follow the instructions at
+        https://google.com/chromeos/recovery to recover your device using
+        external media.
+
 *   **Developer mode**: To enter [Developer Mode], first enter recovery mode,
     then press `Ctrl + D`, followed by `Enter` to accept.
     *   Note that [Developer Mode] disables security features and may leave your
