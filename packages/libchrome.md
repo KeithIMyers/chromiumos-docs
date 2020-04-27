@@ -513,6 +513,34 @@ libbase shared libraries. One of the advantages of using shared libraries
 is that all of the non-writable sections (like .text) get shared between
 processes, and that's defeated in part by multiple active libbase versions.
 
+## Making changes locally
+
+*   **NOTE**: This is intended for testing *local* changes only, not for changes
+intended to be committed (e.g. a patch or a cherry-pick).
+
+*   **NOTE**: If the interface (ABI) is changed in any way, the entire image
+will need to be rebuilt.
+
+To make local changes (for testing an update or adding debugging) you can do
+the following.
+
+1.  Create a local branch in the libchrome repository.
+    *   `cd src/aosp/external/libchrome`
+    *   `repo start ${branch_name}`
+1.  Locally modify the files, and create a local comit.
+    *   `git commit -am "libchrome: {change description}"`
+1.  Find the git commit hash
+    *   `git log -n 1`
+1.  Update the libchrome ebuild with the new hash
+    *   Edit `src/third_party/chromiumos-overlay/chromeos-base/libchrome/libchrome-${version}.ebuild`
+        *   There should only be one ebuild file in the directory and a
+            -rXX.ebuild link to it.
+    *   Change the second entry in `CROS_WORKON_COMMIT` to the new hash.
+        *   The first entry is for platform2, the second is for libchrome.
+1.  Build and deploy libchrome
+    *   `emerge-${BOARD} libchrome {plus dependent workon packages, e.g. shill}`
+    *   `cros deploy ${IP} libchrome {other packages}`
+
 ## See also
 
 [libbase] on Google Git
