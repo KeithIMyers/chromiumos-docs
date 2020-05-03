@@ -15,7 +15,7 @@ boundaries are considered critical:
 
 *   Verified boot (any attack that persists across reboot)
 *   User isolation. One user being able to exploit another user or
-    access the encrypted data of another user (i.e. [crbug.com/764540])
+    access the encrypted data of another user (e.g. [crbug.com/764540])
 *   Native code execution via a remote vector
 *   Kernel code execution via a remote vector
 *   A lock screen bypass from the lock screen
@@ -24,17 +24,22 @@ They are normally assigned priority **Pri-0** and assigned to the current
 stable milestone (or earliest milestone affected). For critical severity
 bugs, [SheriffBot] will automatically assign the milestone.
 
-> For critical vulnerabilities, we aim to deploy the patch to all
-> Chrome OS users in under 30 days.
+> For critical vulnerabilities in the Chrome browser, we aim to release a fix
+> no later than seven days after the vulnerability is fixed in the Chrome
+> desktop stable channel.
+> For all other critical vulnerabilities, we aim release a fix in under 14 days.
 
 Critical vulnerability details may be made public in 60 days,
-in accordance with Google's general
-[vulnerability disclosure recommendations], or [faster (7 days)],
-if there is evidence of active exploitation.
+in accordance with Google's general [vulnerability disclosure recommendations],
+or [faster (7 days)], if there is evidence of active exploitation.
 
 A typical type of critical vulnerability on Chrome OS is
 an exploit chain comprising individual bugs that allows
-persistent root access on a machine, even in guest mode ([766253]).
+persistent root access on a machine, even in guest mode ([crbug.com/766253]).
+
+For a critical severity exploit chain, releasing a fix that *breaks the chain*,
+that is, a fix that resolves one of the links in the exploit chain, is enough
+to consider the exploit chain fixed in the stable channel.
 
 Note that the individual bugs that make up the chain will have lower
 severity ratings.
@@ -60,15 +65,18 @@ allows kernel code execution from root (or a regular user) would be rated
 High severity. The bug that allows for exploit persistence given root
 access would be rated High severity as well.
 
-In general, these are the layers of protection whose bypasses we consider
-High-severity bugs:
+In general, these are the bypasses we consider High-severity bugs:
 
-*   Native code execution in a renderer process
-*   Browser process/`chronos` user code execution
-*   Root (or other more privileged user, such as system service users)
-    code execution
-*   Code execution in the kernel that requires local privileges to exploit
-*   Persistent code execution
+*   Javascript (or other web technology, like SVG) to native code execution in a
+    renderer process
+*   Renderer native code execution to browser process/`chronos` user code
+    execution
+*   `chronos`/unprivileged user native code execution to `root` (or other more
+    privileged user, such as system service users) code execution
+*   Code execution in the kernel that requires local privileges to exploit (i.e.
+    local kernel privilege escalation)
+*   Persistent code execution (turning a transient compromise into one that
+    survives a reboot)
 
 Full chain exploits don't always need to break all these layers. For example,
 most persistent exploitation chains don't need a kernel bug.
@@ -77,8 +85,7 @@ They are normally assigned priority **Pri-1** and assigned to the current
 stable milestone (or earliest milestone affected). For high severity bugs,
 [SheriffBot] will automatically assign the milestone.
 
-For high severity vulnerabilities, we aim to deploy the patch to all Chrome
-users in under 60 days.
+> For high severity vulnerabilities, we aim to release a fix in under 30 days.
 
 ## Medium Severity
 
@@ -146,6 +153,6 @@ These bugs are often:
 [SheriffBot]: https://www.chromium.org/issue-tracking/autotriage
 [vulnerability disclosure recommendations]: https://security.googleblog.com/2010/07/rebooting-responsible-disclosure-focus.html
 [faster (7 days)]: https://security.googleblog.com/2013/05/disclosure-timeline-for-vulnerabilities.html
-[766253]: https://bugs.chromium.org/p/chromium/issues/detail?id=766253
+[crbug.com/766253]: https://bugs.chromium.org/p/chromium/issues/detail?id=766253
 [Chromium Security FAQ]: https://chromium.googlesource.com/chromium/src/+/master/docs/security/faq.md#TOC-Are-denial-of-service-issues-considered-security-bugs-
 [crbug.com/795434]: https://bugs.chromium.org/p/chromium/issues/detail?id=795434
