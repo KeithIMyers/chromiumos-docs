@@ -102,8 +102,15 @@ Entering the Simple Chrome environment does the following:
 *   `--nogn-gen` Do not run 'gn gen' automatically. Use this option to persist
     changes made to a previous session's gn args.
 
-**Chrome OS developers**: Please set `dcheck_always_on=true` and file bugs if
-you encounter any DCHECK crashes.
+**Chrome OS developers**
+
+Use the following command:
+```
+(shell) cros chrome-sdk --internal --board=$BOARD --log-level=info
+```
+
+*Optional*: Please help development by setting `dcheck_always_on=true` and filing
+bugs if you encounter any DCHECK crashes:
 ```
 (shell) cros chrome-sdk --internal --board=$BOARD --log-level=info --gn-extra-args='dcheck_always_on=true'
 ```
