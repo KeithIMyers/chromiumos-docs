@@ -173,7 +173,8 @@ A bit field that tracks the different permutations of HW that the firmware needs
 to be able to handle. The FW\_CONFIG only contains the information that the
 firmware strictly needs to make a branching decision. Any other information
 about a device should be captured and stored in the higher level configuration
-system.
+system. See [SKU and FW Configuration Fields](./firmware_config.md) for more
+details.
 
 Below are a few, non-exhaustive examples of how the firmware configuration bits
 could be portioned.
