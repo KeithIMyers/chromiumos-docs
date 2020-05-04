@@ -553,6 +553,10 @@ Update the kernel on the target:
 ```
 
 *** note
+Note: [cros deploy] does not currently support deploying kernel packages.
+***
+
+*** note
 Note that using `cros_workon_make` leaves build artifacts in your source
 directory under the `build` directory. When you do a regular emerge of the
 kernel (and are `cros_workon`-ed) this will slow things down because the
@@ -1389,6 +1393,7 @@ consuming, in many cases it will allow to test kernel modifications much faster
 and easier than the ways described below.
 
 [fromupstream.py]: https://chromium.googlesource.com/chromiumos/platform/dev-util/+/master/contrib/fromupstream.py
+[cros deploy]: https://dev.chromium.org/chromium-os/build/cros-deploy
 [Dynamic Debug]: https://www.kernel.org/doc/html/v4.19/admin-guide/dynamic-debug-howto.html
 [dynamic debug is disabled on Chrome OS]: https://crbug.com/188825
 [network based development]: http://www.chromium.org/chromium-os/how-tos-and-troubleshooting/network-based-development
