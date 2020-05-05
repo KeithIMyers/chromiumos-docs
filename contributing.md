@@ -335,21 +335,6 @@ Further, if someone adds Code-Review-2 or Verified-1, the [CQ] will ignore it.
 More details on the Commit Queue can be found in the [Commit Queue
 Overview][CQ].
 
-### Pre-Commit Queue (Pre-CQ)
-
-The Pre-CQ runs a reduced set of tests against a [CL] before going to the [CQ].
-The goal is to get quicker feedback by running compile & [unittests] (and some
-VM tests) against the [CL] in isolation.
-If a [CL] fails the Pre-CQ, it's a pretty good signal the [CL] is buggy.
-
-The Pre-CQ is triggered automatically when your [CL] is marked Code-Review+2.
-You can trigger this earlier by adding the Commit-Queue +1 label yourself. If
-the Pre-CQ passes, it will not be required again before the [CQ] runs.
-
-Setting CQ+1 (Dry run) is intended just for getting the Pre-CQ to test the [CL].
-
-More details on the Pre-CQ can be found in the [Commit Queue Overview][CQ].
-
 ### Merge conflicts
 
 It is possible that your change will be rejected because of a merge conflict.
@@ -383,10 +368,7 @@ If something did go wrong, the [CQ] will post details of the run.
 This will often include a lot of logs that you're expected to go through and
 make sure the failure wasn't due to your [CL].
 
-If you're confident your [CL] was not at fault, simply add Commit-Queue+1 again.
-
-Often times the [CQ] and sheriffs will triage a failed [CQ] run and mark all the
-unrelated [CL]s are Commit-Queue+1 again for you.
+If you're confident your [CL] was not at fault, simply add Commit-Queue+2 again.
 
 If you're still unsure, feel free to reach out to the sheriffs or reviewers.
 
