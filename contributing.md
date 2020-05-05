@@ -570,7 +570,7 @@ Here's the process:
     *   Any changes that haven't yet been merged will be run through the set of
         pre-upload hooks even if you didn't author them.
         If you've verified that your CL passes the hooks, you can use the
-        `--no-verify` flag to bypass the checks.
+        `--ignore-hooks` flag to bypass the checks.
         *Use with care.*
 1.  Once you're all done, you can delete the temporary branch.
     1.   Run `repo abandon change-1234 .` to delete & detach.

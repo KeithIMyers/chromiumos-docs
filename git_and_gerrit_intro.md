@@ -171,7 +171,7 @@ When asked whether to run the checks, enter `yes`. If the checks find any
 problems, they will tell you about them and the change will not be uploaded.
 Once you've fixed them you can run the command again. Sometimes it will warn
 about things that can't be fixed given the circumstances, in which case add
-`--no-verify` to the command (though you should probably amend your commit
+`--ignore-hooks` to the command (though you should probably amend your commit
 message to explain why).
 
 #### Adding reviewers
