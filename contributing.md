@@ -559,25 +559,12 @@ Follow the extra history download step to resolve that.
 Here's the process:
 
 1.  Go to your CL in Gerrit.
-1.  *If you need to download the history first*
+1.  Create a temporary branch in the exact state as the CL.
     1.  Click the ⋮ menu.
     1.  Select "Download patch" section.
-    1.  Copy the "Checkout" code snippet.
-    1.  Run that in your local git checkout.
-    1.  Git will warn you about being in a "detached HEAD" state, but don't
-        worry about it.  The steps below will fix things.
-1.  Get the parent commit id of the latest PS.
-    1.  Look for the "Parent" entry in the summary section in the upper left.
-    1.  Click the copy button next to it.
-1.  In your local checkout, create a new temporary branch.
-    *   e.g. `repo start foo`
-1.  Reset that branch to the parent commit copied earlier.
-    *   This will throw away any history in the branch which is why you want to
-        create a temporary branch.
-    *   e.g. `git reset --hard <parent commit id>`
-1.  Cherry pick the updated commit from your other local branch.
-    *   This will be the change you want to upload.
-    *   e.g. `git cherry-pick <commit id>`
+    1.  Click the "REPO" tab next to the "HTTP" tab.
+    1.  Copy the "Branch" code snippet.
+    1.  Run the `repo download ...` command in your local git checkout.
 1.  Make any last changes you want before uploading it like normal.
     *   e.g. `repo upload --cbr .`
     *   Any changes that haven't yet been merged will be run through the set of
@@ -586,8 +573,7 @@ Here's the process:
         `--no-verify` flag to bypass the checks.
         *Use with care.*
 1.  Once you're all done, you can delete the temporary branch.
-    1.   Switch back to your normal branch using `git checkout <branch>`.
-    1.   Delete the branch using `repo abandon foo .`.
+    1.   Run `repo abandon change-1234 .` to delete & detach.
 
 The key to this process is that the commits you're building on top of have not
 changed since they were uploaded to Gerrit.
