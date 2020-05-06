@@ -532,10 +532,6 @@ from the same checkout that you will be working in here, and that the git object
 directory hasn't been garbage collected.
 Or that the parent commit is one that's been merged into the tree already.
 This is the most common flow, so it's normally OK.
-
-However, if the `git reset` command below fails because it couldn't locate the
-commit you specified, you'll have to manually download the history.
-Follow the extra history download step to resolve that.
 ***
 
 Here's the process:
@@ -561,8 +557,8 @@ The key to this process is that the commits you're building on top of have not
 changed since they were uploaded to Gerrit.
 Gerrit defines "changed" as "has new commit id", not "the diff & commit message
 are the same".
-That is why we got the exact commit id above and used `git reset` to make sure
-the local tree state matched it exactly.
+That is why we used `repo download` above to pull down the exact CL and its
+commit state to make sure the local tree state matched it exactly.
 If you have multiple unmerged commits in this branch (e.g. a patch series), and
 they get rebased (e.g. you ran `git rebase` or `repo sync` rebased for you),
 then uploading changes from that branch will update all the CLs in Gerrit (which
