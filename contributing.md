@@ -464,6 +464,32 @@ $ project_url="https://chromium.googlesource.com/$(git config remote.cros.projec
 $ git push $project_url :refs/sandbox/${USER}/${BRANCH_NAME}
 ```
 
+### Gerrit sandbox access {#sandbox-acl}
+
+Write access to the sandbox namespace is restricted to contributors & partners.
+We don't allow any registered user to push to prevent spam.
+
+If you don't have access but you're working on the CrOS project and it would
+help to easily share in-progress changes, please contact whatever Googlers you
+are currently working with.
+Any of them should have access to add your specific account.
+
+Note that we already add:
+
+*   All Googlers
+*   All "Chrome OS Approvers" (people who have CR+2 access)
+*   All "Chrome OS Committers" which is a large umbrella group of CrOS friends
+*   (chrome-internal only) All Chrome OS partners
+
+You can double check your access by visiting your
+[settings page](https://chromium-review.googlesource.com/settings/#Groups).
+Look for `chromeos-gerrit-sandbox-access` there.
+
+If you still need to be added, here are the groups on the servers to update:
+
+*   https://chromium-review.googlesource.com/admin/groups/chromeos-gerrit-sandbox-access
+*   https://chrome-internal-review.googlesource.com/admin/groups/chromeos-gerrit-sandbox-access
+
 ### Switch back to master/ToT
 
 While you're working on your changes, you might want to go back to the mainline
