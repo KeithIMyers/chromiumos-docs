@@ -269,7 +269,7 @@ out_$SDK_BOARD/Release
 
 To run a Tast test:
 ```bash
-(sdk) .../chrome/src $ cros_run_test --cmd -- local_test_runner ui.ChromeLogin
+(sdk) .../chrome/src $ cros_run_test --tast ui.ChromeLogin
 ```
 
 To build and run an arbitrary test (e.g. `base_unittests`):
