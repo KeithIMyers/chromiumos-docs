@@ -56,6 +56,20 @@ The commit message should start with **CHROMIUM: config:**
 
 An example message is: **CHROMIUM: config: enable aebl config**
 
+## How do I build an upstream kernel?
+
+There are various ways of building mainline Linux, but it can be useful to use
+existing Chrome OS tooling to build a non-Chrome-OS-flavored kernel. See the
+[cros-kernel eclass documentation] for tips on how to use the "fallback"
+configuration system to build any (e.g., mainline) kernel tree within the
+existing Portage-based flow.
+
+*** note
+**Note:** Chrome OS kernels often support hardware that is not yet supported in
+an upstream kernel release. Ensuring hardware support for your system is not
+covered here.
+***
+
 ## How do I send a patch upstream?
 
 Changes to parts of the kernel which are not purely Chrome OS- specific should
@@ -519,6 +533,8 @@ Previous discussions:
 Kernel configuration in Chromium OS has an extra level of indirection from the
 normal .config file. So do the instructions - [see this page for more
 information](https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/kernel-configuration).
+
+See also the [cros-kernel eclass documentation].
 
 ### How to get the kernel config from a running system
 
@@ -1392,6 +1408,7 @@ While setting up your environment might appear to be harder and more time
 consuming, in many cases it will allow to test kernel modifications much faster
 and easier than the ways described below.
 
+[cros-kernel eclass documentation]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/refs/heads/master/eclass/cros-kernel/README.md
 [fromupstream.py]: https://chromium.googlesource.com/chromiumos/platform/dev-util/+/master/contrib/fromupstream.py
 [cros deploy]: https://dev.chromium.org/chromium-os/build/cros-deploy
 [Dynamic Debug]: https://www.kernel.org/doc/html/v4.19/admin-guide/dynamic-debug-howto.html
