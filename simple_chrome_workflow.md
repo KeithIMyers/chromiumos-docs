@@ -77,7 +77,7 @@ checkout:
 ```
 (shell) cd /path/to/chrome/src
 (shell) export BOARD=amd64-generic
-(shell) cros chrome-sdk --board=$BOARD --log-level=info [--download-vm] [--gomadir=~/goma]
+(shell) cros chrome-sdk --board=$BOARD --log-level=info [--download-vm]
 ```
 
 The command prompt will change to look like `(sdk $BOARD $VERSION)`.
@@ -86,9 +86,7 @@ Entering the Simple Chrome environment does the following:
 
 1.  Fetches the Chrome OS toolchain and sysroot (SDK) for building Chrome.
 1.  Creates out_$BOARD/Release and generates or updates args.gn.
-1.  Installs and starts [Goma].  (*Non-Googlers* may need to disable this with
-    `--nogoma`, Googlers would want to reuse existing installation with
-    `--gomadir`.)
+1.  Starts [Goma].  (*Non-Googlers* may need to disable this with `--nogoma`.)
 1.  `--download-vm` will download a Chrome OS VM and a QEMU binary.
 
 ### cros chrome-sdk options
