@@ -25,6 +25,12 @@
   start the review until you’ve stopped making changes.
   * Use `repo upload --no-emails` to avoid sending emails for CLs not ready for
     review.
+    * To make `--no-emails` the default for a project, run the appropriate
+      command inside that project's directory.
+      * Public projects: `git config review.$(git config --get
+	remote.cros.review).uploadnotify NONE`
+      * Private projects: `git config review.$(git config --get
+	remote.cros-internal.review).uploadnotify NONE`
   * Use Gerrit comments as needed to clarify that a CL is now ready for review.
   * Recommended: Leave “WIP” in the CL title until it is ready to review.
 * Make sure that `make buildall` succeeds after each individual change; this
@@ -58,6 +64,7 @@
     all unresolved comments.
   * Use `repo upload --no-emails` for patchsets that address comments before the
     responses to those comments.
+    * See above instructions for using `--no-emails` by default.
   * Try to minimize rebases in the middle of a review; if practical, don’t
     rebase until just before submitting.
 * Try to make review comments maximally actionable for authors, who may be in
