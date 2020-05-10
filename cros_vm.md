@@ -66,7 +66,7 @@ From within the [Simple Chrome] environment:
 > to the kvm group: `sudo usermod -a -G kvm $USER`
 
 ### Viewing the VM
-To view the VM in a window, you may need to launch `vncviewer`:
+To view the VM in a window, you can launch `vncviewer`:
 ```bash
 (shell) vncviewer localhost:5900 &
 ```
@@ -76,7 +76,7 @@ To install `vncviewer`:
 (shell) sudo apt-get install vncviewer
 ```
 If this package is not available on your system, any other VNC Viewer should
-work as well.
+work as well. You can also use the [VNC Viewer extension] in chrome.
 
 ### Stop the VM
 
@@ -298,13 +298,13 @@ To run all Tast tests matched by an [attribute expression]:
 See [go/tast-infra] (Googler-only) for more information about which Tast tests
 are run by different builders.
 
-This doc is at [go/cros-vm]. Please send feedback to [achuith@chromium.org].
+This doc is at [go/cros-vm].
 
 [depot_tools installed]: https://www.chromium.org/developers/how-tos/install-depot-tools
 [go/cros-qemu]: https://storage.cloud.google.com/achuith-cloud.google.com.a.appspot.com/qemu.tar.gz
 [Linux Chromium checkout]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux/build_instructions.md
 [Virtualization enabled]: https://g3doc.corp.google.com/tools/android/g3doc/development/crow/enable_kvm.md
-[Simple Chrome]: https://chromium.googlesource.com/chromiumos/docs/+/master/simple_chrome_workflow.md
+[Simple Chrome]: simple_chrome_workflow.md
 [chroot]: developer_guide.md
 [Tast: Running Tests]: https://chromium.googlesource.com/chromiumos/platform/tast/+/HEAD/docs/running_tests.md
 [full]: https://cros-goldeneye.corp.google.com/chromeos/legoland/builderSummary?builderGroups=full
@@ -315,6 +315,6 @@ This doc is at [go/cros-vm]. Please send feedback to [achuith@chromium.org].
 [attribute expression]: https://chromium.googlesource.com/chromiumos/platform/tast/+/HEAD/docs/test_attributes.md
 [Launch a locally built VM from within the chroot]: #Launch-a-locally-built-VM-from-within-the-chroot
 [go/tast-infra]: https://chrome-internal.googlesource.com/chromeos/chromeos-admin/+/master/doc/tast_integration.md
-[go/cros-vm]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md
-[achuith@chromium.org]: mailto:achuith@chromium.org
+[go/cros-vm]: cros_vm.md
 [chromeos-amd64-generic-rel]: https://ci.chromium.org/p/chromium/builders/luci.chromium.ci/chromeos-amd64-generic-rel
+[VNC Viewer Extension]: https://chrome.google.com/webstore/detail/iabmpiboiopbgfabjmgeedhcmjenhbla
