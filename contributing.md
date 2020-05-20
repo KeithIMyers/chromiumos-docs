@@ -602,13 +602,6 @@ want to take over their CL or have it rebased when you upload your new CL, then
 this is the flow for you.
 
 The flow is largely the same as the "Updating CL without rebasing" process.
-You'll have to make sure to follow the extra history download steps if the CL
-you're basing things on is not your own.
-
-Instead of selecting the Parent commit, you'll want to get the commit of the PS.
-Look for the "Files" header above the list of changed files.
-Next to that is the patchset selection, and next to that is a commit id.
-Click the copy button next to it to get the commit you'll be resetting to.
 
 Be extra aware of the caveat for how this works as noted in the section above:
 the commits you downloaded and are basing things on must not change (i.e. their
