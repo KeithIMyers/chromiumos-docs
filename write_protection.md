@@ -246,12 +246,6 @@ Or you can control it with a suzyQ:
 
 For AP firmware,
 *   Check WP Range.
-    Run `mosys eeprom map | grep WP_RO`.
-    Example output:
-```
-host_firmware | WP_RO | 0x00000000 | 0x00200000 | static
-```
-*   Alternately run
 ```
 flashrom -p host -r /tmp/bios.bin
 fmap_decode /tmp/bios.bin
