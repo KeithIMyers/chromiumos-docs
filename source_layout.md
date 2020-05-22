@@ -10,7 +10,7 @@ goal is to align rather than keep adding exceptions.
 
 [TOC]
 
-## Local Checkout
+## Local Checkout {#local-layout}
 
 This is the layout as seen when you get a full CrOS checkout.
 We cover the source repos separately from the generated paths to make the
@@ -147,7 +147,7 @@ various caches and build directories safely.
                 the latest build for this board.
             *   `$VERSION/`: Each version gets a unique directory.
 
-## Git Server Layout
+## Git Server Layout {#server-layout}
 
 This is the layout as organized on the Git server.
 This isn't comprehensive, but should provide enough guidance here.
@@ -355,15 +355,47 @@ as `remotes/aosp/xxx` in the local checkout.
 
 ## FAQ
 
-### How do I create a new repo on the server?
+### How do I create a new repository on the server? {#server-new-repo}
 
-Follow the steps in this guide:
-http://dev.chromium.org/chromium-os/how-tos-and-troubleshooting/git-server-side-information
+File a bug for the [Infra>Git>Admin rotation].
+All these bugs are marked [RVG] by default so providing non-public info is OK.
+~24hr respone time can be expected.
+
+Please do not ask specific people to create repositories for you, even if you
+happen to know they might have credentials to do so.
+The bug queue above goes into an oncall rotation queue to help distribute load.
+
+If you are not a committer, make sure to mention someone by their @chromium.org
+or @google.com address who can help vouch/verify the request.
+
+Be sure to fill out the template, and to provide these details:
+*   The name of the new repository on the server.
+    *   See the [Server Layout] section above for examples.
+*   Whether it should be a read-only mirror, a fork of an upstream project, or
+    a completely new (empty) project.
+*   Any non-standard permissions/access to the repository.
+    NB: We try to avoid this, but we may consider anything that is reasonable
+    and allowed by our [security policy](./contributing.md#policies).
+
+Feel free to provide any other information you think would help with processing
+the request.
+We don't usually need full details (e.g. [PRD]/design docs), but usually "too
+much information" is not the problem we have :).
+
+### How do I mirror an upstream repository onto the git server?
+
+See the [How do I create a new repository on the server?](#server-new-repo)
+FAQ above.
 
 ### How do I add a repo to the manifest?
 
+*** note
+The repository must already exist on the server.
+See [How do I create a new repository on the server?](#server-new-repo) first.
+***
+
 If the repo is public (i.e. exists on the [Chromium GoB]), then update the
-[full.xml] file in the public [manifest] repo and the [external_full.xml]
+[full.xml] file in the public [manifest] repo and the [internal full.xml]
 file in the internal [manifest-internal] repo.
 Both files in both repos must be updated together, so make sure to use a
 [Cq-Depend] to land them atomically.
@@ -433,6 +465,21 @@ changes you made will be lost.
 So if you were adding a repo, it will be deleted again from the checkout.
 If you were removing a repo, it will be added again to the checkout.
 
+### How do I initialize a new repository?
+
+Once the repository is in the manifest (see the previous FAQs), you can
+`repo sync` to get it locally, and then add/commit/upload files like normal.
+
+The manifest CLs do not need to be merged first -- if you want to generate
+content ahead of time, you can use the testing steps above to add it to your
+local manifest, and then start uploading CLs right away.
+
+### How do I create a new branch/tag in a repository on the git server?
+
+You don't :).
+File a bug for the [Infra>Git>Admin rotation] with your exact request and you
+should hear back within ~24hrs.
+
 ### Where do I put ebuilds only for Googlers and internal Chrome OS builds?
 
 The [chromeos-overlay] holds all packages & settings for this.
@@ -478,13 +525,15 @@ See the previous questions in this FAQ for more details.
 [docs-internal]: https://chrome-internal.googlesource.com/chromeos/docs/
 [docs]: https://chromium.googlesource.com/chromiumos/docs/
 [eclass-overlay]: https://chromium.googlesource.com/chromiumos/overlays/eclass-overlay/
-[external_full.xml]: https://chrome-internal.googlesource.com/chromeos/manifest-internal/+/HEAD/external_full.xml
+[Infra>Git>Admin rotation]: https://bugs.chromium.org/p/chromium/issues/entry?template=Infra-Git
+[internal full.xml]: https://chrome-internal.googlesource.com/chromeos/manifest-internal/+/HEAD/full.xml
 [filesystem layout]: filesystem_layout.md
 [full.xml]: https://chromium.googlesource.com/chromiumos/manifest/+/HEAD/full.xml
 [Gerrit project config]: https://www.gerritcodereview.com/config-project-config.html
 [Gerrit refs/for]: https://www.gerritcodereview.com/concept-refs-for-namespace.html
 [internal_full.xml]: https://chrome-internal.googlesource.com/chromeos/manifest-internal/+/HEAD/internal_full.xml
 [kernel]: https://chromium.googlesource.com/chromiumos/third_party/kernel/
+[Local Checkout]: #local-layout
 [Local manifests]: https://gerrit.googlesource.com/git-repo/+/master/docs/manifest-format.md#Local-Manifests
 [LUCI]: https://chromium.googlesource.com/infra/luci/luci-py/
 [manifest]: https://chromium.googlesource.com/chromiumos/manifest/
@@ -494,9 +543,12 @@ See the previous questions in this FAQ for more details.
 [platform2]: https://chromium.googlesource.com/chromiumos/platform2/
 [portage-stable]: https://chromium.googlesource.com/chromiumos/overlays/portage-stable/
 [portage_tool]: https://chromium.googlesource.com/chromiumos/third_party/portage_tool/
+[PRD]: glossary.md#PRD
 [repo]: https://gerrit.googlesource.com/git-repo
 [repohooks]: https://chromium.googlesource.com/chromiumos/repohooks/
+[RVG]: glossary.md#RVG
 [sandbox]: contributing.md#sandbox
+[Server Layout]: #server-layout
 [SemVerTag]: https://semver.org/spec/v1.0.0.html#tagging-specification-semvertag
 [vboot_reference]: https://chromium.googlesource.com/chromiumos/platform/vboot_reference/
 [VM/containers]: containers_and_vms.md
