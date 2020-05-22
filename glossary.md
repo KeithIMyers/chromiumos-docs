@@ -23,6 +23,8 @@
 *   __CTS__: Android Compatibility Test Suite.
 *   __CWS__: ["Chrome Web Store"](https://chrome.google.com/webstore/), used to
     host & distribute Chrome extensions.
+*   __DDOC__: Design Document.  Describes & outlines a project and everything
+    related to it to help others review & decide whether & how to move forward.
 *   __DPTF__: (Intel's) Dynamic Platform & Thermal Framework.
 *   __DUT__: "Device under test", used to refer to the system running
     Chromium [OS] and where tests are being executed.
@@ -75,10 +77,14 @@
 *   __PCIe__: Peripheral Component Interconnect Express expansion bus
     standard for connecting devices.
 *   __PCRs__: Platform Configuration Registers.
+*   __PDD__: Privacy Design Document.  Outlines everything privacy related to
+    make sure the project is doing the right thing.
 *   __PDG__: Platform Design Guide.
 *   __PFQ__: "Preflight queue", used to describe bot configurations
     in the waterfall that run to test/gate changes before they're
     allowed into the tree for everyone to see.
+*   __PRD__: Product Requirements Document.  Used to justify a feature/project,
+    not to design it.
 *   __PS__: Patchset.  Never used to mean "patch series".
 *   __PSR__: Panel Self Refresh (eDP).
 *   __PTAL__: "Please take a[nother] look", often used when someone
@@ -90,6 +96,8 @@
 *   __RSLGTM__: "Rubber stamp looks good to me", used when the
     reviewer is merely granting OWNERS approval without doing a
     proper code review.
+*   __RVG__: The "Restrict-View-Google" label used to restrict issues in
+    monorail to Google employees (in addition to the reporter or people cc-ed).
 *   __SGTM__: Secret Google Time Machine "Sounds good to me".
 *   __SI__: Signal Integrity.
 *   __SMT__: Surface-mount Technology.
@@ -124,6 +132,7 @@
 
 *   __AFAICT__: as far as I can tell
 *   __AFAIK__: as far as I know
+*   __DTRT__: Do(ing) The Right Thing.
 *   __e.g.__: (latin) for example
 *   __FWIW__: for what it's worth
 *   __IANAL__: I am not a lawyer
