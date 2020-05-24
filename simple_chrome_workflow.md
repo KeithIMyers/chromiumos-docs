@@ -32,7 +32,7 @@ In order to sign in to Chrome OS you must have Google API keys:
 
 *   External contributors: See [api-keys]. You'll need to put them in your
     `out_$BOARD/Release/args.gn file`, see below.
-*   *Googlers*: See [go/chrome-build-instructions] to get the internal source.
+*   *Googlers*: See [chrome build instructions] to get the internal source.
     If you have `src-internal` in your `.gclient` file the official API keys
     will be set up automatically.
 
@@ -626,7 +626,7 @@ The legacy `GYP` build system is no longer supported.
 [Running a Chrome Google Test binary in the VM]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md#Run-a-Chrome-GTest-binary-in-the-VM
 [go/shortleash]: https://goto.google.com/shortleash
 [debugging tips]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips
-[go/chrome-build-instructions]: https://companydoc.corp.google.com/company/teams/chrome/chrome_build_instructions.md
+[chrome build instructions]: https://g3doc.corp.google.com/company/teams/chrome/linux_build_instructions.md
 [api-keys]: https://www.chromium.org/developers/how-tos/api-keys
 [install-build-deps-android.sh]: https://chromium.googlesource.com/chromium/src/+/master/build/install-build-deps-android.sh
 [Goma]: https://chromium.googlesource.com/infra/goma/client/
