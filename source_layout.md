@@ -395,10 +395,10 @@ See [How do I create a new repository on the server?](#server-new-repo) first.
 ***
 
 If the repo is public (i.e. exists on the [Chromium GoB]), then update the
-[full.xml] file in the public [manifest] repo and the [internal full.xml]
-file in the internal [manifest-internal] repo.
-Both files in both repos must be updated together, so make sure to use a
-[Cq-Depend] to land them atomically.
+[internal full.xml] file in the internal [manifest-internal] repo.
+Do not modify the [full.xml] file in the public [manifest] repo. The public
+[manifest] repo will automatically sync with the internal [manifest-internal]
+repo.
 
 If the repo is private (i.e. exists on the [Chrome GoB]), then update the
 [internal_full.xml] file in the internal [manifest-internal] repo.
