@@ -314,6 +314,43 @@ $ git mv chromeos-bsp-board-0.0.1-r1.ebuild chromeos-bsp-board-0.0.1-r2.ebuild
 If updating packages versions (say from PV=0.0.1 to PV=0.1.0 above), rename the
 base file (i.e., `chromeos-bsp-board-0.0.1.ebuild`).
 
+### Using chromeos-version.sh {#using-chromeos_version_sh}
+
+For `cros_workon` packages, a `chromeos-version.sh` script can be used to tell
+the Commit Queue which version to uprev the stable ebuild version to. The script
+should be placed under the `files/` directory of the ebuild and looks like the
+following:
+
+```bash
+#!/bin/sh
+# Copyright 2018 The Chromium OS Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+#
+# This echo statement sets the package base version (without its -r value).
+# If it is necessary to add a new blocker or version dependency on this ebuild
+# at the same time as revving the ebuild to a known version value, editing this
+# version can be useful.
+
+echo 0.0.2
+```
+
+Here, `0.0.2` is the version you want to set the package to. If you need to set
+a blocker, it would look like the following:
+
+```bash
+RDEPEND="!<chromeos-base/pkgname-0.0.2"
+```
+
+The version can also be generated from the package sources, whose directory is
+passed as parameter to the script, e.g.:
+```bash
+exec sed -e 's/devel/pre/g' -e 's/-/_/g' $1/VERSION
+```
+
+The Commit Queue will automatically add and increment `-rN` part of the version
+as required.
+
 ## How do I build a debug package?
 
 There are a few things that are important to get a debug package:
@@ -655,7 +692,7 @@ If the file you are moving comes from a `cros_workon` package (where you only
 modify the 9999 ebuild), the uprev is handled automatically. This means there
 isn't anything to safely block against.  Instead, you should add/update
 `chromeos-version.sh` and bump the version.  See the
-[`chromeos-version.sh` description](#using-chromeos_version_sh) below for more
+[`chromeos-version.sh` description](#using-chromeos_version_sh) for more
 details.
 
 ### Testing of upstream packages
@@ -679,36 +716,6 @@ dev-util/gtk-doc-am-1.18 (/usr/bin/gtkdoc-rebase)
 ```
 
 To deal with moving files between packages, you'll want to utilize blockers.
-
-### Using chromeos-version.sh
-
-For non-upstream packages in chromiumos-overlay (typically under the
-chromeos-base namespace), we do not always maintain package versions (so ebuilds
-are named `<pkgname>-0.0.1-rN.ebuild`). A `chromeos-version.sh` script can be
-used to increment the package version in this case (obviating the need to rename
-the ebuild). The script should be placed under the `files/` directory of the
-ebuild and looks like the following:
-
-```bash
-#!/bin/sh
-# Copyright 2018 The Chromium OS Authors. All rights reserved.
-# Use of this source code is governed by a BSD-style license that can be
-# found in the LICENSE file.
-#
-# This echo statement sets the package base version (without its -r value).
-# If it is necessary to add a new blocker or version dependency on this ebuild
-# at the same time as revving the ebuild to a known version value, editing this
-# version can be useful.
-
-echo 0.0.2
-```
-
-Here, `0.0.2` is the version you want to set the package to. The blocker then
-looks like the following:
-
-```bash
-RDEPEND="!<chromeos-base/pkgname-0.0.2"
-```
 
 ## What does "build_packages" actually do? {#what-does-build-packages-do}
 
