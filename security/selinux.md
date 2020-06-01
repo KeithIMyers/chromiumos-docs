@@ -646,6 +646,10 @@ In this section, we'll take an example of steps to confine and enforce tcsd.
 
     It's time to verify if your process is running under the correct domain.
 
+    - `cros_workon-$BOARD selinux-policy` for the sepolicy change to take
+      effect. Also `build_image` and `cros flash` is needed to update the
+      selinux contexts of the files.
+
     - If it's a daemon process, simply `ps auxZ | grep tcsd | grep -v grep`. It
       will display the process matching `tcsd` with its pid, user, command line,
       and domain, etc.
