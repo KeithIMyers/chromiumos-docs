@@ -25,10 +25,18 @@ Identify the cells that are red. This happens for bugs that don't have owners,
 that are not assigned to a component, or don't have an Impact, Milestone, or
 Severity flag; or bugs that haven't seen an update in a while.
 
-Attempt to reduce the amount of red on the spreadsheet. Find owners for
+Attempt to reduce the amount of red in the spreadsheet. Find owners for
 un-owned bugs, assign proper components to bugs without components. Triage
 Impact, Milestone, and Severity for bugs. Make sure progress is happening on
 High+ severity bugs.
+
+Consider ensuring that all bugs in the spreadsheet are assigned to a component.
+This contributes to Chrome OS wide efforts to organize open bugs. If no specific
+component is immediately obvious for the bug, *Security* can be a reasonable
+"landing" component. For third-party packages, *OS>Packages* can be a reasonable
+component, but prefer assigning bugs to functional componentes related to the
+team that owns the package. Most of these components will still live inside the
+larger *OS* component, so that can narrow the search.
 
 If you see a bug reported in a third-party package, check the
 [security-sensitive package list]. If the package is in the list, make it a
