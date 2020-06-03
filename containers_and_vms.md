@@ -7,6 +7,9 @@ This is a heavily-technical document; for user-friendly information, see
 [Set up Linux (Beta) on your Chromebook
 documentation](https://support.google.com/chromebook/answer/9145439).
 
+If you're interested in hacking on [Crostini] itself, take a look at the
+[Crostini developer guide](crostini_developer_guide.md)
+
 We won't get into technical details for specific projects as each one already
 has relevant documentation.
 We instead will link to them for further reading.
