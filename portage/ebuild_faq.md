@@ -649,6 +649,15 @@ because `util-linux` now owns those files.
 See also the
 [Gentoo devmanual][gentoo-blockers] for more information about blockers.
 
+#### Handling 9999 ebuilds
+
+If the file you are moving comes from a `cros_workon` package (where you only
+modify the 9999 ebuild), the uprev is handled automatically. This means there
+isn't anything to safely block against.  Instead, you should add/update
+`chromeos-version.sh` and bump the version.  See the
+[`chromeos-version.sh` description](#using-chromeos_version_sh) below for more
+details.
+
 ### Testing of upstream packages
 
 For example, you had tried to `build_packages` or `emerge` after pulling in some
@@ -671,7 +680,7 @@ dev-util/gtk-doc-am-1.18 (/usr/bin/gtkdoc-rebase)
 
 To deal with moving files between packages, you'll want to utilize blockers.
 
-#### Using `chromeos-version.sh`
+### Using chromeos-version.sh
 
 For non-upstream packages in chromiumos-overlay (typically under the
 chromeos-base namespace), we do not always maintain package versions (so ebuilds
