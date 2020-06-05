@@ -292,7 +292,7 @@ To run all Tast tests matched by an [attribute expression]:
 ```bash
 (chroot) ~/trunk/src/scripts $ mkdir /tmp/results
 (chroot) ~/trunk/src/scripts $ cros_run_test --board $BOARD \
---results-dir=/tmp/results --tast '(!disabled && ("group:mainline" || !"group:*") && !informational)'
+--results-dir=/tmp/results --tast '("group:mainline" && !informational)'
 ```
 
 See [go/tast-infra] (Googler-only) for more information about which Tast tests
