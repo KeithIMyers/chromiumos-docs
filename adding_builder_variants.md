@@ -122,8 +122,8 @@ config in the infra config codebase.
 #### Adding new builders
 
 To define a new builder, create a function in
-`src/infra/config/new_builders.star` which defines the necessary builders and
-then call your function in `src/infra/config/main.star`. There are helper
+`infra/config/new_builders.star` which defines the necessary builders and
+then call your function in `infra/config/main.star`. There are helper
 functions in `new_builders.star` which define common types of builders (cq,
 postsubmit, etc.) so be sure to look into those options before doing more work
 than necessary.
@@ -138,7 +138,7 @@ None`. New builder variants should follow the same behavior.
 #### Adding a new builder config
 
 To define a new builder config, you must add a function in
-`src/infra/config/builderconfig/builder_config.star`. It is here where you can
+`infra/config/builderconfig/builder_config.star`. It is here where you can
 specify which profile the builder should use. You must call this function in
 `main.star` as well, ensuring that you call your function defining the builders
 before defining the corresponding builder configs. The function should look
@@ -150,7 +150,7 @@ See `_define_debug_kernel_builder_configs()` for an example.
 #### Specify test suites to run
 
 To specify which tests suites to run with images built by your builders, you
-must modify `src/infra/config/builderconfig/target_test_requirements_config.star`.
+must modify `infra/config/builderconfig/target_test_requirements_config.star`.
 If these tests are expirimental or purely informational, be sure to mark them as
 non-critical. See [this CL](https://crrev.com/i/2392510) for an example.
 
