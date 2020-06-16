@@ -1417,6 +1417,10 @@ If gdb is still looking for the source file in the wrong directory path, you can
 use `set substitute-path <from> <to>` inside gdb to help it find the right path
 (inside your sysroot) for searching for source files.
 
+### Printing stack traces at runtime.
+
+See [./stack_traces.md] for how to print stack traces at runtime.
+
 ## Remote Debugging
 
 ### Setting up remote debugging by hand.
@@ -1973,3 +1977,4 @@ Below are a few links to external sites that you might also find helpful
 [repo user docs]: https://source.android.com/source/using-repo
 [repo-discuss group]: http://groups.google.com/group/repo-discuss
 [Developer Mode]: ./developer_mode.md
+[./stack_traces.md]: https://chromium.googlesource.com/chromiumos/docs/+/master/stack_traces.md

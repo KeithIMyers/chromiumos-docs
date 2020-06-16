@@ -415,6 +415,9 @@ To deploy a debug build you need to add `--nostrip` to `deploy_chrome` because
 otherwise it will strip symbols even from a debug build. This requires
 [Deploying Chrome to the user partition].
 
+See [./stack_traces.md] for some tips on getting stack traces at runtime
+(not during a crash).
+
 > **Note:** If you just want crash backtraces in the logs you can deploy a
 > release build with `--nostrip`. You don't need a debug build (but you still
 > need to deploy to a user partition).
@@ -636,3 +639,4 @@ The legacy `GYP` build system is no longer supported.
 [crbug.com/360342]: https://bugs.chromium.org/p/chromium/issues/detail?id=360342
 [crbug.com/403086]: https://bugs.chromium.org/p/chromium/issues/detail?id=403086
 [web_tests_linux.md]: https://chromium.googlesource.com/chromium/src/+show/master/docs/web_tests_linux.md
+[./stack_traces.md]: https://chromium.googlesource.com/chromiumos/docs/+/master/stack_traces.md
