@@ -184,6 +184,32 @@ So if you run an insecure/compromised container, and then type your passwords
 into the container, they can be stolen even while the rest of the Chrome OS
 system remains secure.
 
+### Extracting Disk Images
+
+Sometimes it's useful to be able to extract the disk image from a VM and move it
+to another machine, either to recover the data if the VM won't start the normal
+way, or to track down the source of a bug. This can be done from crosh, even on
+non-dev mode devices, using the following command:
+
+```bash
+crosh> vmc export <vm name> <file name> [removable storage name]
+```
+
+Where `<vm name>` is e.g. `termina`, `<file name>` can be any file name, and
+`[removable storage name]` is the drive label. Remember to quote this if the
+name contains spaces e.g. `"My USB Drive"`. The backup will be stored either on
+the removable storage specified, or in your Downloads folder if you didn't
+specify one. The file is a gzipped tar archive of the raw VM disk image and can
+be extracted and mounted on another system as follows:
+
+```bash
+tar -xzf <file name>
+sudo mount <img file> /path/to/mount
+```
+
+The container data is then available at
+`/path/to/mount/lxd/storage-pools/default/containers/penguin/rootfs`.
+
 ### Persistence
 
 Processes in [VM]s and containers do not survive logout (since they live in the
