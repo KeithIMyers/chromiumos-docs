@@ -322,7 +322,7 @@ keys, these features of chromium will be quietly disabled.
 #### Branch Builds
 
 If you want to build on a branch, pass the branch name to repo init (e.g: `repo
-init -u <URL> [-g minilayout] **-b 0.9.94.T**`).
+init -u <URL> [-g minilayout] -b release-R80-12739.B`).
 
 When you use `repo init` you will be asked to confirm your name, email address,
 and whether you want color in your terminal. This command runs quickly. The
