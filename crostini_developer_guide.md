@@ -26,18 +26,19 @@ Googlers: update this image at [go/termina-rpc]
 | container .debs, Termina build scripts | Container                | [platform/container-guest-tools]     | N/A                                                                                              |
 | crostini_client                        | Host                     | [platform2/vm_tools/crostini_client] | chromeos-base/crostini_client                                                                    |
 | [crosvm]                               | Host                     | [platform/crosvm]                    | chromeos-base/crosvm                                                                             |
-| garcon                                 | Termina, Container       | [platform2/vm_tools/garcon]          | chromeos-base/vm_guest_tools, chromeos-base/termina_container_tools                              |
+| [garcon]                               | Termina, Container       | [platform2/vm_tools/garcon]          | chromeos-base/vm_guest_tools, chromeos-base/termina_container_tools                              |
 | LXD                                    | Termina                  | [github/lxc/lxd]                     | app-emulation/lxd                                                                                |
 | maitred                                | Termina                  | [platform2/vm_tools/maitred]         | chromeos-base/vm_guest_tools                                                                     |
-| seneschal                              | Host                     | [platform2/vm_tools/seneschal]       | chromeos-base/vm_host_tools                                                                      |
-| sommelier                              | Termina, Container       | [platform2/vm_tools/sommelier]       | chromeos-base/sommelier, chromeos-base/termina_container_tools                                   |
+| [seneschal]                            | Host                     | [platform2/vm_tools/seneschal]       | chromeos-base/vm_host_tools                                                                      |
+| [sommelier]                            | Termina, Container       | [platform2/vm_tools/sommelier]       | chromeos-base/sommelier, chromeos-base/termina_container_tools                                   |
 | system_api                             | Host                     | [platform2/system_api]               | chromeos-base/system_api                                                                         |
-| tremplin                               | Termina                  | [platform/tremplin]                  | chromeos-base/tremplin                                                                           |
+| [tremplin]                             | Termina                  | [platform/tremplin]                  | chromeos-base/tremplin                                                                           |
 | VM protobufs                           | Host, Termina, Container | [platform2/vm_tools/proto]           | chromeos-base/vm_protos                                                                          |
 | vm_syslog                              | Host, Termina            | [platform2/vm_tools/syslog]          | chromeos-base/vm_guest_tools, chromeos-base/vm_host_tools                                        |
-| vsh                                    | Host, Termina, Container | [platform2/vm_tools/vsh]             | chromeos-base/vm_host_tools, chromeos-base/vm_guest_tools, chromeos-base/termina_container_tools |
+| [vsh]                                  | Host, Termina, Container | [platform2/vm_tools/vsh]             | chromeos-base/vm_host_tools, chromeos-base/vm_guest_tools, chromeos-base/termina_container_tools |
 
 [crosvm]: https://chromium.googlesource.com/chromiumos/platform/crosvm/+/HEAD/README.md
+[garcon]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/garcon/README.md
 [github/lxc/lxd]: https://github.com/lxc/lxd
 [platform/container-guest-tools]: https://chromium.googlesource.com/chromiumos/containers/cros-container-guest-tools/
 [platform/crosvm]: https://chromium.googlesource.com/chromiumos/platform/crosvm/
@@ -55,6 +56,10 @@ Googlers: update this image at [go/termina-rpc]
 [platform2/vm_tools/sommelier]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/sommelier
 [platform2/vm_tools/syslog]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/syslog
 [platform2/vm_tools/vsh]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/vsh
+[seneschal]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/seneschal/README.md
+[sommelier]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/sommelier/README.md
+[tremplin]: https://chromium.googlesource.com/chromiumos/platform/tremplin/+/HEAD/README.md
+[vsh]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/vsh/README.md
 
 ## How do I build/deploy/test my change?
 
