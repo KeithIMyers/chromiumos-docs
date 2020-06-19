@@ -91,8 +91,8 @@ Entering the Simple Chrome environment does the following:
 
 ### cros chrome-sdk options
 
-*   `--internal` Sets up Simple Chrome to build and deploy the official *Chrome*
-    instead of *Chromium*.
+*   `--chrome-branding` Sets up Simple Chrome to build and deploy the internal *Chrome* instead of *Chromium*.
+*   `--official` Enables the official build level of optimization.
 *   `--gn-extra-args='extra_arg=foo other_extra_arg=bar'` For setting
     extra gn args, e.g. 'dcheck_always_on=true'.
 *   `--log-level=info` Sets the log level to 'info' or 'debug' (default is
@@ -100,17 +100,19 @@ Entering the Simple Chrome environment does the following:
 *   `--nogn-gen` Do not run 'gn gen' automatically. Use this option to persist
     changes made to a previous session's gn args.
 
+> **Googlers**: Use `--chrome-branding` if you need a branded *Chrome* build including resources and components from src-internal to work on internal features like ARC and assistant. `--official` doesn't involve branding, instead it enables an additional level of optimization and removes development conveniences like runtime stack traces. Use it for performance testing, not for debugging.
+
 **Chrome OS developers**
 
 Use the following command:
 ```
-(shell) cros chrome-sdk --internal --board=$BOARD --log-level=info
+(shell) cros chrome-sdk --chrome-branding --board=$BOARD --log-level=info
 ```
 
 *Optional*: Please help development by setting `dcheck_always_on=true` and filing
 bugs if you encounter any DCHECK crashes:
 ```
-(shell) cros chrome-sdk --internal --board=$BOARD --log-level=info --gn-extra-args='dcheck_always_on=true'
+(shell) cros chrome-sdk --chrome-branding --board=$BOARD --log-level=info --gn-extra-args='dcheck_always_on=true'
 ```
 
 ### cros chrome-sdk tips

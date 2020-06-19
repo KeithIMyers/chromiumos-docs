@@ -50,7 +50,7 @@ with `--download-vm`:
 *   `--clear-sdk-cache` recommended, clears the cache.
 *   `--log-level=debug` for additional output (e.g. VM image download details).
 *   `--board=betty` will download an ARC-enabled VM (Googler-only).
-*   `--internal` will set $GN_ARGS to build and deploy an internal Chrome build.
+*   `--chrome-branding` will set $GN_ARGS to build and deploy a branded Chrome build including resources and components from src-internal.
 *   `--version` to download a non-LKGM version, eg 10070.0.0.
 
 Some boards do not generate VM images. `amd64-generic` and `betty` (for ARC,
