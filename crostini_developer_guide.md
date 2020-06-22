@@ -198,6 +198,33 @@ must be manually emerged to propagate changes into
 Once `termina_container_tools` is manually rebuilt, the `deploy_termina` flow
 will work as normal.
 
+## Running VM executables off of a device
+
+It's possible to run binaries built for the termina VM from the chromium OS
+chroot, which can be useful for debugging or testing. Assuming you already have
+a chromium OS chroot set up and have built the tatl board, you can run inside
+the chroot:
+
+```bash
+../platform2/common-mk/platform2_test.py --board tatl [--run_as_root] [command to run]
+```
+
+For example, to run LXD, you could run inside the chroot:
+
+```bash
+../platform2/common-mk/platform2_test.py --board tatl --run_as_root env LXD_DIR=/path/to/lxd/data lxd
+../platform2/common-mk/platform2_test.py --board tatl --run_as_root env LXD_DIR=/path/to/lxd/data lxd waitready
+../platform2/common-mk/platform2_test.py --board tatl --run_as_root env LXD_DIR=/path/to/lxd/data lxc [lxc subcommands go here]
+```
+
+This is not limited to x86_64 boards either, `platform2_test.py` will
+automatically set up QEMU to run ARM binaries if you ask it to run binaries from
+an ARM board. This is likely to be very slow, however.
+
+Note that this is not equivalent to actually running the VM, since only the
+command you run will be performed. Depending on the exact set up you need to
+test, this may not be sufficient.
+
 [APT]: https://en.wikipedia.org/wiki/APT_(software)
 [go/termina-rpc]: http://go/termina-rpc
 [Where does the code live?]: #repo-table
