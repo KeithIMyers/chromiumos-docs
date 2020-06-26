@@ -90,7 +90,7 @@ epatch "${FILESDIR}"/$PATCH_NAME
 ### 4. Test your change
 
 ```
-$ ebuild-$BOARD $CATEGORY/$PKG
+$ emerge-$BOARD $CATEGORY/$PKG
 ```
 
 If your patch worked, goto step 5. Else, goto step 2.
