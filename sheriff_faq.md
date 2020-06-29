@@ -192,7 +192,7 @@ should follow the following process:
 1.  Make sure the issue is fixed.
     *   If the build-breaker is taking more than a 5-10 minutes to land a fix,
         ask him/her to revert.
-    *   If the build-breaker isn't responding, perform the qrevert yourself.
+    *   If the build-breaker isn't responding, perform the revert yourself.
 1.  Watch the next build to make sure it completes cleanly.
     *  Sheriffs are responsible for watching builds and making sure that people
        are working on making them green.
@@ -279,7 +279,7 @@ brief explanation of why you are bypassing OWNERS. Your CL will still require a
 Code-Review +2 vote from someone other than yourself: Ask for a reviewer in
 [CrOS Oncall] if you don't have someone handy.
 
-## Help with specific failure catagories
+## Help with specific failure categories
 
 ### How do I investigate VMTest failures?
 
