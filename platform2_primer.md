@@ -176,6 +176,16 @@ P2_TEST_FILTER="StringUtils.*" cros_workon_make --test libchromeos
 
 For more information, consult the [upstream gtest documentation].
 
+*** note
+Unit tests typically run code on your host machine which is compiled for the
+target Chrome OS system. When the target CPU architecture differs from host
+machine (e.g., running ARM unit tests on an x86 host), we run them under QEMU.
+When running x86 unit tests on an x86 host, we run them natively. Note that
+this can cause problems when the ISA is similar but not identical -- see
+https://crbug.com/856686 for more info. In practice, this means that unit tests
+built for AMD systems may fail when your host system uses an Intel CPU.
+***
+
 ## Further reading
 
 * [GN in ChromeOS] further describes using GN
