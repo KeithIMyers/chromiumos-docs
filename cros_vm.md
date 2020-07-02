@@ -237,9 +237,10 @@ Follow instructions to [build Chromium OS] and a VM image. In the [chroot]:
 (chroot) ~/trunk/src/scripts $ ./image_to_vm.sh --test_image --board=$BOARD
 ```
 
-You can either specify the image path or the board:
+You can specify the image path, and if you leave it out, the latest built image
+will be used:
 ```bash
-(chroot) ~/trunk/src/scripts $ cros_vm --start --image-path \
+(chroot) ~/trunk/src/scripts $ cros_vm --start --board $BOARD --image-path \
 ../build/images/$BOARD/latest/chromiumos_qemu_image.bin
 (chroot) ~/trunk/src/scripts $ cros_vm --start --board $BOARD
 ```
