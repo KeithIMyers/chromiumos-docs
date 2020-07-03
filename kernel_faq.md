@@ -118,11 +118,16 @@ git commit
 
 Patman automates patch creation, checking, change list creation, cover letter,
 sending to the mailing list, etc. You can find patman in the U-Boot tree
-(src/third\_party/u-boot/files/tools/patman). There is also a kernel patch set
-[here](https://lkml.org/lkml/2015/5/3/105) with a newer version. Upstream
-U-Boot has it also.
+(`src/third_party/u-boot/files/tools/patman`). It usually should be run outside
+of the chroot, so you could create an alias, or a symlink to somewhere in your
+path:
+```bash
+alias patman='~/chromiumos/src/third_party/u-boot/files/tools/patman/patman'
+# or
+ln -s ~/chromiumos/src/third_party/u-boot/files/tools/patman/patman ~/bin
+```
 
-Amend your top commit to have the line:
+To use patman, amend your top commit to have the line:
 
 ```
 Series-to: LKML <linux-kernel@vger.kernel.org>
