@@ -59,13 +59,15 @@ device and disconnecting the battery would still disable write protection.
 ## Software write protect
 
 In addition to the hardware WP signal, there is a software WP setting that
-allows us some more flexibility in managing write protection. The software WP
-setting is configured in the flash chip to designate the region in the flash
-memory that is subject to write protection. This region is actually what the
-flash chip checks when performing access control checks for flash writes. The
-flash chip enforces that software WP setting can be switched off by the CPU
-only when hardware WP is not asserted. Software WP can however be enabled while
-hardware WP is asserted.
+allows us some more flexibility in managing write protection.  The Status
+Register Write Disable (SRWD), a non-volatile bit, is operated together with
+Write Protection (WP#) pin for providing hardware protection mode.  The hardware
+protection mode requires SRWD set to 1 and WP# pin signal asserted low. In the
+hardware protection mode, the Write Status Register (WRSR) instruction is no
+longer accepted for execution and the SRWD bit and Block Protect bits (BP2, BP1,
+BP0) are read only. The Block Protect, BP, bits mask the regions within the SPI
+flash data address space such that access that results in mutations can be
+controlled.
 
 This allows us to ship systems with hardware WP on, but leaving software WP off
 until a point in time where software decided to engage it. One case where we're
@@ -134,10 +136,13 @@ wpsw_cur                = 1                              # [RO/int] Firmware wri
 
 A value of `1` indicates that write protection is enabled.
 
-### Software Write Protection status
+### Software Write Protection and Write Protection Range Status
 
-To check software write protection status, run the following commands. Make
-sure that the write protect range length is not 0.
+To check software write protection and write protection range status, run the
+following commands. Note that the write protection range is independent from
+the software write protection status (if sw write protection is disabled, it
+means you can manipulate the protection range).
+
 *   EC: `flashrom -p ec --wp-status`
 *   AP: `flashrom -p host --wp-status`
 
@@ -145,6 +150,9 @@ If PD (Power Delivery) firmware is present, this additional command can be run:
 *   EC: `flashrom -p ec:type=pd --wp-status`
 
 ## Disabling write protect
+
+The typical sequence for disabling write protection is to disable hardware write
+protect, disable software write protect, and clear the write protection ranges.
 
 ### Disabling hardware write protect {#disable-hw-wp}
 
@@ -200,6 +208,18 @@ enabled.
     *   Glados: `flashrom -p ec:type=pd --wp-disable` followed by
     `ectool --name=cros_pd reboot_ec RO at-shutdown` and `reboot`.
 
+### Disabling the Protected Range {#disable-wp-range}
+
+*** note
+*NOTE*: You cannot manipulate the protected range (BP bits) if software write
+protect is enabled.
+***
+
+*   flashrom -p host --wp-range 0x0 0x0
+
+TODO(kmshelton): Make this less brittle by replacing with a reference to the
+flashrom man page (once it covers wp-range).
+
 ## Enabling write protect
 
 ### Enabling hardware write protect {#enable-hw-wp}
@@ -242,7 +262,7 @@ Or you can control it with a suzyQ:
 *   Start servod inside the chroot: `sudo servod &`
 *   Force write-protect on via the servo header: `dut-control fw_wp_state:force_on`.
 
-### Enabling software write protect {#enable-sw-wp}
+### Enabling software write protect and specifying the RO region as the protected range {#enable-sw-wp}
 
 For AP firmware,
 *   Check WP Range.
