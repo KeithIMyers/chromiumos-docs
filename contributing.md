@@ -105,7 +105,7 @@ The Chromium OS project has supported various bug trackers over the years, but
 currently there are 2 supported trackers: one at [crbug.com], for which you
 should use the prefix `chromium:`, and one at [issuetracker.google.com] (see
 [issue tracker]; internally known as Buganizer), for which you should use the
-prefix `b:`.
+prefix `b:`. The `b:` prefix can also be used with the [partner issue tracker].
 If your changes are related to more than one issue, you can list all the
 issues separated with commas, or include multiple `BUG=` lines.
 
@@ -758,6 +758,7 @@ wouldn't protect from [insider threats].
 [insider threats]: https://en.wikipedia.org/wiki/Insider_threat
 [issue tracker]: https://developers.google.com/issue-tracker/
 [issuetracker.google.com]: https://issuetracker.google.com/
+[partner issue tracker]: https://partnerissuetracker.corp.google.com
 [Life of a Patch]: https://source.android.com/setup/contribute/life-of-a-patch
 [Policies]: #policies
 [unittests]: testing/unit_tests.md
