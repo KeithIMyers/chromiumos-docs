@@ -288,7 +288,7 @@ You can look up the board name in our public [device list].
 * atlas
 * banon
 * bob
-* buddy ([R81/experimental](#exp-chrome-flags))
+* buddy (R83)
 * celes
 * coral
 * cyan
@@ -296,27 +296,27 @@ You can look up the board name in our public [device list].
 * elm
 * eve
 * fizz
-* gandof ([R81/experimental](#exp-chrome-flags))
+* gandof (R83)
 * grunt
-* guado ([R81/experimental](#exp-chrome-flags))
+* guado (R83)
 * hana
 * hatch
 * kalista
 * kefka
 * kevin
-* lulu ([R81/experimental](#exp-chrome-flags))
+* lulu (R83)
 * nami
 * nautilus
 * nocturne
 * oak
 * octopus
-* paine ([R81/experimental](#exp-chrome-flags))
+* paine (R83)
 * pyro
 * rammus
 * reef
 * reks
 * relm
-* rikku ([R81/experimental](#exp-chrome-flags))
+* rikku (R83)
 * samus (R80)
 * sand
 * sarien
@@ -325,10 +325,10 @@ You can look up the board name in our public [device list].
 * snappy
 * soraka
 * terra
-* tidus ([R81/experimental](#exp-chrome-flags))
+* tidus (R83)
 * ultima
 * wizpig
-* yuna ([R81/experimental](#exp-chrome-flags))
+* yuna (R83)
 
 #### Experimental Flags {#exp-chrome-flags}
 
