@@ -113,9 +113,11 @@ figuring out what code path is triggering a hard to reproduce issue.
 
 #### Decoding backtraces
 
-For 4.19 kernel, update as needed:
+For 4.19 kernel on arm64 board (kukui), update CROSS_COMPILE / board name /
+kernel version as needed:
 
   ```bash
+  CROSS_COMPILE=aarch64-cros-linux-gnu- \
   ../third_party/kernel/v4.19/scripts/decode_stacktrace.sh \
   /build/kukui/usr/lib/debug/boot/vmlinux \
   /mnt/host/source/src/third_party/kernel/v4.19 \
