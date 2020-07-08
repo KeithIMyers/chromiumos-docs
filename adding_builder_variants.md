@@ -9,9 +9,6 @@ builder variants by adding profiles to existing overlays.
 Example CLs are linked throughout this document and are also listed here for
 quick access:
 
-*Note that the octopus debug_kernel profile has been moved from the private
-overlay to the public since these initial CLs*
-
 * [Add debug kernel builder feature profile](https://crrev.com/c/1929549)
 * [Add debug_kernel profile for automated kernel
 testing](https://crrev.com/i/2147519)
@@ -94,9 +91,15 @@ version of the sys-kernel/chromeos-kernel package. The debug kernel feature
 profile is then mixed in to the 'debug_kernel' profile in the octopus overlay
 by adding `chromiumos:features/kernel/debug` to the `parent` file. See
 `src/overlays/overlay-octopus/profiles/debug_kernel` for [this
-example](https://crrev.com/i/2147519). Note that profiles should be public by
-default, unless there's a specific need to use a private repo (e.g. restrictive
-licensing, or trying to keep some upcoming new HW or SW secret).
+example](https://crrev.com/i/2147519).
+
+Note that profiles should be public unless there's a specific need
+to use a private repo (e.g. restrictive licensing, or trying to keep some
+upcoming new HW or SW secret). However, if a new profile inherits from an
+existing private profile, it must be in the private repo. Be sure to take into
+account the fact that settings in private profiles are applied on top of
+settings in the matching public profile (e.g. octopus-private:base vs.
+octopus:base).
 
 #### Testing locally
 
