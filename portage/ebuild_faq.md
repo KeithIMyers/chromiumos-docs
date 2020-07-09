@@ -369,9 +369,13 @@ USE="cros-debug" CFLAGS="-g -O0" FEATURES="nostrip noclean -splitdebug" \
 ```
 
 *   *NOTE*: the `cros-debug` `USE` flag is specific to first-party
-    Chromium OS packages. You may also want to check if your target
-    `USE`s the bare `debug` flag, especially in third-party packages
-    (like [CUPS][cups-ebuild-use-debug]).
+    Chromium OS packages. Its main purpose is to enable debug
+    assertions.
+*   You may also want to check if your target `USE`s the bare `debug`
+    flag, especially in third-party packages (like
+    [CUPS][cups-ebuild-use-debug]). However, take note that `debug`
+    isn't as well-defined as `cros-debug`; third-party ebuilds can do
+    any number of things, like increasing log levels to high verbosity.
 *   By default, we separate the debug symbols from the binary and store it in
     `/build/<board name>/usr/lib/debug` in the chroot. You have to set
     `FEATURES="-splitdebug nostrip"` to not strip the binary.
@@ -1067,4 +1071,4 @@ Instructions for building Chromium OS can be found
 [Chromium OS's virtual/linux-sources ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/virtual/linux-sources/
 [package management specification]: https://dev.gentoo.org/~tanderson/pms/eapi-2-approved/pms.html
 [chromium-os-dev-guide]: ../developer_guide.md
-[cups-ebuild-use-debug]: https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/third_party/chromiumos-overlay/net-print/cups/cups-9999.ebuild;l=28;drc=88319f88799723be3ae413dbf34a1aaa9ddda741
+[cups-ebuild-use-debug]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/932089ace19442cbd1d72a9304226ab604984ac4/net-print/cups/cups-9999.ebuild#28
