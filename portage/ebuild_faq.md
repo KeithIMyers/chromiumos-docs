@@ -73,7 +73,7 @@ will see that it works by installing the `virtual/target-os` package into a
 target. For example, to prepare to build an x86-generic image:
 
 ```bash
-emerge-x86-generic -a virtual/target-os
+emerge-amd64-generic -a virtual/target-os
 ```
 
 We've set a portage option to build binary packages as a side-effect of building
@@ -137,7 +137,7 @@ dependencies yet. The `--verbose` option will also show the set of `USE` flags
 that can be turned on and off for the packages to hopefully trim dependencies:
 
 ```bash
-emerge-x86-generic --pretend --emptytree --verbose vim
+emerge-amd64-generic --pretend --emptytree --verbose vim
 
 These are the packages that would be merged, in order:
 
@@ -364,10 +364,14 @@ There are a few things that are important to get a debug package:
 Putting these together:
 
 ```bash
-USE="debug" CFLAGS="-g -O0" FEATURES="nostrip noclean -splitdebug"
-emerge-x86-generic -a package-name
+USE="cros-debug" CFLAGS="-g -O0" FEATURES="nostrip noclean -splitdebug" \
+    emerge-amd64-generic -a <package-name>
 ```
 
+*   *NOTE*: the `cros-debug` `USE` flag is specific to first-party
+    Chromium OS packages. You may also want to check if your target
+    `USE`s the bare `debug` flag, especially in third-party packages
+    (like [CUPS][cups-ebuild-use-debug]).
 *   By default, we separate the debug symbols from the binary and store it in
     `/build/<board name>/usr/lib/debug` in the chroot. You have to set
     `FEATURES="-splitdebug nostrip"` to not strip the binary.
@@ -398,7 +402,7 @@ Mount the image from file or USB stick using:
 Emerge into the mounted system:
 
 ```bash
-emerge-x86-generic -k --root=/tmp/m package-name
+emerge-amd64-generic -k --root=/tmp/m package-name
 ```
 
 ## The package I want to install has been "masked". How do I fix that?
@@ -407,7 +411,7 @@ When importing a package with `emerge-<board_name>`, you may get an error
 message about "masked packages". For instance, the response to
 
 ```bash
-emerge-x86-generic flashrom
+emerge-amd64-generic flashrom
 ```
 
 may contain the following:
@@ -429,7 +433,7 @@ the tilde (`~`).
 Prepend `FEATURES=noclean` to `emerge`:
 
 ```bash
-FEATURES="noclean" emerge-x86-generic -a kernel
+FEATURES="noclean" emerge-amd64-generic -a kernel
 ```
 
 ```bash
@@ -795,7 +799,7 @@ the emerge command to make it use binary packages. To see what happens in this
 case, type:
 
 ```bash
-emerge-x86-generic --getbinpkg --usepkg --with-bdeps y app-arch/tar
+emerge-amd64-generic --getbinpkg --usepkg --with-bdeps y app-arch/tar
 ```
 
 This time you will probably see it download something like:
@@ -1063,3 +1067,4 @@ Instructions for building Chromium OS can be found
 [Chromium OS's virtual/linux-sources ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/virtual/linux-sources/
 [package management specification]: https://dev.gentoo.org/~tanderson/pms/eapi-2-approved/pms.html
 [chromium-os-dev-guide]: ../developer_guide.md
+[cups-ebuild-use-debug]: https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/third_party/chromiumos-overlay/net-print/cups/cups-9999.ebuild;l=28;drc=88319f88799723be3ae413dbf34a1aaa9ddda741
