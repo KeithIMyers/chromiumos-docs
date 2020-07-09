@@ -247,3 +247,38 @@ being produced.
 [struct gesture]: https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/platform/gestures/include/gestures.h?q=%22struct%20gesture%22&ss=chromiumos
 [interpreter-chains]: https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/platform/gestures/src/gestures.cc?q=InitializeTouchpad
 [Gesture Properties]: https://chromium.googlesource.com/chromiumos/platform/gestures/+/master/docs/gesture_properties.md
+
+## Chrome to Linux apps (Crostini)
+
+When a Linux app is run on Chrome OS, input events are forwarded to it over the
+Wayland protocol. You can read more about Wayland in the [Wayland Book]. A
+Chrome component called [Exo] (or Exosphere) acts as the Wayland server, and
+[Sommelier] is the compositor (running within the VM). If the app in question
+actually uses the X11 protocol, Sommelier uses [XWayland] for translation.
+
+**How to watch it:** you can see the events being sent to an application by
+running it within Sommelier from your Linux VM terminal, and setting the
+`WAYLAND_DEBUG` environment variable. For example, `sgt-untangle` (from the
+`sgt-puzzles` package) is a nice app to play around with in this case:
+
+```
+$ WAYLAND_DEBUG=1 sommelier sgt-untangle
+```
+
+That’ll give you a lot of output as you move the mouse and type, so you probably
+want to filter it. For example, to only show pointer events:
+
+```
+$ WAYLAND_DEBUG=1 sommelier sgt-untangle 2>&1 | grep wl_pointer
+```
+
+If the app only works with X11, add the `-X` switch before the name:
+
+```
+$ WAYLAND_DEBUG=1 sommelier -X xeyes
+```
+
+[Wayland Book]: https://wayland-book.com/
+[Exo]: https://chromium.googlesource.com/chromium/src/+/HEAD/components/exo
+[Sommelier]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/sommelier/README.md
+[XWayland]: https://wayland.freedesktop.org/xserver.html
