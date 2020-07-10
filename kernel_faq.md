@@ -1302,7 +1302,10 @@ Once you configure the target device, you can break into debug mode with the
 docs](https://www.kernel.org/doc/html/latest/admin-guide/sysrq.html)); e.g.:
 
 *   `Alt-VolUp-G` on the DUT keyboard
-*   ``<enter> ` Z G`` (brk-g) if using servo
+*   ``<enter> ` Z G`` (brk-g) if using servo (note: for this to work, you need
+    to have `console=ttyS0,115200n8` parameter, but you can also set
+    `loglevel=0` if you want to keep the console quiet and avoid associated
+    slowdowns)
 *   `echo g > /proc/sysrq-trigger`
 
 then attach to the target console with your cross-targeted GDB:
@@ -1345,7 +1348,19 @@ Ctrl-Z
 kill -9 %
 ```
 
-### Multiplexing the console
+### Multiplexing the console (the easy way)
+
+Use `dut-console` [script](https://chromium.googlesource.com/chromiumos/platform/dev-util/+/HEAD/contrib/dut-console)
+with `-k` parameter:
+
+```bash
+dut-console -p 9999 -c cpu -k
+```
+
+`dut-console` will also print instructions on how to attach `gdb` from inside
+the chroot.
+
+### Multiplexing the console (the detailed way)
 
 If you want to use both KGDB and a standard serial console over the same serial
 port, you need to run a program like `kdmx` or `agent-proxy` to multiplex your
