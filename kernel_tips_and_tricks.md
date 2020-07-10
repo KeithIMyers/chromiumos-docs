@@ -278,6 +278,67 @@ static int board_setup(void)
 
 Rebuild depthcharge, and build it into the image.
 
+### Bisecting a stable branch merge
+
+To bisect along the upstream stable branch, first identify and test the merge
+commit and the chromeos branch.
+
+Merge:
+```
+commit f5edda0c2aefe22f338c3a00c0aa52161976d4b1
+Merge: ce070a331d16 399849e4654e
+Author: Guenter Roeck <groeck@chromium.org>
+Date:   Wed Jul 1 08:17:19 2020 -0700
+
+    CHROMIUM: Merge 'v4.19.131' into chromeos-4.19
+
+    Merge of v4.19.131 into chromeos-4.19
+
+    Changelog:
+    ----------------------------------------------------------------
+    Aaron Plattner (1):
+          ALSA: hda: Add NVIDIA codec IDs 9a & 9d through a0 to patch table
+
+    Aditya Pakki (1):
+          rocker: fix incorrect error handling in dma_rings_init
+```
+
+ChromeOS:
+```
+commit ce070a331d1697048ebfdb9011be299bc77940dc
+Author: Benjamin Gordon <bmgordon@chromium.org>
+Date:   Thu Mar 26 13:23:28 2020 -0600
+
+    CHROMIUM: LSM: Convert symlink checks to MNT_NOSYMFOLLOW
+```
+
+Start a regular `git bisect`, identifying the merge as bad and chromeos branch
+as good:
+```bash
+git bisect
+git checkout f5edda0c2aef
+# Build and test
+git bisect bad
+git checkout ce070a331d16
+# Build and test
+git bisect good
+```
+Git is smart enough to bisect along the upstream branch, rooted at the common
+branch point (the previous upstream merge).
+
+At each bisection point, you need to merge in the chromeos branch. The device
+may not boot and function correctly if you do not do this:
+```bash
+git merge --no-commit ce070a331d16
+# Resolve merge conflicts
+
+# Build/deploy/test kernel
+
+# Reset git state and continue bisection
+git reset --hard
+git bisect [good|bad]
+```
+
 ## CLs
 
 ### Patch tags
