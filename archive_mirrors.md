@@ -294,13 +294,13 @@ For example, if you wanted to use `chromeos-localmirror-private`, you'd write:
 ```sh
 SRC_URI="gs://chromeos-localmirror-private/distfiles/${P}.tar.xz"
 ...
-RESTRICT="nomirror"
+RESTRICT="mirror"
 ```
 
 This tells portage to only fetch from the URI's listed in `SRC_URI` and ignore
 the default list of mirrors.
 This setting is valid *only* when using an internal mirror.
-Ebuilds must never use `nomirror` while pointing to external sites.
+Ebuilds must never use `mirror` while pointing to external sites.
 
 #### CPFE & gs://chromeos-binaries/
 
