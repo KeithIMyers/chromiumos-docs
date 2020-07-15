@@ -177,6 +177,23 @@ You must tweak your sudoers configuration to turn off the tty_tickets option as
 described in [Making sudo a little more permissive]. This is required for using
 `cros_sdk`.
 
+### Set locale
+
+These may not be needed if you are building on a system that you
+already use, however if you have a clean instance on GCE, you'll need
+to set a better locale. For example, on Debian Buster on GCE, do:
+
+```bash
+(outside)
+sudo apt-get install locales
+sudo dpkg-reconfigure locales
+```
+
+When running `dpkg-reconfigure locales`, choose a language with UTF-8,
+e.g. `en_US.UTF-8`. For this change to take effect, you will need to
+log out and back in (closing all term windows, tmux/screen sessions,
+etc.).
+
 ### Configure git
 
 Setup git now. If you don't do this, you may run into errors/issues
