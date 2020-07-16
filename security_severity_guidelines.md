@@ -1,7 +1,7 @@
 # Chrome OS Security Severity Guidelines
 
 These are the severity guidelines for Chrome OS Security Issues.
-They are related to to the [Severity Guidelines for Chrome Security Issues].
+They are related to the [Severity Guidelines for Chrome Security Issues].
 One key difference between the Chrome and Chrome OS security models is that
 Chrome OS needs to protect against physically local attackers in certain cases,
 such as at the lock screen.
@@ -28,6 +28,7 @@ bugs, [SheriffBot] will automatically assign the milestone.
 > no later than seven days after the vulnerability is fixed in the Chrome
 > desktop stable channel.
 > For all other critical vulnerabilities, we aim release a fix in under 14 days.
+> See the [Service Level Objectives] section below for details.
 
 Critical vulnerability details may be made public in 60 days,
 in accordance with Google's general [vulnerability disclosure recommendations],
@@ -86,6 +87,7 @@ stable milestone (or earliest milestone affected). For high severity bugs,
 [SheriffBot] will automatically assign the milestone.
 
 > For high severity vulnerabilities, we aim to release a fix in under 30 days.
+> See the [Service Level Objectives] section below for details.
 
 ## Medium Severity
 
@@ -122,6 +124,44 @@ They are normally assigned priority **Pri-2**. Milestones can be assigned
 to low severity bugs on a case-by-case basis, but they are not normally
 merged to stable or beta branches.
 
+## Service Level Objectives
+
+A *Service Level Objective* (SLO) is a definition of the desired performance of
+a service or process for a single metric. In this case, the process is the
+fixing of security issues in Chrome OS, and the metric is the time taken to
+triage, fix, and release the fix for a security issue.
+
+For Chrome OS security we specify the SLOs for:
+
+*   Time to triage the issue (assign priority, owner, and milestone).
+*   Time between updates to the issue.
+*   Time to release the fix to users after the fix has landed on the tree.
+
+Moreover, for critical and high severity bugs we also specify the target amount
+of time for the entire process, as described in the sections above:
+
+*   Critical severity issues: **14 days** from receiving the bug to releasing
+    the fix.
+    *   For critical vulnerabilities in the Chrome browser, the fix should be
+        be released no later than **seven days** after the vulnerability is
+        fixed in the Chrome desktop stable channel.
+*   High severity issues: **30 days** from receiving the bug to releasing the
+    fix.
+
+### SLO matrices
+
+| Priority | Owner assigned, milestone tagged | Issue updated |
+| :--- | :--- | :--- |
+| P0  | Within 1 business day | Every business day |
+| P1  | Within 1 week | Every week  |
+| P2  | Within 1 month | Every month |
+
+| Priority | Fix released |
+| :--- | :--- |
+| P0  | Requires emergency push unless next stable release can include the fix and happen before the end of the workweek. |
+| P1  | Fix must be included in next stable release, no later than two weeks. |
+| P2  | Fix on tip-of-tree, considering merging if the fix is straightforward. |
+
 ## Security Impact Labels
 
 Security Impact labels are used to identify what release a particular
@@ -143,10 +183,11 @@ issue, re-classify as Type=Bug, and assign it to a relevant component or owner.
 
 These bugs are often:
 
-* Denial of service bugs. See the [Chromium Security FAQ] for more information.
-* Enterprise policy bypass bugs. For a good example, see [crbug.com/795434].
-  These bugs should be assigned to the Enterprise component and labeled
-  Restrict-View-Google.
+*   Denial of service bugs. See the [Chromium Security FAQ] for more
+*   information.
+*   Enterprise policy bypass bugs. For a good example, see [crbug.com/795434].
+    These bugs should be assigned to the Enterprise component and labeled
+    Restrict-View-Google.
 
 [Severity Guidelines for Chrome Security Issues]: https://chromium.googlesource.com/chromium/src/+/master/docs/security/severity-guidelines.md
 [crbug.com/764540]: https://bugs.chromium.org/p/chromium/issues/detail?id=764540
@@ -156,3 +197,4 @@ These bugs are often:
 [crbug.com/766253]: https://bugs.chromium.org/p/chromium/issues/detail?id=766253
 [Chromium Security FAQ]: https://chromium.googlesource.com/chromium/src/+/master/docs/security/faq.md#TOC-Are-denial-of-service-issues-considered-security-bugs-
 [crbug.com/795434]: https://bugs.chromium.org/p/chromium/issues/detail?id=795434
+[Service Level Objectives]: #service-level-objectives
