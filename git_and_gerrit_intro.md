@@ -337,4 +337,4 @@ again, building on the changes you’ve already submitted.
 [Gerrit slides]: https://docs.google.com/presentation/d/1C73UgQdzZDw0gzpaEqIC6SPujZJhqamyqO1XOHjH-uk/edit?usp=sharing
 [Git slides]: https://docs.google.com/presentation/d/1IQCRPHEIX-qKo7QFxsD3V62yhyGA9_5YsYXFOiBpgkk/edit?usp=sharing
 [depot_tools]: https://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html#_setting_up
-[repo sync tip]: https://sites.google.com/a/chromium.org/dev/chromium-os/tips-and-tricks-for-chromium-os-developers#TOC-How-to-make-repo-sync-less-disruptive-by-running-the-stages-separately
+[repo sync tip]: tips-and-tricks.md#TOC-How-to-make-repo-sync-less-disruptive-by-running-the-stages-separately

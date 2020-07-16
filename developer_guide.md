@@ -1925,7 +1925,7 @@ Below are a few links to external sites that you might also find helpful
 [RAM-thread]: https://groups.google.com/a/chromium.org/d/topic/chromium-os-dev/ZcbP-33Smiw/discussion
 [install depot_tools]: http://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html#_setting_up
 [Sync to Green]: #Sync-to-Green
-[Making sudo a little more permissive]: http://www.chromium.org/chromium-os/tips-and-tricks-for-chromium-os-developers#TOC-Making-sudo-a-little-more-permissive
+[Making sudo a little more permissive]: tips-and-tricks.md#How-to-make-sudo-a-little-more-permissive
 [Decide where your source will live]: #Decide-where-your-source-will-live
 [gerrit-guide]: http://www.chromium.org/chromium-os/developer-guide/gerrit-guide
 [repo]: https://code.google.com/p/git-repo/
@@ -1936,7 +1936,7 @@ Below are a few links to external sites that you might also find helpful
 [chroot]: http://en.wikipedia.org/wiki/Chroot
 [gsutil]: gsutil.md
 [crosbug/10048]: http://crosbug.com/10048
-[Tips And Tricks]: https://sites.google.com/a/chromium.org/dev/chromium-os/tips-and-tricks-for-chromium-os-developers
+[Tips And Tricks]: tips-and-tricks.md
 [something harder]: http://www.google.com/search?q=the+fourth+dimension
 [issues with virtual packages]: http://crosbug.com/5777
 [What does build_packages actually do?]: portage/ebuild_faq.md#what-does-build-packages-do
