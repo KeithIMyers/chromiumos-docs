@@ -27,22 +27,27 @@ You'll learn how to publish first-party and third-party crates to
 
 To import a third-party crate, we need to create an ebuild for it in
 `~/chromiumos/src/third_party/chromiumos-overlay/dev-rust/<crate_name>/<crate_name>-<crate_version>.ebuild`.
-For an `example` crate with [SemVer] dependencies:
+For an `example` crate with the following [SemVer] dependencies:
 
 ```toml
 [dependencies]
-crate1 = "^0.4"
-crate2 = "^1.2"
-crate3 = "~1.3"
+libc = "0.2"
+getopts = "1.2"
+rayon = "1.4.1"
+http = "^0.1.8"
+indexmap = "^1.0"
+string = "~1.2"
+bit-set = "~2.7.1"
+walkdir = "~2"
 ```
 
-Here is its ebuild:
+We would create the following ebuild:
 
 ```bash
 # Copyright <copyright_year> The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI="7"
 
 CROS_RUST_REMOVE_DEV_DEPS=1
 
@@ -57,10 +62,14 @@ SLOT="${PV}/${PR}"
 KEYWORDS="*"
 
 DEPEND="
-	>=dev-rust/crate1-0.4:=
-	>=dev-rust/crate2-1.2:=
-	<dev-rust/crate2-2.0
-	=dev-rust/crate3-1.3*:=
+	=dev-rust/libc-0.2*:=
+	=dev-rust/getopts-1.2*:=
+	>=dev-rust/rayon-1.4.1:= <dev-rust/rayon-2.0
+	>=dev-rust/http-0.1.8:= <dev-rust/http-0.2
+	=dev-rust/indexmap-1*:=
+	=dev-rust/string-1.2*:=
+	>=dev-rust/bit-set-2.7.1:= <dev-rust/bit-set-2.8
+	=dev-rust/walkdir-2*:=
 "
 ```
 
@@ -68,6 +77,9 @@ DEPEND="
     `Cargo.toml` or [crates.io].
 -   All the dependencies should have a `cros-rust` ebuild and be listed in
     DEPEND section.
+-   Dependencies in `Cargo.toml` which do not have any operator specified in
+    their version number (for example, '^', '<', '~') are handled the same as
+    crates with '^' specified.
 -   Download the crate from [crates.io] and upload it to [localmirror].
     (Check details in "Depending on Crates" section).
 -   Run command `ebuild example.ebuild digest` to generate Manifest.
