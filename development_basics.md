@@ -206,7 +206,7 @@ and mailing lists rather than the internal versions.
 [C++11 use in Chromium]: https://chromium-cpp.appspot.com/
 [platform2 repository]: platform2_primer.md
 [Linux kernel coding style]: https://github.com/torvalds/linux/blob/master/Documentation/process/coding-style.rst
-[Kernel FAQ]: kernel_faq.md
+[Kernel Development]: kernel_development.md
 [EC Development page]: https://chromium.googlesource.com/chromiumos/platform/ec/+/master/README.md
 [src/platform2/init]: https://chromium.googlesource.com/chromiumos/platform2/+/master/init/
 [init STYLE file]: https://chromium.googlesource.com/chromiumos/platform2/+/master/init/STYLE
