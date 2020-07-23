@@ -610,66 +610,6 @@ kmake () {
 }
 ```
 
-### Alternate build method (slow and not recommended apparently) (REMOVE?)
-
-**FIXME: should we just remove this section?**
-
-**Note:** there is more information (possibly more useful too) in the [disk
-format](https://sites.google.com/a/chromium.org/dev/chromium-os/chromiumos-design-docs/disk-format)
-document, and more specifically
-[here](http://www.chromium.org/chromium-os/chromiumos-design-docs/disk-format#TOC-Kernel-partition-format).
-
-Check out the tree somewhere as usual, make the chroot, build packages, build
-image, blah blah blah. Create a bootable USB key from that image. We'll modify
-that key with our testing kernel.
-
-At this point you need to `cros_workon` the kernel (and clone the kernel tree
-in case you used mini-layout). See the big picture and instructions in
-[Chromium OS Developer
-Guide](developer_guide.md), but as a quick
-reference you are expected to run the following inside `chroot`:
-
-```bash
-~/trunk/src/scripts $ cros_workon start --board=<your platform> chromeos-kernel
-~/trunk/src/scripts $ repo sync chromiumos/third_party/kernel
-```
-
-Then, still inside `chroot`, run this:
-
-```bash
-~/trunk/src/scripts $ export BUILD_DIR=/tmp/kernel # pick any new directory you like
-~/trunk/src/scripts $ mkdir ${BUILD_DIR}
-~/trunk/src/scripts $ cp /build/<your platform>/boot/config ${BUILD_DIR}/.config
-~/trunk/src/scripts $ cd ../third_party/kernel/files
-~/trunk/src/third_party/kernel/files $ ARCH=<your target arch> make oldconfig O=${BUILD_DIR}
-~/trunk/src/third_party/kernel/files $ mv .git .git.bak
-~/trunk/src/third_party/kernel/files $ CROSS_COMPILE=/usr/bin/<base_toolchain_name>- \
-    ARCH=<your target arch> \
-    make -j <num> <image_type> modules O=${BUILD_DIR}
-~/trunk/src/third_party/kernel/files $ mv .git.bak .git
-```
-
-Where
-
-*   `<your_target_arch>` is `arm` or `x86`, depending on your platform
-*   `<base_toolchain_name>` is `armv7a-cros-linux-gnueabi-` or `i686-pc-linux-gnu-`, respectively,
-*   `<image_type>` is `bzImage` for `x86` or `uImage` for `arm`,
-*   `<num>` should be set to an integer which is twice the number of cores on your development machine.
-
-Renaming of the `.git` directory for the duration for the build is required to
-prevent mangling the module path by the kernel make. The `make` will produce
-`${BUILD_DIR}/arch/<your_target_arch>/boot/{bzImage|uImage}`, which is the
-kernel image you want to try. The next step varies depending on whether your
-hardware has an EFI BIOS, legacy BIOS or u-boot. You can ether copy the kernel
-to your USB stick and tell the bootloader to use your new kernel, possibly with
-extra debugging arguments, or use netboot/NFS for u-boot equipped targets (see
-[network based development]
-for details).
-
-If you need your module to be present on the target, you can scp it from the
-build location to your target (provided your target is set for `ssh` access and
-allows `chronos` account login).
-
 ### Network based development (REMOVE?)
 
 **FIXME: The instructions the link leads to seem to apply only to ancient
