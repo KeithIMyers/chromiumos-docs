@@ -176,26 +176,6 @@ However, using emerge is an alternate method, for example:
 *   You need `--install` though if you want to deploy the resulting kernel (and
     in that case emerge is equally fast).
 
-
-#### Dealing with a bad kernel installation
-
-One problem with this fast approach is that it requires an already installed
-and booted target system. If you update with a bad kernel so that it no longer
-boots, this approach is no longer available. The system is generally
-recoverable by booting physical media (USB stick or SD card) and copying its
-kernel blob over your kernel partition:
-
-```bash
-# Assuming you boot physical media as sdb, and your local disk is sda,
-$ dd if=/dev/sdb2 of=/dev/sda2
-```
-
-See [disk
-format](https://sites.google.com/a/chromium.org/dev/chromium-os/chromiumos-design-docs/disk-format)
-for more info on partition layouts, as you may need to use a different
-partition number depending on how you installed your kernel or which
-one you want to replace.
-
 ##### Dealing with partition corruption due to bad kernel recovery
 
 One time I really screwed up my system by recovering (after bad kernel
@@ -262,6 +242,12 @@ The bootloader will attempt to boot the kernel on the sda4 partition (KERN-B)
 and kernel modules will be updated to the sda5 rootfs partition (ROOT-B). If
 the kernel crashes early on then a reboot will fallback to the A slot kernel
 and rootfs that is known to be good and working.
+
+See [disk
+format](https://sites.google.com/a/chromium.org/dev/chromium-os/chromiumos-design-docs/disk-format)
+for more info on partition layouts, as you may need to use a different
+partition number depending on how you installed your kernel or which
+one you want to replace.
 
 ### Kernel configuration
 
