@@ -155,6 +155,10 @@ sudo apt-get install git-core gitk git-gui curl lvm2 thin-provisioning-tools \
      python-pkg-resources python-virtualenv python-oauth2client xz-utils \
      python3.6
 
+# More recent Debian-based distributions (such as Googlers' workstations)
+# might qualify the Python package names, e.g. you might want
+# "python3-virtualenv" and "python3-oauth2client" above.
+
 # If Python 3.5 is the default, switch it to Python 3.6.
 python3 --version
 # If above version says 3.5, you'll need to run:
