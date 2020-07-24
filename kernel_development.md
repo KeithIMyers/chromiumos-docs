@@ -25,98 +25,12 @@ work-in-progress notes at [go/chromeos-kernel-tips-and-tricks].
 
 #### Preparing the target
 
-Note that for test and dev images, these steps should generally not be
-necessary.
-
-#### Disable verity
-
-Ensure that verity is disabled on the target before running the
-`update_kernel.sh` script, or it will complain and abort.  Verity can
-be disabled using the command `/usr/share/vboot/bin/make_dev_ssd.sh
+First, make sure you're running a dev or test image.  Then ensure that
+verity is disabled on the target before running the `update_kernel.sh`
+script, or it will complain and abort.  Verity can be disabled using
+the command `/usr/share/vboot/bin/make_dev_ssd.sh
 --remove_rootfs_verification --partition <partition number>` on the
 target followed by a reboot.
-
-#### Unpack your partitions in the chroot
-
-```bash
-# cd to the image directory
-(chroot) $ cd ~/trunk/src/build/images/${BOARD}/latest
-
-# produce separate images for every partition
-(chroot) $ ./unpack_partitions.sh chromiumos_image.bin
-```
-
-#### Ensure SSH keys are installed
-
-If sshd on the target machine complains about missing keys:
-
-```bash
-# Mount stateful partition
-(chroot) $ sudo mount -o loop part_1 stateful_partition/
-
-(chroot) $ sudo mkdir -p stateful_partition/etc/ssh/
-
-# Generate and save keys.
-# The paths below correspond to /mnt/stateful_partition/etc/ssh/ssh_host_{rsa,dsa}_key on target.
-# Make sure these are correct for your configuration.
-(chroot) $ sudo ssh-keygen -t rsa -f stateful_partition/etc/ssh/ssh_host_rsa_key
-(chroot) $ sudo ssh-keygen -t dsa -f stateful_partition/etc/ssh/ssh_host_dsa_key
-
-# Unmount the stateful partition
-(chroot) $ sudo umount stateful_partition
-```
-
-#### Public key authorization
-
-`update_kernel.sh` uses for authorization keys that, depending on your
-configuration, might not be present in your image. If that's the case, you will
-be prompted for password during script execution. To fix it, run the following
-commands in your image directory:
-
-```bash
-# Mount root filesystem
-(chroot) $ mkdir rootfs_dir/
-(chroot) $ sudo mount -o loop part_3 rootfs_dir/
-
-(chroot) $ sudo mkdir -p rootfs_dir/root/.ssh/
-(chroot) $ sudo cp ~/trunk/src/scripts/mod_for_test_scripts/ssh_keys/testing_rsa.pub rootfs_dir/root/.ssh/authorized_keys
-
-# Unmount root filesystem
-(chroot) $ sudo umount rootfs_dir/
-```
-
-#### iptables configuration
-
-Iptables - again, depending on your configuration - might be configured to
-refuse all the incoming connections, in which case update\_kernel.sh will be
-unable to ssh to your target machine. If you encounter this problem, to fix it:
-
-1.  Again mount the root filesystem:
-
-    `(chroot) $ sudo mount -o loop part_3 rootfs_dir/`
-
-2.  Edit file rootfs\_dir/etc/init/iptables.conf. Find the following line:
-
-    `iptables -P INPUT DROP`
-
-3.  Change it to:
-
-    `iptables -P INPUT ACCEPT`
-
-4.  Save and unmount the filesystem:
-
-    `(chroot) $ sudo umount rootfs_dir/`
-
-#### Repack your partitions in the chroot
-
-To build new image after modifications to one or more of the partitions, simply
-run:
-
-```bash
-(chroot) $ ./pack_partitions.sh chromiumos_image.bin
-```
-
-And voila, your image is now ready!
 
 #### Using cros_workon_make
 
