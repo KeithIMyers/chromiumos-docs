@@ -244,7 +244,7 @@ the kernel crashes early on then a reboot will fallback to the A slot kernel
 and rootfs that is known to be good and working.
 
 See [disk
-format](https://sites.google.com/a/chromium.org/dev/chromium-os/chromiumos-design-docs/disk-format)
+format](https://dev.chromium.org/chromium-os/chromiumos-design-docs/disk-format)
 for more info on partition layouts, as you may need to use a different
 partition number depending on how you installed your kernel or which
 one you want to replace.
@@ -252,10 +252,10 @@ one you want to replace.
 ### Kernel configuration
 
 [Kernel
-configuration](https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/kernel-configuration)
+configuration](https://dev.chromium.org/chromium-os/how-tos-and-troubleshooting/kernel-configuration)
 in Chromium OS has an extra level of indirection from the normal
 .config file. So do the instructions - [see this page for more
-information](https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/kernel-configuration).
+information](https://dev.chromium.org/chromium-os/how-tos-and-troubleshooting/kernel-configuration).
 
 See also the [cros-kernel eclass documentation].
 
@@ -700,7 +700,7 @@ git checkout m/master -- chromeos
 #### Commit messages & summary lines (CHROMIUM, UPSTREAM, FROMLIST, BACKPORT)
 
 See the [Kernel Design
-page](https://sites.google.com/a/chromium.org/dev/chromium-os/chromiumos-design-docs/chromium-os-kernel)
+page](https://dev.chromium.org/chromium-os/chromiumos-design-docs/chromium-os-kernel)
 for some more details.
 
 For changes which cannot be submitted upstream to the official Linux Kernel
