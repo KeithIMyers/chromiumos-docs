@@ -57,7 +57,7 @@ C should only be used for code that is part of the Linux kernel or Chrome OS
 firmware.
 
 Both kernel and firmware code should follow the [Linux kernel coding style]. The
-[Kernel FAQ] has more details about Chrome OS kernel development, and the
+[Kernel Development] guide has more details about Chrome OS kernel development, and the
 [EC Development page] discusses firmware.
 
 ### Shell
