@@ -927,16 +927,9 @@ BUG/WARN and friends provide nice backtraces. These can be very useful for
 figuring out what code path is triggering a hard to reproduce issue.
 
 #### Decoding backtraces
-
-For 4.19 kernel, update as needed:
-
   ```bash
-  ../third_party/kernel/v4.19/scripts/decode_stacktrace.sh \
-  /build/kukui/usr/lib/debug/boot/vmlinux \
-  /mnt/host/source/src/third_party/kernel/v4.19 \
-  /build/kukui/usr/lib/debug/lib/modules/4.19.*/
+  ~/trunk/src/platform/dev/contrib/kernel_decode_stack -b kukui
   ```
-**FIXME: point to `kernel_decode_stack` script here**
 
 Sometimes gdb is more useful (aarch64, update as needed):
 
