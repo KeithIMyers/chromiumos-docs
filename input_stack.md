@@ -73,8 +73,8 @@ output protocols, called evdev and joydev, which are consumed by userspace
 (Chrome, in this case).
 
 **Where to find logs:** run `dmesg` to print the contents of the Kernel log, or
-`dmesg --follow` to have it printed in real-time. Useful messages to look out
-for include things like:
+`dmesg -w` to have it printed in real-time. (These work in Crosh, even without
+developer mode enabled.) Useful messages to look out for include things like:
 
 *   "input: Atmel MaXTouch Touchpad as
     /devices/pci0000:00/INT3432:00/i2c-0/i2c-ATML0000:01/input/input4", which
