@@ -930,11 +930,11 @@ chromiumos-overlay                    | 1
 project-`<project name>`              | 1.5
 project-`<project name>`-private      | 1.7
 chipset-`<chip>`                      | 1.8
+chipset-`<chip>`-private              | 1.8.5
 baseboard-`<baseboard>`               | 1.9
+baseboard-`<baseboard>`-private       | 1.9.5
 overlay-`<board>`                     | 2
 overlay-variant-`<board>`             | 2.5
-chipset-`<chip>`-private              | 2.8
-baseboard-`<baseboard>`-private       | 2.9
 overlay-`<board>`-private             | 3
 overlay-variant-`<board>`-private     | 3.5
 overlay-`<board>`-`<special>`-private | 4
