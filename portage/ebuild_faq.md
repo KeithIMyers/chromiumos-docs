@@ -933,6 +933,8 @@ chipset-`<chip>`                      | 1.8
 baseboard-`<baseboard>`               | 1.9
 overlay-`<board>`                     | 2
 overlay-variant-`<board>`             | 2.5
+chipset-`<chip>`-private              | 2.8
+baseboard-`<baseboard>`-private       | 2.9
 overlay-`<board>`-private             | 3
 overlay-variant-`<board>`-private     | 3.5
 overlay-`<board>`-`<special>`-private | 4
