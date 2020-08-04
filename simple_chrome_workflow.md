@@ -129,6 +129,44 @@ bugs if you encounter any DCHECK crashes:
 
 > **Note**: See also [Using a custom Chrome OS build].
 
+### Shell-less flow
+
+It's also possible to follow all these instructions _outside_ the Simple Chrome
+SDK shell, which conforms more closely to how the browser is built for its
+other supported platforms. In this alternative workflow, the `cros chrome-sdk`
+is never called directly by hand, but instead called once during `gclient sync`.
+
+To do this, simply add the board you're interested in to the `cros_boards`
+[custom gclient var] of your .gclient file. The board's SDK will then be
+downloaded (and cached) everytime you run `gclient sync`, which should be run
+after every update to your chromium checkout. Similar to the shell, this will
+also create a convenient build dir at `out_$BOARD/Release`. However, GN won't
+automatically run in that dir. So to proceed with compilation, run:
+
+```
+(shell) gn gen out_$BOARD/Release
+```
+
+Then to compile Chrome:
+
+```
+(shell) autoninja -C out_$BOARD/Release chrome
+```
+
+And any tool or script you would run inside the shell needs to be tweaked to
+include the full path inside chromite, and may need the board explicitly passed.
+For example, a `deploy_chrome` invocation outside the shell looks like:
+
+```
+(shell) ./third_party/chromite/bin/deploy_chrome --build-dir=out_${BOARD}/Release --device=$IP_ADDR --board=${BOARD}
+```
+
+This shell-less flow is currently in use by all of [Chrome's builders], so
+there's some guarantee that it will function correctly. Conversely, the
+traditional flow that uses the shell has no such continuous build coverage and
+is mostly community-supported. In practice, however, the two flows are mostly
+identical under the hood. So if one works, the other is likely to as well.
+
 ---
 
 ## Build Chrome
@@ -283,14 +321,14 @@ Specify the build output directory to deploy from using `--build-dir`. For the
 [VM]:
 
 ```
-(sdk) deploy_chrome --build-dir=out_${SDK_BOARD}/Release --to=localhost --port=9222
+(sdk) deploy_chrome --build-dir=out_${SDK_BOARD}/Release --device=localhost:9222
 ```
 
 For a physical device, which must be ssh-able as user 'root', you must specify
-the IP address using `--to`:
+the IP address using `--device`:
 
 ```
-(sdk) deploy_chrome --build-dir=out_${SDK_BOARD}/Release --to=$IP_ADDR
+(sdk) deploy_chrome --build-dir=out_${SDK_BOARD}/Release --device=$IP_ADDR
 ```
 
 > **Note:** The first time you run this you will be prompted to remove rootfs
@@ -308,7 +346,7 @@ device, e.g.:
 *   When using other compile options that produce a significantly larger image.
 
 ```
-(sdk) deploy_chrome --build-dir=out_$SDK_BOARD/Release --to=$IP_ADDR --mount [--nostrip]
+(sdk) deploy_chrome --build-dir=out_$SDK_BOARD/Release --device=$IP_ADDR --mount [--nostrip]
 ```
 
 > **Note:** This also prompts to remove rootfs verification so that
@@ -332,7 +370,7 @@ TARGET             SOURCE                                      FSTYPE OPTIONS
         *   `mkdir /usr/local/chrome`
         *   `rm -R /opt/google/chrome`
         *   `ln -s /usr/local/chrome /opt/google/chrome`
-     *   `deploy_chrome --build-dir=out_${SDK_BOARD}/Release --to=$IP_ADDR
+     *   `deploy_chrome --build-dir=out_${SDK_BOARD}/Release --device=$IP_ADDR
          --nostrip`
      *   The device can then be rebooted and the unstripped version of Chrome
          will be run.
@@ -600,13 +638,11 @@ PS1='\[\033[01;33m\](sdk ${SDK_BOARD} ${SDK_VERSION})\[\033[00m\] \w \[\033[01;3
 NOTE: Currently the release version (e.g. 52) is not available as an
 environment variable.
 
-### GYP
-
-The legacy `GYP` build system is no longer supported.
-
 [Custom build directories]: #custom-build-directories
 [Updating the version of the Chrome OS SDK]: #updating-the-version-of-the-chrome-os-sdk
 [Using a custom Chrome OS build]: #using-a-custom-chrome-os-build
+[custom gclient var]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/chromeos_build_instructions.md#additional-gclient-setup
+[Chrome's builders]: chrome_commit_pipeline.md#the-chromium-waterfall
 [Command-line flags and environment variables]: #command-line-flags-and-environment-variables
 [Deploying Chrome to the user partition]: #deploying-chrome-to-the-user-partition
 [Debug builds]: #debug-builds
