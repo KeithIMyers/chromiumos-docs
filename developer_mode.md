@@ -139,29 +139,106 @@ Then reboot. Your rootfs will be mounted read/write.
     (dut) $ sudo restart ui
     ```
 
-## Booting into alternative firmware {#alt-firmware}
+## Booting from USB or SD card
 
-Starting in 2019 some Chromebooks support selecting different firmware at the
-developer screen. Press a number to choose the firmware.
+Chromium OS can be installed on a USB stick or SD card, for example if you
+[build it yourself][Building Chromium OS]. In order to boot these, you have to
+first enable booting from external storage by [opening a shell](#shell) and
+running the command `crossystem deb_boot_usb=1`. (Even though this only says
+USB, it will also work for SD cards.)
 
-Available options are:
+Afterwards, reboot the device and use the
+[method appropriate for your device][debug buttons] to trigger external storage
+boot when you see the developer mode boot screen.
 
-1.  U-Boot
-1.  TianoCore (x86 only)
-1.  SeaBIOS (x86 only)
-1.  Memtest86plus (x86 only)
+## Running an alternative bootloader ("legacy BIOS") {#alt-firmware}
 
-This firmware is stored in the RW_LEGACY section of the SPI flash, which is a
-read-write section; you can update it if you like. See the `chromeos-bootimage`
-ebuild for the `altfw` feature and how this CBFS region is populated.
+You can install an alternative bootloader that may make it easier to boot other
+operating systems. This does **not** require you to disable firmware write
+protection (with its associated risks).
+
+_NOTE: Some Chrome OS devices may ship with one or more alternative bootloaders
+pre-installed. These are merely provided as examples of how to set up the
+alternative bootloader feature. They are not officially supported, usually not
+tested and may or may not work at all or do anything useful. The point of the
+alternative bootloader feature is just to allow users to install their own -- we
+may occasionally pre-install software if it is readily available, but we are not
+committing to test and maintain it or to provide the same set across all
+platforms._
+
+_You can also find ready-made alternative bootloaders to install on third-party
+community sites such as [mrchromebox.tech]. Note that these sites are not
+affiliated with Google or the Chromium OS project and we are not responsible for
+any issues or damages arising from them. Use at your own risk._
+
+Alternative bootloaders must be packaged as a coreboot payload and installed in
+the `RW_LEGACY` section of the firmware flash. You can read out the flash and
+print the contents of this section by [opening a shell](#shell) and running
+```
+flashrom -r /tmp/bios.bin
+cbfstool /tmp/bios.bin print -r RW_LEGACY
+```
+If you see a file called `altfw/list` in this output, you have a 2019+ platform
+that supports having more than one alternative bootloader installed at the same
+time. Otherwise, you can only install a single bootloader that must be called
+`payload`. In that case you may need to remove an already installed bootloader
+via `cbfstool /tmp/bios.bin remove -r RW_LEGACY -n payload` to make room.
+
+The new bootloader you want to add should be formatted as an ELF file. Make sure
+that the entry point information in the file is correctly set and that it
+contains code able to run in a firmware environment (i.e. no operating system
+support, nothing set up other than what coreboot usually provides to its
+payloads). Then add the file via
+```
+cbfstool /tmp/bios.bin add-payload -r RW_LEGACY -c lzma -n <your bootloader name> -f <path/to/your/bootloader.elf>
+```
+On an older platform make sure the name is `payload` and you're done. On a newer
+platform, you can choose any name you want but you need to enter it in the
+bootloader directory file. Extract this file with
+```
+cbfstool /tmp/bios.bin extract -r RW_LEGACY -n altfw/list -f /tmp/altfw.txt
+```
+and edit `/tmp/altfw.txt` with a normal text editor (e.g. `nano`). The file
+contains one line per bootloader with the following values separated by
+semicolons:
+
+1. Number of the bootloader in the developer mode menu (0 through 9)
+    * NOTE: The bootloader number 0 is always the "default" that will boot if `dev_default_boot=legacy` is set and the developer boot screen timer runs out.
+1. Name of the bootloader in CBFS (i.e. the `-n` parameter to `cbfstool`)
+1. Name of the bootloader that shall appear in the developer mode menu
+1. Comment field for more detailed description (not used by firmware)
+
+Add a line for the bootloader you just added, save the file, then replace the
+file in CBFS with the updated version via
+```
+cbfstool /tmp/bios.bin remove -r RW_LEGACY -n altfw/list
+cbfstool /tmp/bios.bin add -r RW_LEGACY -n altfw/list -f /tmp/altfw.txt -t raw
+```
+You may also want to delete the `cros_allow_auto_update` file, if present. This
+will prevent future Chrome OS system updates from overwriting the alternative
+bootloader section after you modified it:
+```
+cbfstool /tmp/bios.bin remove -r RW_LEGACY -n cros_allow_auto_update
+```
+Finally, you must write the modified CBFS section back to the firmware flash and
+tell the firmware to enable the alternative bootloader feature:
+```
+flashrom -w /tmp/bios.bin -i RW_LEGACY
+crossystem dev_boot_legacy=1
+```
+Now you can reboot and use the
+[method appropriate for your device][debug buttons] to run your alternative
+bootloader when you see the developer mode boot screen.
 
 <!-- Links -->
 
 [`VT-2`]: #vt2
+[Building Chromium OS]: https://chromium.googlesource.com/chromiumos/docs/+/master/developer_guide.md#Building-Chromium-OS
 [crosh]: https://chromium.googlesource.com/chromiumos/platform2/+/master/crosh
 [debug buttons]: https://chromium.googlesource.com/chromiumos/docs/+/master/debug_buttons.md
 [keyboard developer mode]: https://chromium.googlesource.com/chromiumos/docs/+/master/debug_buttons.md#firmware-keyboard-interface
 [keyboardless developer mode]: https://chromium.googlesource.com/chromiumos/docs/+/master/debug_buttons.md#firmware-menu-interface
+[mrchromebox.tech]: https://mrchromebox.tech
 [recovery process]: https://www.google.com/chromeos/recovery
 
 <!-- Images -->

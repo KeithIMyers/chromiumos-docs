@@ -70,12 +70,17 @@ keyboard attached.
         *   `Ctrl + U`: Boot the system from an external USB stick or SD card.
             The option `crossystem dev_boot_usb=1` must be set from the command
             line before this option is available.
-        *   `Ctrl + L`: Chain-load an included legacy bootloader (e.g. SeaBIOS).
+        *   `Ctrl + L`: Chain-load an alternative bootloader (e.g. SeaBIOS).
             This may allow booting other Operating Systems more easily. Not all
-            devices are shipped with legacy bootloaders. New legacy bootloaders
-            can be manually installed on the device from [Developer Mode]. The
-            option `crossystem dev_boot_legacy=1` must be set from the command
-            line before this option is available.
+            devices are shipped with alternative bootloaders. New alternative
+            bootloaders can be manually installed on the device from
+            [Developer Mode]. The option `crossystem dev_boot_legacy=1` must be
+            set from the command line before this option is available.
+        *   `0` through `9`: On newer (2019+) platforms, more than one
+            alternative bootloader can be installed and `Ctrl + L` will show a
+            selection menu. On these devices, the number keys can be used to
+            directly boot the numbered bootloader without going through the
+            menu.
     *   The option `crossystem dev_boot_default=usb` can be set to override the
         default boot behavior if no key combination is pressed for 30 seconds.
 
