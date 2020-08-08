@@ -161,7 +161,7 @@ that:
 [metrics ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/chromeos-base/metrics/metrics-9999.ebuild
 [Google Test]: https://github.com/google/googletest
 [Portage documentation]: https://devmanual.gentoo.org/ebuild-writing/functions/src_test/index.html
-[this doc]: https://www.chromium.org/chromium-os/testing/qemu-unittests
+[this doc]: ./qemu_unit_tests_design.md
 [file a bug]: https://crbug.com/new
 [example CL]: https://crrev.com/c/583938/
 [example file]: https://crrev.com/c/583578/7/src/manifest_unittest.cc
