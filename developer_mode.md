@@ -14,8 +14,10 @@ Modern Chrome OS devices can be put into developer mode by pressing
 *   [Developer mode for devices with a keyboard][keyboard developer mode]
 *   [Developer mode for devices without a keyboard (tablets)][keyboardless developer mode]
 
-**Caution: Modifications you make to the system are not supported by Google, may
-cause hardware, software or security issues and may void warranty.**
+*** note
+**Caution:** Modifications you make to the system are not supported by Google,
+may cause hardware, software or security issues and may void warranty.
+***
 
 NOTE: Putting your device into developer mode inherently makes it a little less
 secure. Specifically, it makes the "verified boot" that's built-in to your
@@ -112,10 +114,12 @@ again and another shell will be opened. You can `[ Alt ] [ Tab ]` between them.
 The Chromium OS rootfs is mounted read-only. In developer mode you can disable
 the rootfs verification, enabling it to be modified.
 
-**NOTE: If you mount the root filesystem in writeable mode, even if you make no
-changes, it will no longer be verifiable and you'll have to use a recovery image
-to restore your system when you switch back to normal mode. Auto updates may
-also fail until a full payload is downloaded.**
+*** note
+**NOTE:** If you mount the root filesystem in writeable mode, even if you make
+no changes, it will no longer be verifiable and you'll have to use a recovery
+image to restore your system when you switch back to normal mode. Auto updates
+may also fail until a full payload is downloaded.
+***
 
 To make your rootfs writable, run the following command from a shell on the
 device:
@@ -157,19 +161,21 @@ You can install an alternative bootloader that may make it easier to boot other
 operating systems. This does **not** require you to disable firmware write
 protection (with its associated risks).
 
-_NOTE: Some Chrome OS devices may ship with one or more alternative bootloaders
-pre-installed. These are merely provided as examples of how to set up the
-alternative bootloader feature. They are not officially supported, usually not
-tested and may or may not work at all or do anything useful. The point of the
-alternative bootloader feature is just to allow users to install their own -- we
-may occasionally pre-install software if it is readily available, but we are not
-committing to test and maintain it or to provide the same set across all
-platforms._
+*** note
+**NOTE:** Some Chrome OS devices may ship with one or more alternative
+bootloaders pre-installed. These are merely provided as examples of how to set
+up the alternative bootloader feature. They are not officially supported,
+usually not tested and may or may not work at all or do anything useful. The
+point of the alternative bootloader feature is just to allow users to install
+their own -- we may occasionally pre-install software if it is readily
+available, but we are not committing to test and maintain it or to provide the
+same set across all platforms.
 
-_You can also find ready-made alternative bootloaders to install on third-party
+You can also find ready-made alternative bootloaders to install on third-party
 community sites such as [mrchromebox.tech]. Note that these sites are not
 affiliated with Google or the Chromium OS project and we are not responsible for
-any issues or damages arising from them. Use at your own risk._
+any issues or damages arising from them. Use at your own risk.
+***
 
 Alternative bootloaders must be packaged as a coreboot payload and installed in
 the `RW_LEGACY` section of the firmware flash. You can read out the flash and
@@ -202,11 +208,13 @@ and edit `/tmp/altfw.txt` with a normal text editor (e.g. `nano`). The file
 contains one line per bootloader with the following values separated by
 semicolons:
 
-1. Number of the bootloader in the developer mode menu (0 through 9)
-    * NOTE: The bootloader number 0 is always the "default" that will boot if `dev_default_boot=legacy` is set and the developer boot screen timer runs out.
-1. Name of the bootloader in CBFS (i.e. the `-n` parameter to `cbfstool`)
-1. Name of the bootloader that shall appear in the developer mode menu
-1. Comment field for more detailed description (not used by firmware)
+1.  Number of the bootloader in the developer mode menu (0 through 9)
+    *   NOTE: The bootloader number 0 is always the "default" that will boot
+        if `dev_default_boot=legacy` is set and the developer boot screen
+        timer runs out.
+1.  Name of the bootloader in CBFS (i.e. the `-n` parameter to `cbfstool`)
+1.  Name of the bootloader that shall appear in the developer mode menu
+1.  Comment field for more detailed description (not used by firmware)
 
 Add a line for the bootloader you just added, save the file, then replace the
 file in CBFS with the updated version via
@@ -233,11 +241,11 @@ bootloader when you see the developer mode boot screen.
 <!-- Links -->
 
 [`VT-2`]: #vt2
-[Building Chromium OS]: https://chromium.googlesource.com/chromiumos/docs/+/master/developer_guide.md#Building-Chromium-OS
-[crosh]: https://chromium.googlesource.com/chromiumos/platform2/+/master/crosh
-[debug buttons]: https://chromium.googlesource.com/chromiumos/docs/+/master/debug_buttons.md
-[keyboard developer mode]: https://chromium.googlesource.com/chromiumos/docs/+/master/debug_buttons.md#firmware-keyboard-interface
-[keyboardless developer mode]: https://chromium.googlesource.com/chromiumos/docs/+/master/debug_buttons.md#firmware-menu-interface
+[Building Chromium OS]: developer_guide.md#Building-Chromium-OS
+[crosh]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/crosh
+[debug buttons]: debug_buttons.md
+[keyboard developer mode]: debug_buttons.md#firmware-keyboard-interface
+[keyboardless developer mode]: debug_buttons.md#firmware-menu-interface
 [mrchromebox.tech]: https://mrchromebox.tech
 [recovery process]: https://www.google.com/chromeos/recovery
 
