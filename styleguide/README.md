@@ -1,4 +1,4 @@
-# Chromium OS Style Guide
+# Chromium OS Style Guide [go/cros-style]
 
 As a general rule, we try to follow existing style guides of parent projects
 when they have one.

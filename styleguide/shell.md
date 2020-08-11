@@ -1,4 +1,4 @@
-# Shell Style Guidelines
+# Shell Style Guidelines [go/cros-shstyle]
 
 [TOC]
 

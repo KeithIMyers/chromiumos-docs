@@ -1,4 +1,4 @@
-# Python Style Guidelines
+# Python Style Guidelines [go/cros-pystyle]
 
 [TOC]
 
