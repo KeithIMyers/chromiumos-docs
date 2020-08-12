@@ -145,16 +145,41 @@ Files that are not meant to be executed should not contain a shebang line.
 
 ## String formatting
 
-The [Google style guide] says that the `'{}'.format()` style is permitted.
-That is true, but in CrOS we much more often/always use % instead. You should
-stick to using % in CrOS code to match existing codebases.
+It is acceptable to mix f-strings & non-f-string formatting in a codebase,
+module, function, or any other grouping.
+Do not worry about having to pick only one style.
+
+### f-strings
+
+When writing Python 3.6+ code, prefer [f-strings].
+They aren't always the best fit which is why we say you should *prefer* rather
+than *always* use them.
+See the next section for non-f-string formatting.
+
+Writing readable f-strings is important, so try to avoid packing too much logic
+in the middle of the `{...}` sections.
+If you need a list comprehension or complicated computation, then it's usually
+better to pull it out into a temporary variable instead.
+Dynamic code in the middle of static strings can be easy to miss for readers.
+
+### % formatting
+
+The [Google style guide] says that the [% formatting] and `'{}'.format()` styles
+are both permitted.
+In CrOS we exclusively use [% formatting], so you should too to match.
+There is no real material difference between the two styles, so sticking with
+% for consistency is better.
+
+Changing either form to an f-string is always OK.
 
 ```python
 x = 'name: %s; score: %d' % (name, n)
 x = 'name: %(name)s; score: %(score)d' % {'name': name, 'score': n}
 ```
 
-Also keep in mind that for logging type functions, we don't format in place.
+### Logging formatting
+
+Keep in mind that for logging type functions, we don't format in-place.
 Instead, we pass them as args to the function.
 
 ```python
@@ -301,9 +326,11 @@ modules (they're available in the chroot as well):
 [PEP-8]: https://www.python.org/dev/peps/pep-0008/
 [PEP-257]: https://www.python.org/dev/peps/pep-0257/
 [PEP-328]: https://www.python.org/dev/peps/pep-0328/
+[f-strings]: https://docs.python.org/3/reference/lexical_analysis.html#formatted-string-literals
 [Google style guide]: https://github.com/google/styleguide/blob/gh-pages/pyguide.md#310-strings
 [Google style guide]: https://github.com/google/styleguide/blob/gh-pages/pyguide.md#312-todo-comments
 [mock]: https://docs.python.org/3/library/unittest.mock.html
 [pymox]: https://code.google.com/p/pymox/wiki/MoxDocumentation
 [unittest]: https://docs.python.org/library/unittest.html
 [Pylint]: https://github.com/PyCQA/pylint
+[% formatting]: https://docs.python.org/3/library/stdtypes.html#printf-style-string-formatting
