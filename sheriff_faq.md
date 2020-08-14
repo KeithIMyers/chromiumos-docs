@@ -184,15 +184,11 @@ When Sheriffs encounter build failures on the public Chromium OS builder, they
 should follow the following process:
 
 1.  See if you could fix it by reverting a recent patch
-    *   If the build or test failure has a likely culprit, contact the author.
-        If you can't, revert!
+    *   If the build or test failure has a likely culprit, perform the revert and
+        cc the author.
     *   Infrastructure build failure (repo sync hang, archive build failure,
         build_packages etc)?  Contact a [build deputy oncall]!
     *   For any other infrastructure failures, **contact a [CI oncall]**!
-1.  Make sure the issue is fixed.
-    *   If the build-breaker is taking more than a 5-10 minutes to land a fix,
-        ask him/her to revert.
-    *   If the build-breaker isn't responding, perform the revert yourself.
 1.  Watch the next build to make sure it completes cleanly.
     *  Sheriffs are responsible for watching builds and making sure that people
        are working on making them green.
