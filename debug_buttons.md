@@ -81,7 +81,7 @@ keyboard attached.
             selection menu. On these devices, the number keys can be used to
             directly boot the numbered bootloader without going through the
             menu.
-    *   The option `crossystem dev_boot_default=usb` can be set to override the
+    *   The option `crossystem dev_default_boot=usb` can be set to override the
         default boot behavior if no key combination is pressed for 30 seconds.
 
 Some devices do not support `Esc + Power + Refresh` for entering Recovery Mode:
