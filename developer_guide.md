@@ -511,7 +511,7 @@ chroot:
 ```
 
 This setting only holds while you stay in the chroot. If you leave and come
-back, you need to do specify this setting again.
+back, you need to specify this setting again.
 
 **SIDE NOTES:**
 
@@ -1884,7 +1884,7 @@ Below are a few links to external sites that you might also find helpful
 
 *   **Definitely** look at the [Chromium OS dev group] to see what people are
     talking about.
-*   Check out the [Chromium OS bug tracker] to report bugs, look for known
+*   Check out the [Chromium bug tracker] to report bugs, look for known
     issues, or look for things to fix.
 *   Get an idea of what's actively happening by looking at the [Chromium Gerrit]
     site. (Note that this is no longer the same site that Chromium uses)
@@ -1981,7 +1981,7 @@ Below are a few links to external sites that you might also find helpful
 [Go in Chromium OS]: https://sites.google.com/a/chromium.org/dev/chromium-os/developer-guide/go-in-chromium-os
 [Go]: http://golang.org
 [Chromium OS dev group]: http://groups.google.com/a/chromium.org/group/chromium-os-dev
-[Chromium OS bug tracker]: http://code.google.com/p/chromium-os/issues/list
+[Chromium bug tracker]: https://bugs.chromium.org/p/chromium/issues/list
 [Chromium Gerrit]: https://chromium-review.googlesource.com/
 [Chromium OS gitweb]: https://chromium.googlesource.com/
 [Chromium OS build waterfall]: http://build.chromium.org/p/chromiumos/waterfall
