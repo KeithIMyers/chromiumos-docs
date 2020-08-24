@@ -23,14 +23,18 @@ responsibility grants you CR+2 access.
 ## The sheriff's primary focus is the postsubmit builders
 
 There are many CQ's running at the same time. The CQ's are the concern of the CL
-authors (and the Legacy CQ is watched by the CI oncaller), not the
-sheriff. Every 10 minutes, a builder called [Annealing] takes a snapshot of the
-tree and uprevs packages. Then, the [postsubmit builder] takes the most recent
-of these (every 7-10 hours) and runs builds and hardware tests. **As a sheriff,
-the only thing that you are concerned about is the status of the tip-of-tree as
-shown by the postsubmit builder as tracked in Sheriff-o-Matic (see below). By
-fixing the tip-of-tree, you unblock CQ runs that are running from the same
-broken state of the tree.**
+authors. Every 30 minutes, a builder called [Annealing] takes a snapshot
+of the tree and uprevs packages. Then, the [postsubmit builder] takes the most
+recent of these (every 7-10 hours) and runs builds and hardware tests. There are
+also snapshot builds launched at a higher frequency which may show tip-of-tree
+build breakages more quickly as they're launched and complete at a more rapid
+cadence. **As a sheriff, the only thing that you are concerned about is the
+status of the tip-of-tree as shown by the postsubmit\snapshots as tracked in
+Sheriff-o-Matic (see below). By fixing the tip-of-tree, you unblock CQ runs that
+are running from the same broken state of the tree.** The secondary sheriff will
+be watching the tip-of-tree release builders, and some, but not all issues
+will manifest there as well see the [secondary sheriff] doc. The older release
+builds are watched by the release owner TPMs.
 
 This diagram attempts to capture this at an abstract level:
 
@@ -67,8 +71,8 @@ This diagram attempts to capture this at an abstract level:
 
 ### Secondary sheriff
 
-1.  Step in to replace the sheriff when they're unavailable.
 1.  Watch release builders and branches ([internal doc here]).
+1.  Step in to replace the sheriff when they're unavailable.
 
 ### Sheriff and Gardener calendars
 
@@ -188,7 +192,7 @@ should follow the following process:
         cc the author.
     *   Infrastructure build failure (repo sync hang, archive build failure,
         build_packages etc)?  Contact a [build deputy oncall]!
-    *   For any other infrastructure failures, **contact a [CI oncall]**!
+    *   For any other infrastructure failures, **contact a [Triage Oncall]**!
 1.  Watch the next build to make sure it completes cleanly.
     *  Sheriffs are responsible for watching builds and making sure that people
        are working on making them green.
@@ -201,7 +205,7 @@ should follow the following process:
 *   If a test fails, or a specific component fails to compile, file a bug
     against that component normally. Assign it to an owner for that component.
 *   If you believe there's an issue with the builder infrastructure, contact the
-    oncall as above or file a bug at [go/cros-ci-bug].
+    oncall as above or file a bug at [go/cros-triage-bug].
 *   If you believe there's an issue with the lab or hardware test
     infrastructure, you can file a bug following the instructions at
     [go/chromeos-lab-bug]
@@ -500,6 +504,7 @@ Other handy links to information:
 
 [Annealing]: https://ci.chromium.org/p/chromeos/builders/annealing/Annealing
 [CI oncall]: https://oncall.corp.google.com/chromeos-ci-eng
+[Triage Oncall]: https://oncall.corp.google.com/chromeos-infra-triage
 [CrOS Oncall]: https://goto.google.com/crosoncall
 [CrOS Sheriff Glossary]: http://go/cros-sheriff-glossary
 [Cros-Sheriffing YAQ]: https://yaqs.googleplex.com/eng/t/cros-sheriffing
@@ -510,6 +515,7 @@ Other handy links to information:
 [Gardening Tasks]: https://code.google.com/p/chromium/issues/list?can=2&q=label%3AGardening
 [Gerrit lists recently merged changes]: https://chromium-review.googlesource.com/q/status:merged
 [Infrastructure Deputy]: http://goto.google.com/cros-infra-deputy
+[secondary sheriff]: https://goto.google.com/secondary-sheriff
 [Shadow Gardeners Calendar]: https://oncall.corp.google.com/chromeos-shadow-gardeners
 [Shadow Gardeners group]: https://ganpati.corp.google.com/#Group_Info?name=chromeos-chrome-shadow-gardeners
 [Sheriff FAQ: Chromium OS ASAN]: https://sites.google.com/a/chromium.org/dev/developers/tree-sheriffs/sheriff-details-chromium-os/sheriff-faq-chromium-os-asan-bots
@@ -531,6 +537,7 @@ Other handy links to information:
 [go/chromeos-images]: https://goto.google.com/chromeos-images
 [go/chromeos-lab-bug]:  http://go/chromeos-lab-bug
 [go/cros-ci-bug]: http://go/cros-ci-bug
+[go/cros-triage-bug]: http://go/cros-triage-bug
 [go/cros-gardening]: http://go/cros-gardening
 [go/cros-noncritical]: https://goto.google.com/cros-noncritical
 [go/oncall2calendar]: https://goto.google.com/oncall2calendar
