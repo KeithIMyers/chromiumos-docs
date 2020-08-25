@@ -54,7 +54,7 @@ with `--download-vm`:
 *   `--version` to download a non-LKGM version, eg 10070.0.0.
 
 Some boards do not generate VM images. `amd64-generic` and `betty` (for ARC,
-internal only) are recommended.
+internal only) are recommended. Using `cros_vm` for non-X86 boards is currently not supported.
 
 ## Launch a Chrome OS VM
 
