@@ -142,29 +142,24 @@ modifying (see [Where does the code live?]):
 (inside) $ cros_workon --board=${GUEST_BOARD} start ${PACKAGE_NAME}
 ```
 
-Then, to build and deploy the updated packages to a device for testing, run this
-command:
+Then build the guest image like a normal CrOS board:
 
 ```bash
-(inside) $ /mnt/host/source/src/platform/dev/contrib/deploy_termina -p -i -d ${DEVICE_IP}
+(inside) $ ./build_packages --board=${GUEST_BOARD}
+(inside) $ ./build_image --board=${GUEST_BOARD} test
 ```
 
-The `deploy_termina` command above is recommended for new developers.  It
-automatically determines the correct guest board for the device (`tatl` or
-`tael`) by connecting to the device specified using `-d ${DEVICE_IP}` via SSH.
-It then builds the full set of packages for the device (`-p`), builds the Chrome
-OS rootfs image for the guest (`-i`), repacks the guest image into the layout
-expected for the `cros-termina` component, copies it to the device, and restarts
-the `vm_concierge` and `vm_cicerone` services on the device (stopping any
-running VMs in the process).
+This image is installed into the host image by the `termina-dlc` package, and
+can be built and deployed like the host service changes above:
 
-> **WARNING**: The `/run/imageloader` directory that holds the Termina image is
-> a `tmpfs`, so changes are *not* persisted across reboots. You will need to
-> either run the `deploy_termina` script again, or manually mount the Termina
-> image into the `/run/imageloader/cros-termina/99999.0.0` directory.
+```bash
+(inside) $ cros_workon --board=${BOARD} start termina-dlc
+(inside) $ emerge-${BOARD} termina-dlc
+(inside) $ cros deploy ${DEVICE_IP} termina-dlc
+```
 
-After `deploy_termina` completes, newly-launched VMs will use the testing
-component with the updated packages.
+After `cros deploy` completes, newly-launched VMs will use the testing component
+with the updated packages.
 
 ### Container changes
 
@@ -195,8 +190,8 @@ must be manually emerged to propagate changes into
 (inside) $ emerge-${GUEST_BOARD} termina_container_tools # copy into /opt
 ```
 
-Once `termina_container_tools` is manually rebuilt, the `deploy_termina` flow
-will work as normal.
+Once `termina_container_tools` is manually rebuilt, the `termina-dlc` flow will
+work as normal.
 
 ## Running VM executables off of a device
 
