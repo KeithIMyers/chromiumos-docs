@@ -1542,8 +1542,8 @@ better to use `tac` so that the bottom-most CL is set to ready first):
 
 ```bash
 gerrit deps ${CL} --raw | tee deps-${CL}
-gerrit verify `tac deps-${CL}` 1
-gerrit ready `tac deps-${CL}` 2
+gerrit label-v `tac deps-${CL}` 1
+gerrit label-cq `tac deps-${CL}` 2
 ```
 
 ### Downloading a patch from patchwork into IMAP
