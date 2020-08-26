@@ -119,21 +119,22 @@ slow. There are a couple approaches that can be useful to recover quickly.
 *   Make sure you use a serial-enabled coreboot firmware.
 *   If the kernel on internal storage does not boot anymore:
 
-    1.  Boot from USB (slam Ctrl-U during FW bootup)
+    1.  Boot from USB (press Ctrl-U during FW bootup, you may have to do this repeatedly if on a serial console)
     1.  Copy kernel and modules back to internal storage (instructions below
         assume eMMC)
 
         ```bash
+        VERSION=$(uname -r)
         dd if=/dev/sda2 of=/dev/mmcblk0p2
         mkdir /tmp/mnt
         mount /dev/mmcblk0p3 /tmp/mnt
-        rm -rf /tmp/mnt/lib/modules/4.1*
-        cp -a /lib/modules/4.1*/tmp/mnt/lib/modules/
+        rm -rf /tmp/mnt/lib/modules/${VERSION}
+        cp -a /lib/modules/${VERSION}/tmp/mnt/lib/modules/
         dd if=/dev/sda2 of=/dev/mmcblk0p4
         umount /tmp/mnt
         mount /dev/mmcblk0p5 /tmp/mnt
-        rm -rf /tmp/mnt/lib/modules/4.1*
-        cp -a /lib/modules/4.1*/tmp/mnt/lib/modules/
+        rm -rf /tmp/mnt/lib/modules/${VERSION}
+        cp -a /lib/modules/${VERSION}/tmp/mnt/lib/modules/
         umount /tmp/mnt
         # Optional, only if USB stick has rootfs verification on
         # /usr/share/vboot/bin/make_dev_ssd.sh --remove_rootfs_verification -i /dev/mmcblk0
