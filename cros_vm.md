@@ -158,7 +158,7 @@ chromiumos_preflight
 
 ```bash
 (sdk) .../chrome/src $ deploy_chrome --build-dir=out_$SDK_BOARD/Release/ \
---to=localhost --port=9222
+--device=localhost:9222
 ```
 
 ## Run a Tast test in the VM
