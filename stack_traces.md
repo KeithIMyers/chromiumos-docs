@@ -55,7 +55,7 @@ traces at runtime, prefer `--strip-flags=-S`.
 # Rebuild example
 (sdk) autoninja -C out_${SDK_BOARD}/Release chrome nacl_helper
 # Deploy chrome example
-(sdk) deploy_chrome --build-dir=out_${SDK_BOARD}/Release --to=DUT --mount --strip-flags=-S
+(sdk) deploy_chrome --build-dir=out_${SDK_BOARD}/Release --device=DUT --mount --strip-flags=-S
 ```
 
 Note that the effects of the `--mount` option will not survive a reboot. If you
