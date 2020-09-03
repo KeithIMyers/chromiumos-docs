@@ -61,16 +61,33 @@ and related articles instead.
 
 ## Collecting full debug logs {#logs}
 
-It's also possible to collect extensive system logs rather than the subset
-that's included in feedback reports. To do this, enter
-`chrome://net-internals/#chromeos` in the location bar and click the `Store
-Debug Logs` button. The resulting `debug-logs` archive file will be placed in
-your Downloads folder. It may contain personally identifiable information, so
-you may want to either:
+It is also possible to collect more extensive system logs beyond what is
+included in feedback reports. Frequently this is not necessary, so check with a
+developer first.
+1.  Navigate to `chrome://network/#logs`
+2.  `Include the system_logs.txt file` is checked by default, we encourage
+    including that because many tools can parse that format. (It is the same
+    file that gets sent to feedback reports).
+    *   PII is stripped by default. Uncheck this if PII data like network names
+        is needed for debugging, but see the PII notes below.
+3.  Check `Include a policies.json file` if policy information is relevant
+    (and see PII notes below).
+4.  Check `Include all log files collected by debugd` to include additional
+    logs as a separate archive.
+    *   Also Check `Include Chrome logs` if the complete Chrome log file is
+        needed. A truncated log will be included in system_logs.txt.
+    *   This file can be quite large and may take a while to generate.
+    *   These log files will not be stripped of any PII.
+5.  Click on the 'Store system logs' button.
 
-*   extract only the relevant log files, or
-*   upload the archive to your Drive account and share it only with the
-    developer investigating the issue.
+All files will be saved to the Downloads folder.
+
+If logs with PII (personally identifiable information) are included, you may
+want to do one or more of the following:
+*   Ensure that files are only attached to an issue with a restricted component.
+*   Upload the archive to a Drive account and share it only with any developers
+    investigating the issue.
+*   Extract and attach only the relevant log files after inspecting them.
 
 ## Taking screenshots {#screenshots}
 
