@@ -65,12 +65,12 @@ To review someone else's changes, apply them locally first, or just click the
 
 [Chromium OS]: https://www.chromium.org/chromium-os
 [Contributing]: contributing.md
-[rendered by Gitiles]: https://chromium.googlesource.com/chromiumos/docs/+/master/
+[rendered by Gitiles]: https://chromium.googlesource.com/chromiumos/docs/+/HEAD/
 [Gerrit sandbox branches]: contributing.md#sandbox
-[Gitiles-flavored Markdown]: https://gerrit.googlesource.com/gitiles/+/master/Documentation/markdown.md
-[Chromium documentation guidelines]: https://chromium.googlesource.com/chromium/src/+/master/docs/documentation_guidelines.md
-[Chromium documentation best practices]: https://chromium.googlesource.com/chromium/src/+/master/docs/documentation_best_practices.md
+[Gitiles-flavored Markdown]: https://gerrit.googlesource.com/gitiles/+/HEAD/Documentation/markdown.md
+[Chromium documentation guidelines]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/documentation_guidelines.md
+[Chromium documentation best practices]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/documentation_best_practices.md
 [style guide]: https://github.com/google/styleguide/tree/gh-pages/docguide
 [repo]: https://source.android.com/source/using-repo
 [chromium-review.googlesource.com]: https://chromium-review.googlesource.com/
-[md_browser]: https://chromium.googlesource.com/chromium/src/tools/md_browser/+/master/
+[md_browser]: https://chromium.googlesource.com/chromium/src/tools/md_browser/

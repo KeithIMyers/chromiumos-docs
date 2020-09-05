@@ -144,7 +144,7 @@ Comments start with a `#` character and extend to the end of the line.
 
 ```
 # For information about this file, see
-# https://chromium.googlesource.com/chromiumos/docs/+/master/gsutil.md#googlestorage_acl.txt
+# https://chromium.googlesource.com/chromiumos/docs/+/HEAD/gsutil.md#googlestorage_acl.txt
 
 # Give owners of the chromeos.int.bot@gmail.com project full control.
 -g 00b4903a97fb6344be6306829e053825e18a04ab0cc5513e9585a2b8c9634c80:FULL_CONTROL

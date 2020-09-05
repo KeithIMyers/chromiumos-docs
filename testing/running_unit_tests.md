@@ -154,18 +154,18 @@ that:
     *   inherit the `tast-bundle` eclass.
 
 [Best practices for writing Chrome OS unit tests]: ./unit_tests.md
-[Introduction: Why Google C++ Testing Framework?]: https://github.com/google/googletest/blob/master/googletest/docs/primer.md
-[GoogleTest FAQ]: https://github.com/google/googletest/blob/master/googletest/docs/faq.md
-[`cros_run_unit_tests`]: https://chromium.googlesource.com/chromiumos/chromite/+/master/scripts/cros_run_unit_tests.py
-[platform2 testing section]: https://chromium.googlesource.com/chromiumos/docs/+/master/platform2_primer.md#running-unit-tests
-[metrics ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/chromeos-base/metrics/metrics-9999.ebuild
+[Introduction: Why Google C++ Testing Framework?]: https://github.com/google/googletest/blob/HEAD/googletest/docs/primer.md
+[GoogleTest FAQ]: https://github.com/google/googletest/blob/HEAD/googletest/docs/faq.md
+[`cros_run_unit_tests`]: https://chromium.googlesource.com/chromiumos/chromite/+/HEAD/scripts/cros_run_unit_tests.py
+[platform2 testing section]: /platform2_primer.md#running-unit-tests
+[metrics ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/chromeos-base/metrics/metrics-9999.ebuild
 [Google Test]: https://github.com/google/googletest
 [Portage documentation]: https://devmanual.gentoo.org/ebuild-writing/functions/src_test/index.html
 [this doc]: ./qemu_unit_tests_design.md
 [file a bug]: https://crbug.com/new
 [example CL]: https://crrev.com/c/583938/
 [example file]: https://crrev.com/c/583578/7/src/manifest_unittest.cc
-[canonical example]: https://chromium.googlesource.com/chromiumos/platform2/+/master/common-mk/testrunner.cc
+[canonical example]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/common-mk/testrunner.cc
 [testrunner]: https://chromium-review.googlesource.com/c/583578/7/src/testrunner.cc
 [this example CL]: https://crrev.com/c/1760792
 [an example CL]: https://crrev.com/c/1716195

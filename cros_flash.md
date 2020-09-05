@@ -29,7 +29,7 @@ USB stick to image the device first (see [developer guide]).
 
 There are plans to eliminate requirements 3 and 4, and the test image
 requirement so that `cros flash` may be integrated into the [Simple Chrome]
-workflow (bug [980627](http://crbug.com/980627)).
+workflow (bug [980627](https://crbug.com/980627)).
 
 ### Download images/payloads from Google Storage
 
@@ -160,10 +160,10 @@ Make sure that update-engine service on device is running. If not:
 start update-engine
 ```
 
-[available here]: https://chromium.googlesource.com/chromiumos/chromite/+/refs/heads/master/cli/cros/cros_flash.py
-[devserver]: https://chromium.googlesource.com/chromiumos/chromite/+/refs/heads/master/docs/devserver.md
+[available here]: https://chromium.googlesource.com/chromiumos/chromite/+/HEAD/cli/cros/cros_flash.py
+[devserver]: https://chromium.googlesource.com/chromiumos/chromite/+/HEAD/docs/devserver.md
 [Setting up SSH Access]: https://www.chromium.org/chromium-os/testing/autotest-developer-faq/ssh-test-keys-setup
-[Simple Chrome]: /simple_chrome_workflow.md
-[developer guide]: /developer_guide.md
-[xBuddy documentation]: /xbuddy.md
-[cros deploy]: https://sites.google.com/a/chromium.org/dev/chromium-os/build/cros-deploy
+[Simple Chrome]: simple_chrome_workflow.md
+[developer guide]: developer_guide.md
+[xBuddy documentation]: xbuddy.md
+[cros deploy]: https://dev.chromium.org/chromium-os/build/cros-deploy

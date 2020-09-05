@@ -1,15 +1,15 @@
 # GN in Chrome OS (go/chromeos-gn)
 
 New packages should use
-[GN](https://gn.googlesource.com/gn/+/master/docs/reference.md) instead of GYP.
+[GN](https://gn.googlesource.com/gn/+/HEAD/docs/reference.md) instead of GYP.
 
 See the official [step-by-step introduction](
-https://gn.googlesource.com/gn/+/master/docs/quick_start.md#Step_by_step) for
+https://gn.googlesource.com/gn/+/HEAD/docs/quick_start.md#Step_by_step) for
 the GN basics. This article discusses Chrome OS specific stuff.
 
 ## How to build your package with GN
 
-Example: [arc/adbd/BUILD.gn](https://chromium.googlesource.com/chromiumos/platform2/+/master/arc/adbd/BUILD.gn)
+Example: [arc/adbd/BUILD.gn](https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/arc/adbd/BUILD.gn)
 
 - Put `BUILD.gn` in your package directory, which is determined by
   `PLATFORM_SUBDIR` in your ebuild. Existence of `BUILD.gn` indicates to the
@@ -29,7 +29,7 @@ Example: [arc/adbd/BUILD.gn](https://chromium.googlesource.com/chromiumos/platfo
 ## How to write ebuilds
 
 Example: [arc-adbd-9999.ebuild](
-https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/chromeos-base/arc-adbd/arc-adbd-9999.ebuild)
+https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/chromeos-base/arc-adbd/arc-adbd-9999.ebuild)
 
 Note we should add `.gn` in `CROS_WORKON_SUBTREE` so that the platform2 build
 system can access the file.

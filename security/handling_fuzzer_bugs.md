@@ -27,6 +27,6 @@ Security bugs found by fuzzers are handled just like any other
 internally-reported security bug, and should be fixed according to the
 [security severity guidelines].
 
-[security severity guidelines]: https://chromium.googlesource.com/chromiumos/docs/+/master/security_severity_guidelines.md
+[security severity guidelines]: /security_severity_guidelines.md
 
-[list of security-sensitive Chrome OS packages]: https://chromium.googlesource.com/chromiumos/docs/+/master/security/sensitive_chromeos_packages.md
+[list of security-sensitive Chrome OS packages]: sensitive_chromeos_packages.md

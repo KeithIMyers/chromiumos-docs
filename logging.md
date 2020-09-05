@@ -48,4 +48,4 @@ Chrome logs are rotated by itself (to be more specific, a new log file is genera
 
 ## Logs from Chrome processes
 
-See the chrome side document: [Chrome Logging on Chrome OS](https://chromium.googlesource.com/chromium/src/+/master/docs/chrome_os_logging.md)
+See the chrome side document: [Chrome Logging on Chrome OS](https://chromium.googlesource.com/chromium/src/+/HEAD/docs/chrome_os_logging.md)

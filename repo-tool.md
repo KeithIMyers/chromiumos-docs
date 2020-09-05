@@ -124,7 +124,7 @@ Here are all the places you'll want to update.
         See [source checkout] for updating via `~/chromiumos/manifest/`.
     *   [private manifest](https://chrome-internal.googlesource.com/chromeos/manifest-internal/):
         See [source checkout] for updating via `~/chromiumos/manifest-internal/`.
-    *   [infra pins](https://cs.chromium.org/chromium/build/scripts/slave/recipe_modules/chromite/api.py)
+    *   [infra pins](https://chromium.googlesource.com/chromium/tools/build/+/HEAD/recipes/recipe_modules/chromite/api.py)
 
 ## Managing Our Fork
 

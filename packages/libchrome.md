@@ -404,7 +404,7 @@ improve the current situation:
 ## Building libbase
 
 See the
-[gn build recipe](https://chromium.googlesource.com/aosp/platform/external/libchrome/+/refs/heads/master/BUILD.gn)
+[gn build recipe](https://chromium.googlesource.com/aosp/platform/external/libchrome/+/HEAD/BUILD.gn)
 .
 
 It maintains a list of all the files which go into a shared library

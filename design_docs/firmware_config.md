@@ -189,12 +189,12 @@ audio codec or whether base accelerometer is present, can be missing from the
 config with the following exceptions:
 
 *   The equivalent of all
-    [hardware features](https://chromium.googlesource.com/chromiumos/overlays/board-overlays/+/master/overlay-octopus/chromeos-base/chromeos-config-bsp-octopus/files/model.yaml#20)
+    [hardware features](https://chromium.googlesource.com/chromiumos/overlays/board-overlays/+/HEAD/overlay-octopus/chromeos-base/chromeos-config-bsp-octopus/files/model.yaml#20)
     should be marked as present to support better SMT testing of bare boards.
 
 ### OS access to hardware properties
 
-[Hardware-properties](https://chromium.googlesource.com/chromiumos/platform2/+/master/chromeos-config/README.md#hardware_properties)
+[Hardware-properties](https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/chromeos-config/README.md#hardware_properties)
 information is currently stored in model.yaml which correlates to SKU ID. This
 will be replaced and sourced from the new master config system using
 DesignConfigId. Once the new device config management system is tracking

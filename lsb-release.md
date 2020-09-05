@@ -78,7 +78,7 @@ If you want to access fields in this file, please do not parse it yourself.
 The `SysInfo` class is provided by libchrome in [base/sys_info.h].
 See the methods that start with the `GetLsb` prefix.
 
-[base/sys_info.h]: https://chromium.googlesource.com/chromium/src/+/master/base/system/sys_info.h
+[base/sys_info.h]: https://chromium.googlesource.com/chromium/src/+/HEAD/base/system/sys_info.h
 
 ```cpp
 #include <base/sys_info.h>

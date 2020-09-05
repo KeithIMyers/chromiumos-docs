@@ -1066,11 +1066,11 @@ Instructions for building Chromium OS can be found
 [Portage]: https://wiki.gentoo.org/wiki/Portage
 [Gentoo]: https://www.gentoo.org/
 [localmirror]: ../archive_mirrors.md
-[devserver]: https://chromium.googlesource.com/chromiumos/chromite/+/refs/heads/master/docs/devserver.md
-[devserver-single-package]: https://chromium.googlesource.com/chromiumos/chromite/+/refs/heads/master/docs/devserver.md#TOC-How-to-build-a-single-package-and-i
+[devserver]: https://chromium.googlesource.com/chromiumos/chromite/+/HEAD/docs/devserver.md
+[devserver-single-package]: https://chromium.googlesource.com/chromiumos/chromite/+/HEAD/docs/devserver.md#TOC-How-to-build-a-single-package-and-i
 [gentoo-blockers]: https://devmanual.gentoo.org/general-concepts/dependencies/#blockers
-[virtual/editor from upstream portage]: https://chromium.googlesource.com/chromiumos/overlays/portage/+/master/virtual/editor/editor-0.ebuild
-[Chromium OS's virtual/linux-sources ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/virtual/linux-sources/
+[virtual/editor from upstream portage]: https://chromium.googlesource.com/chromiumos/overlays/portage/+/HEAD/virtual/editor/editor-0.ebuild
+[Chromium OS's virtual/linux-sources ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/virtual/linux-sources/
 [package management specification]: https://dev.gentoo.org/~tanderson/pms/eapi-2-approved/pms.html
 [chromium-os-dev-guide]: ../developer_guide.md
 [cups-ebuild-use-debug]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/932089ace19442cbd1d72a9304226ab604984ac4/net-print/cups/cups-9999.ebuild#28

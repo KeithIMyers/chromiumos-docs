@@ -757,13 +757,13 @@ llvm-cov report -instr-profile=default.profdata -object=/build/$BOARD/tmp/portag
 [unit testing document]: https://www.chromium.org/chromium-os/testing/adding-unit-tests-to-the-build
 [Functional tests]: https://en.wikipedia.org/wiki/Functional_testing
 [Tast]: https://chromium.googlesource.com/chromiumos/platform/tast/
-[Autotest]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md
+[Autotest]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/HEAD/docs/user-doc.md
 [commit queue]: https://www.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/commit-queue-overview
-[Google Mock]: https://github.com/google/googletest/blob/master/googlemock/README.md
+[Google Mock]: https://github.com/google/googletest/blob/HEAD/googlemock/README.md
 [Google Test]: https://github.com/google/googletest
 ["Should we officially deprecate GMock?"]: https://groups.google.com/a/chromium.org/forum/#!msg/chromium-dev/-KH_IP0rIWQ/HynALJ3rsk0J
 ["Using NiceMock?"]: https://groups.google.com/a/chromium.org/forum/#!msg/chromium-dev/1zktlTqFb6o/g5-Llb7LCgAJ
 ["Friends You Can Depend On"]: https://testing.googleblog.com/2008/06/tott-friends-you-can-depend-on.html
 ["Know Your Test Doubles"]: https://testing.googleblog.com/2013/07/testing-on-toilet-know-your-test-doubles.html
 [Google Testing Blog]: https://testing.googleblog.com/
-[`MOCK_METHOD`]: https://github.com/google/googletest/blob/master/googlemock/docs/cook_book.md#creating-mock-classes
+[`MOCK_METHOD`]: https://github.com/google/googletest/blob/HEAD/googlemock/docs/cook_book.md#creating-mock-classes

@@ -303,7 +303,7 @@ This doc is at [go/cros-vm].
 
 [depot_tools installed]: https://www.chromium.org/developers/how-tos/install-depot-tools
 [go/cros-qemu]: https://storage.cloud.google.com/achuith-cloud.google.com.a.appspot.com/qemu.tar.gz
-[Linux Chromium checkout]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux/build_instructions.md
+[Linux Chromium checkout]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/linux/build_instructions.md
 [Virtualization enabled]: https://g3doc.corp.google.com/tools/android/g3doc/development/crow/enable_kvm.md
 [Simple Chrome]: simple_chrome_workflow.md
 [chroot]: developer_guide.md
@@ -315,7 +315,7 @@ This doc is at [go/cros-vm].
 [build Chromium OS]: developer_guide.md
 [attribute expression]: https://chromium.googlesource.com/chromiumos/platform/tast/+/HEAD/docs/test_attributes.md
 [Launch a locally built VM from within the chroot]: #Launch-a-locally-built-VM-from-within-the-chroot
-[go/tast-infra]: https://chrome-internal.googlesource.com/chromeos/chromeos-admin/+/master/doc/tast_integration.md
+[go/tast-infra]: https://chrome-internal.googlesource.com/chromeos/chromeos-admin/+/HEAD/doc/tast_integration.md
 [go/cros-vm]: cros_vm.md
 [chromeos-amd64-generic-rel]: https://ci.chromium.org/p/chromium/builders/luci.chromium.ci/chromeos-amd64-generic-rel
 [VNC Viewer Extension]: https://chrome.google.com/webstore/detail/iabmpiboiopbgfabjmgeedhcmjenhbla

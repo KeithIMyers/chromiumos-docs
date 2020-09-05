@@ -12,7 +12,7 @@ document describes how to do so.
 |---------------|-------------------------------------------------------|
 |  (shell)      | outside the chroot and SDK shell on your workstation  |
 |  (sdk)        | inside the `chrome-sdk` SDK shell on your workstation |
-|  (device)     | in your [VM] or Chrome OS device                      |
+|  (device)     | in your [VM](./cros_vm.md) or Chrome OS device        |
 
 ## Chromium
 
@@ -42,7 +42,7 @@ different, and re-running `cros chrome-sdk` will overwrite these.
 
 Then append `exclude_unwind_tables=false`.
 
-[add them via]: https://chromium.googlesource.com/chromiumos/docs/+/master/simple_chrome_workflow.md#cros-chrome_sdk-options
+[add them via]: simple_chrome_workflow.md#cros-chrome_sdk-options
 
 #### Deploying Chrome
 
@@ -87,7 +87,7 @@ This code will output to the standard Chrome log, which is accessible via:
 
 See the [chrome os logging] document for further info.
 
-[chrome os logging]: https://chromium.googlesource.com/chromium/src.git/+/master/docs/chrome_os_logging.md
+[chrome os logging]: https://chromium.googlesource.com/chromium/src.git/+/HEAD/docs/chrome_os_logging.md
 
 It's also possible to log the stack trace to stderr with the following code:
 

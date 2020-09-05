@@ -282,4 +282,4 @@ has been updated to detail the new recommended steps.
 [sed]: https://www.gnu.org/software/sed/
 [shebang]: https://en.wikipedia.org/wiki/Shebang_(Unix)
 [crouton]: https://github.com/dnschneid/crouton
-[crouton readme]: https://github.com/dnschneid/crouton/blob/master/README.md
+[crouton readme]: https://github.com/dnschneid/crouton/blob/HEAD/README.md

@@ -462,7 +462,7 @@ Wiki](https://selinuxproject.org/page/TypeRules)
     `exec_type` and thereby transitioning to `new_domain`.  It is equivalent to
     `domain_auto_trans(minijail, exec_type, new_domain)`, but makes the
     intention more obvious.  See
-    [minijail_te_macros](https://chromium.googlesource.com/chromiumos/platform2/+/master/sepolicy/policy/chromeos/minijail_te_macros)
+    [minijail_te_macros](https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/sepolicy/policy/chromeos/minijail_te_macros)
     for more minijail-specific macros.
 
 ### Naming Conventions

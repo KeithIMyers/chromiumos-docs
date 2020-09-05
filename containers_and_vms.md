@@ -830,8 +830,8 @@ Note that we're only talking about constraints on data stored in the clipboard.
 [Wayland] apps are still free to transfer data directly between themselves in
 whatever arbitrary format they like.
 
-[exo/data_source.cc]: https://chromium.googlesource.com/chromium/src/+/master/components/exo/data_source.cc
-[clipboard_constants.cc]: https://chromium.googlesource.com/chromium/src/+/master/ui/base/clipboard/clipboard_constants.cc
+[exo/data_source.cc]: https://chromium.googlesource.com/chromium/src/+/HEAD/components/exo/data_source.cc
+[clipboard_constants.cc]: https://chromium.googlesource.com/chromium/src/+/HEAD/ui/base/clipboard/clipboard_constants.cc
 
 ### Can I read/write the clipboard automatically from inside the VM?
 
@@ -1179,16 +1179,16 @@ It's not that [crouton] is bad, it's simply a completely different model.
 [Security]: #Security
 
 [9p]: http://man.cat-v.org/plan_9/5/intro
-[9s]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/9s/
+[9s]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/9s/
 [AMD-V]: https://en.wikipedia.org/wiki/AMD-V
 [alt syscall]: https://chromium.googlesource.com/chromiumos/third_party/kernel/+/HEAD/security/chromiumos/alt-syscall.c
 [Android Studio]: https://developer.android.com/topic/arc/studio
 [child accounts]: https://support.google.com/families/answer/7680868
-[Cicerone]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/cicerone/
+[Cicerone]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/cicerone/
 [component]: https://chromium.googlesource.com/chromium/src/+/lkgr/components/component_updater/README.md
-[Concierge]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/concierge/
+[Concierge]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/concierge/
 [cros-container-guest-tools]: https://chromium.googlesource.com/chromiumos/containers/cros-container-guest-tools/
-[crosh]: https://chromium.googlesource.com/chromiumos/platform2/+/master/crosh/
+[crosh]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/crosh/
 [Crostini]: #Crostini
 [crosvm]: https://chromium.googlesource.com/chromiumos/platform/crosvm/
 [crouton]: https://github.com/dnschneid/crouton
@@ -1197,13 +1197,13 @@ It's not that [crouton] is bad, it's simply a completely different model.
 [dm-verity]: https://gitlab.com/cryptsetup/cryptsetup/wikis/DMVerity
 [DPI]: https://en.wikipedia.org/wiki/Dots_per_inch#Computer_monitor_DPI_standards
 [FUSE]: https://github.com/libfuse/libfuse/
-[Garcon]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/garcon/
+[Garcon]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/garcon/
 [Gentoo]: https://gentoo.org/
 [HiDPI]: https://en.wikipedia.org/wiki/HiDPI
 [KVM]: https://www.linux-kvm.org/
 [kvmtool]: https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/
 [LXC]: https://linuxcontainers.org/lxc/introduction/
-[Maitred]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/maitred/
+[Maitred]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/maitred/
 [MIME]: https://en.wikipedia.org/wiki/MIME
 [multiprofile]: https://support.google.com/chromebook/answer/6088201
 [NaCl]: https://developer.chrome.com/native-client
@@ -1212,22 +1212,22 @@ It's not that [crouton] is bad, it's simply a completely different model.
 [seccomp]: https://en.wikipedia.org/wiki/Seccomp
 [Secure Shell]: https://chrome.google.com/webstore/detail/pnhechapfaindjhompbnflcldabbghjo
 [SELinux]: https://en.wikipedia.org/wiki/Security-Enhanced_Linux
-[Seneschal]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/seneschal/
-[Sommelier]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/sommelier/
+[Seneschal]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/seneschal/
+[Sommelier]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/sommelier/
 [SquashFS]: https://en.wikipedia.org/wiki/SquashFS
 [Steam]: https://store.steampowered.com/linux
 [SVM]: https://en.wikipedia.org/wiki/AMD-V
-[Termina]: https://chromium.googlesource.com/chromiumos/overlays/board-overlays/+/master/project-termina/
+[Termina]: https://chromium.googlesource.com/chromiumos/overlays/board-overlays/+/HEAD/project-termina/
 [Terminal]: #Terminal
-[Tremplin]: https://chromium.googlesource.com/chromiumos/platform/tremplin/+/master/
+[Tremplin]: https://chromium.googlesource.com/chromiumos/platform/tremplin/
 [user namespaces]: http://man7.org/linux/man-pages/man7/user_namespaces.7.html
 [userland]: https://en.wikipedia.org/wiki/User_space
 [UTC]: https://en.wikipedia.org/wiki/Coordinated_Universal_Time
 [virtio]: http://docs.oasis-open.org/virtio/virtio/v1.0/virtio-v1.0.html
 [VM]: https://en.wikipedia.org/wiki/Virtual_machine
-[vmc]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/concierge/
+[vmc]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/concierge/
 [VMX]: https://en.wikipedia.org/wiki/Intel%20VT-x
-[vsh]: https://chromium.googlesource.com/chromiumos/platform2/+/master/vm_tools/vsh/
+[vsh]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/vm_tools/vsh/
 [VT-x]: https://en.wikipedia.org/wiki/Intel%20VT-x
 [Wayland]: https://wayland.freedesktop.org/
 [WINE]: https://www.winehq.org/

@@ -84,7 +84,7 @@ in which case you *must not* parse it.
 |  Yes   | `VERSION`         | Major release version | `70` |
 |  Yes   | `VERSION_ID`      | Full release version | `70` |
 
-[crash-reporter]: https://chromium.googlesource.com/chromiumos/platform2/+/master/crash-reporter/
+[crash-reporter]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/crash-reporter/
 [os-release man page]: https://www.freedesktop.org/software/systemd/man/os-release.html
 
 ### /etc/os-release.d/
@@ -123,7 +123,7 @@ This handles both `/etc/os-release` and `/etc/os-release.d/` automatically.
 ...
 ```
 
-[brillo/osrelease_reader.h]: https://chromium.googlesource.com/chromiumos/platform2/+/master/libbrillo/brillo/osrelease_reader.h
+[brillo/osrelease_reader.h]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/libbrillo/brillo/osrelease_reader.h
 
 #### Shell Code
 
@@ -233,7 +233,7 @@ Be sure to use pkg-config to locate the `vboot_host` library instead of using
   }
 ```
 
-[crossystem.h]: https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/master/host/include/crossystem.h
+[crossystem.h]: https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/HEAD/host/include/crossystem.h
 
 #### Shell Code
 
@@ -293,7 +293,7 @@ This is explained in more detail in the [login_manager documentation].
 USE flags must not be used to set board names (e.g. `kevin` or `link`).
 See the [board/device behavior FAQ](#device-behavior) for alternatives.
 
-[libchromeos-use-flags]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/chromeos-base/libchromeos-use-flags/
+[libchromeos-use-flags]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/chromeos-base/libchromeos-use-flags/
 
 ### cros-board.eclass
 
@@ -305,7 +305,7 @@ You might still find some packages in the tree using them, but it's because we
 haven't yet migrated them off.
 https://crbug.com/407731 is tracking that work.
 
-[cros-board.eclass]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/eclass/cros-board.eclass
+[cros-board.eclass]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/eclass/cros-board.eclass
 
 ## FAQ
 
@@ -395,10 +395,10 @@ early dogfood testing with users.
 Use some other knob to control behavior (such as [Finch]).
 
 [chromeos-config section]: #chromeos_config
-[chromeos-config project]: https://chromium.googlesource.com/chromiumos/platform2/+/master/chromeos-config
-[crossystem]: https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/master/utility/crossystem.c
+[chromeos-config project]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/chromeos-config
+[crossystem]: https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+/HEAD/utility/crossystem.c
 [Finch]: http://go/finch-guide
-[login_manager documentation]: https://chromium.googlesource.com/chromiumos/platform2/+/master/login_manager/docs/flags.md
+[login_manager documentation]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/login_manager/docs/flags.md
 [lsb-release]: #LSB
 [os-release]: #os-release
 [rewrite-shell]: ./development_basics.md#shell

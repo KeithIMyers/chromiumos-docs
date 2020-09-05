@@ -172,9 +172,9 @@ If you think you've identified a bug in Chrome OS, please do the following:
 
 [Chromebook Central Help Forum]: https://productforums.google.com/forum/#!forum/chromebook-central
 [official feedback documentation]: https://support.google.com/chromebook/answer/2982029
-[public issue tracker]: https://bugs.chromium.org/p/chromium/issues/list
+[public issue tracker]: https://crbug.com/
 [new.crbug.com]: https://new.crbug.com/
 [crbug.com/new]: https://crbug.com/new
 [go/newcrosbug]: https://goto.google.com/newcrosbug
 [Reporting Security Bugs]: https://dev.chromium.org/Home/chromium-security/reporting-security-bugs
-[Chrome OS Security Severity Guidelines]: https://chromium.googlesource.com/chromiumos/docs/+/master/security_severity_guidelines.md
+[Chrome OS Security Severity Guidelines]: security_severity_guidelines.md

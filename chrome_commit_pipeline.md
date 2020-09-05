@@ -78,8 +78,8 @@ the ChromeOS CQ. There is a [PUpr Dashboard] that shows the current status
 of the uprev CLs as well as the age of the current chrome version on ChromeOS.
 
 [contributing code]: contributing.md
-[commit queue]: https://chromium.googlesource.com/chromium/src/+/master/infra/config/generated/cq-builders.md
-[chromium.org]: http://www.chromium.org
+[commit queue]: https://chromium.googlesource.com/chromium/src/+/HEAD/infra/config/generated/cq-builders.md
+[chromium.org]: https://www.chromium.org
 [Gerrit]: https://chromium-review.googlesource.com/
 [android]: https://ci.chromium.org/p/chromium/g/tryserver.chromium.android
 [cros]: https://ci.chromium.org/p/chromium/g/tryserver.chromium.chromiumos

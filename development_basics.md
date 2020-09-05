@@ -197,20 +197,20 @@ discussing private, partner-related information), use the public issue tracker
 and mailing lists rather than the internal versions.
 
 [contact]: contact.md
-[documentation guidelines]: https://chromium.googlesource.com/chromium/src/+/master/docs/documentation_guidelines.md
-[documentation best practices]: https://chromium.googlesource.com/chromium/src/+/master/docs/documentation_best_practices.md
+[documentation guidelines]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/documentation_guidelines.md
+[documentation best practices]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/documentation_best_practices.md
 [Chromium OS design docs]: https://www.chromium.org/chromium-os/chromiumos-design-docs
 [Chromium design docs]: https://www.chromium.org/developers/design-documents
 [Google C++ style guide]: https://google.github.io/styleguide/cppguide.html
-[Chromium C++ style guide]: https://chromium.googlesource.com/chromium/src/+/master/styleguide/c++/c++.md
+[Chromium C++ style guide]: https://chromium.googlesource.com/chromium/src/+/HEAD/styleguide/c++/c++.md
 [C++11 use in Chromium]: https://chromium-cpp.appspot.com/
 [platform2 repository]: platform2_primer.md
-[Linux kernel coding style]: https://github.com/torvalds/linux/blob/master/Documentation/process/coding-style.rst
+[Linux kernel coding style]: https://github.com/torvalds/linux/blob/HEAD/Documentation/process/coding-style.rst
 [Kernel Development]: kernel_development.md
-[EC Development page]: https://chromium.googlesource.com/chromiumos/platform/ec/+/master/README.md
-[src/platform2/init]: https://chromium.googlesource.com/chromiumos/platform2/+/master/init/
-[init STYLE file]: https://chromium.googlesource.com/chromiumos/platform2/+/master/init/STYLE
-[init README file]: https://chromium.googlesource.com/chromiumos/platform2/+/master/init/README
+[EC Development page]: https://chromium.googlesource.com/chromiumos/platform/ec/+/HEAD/README.md
+[src/platform2/init]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/init/
+[init STYLE file]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/init/STYLE
+[init README file]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/init/README
 [chromiumos-overlay repository]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master
 [Ebuild Writing]: https://devmanual.gentoo.org/ebuild-writing/index.html
 [Ebuild File Format]: https://devmanual.gentoo.org/ebuild-writing/file-format/index.html
@@ -218,17 +218,17 @@ and mailing lists rather than the internal versions.
 [Chromium OS shell style guidelines]: styleguide/shell.md
 [Google Python style guide]: https://google.github.io/styleguide/pyguide.html
 [Chromium OS Python style guidelines]: styleguide/python.md
-[autotest coding style]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/coding-style.md
+[autotest coding style]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/HEAD/docs/coding-style.md
 [Chromium OS testing site]: https://www.chromium.org/chromium-os/testing
 [Google Test]: https://github.com/google/googletest
-[Why Google C++ Testing Framework?]: https://github.com/google/googletest/blob/master/googletest/docs/primer.md
-[Google Test FAQ]: https://github.com/google/googletest/blob/master/googletest/docs/faq.md
+[Why Google C++ Testing Framework?]: https://github.com/google/googletest/blob/HEAD/googletest/docs/primer.md
+[Google Test FAQ]: https://github.com/google/googletest/blob/HEAD/googletest/docs/faq.md
 [unit testing document]: https://www.chromium.org/chromium-os/testing/adding-unit-tests-to-the-build
 [Best practices for writing Chrome OS unit tests]: testing/unit_tests.md
-[Autotest]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/user-doc.md
-[Chromium code review policy]: https://chromium.googlesource.com/chromium/src/+/master/docs/code_reviews.md
+[Autotest]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/HEAD/docs/user-doc.md
+[Chromium code review policy]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/code_reviews.md
 [Developer Guide's code review instructions]: developer_guide.md#Upload-your-changes-and-get-a-code-review
 [Gerrit notification settings]: https://chromium-review.googlesource.com/settings/#Notifications
-[chromium issue tracker]: https://bugs.chromium.org/p/chromium/issues/list
+[chromium issue tracker]: https://crbug.com/
 [Chromium bug reporting guidelines]: https://www.chromium.org/for-testers/bug-reporting-guidelines
 [chromium-os-dev]: https://groups.google.com/a/chromium.org/forum/#!forum/chromium-os-dev

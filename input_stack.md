@@ -117,7 +117,7 @@ end. There's also an `events` file with the events being read from the device.
 
 [hid-tutorial]: https://eleccelerator.com/tutorial-about-usb-hid-report-descriptors/
 [hid-tools]: https://gitlab.freedesktop.org/libevdev/hid-tools
-[gamepad-tests]: https://chromium.googlesource.com/chromiumos/platform/tast-tests/+/master/src/chromiumos/tast/local/bundles/cros/gamepad/
+[gamepad-tests]: https://chromium.googlesource.com/chromiumos/platform/tast-tests/+/HEAD/src/chromiumos/tast/local/bundles/cros/gamepad/
 [uhid interface]: https://kernel.org/doc/Documentation/hid/uhid.txt
 
 #### Drivers
@@ -203,8 +203,8 @@ tool][mtedit-web] from platform/mttools.
 *   [Pointer Events][pointer-events] is a similar page for showing stylus
     events.
 
-[Ozone]: https://chromium.googlesource.com/chromium/src.git/+/master/docs/ozone_overview.md
-[Chrome Logging on Chrome OS]: https://chromium.googlesource.com/chromium/src.git/+/master/docs/chrome_os_logging.md
+[Ozone]: https://chromium.googlesource.com/chromium/src.git/+/HEAD/docs/ozone_overview.md
+[Chrome Logging on Chrome OS]: https://chromium.googlesource.com/chromium/src.git/+/HEAD/docs/chrome_os_logging.md
 [mtedit-web]: https://adlr.info/mtedit-extension/mtedit.html
 [rbyers-paint]: https://rbyers.github.io/paint.html
 [tracker-hud]: https://patrickhlauke.github.io/touch/leapmotion/tracker/
@@ -246,7 +246,7 @@ being produced.
 
 [struct gesture]: https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/platform/gestures/include/gestures.h?q=%22struct%20gesture%22&ss=chromiumos
 [interpreter-chains]: https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/platform/gestures/src/gestures.cc?q=InitializeTouchpad
-[Gesture Properties]: https://chromium.googlesource.com/chromiumos/platform/gestures/+/master/docs/gesture_properties.md
+[Gesture Properties]: https://chromium.googlesource.com/chromiumos/platform/gestures/+/HEAD/docs/gesture_properties.md
 
 ## Chrome to Linux apps (Crostini)
 

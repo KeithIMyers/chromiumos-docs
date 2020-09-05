@@ -283,8 +283,8 @@ For EC firmware,
     *   `fmap_decode /tmp/ec.bin | grep EC_RO`
 *   Run `flashrom -p ec --wp-enable --wp-range START_RANGE END_RANGE`.
 
-["CCD open"]: https://chromium.googlesource.com/chromiumos/platform/ec/+/refs/heads/master/docs/case_closed_debugging_cr50.md#Open-CCD
-[Cr50 console]: https://chromium.googlesource.com/chromiumos/platform/ec/+/refs/heads/master/docs/case_closed_debugging_cr50.md#Consoles
-[Servo]: https://chromium.googlesource.com/chromiumos/third_party/hdctools/+/refs/heads/master/README.md
-[suzyQ]: https://chromium.googlesource.com/chromiumos/third_party/hdctools/+/master/docs/ccd.md#suzyq-suzyqable
+["CCD open"]: https://chromium.googlesource.com/chromiumos/platform/ec/+/HEAD/docs/case_closed_debugging_cr50.md#Open-CCD
+[Cr50 console]: https://chromium.googlesource.com/chromiumos/platform/ec/+/HEAD/docs/case_closed_debugging_cr50.md#Consoles
+[Servo]: https://chromium.googlesource.com/chromiumos/third_party/hdctools/+/HEAD/README.md
+[suzyQ]: https://chromium.googlesource.com/chromiumos/third_party/hdctools/+/HEAD/docs/ccd.md#suzyq-suzyqable
 [Verified Boot]: https://www.chromium.org/chromium-os/chromiumos-design-docs/verified-boot

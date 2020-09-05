@@ -395,16 +395,16 @@ These are our security principles:
     otherwise open it up to additional exposure. There is tension here to
     "secure by default" and *don't scapegoat the user* - this is intentional :-D
 
-[sandboxing guide]: https://chromium.googlesource.com/chromiumos/docs/+/master/sandboxing.md
+[sandboxing guide]: sandboxing.md
 [crbug.com]: https://crbug.com
 [chromeos-security@google.com]: mailto:chromeos-security@google.com
 [office hours]: https://goto.google.com/cros-security-office-hours
 [chromiumdash]: https://chromiumdash.appspot.com/schedule
 [fuzzing documentation]: testing/fuzzing.md
-[BaseMessageLoop]: https://chromium.googlesource.com/aosp/platform/external/libbrillo/+/master/brillo/message_loops/base_message_loop.h
+[BaseMessageLoop]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/libbrillo/brillo/message_loops/base_message_loop.h
 [newer list of cryptographic right answers]: http://latacora.singles/2018/04/03/cryptographic-right-answers.html
 [older reference of cryptographic right answers]: https://www.daemonology.net/blog/2009-06-11-cryptographic-right-answers.html
 [review framework]: #review-framework-things-to-look-at
 [How To Do Chrome Security Reviews]: https://docs.google.com/document/d/1JDC411NquvDGTQjQbtQSzHtBaQyCFMDTAAQZGifdmuE/edit
-[Mojo IPC security guidelines]: https://chromium.googlesource.com/chromium/src/+/master/docs/security/mojo.md
+[Mojo IPC security guidelines]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/security/mojo.md
 [UMA]: https://g3doc.corp.google.com/analysis/uma/g3doc/home/index.md

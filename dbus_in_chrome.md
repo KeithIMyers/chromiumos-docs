@@ -208,15 +208,15 @@ the correct initial state from the daemon.
 
 [D-Bus]: https://www.freedesktop.org/wiki/Software/dbus/
 [D-Bus Best Practices]: dbus_best_practices.md
-[system_api]: https://chromium.googlesource.com/chromiumos/platform/system_api/+/master
-[src/DEPS]: https://chromium.googlesource.com/chromium/src/+/master/DEPS
+[system_api]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/system_api
+[src/DEPS]: https://chromium.googlesource.com/chromium/src/+/HEAD/DEPS
 [mus+ash]: https://www.chromium.org/developers/mus-ash
-[chromeos::CrosDBusService::ServiceProviderInterface]: https://chromium.googlesource.com/chromium/src/+/master/chromeos/dbus/services/cros_dbus_service.h
-[ash/dbus]: https://chromium.googlesource.com/chromium/src/+/master/ash/dbus/
-[ash_dbus_services.cc]: https://chromium.googlesource.com/chromium/src/+/master/ash/dbus/ash_dbus_services.cc
-[chrome/browser/chromeos/dbus]: https://chromium.googlesource.com/chromium/src/+/master/chrome/browser/chromeos/dbus/
-[chrome_browser_main_chromeos.cc]: https://chromium.googlesource.com/chromium/src/+/master/chrome/browser/chromeos/chrome_browser_main_chromeos.cc
-[chromeos/dbus/services]: https://chromium.googlesource.com/chromium/src/+/master/chromeos/dbus/services/
-[ash/BUILD.gn]: https://chromium.googlesource.com/chromium/src/+/master/ash/BUILD.gn
-[chrome/browser/chromeos/BUILD.gn]: https://chromium.googlesource.com/chromium/src/+/master/chrome/browser/chromeos/BUILD.gn
-[chromeos/dbus]: https://chromium.googlesource.com/chromium/src/+/master/chromeos/dbus
+[chromeos::CrosDBusService::ServiceProviderInterface]: https://chromium.googlesource.com/chromium/src/+/HEAD/chromeos/dbus/services/cros_dbus_service.h
+[ash/dbus]: https://chromium.googlesource.com/chromium/src/+/HEAD/ash/dbus/
+[ash_dbus_services.cc]: https://chromium.googlesource.com/chromium/src/+/HEAD/ash/dbus/ash_dbus_services.cc
+[chrome/browser/chromeos/dbus]: https://chromium.googlesource.com/chromium/src/+/HEAD/chrome/browser/chromeos/dbus/
+[chrome_browser_main_chromeos.cc]: https://chromium.googlesource.com/chromium/src/+/HEAD/chrome/browser/chromeos/chrome_browser_main_chromeos.cc
+[chromeos/dbus/services]: https://chromium.googlesource.com/chromium/src/+/HEAD/chromeos/dbus/services/
+[ash/BUILD.gn]: https://chromium.googlesource.com/chromium/src/+/HEAD/ash/BUILD.gn
+[chrome/browser/chromeos/BUILD.gn]: https://chromium.googlesource.com/chromium/src/+/HEAD/chrome/browser/chromeos/BUILD.gn
+[chromeos/dbus]: https://chromium.googlesource.com/chromium/src/+/HEAD/chromeos/dbus

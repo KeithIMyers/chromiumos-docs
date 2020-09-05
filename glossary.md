@@ -105,7 +105,7 @@
 *   __Servo__: a debugging board that connects via USB to a host
     machine and a device under test.
 *   __TBR__: "To be reviewed". In
-    [specific circumstances](https://chromium.googlesource.com/chromium/src/+/master/docs/code_reviews.md#TBR-To-Be-Reviewed)
+    [specific circumstances](https://chromium.googlesource.com/chromium/src/+/HEAD/docs/code_reviews.md#TBR-To-Be-Reviewed)
     used to land code and have it reviewed later.
 *   __TCPC__: Type C Port Controller.
 *   __TPM__: ["Trusted Platform Module"](https://en.wikipedia.org/wiki/Trusted_Platform_Module),
@@ -270,7 +270,7 @@
 *   __build_target__: The new, preferred term for board.
 *   __devserver__: System for updating packages on a Chromium OS device
     without having to use a USB stick or doing a full reimage. See the
-    [Dev Server page](https://chromium.googlesource.com/chromiumos/chromite/+/refs/heads/master/docs/devserver.md).
+    [Dev Server page](https://chromium.googlesource.com/chromiumos/chromite/+/HEAD/docs/devserver.md).
 *   __powerwash__: Wiping of the stateful partition (system & all users) to
     get a device back into a pristine state. The TPM is not cleared, and Lockbox
     is kept intact (thus it is not the same as a factory reset). See the
@@ -299,7 +299,7 @@ Terms related to building ChromiumOS.
     specialized processes for a few specific packages (e.g. chrome, android).
 
 
-[Chromium CQ]: https://chromium.googlesource.com/chromium/src/+/master/docs/infra/cq.md
+[Chromium CQ]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/infra/cq.md
 [Chromium OS CQ]: https://www.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/commit-queue-overview
 [chromium-review.googlesource.com]: https://chromium-review.googlesource.com
 [chromium.googlesource.com]: https://chromium.googlesource.com

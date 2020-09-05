@@ -11,5 +11,5 @@
 * [Bugs](./reporting_bugs.md)
 * [Glossary](./glossary.md)
 * [Style Guide (Markdown)](https://github.com/google/styleguide/tree/gh-pages/docguide)
-* [Gitiles (Markdown Format)](https://gerrit.googlesource.com/gitiles/+/master/Documentation/markdown.md)
+* [Gitiles (Markdown Format)](https://gerrit.googlesource.com/gitiles/+/HEAD/Documentation/markdown.md)
 * [Old Docs](https://www.chromium.org/chromium-os)

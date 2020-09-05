@@ -212,7 +212,7 @@ you'll need to `emerge` it onto your chroot and test it there as well.
 
 You probably want to run at least the `suite:smoke` tests for each board,
 which you can do by following the tips
-[here](https://sites.google.com/a/chromium.org/dev/chromium-os/testing)
+[here](https://dev.chromium.org/chromium-os/testing)
 (Googlers may also use the tips at goto/cros-test). In particular, you
 can use [trybot] to determine what effect your upgrade will have on the
 greenness of the waterfall.
@@ -461,11 +461,11 @@ team for additional guidance.
 
 [portage-stable]: https://chromium.googlesource.com/chromiumos/overlays/portage-stable/
 [chromiumos-overlay]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/
-[Chromium OS developer guide]: https://chromium.googlesource.com/chromiumos/docs/+/refs/heads/master/developer_guide.md
-[contributor's guide]: https://chromium.googlesource.com/chromiumos/docs/+/refs/heads/master/contributing.md
+[Chromium OS developer guide]: /developer_guide.md
+[contributor's guide]: /contributing.md
 [re-applying a patch]: #Re_applying-a-patch-after-upgrade
 [upgrading to unstable versions]: #Upgrading-to-unstable-version
-[the Chrome OS development mailing list]: https://chromium.googlesource.com/chromiumos/docs/+/refs/heads/master/contact.md
+[the Chrome OS development mailing list]: /contact.md
 [trybot]: https://www.chromium.org/chromium-os/build/local-trybot-documentation
 [USE flags]: ebuild_faq.md
 [eclasses]: https://wiki.gentoo.org/wiki/Eclass

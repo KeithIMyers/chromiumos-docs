@@ -141,9 +141,9 @@ The current test/install phases of the sysroot are very limited and not distinct
  * [Build/Test/Install: setup_board](#setup_board)
 
 
-[chromite_bin]: (https://cs.chromium.org/chromium/src/third_party/chromite/bin/)
-[cros_sdk_src]: (https://cs.chromium.org/chromium/src/third_party/chromite/scripts/cros_sdk.py)
-[crosutils]: (https://chromium.googlesource.com/chromiumos/platform/crosutils/)
-[cros-workon-make-src]: (https://chromium.googlesource.com/chromiumos/platform/dev-util/+/refs/heads/master/host/cros_workon_make)
+[chromite_bin]: https://chromium.googlesource.com/chromiumos/chromite/+/HEAD/bin/
+[cros_sdk_src]: https://chromium.googlesource.com/chromiumos/chromite/+/HEAD/scripts/cros_sdk.py
+[crosutils]: https://chromium.googlesource.com/chromiumos/platform/crosutils/
+[cros-workon-make-src]: https://chromium.googlesource.com/chromiumos/platform/dev-util/+/HEAD/host/cros_workon_make
 [build-glossary]: glossary.md#cros-build
 [glossary-acronyms]: glossary.md#acronyms

@@ -537,7 +537,7 @@ See the previous questions in this FAQ for more details.
 [internal_full.xml]: https://chrome-internal.googlesource.com/chromeos/manifest-internal/+/HEAD/internal_full.xml
 [kernel]: https://chromium.googlesource.com/chromiumos/third_party/kernel/
 [Local Checkout]: #local-layout
-[Local manifests]: https://gerrit.googlesource.com/git-repo/+/master/docs/manifest-format.md#Local-Manifests
+[Local manifests]: https://gerrit.googlesource.com/git-repo/+/HEAD/docs/manifest-format.md#Local-Manifests
 [LUCI]: https://chromium.googlesource.com/infra/luci/luci-py/
 [manifest]: https://chromium.googlesource.com/chromiumos/manifest/
 [manifest-internal]: https://chrome-internal.googlesource.com/chromeos/manifest-internal/

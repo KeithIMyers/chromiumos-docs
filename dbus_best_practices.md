@@ -506,10 +506,10 @@ dbus-send --system --print-reply --type=method_call \
 
 [D-Bus]: https://www.freedesktop.org/wiki/Software/dbus/
 [D-Bus Usage in Chrome]: dbus_in_chrome.md
-[libchrome package]: https://android.googlesource.com/platform/external/libchrome/+/master/dbus/
-[libbrillo]: https://android.googlesource.com/platform/external/libbrillo/+/master/brillo/dbus/
-[DBusDaemon and DBusServiceDaemon classes]: https://android.googlesource.com/platform/external/libbrillo/+/master/brillo/daemons/dbus_daemon.h
-[chromeos-dbus-bindings]: https://chromium.googlesource.com/chromiumos/platform2/+/master/chromeos-dbus-bindings/
+[libchrome package]: https://android.googlesource.com/platform/external/libchrome/+/HEAD/dbus/
+[libbrillo]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/libbrillo/brillo/dbus/
+[DBusDaemon and DBusServiceDaemon classes]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/libbrillo/brillo/daemons/dbus_daemon.h
+[chromeos-dbus-bindings]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/chromeos-dbus-bindings/
 [libdbus]: https://dbus.freedesktop.org/doc/api/html/index.html
 [dbus-glib]: https://dbus.freedesktop.org/doc/dbus-glib/
 [own object system]: https://developer.gnome.org/gobject/stable/gobject-The-Base-Object-Type.html
@@ -517,7 +517,7 @@ dbus-send --system --print-reply --type=method_call \
 [dbus-c++]: http://dbus-cplusplus.sourceforge.net/
 [upstream D-Bus tutorial]: http://dbus.freedesktop.org/doc/dbus-tutorial.html#members
 [object manager interface]: https://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-objectmanager
-[system_api]: https://chromium.googlesource.com/chromiumos/platform/system_api/+/master
+[system_api]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/system_api
 [Protocol buffers]: https://github.com/google/protobuf
 [difficult-to-track-down bug]: https://crbug.com/208247
 [start a service]: https://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-starting-services

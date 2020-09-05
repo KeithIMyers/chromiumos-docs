@@ -96,8 +96,8 @@ canary build (generally the most recent).
 
 [chromium-review]: https://chromium-review.googlesource.com
 [developer guide]: developer_guide.md
-[gerrit workflow]: https://chromium.googlesource.com/chromiumos/docs/+/master/contributing.md#Going-through-review
-[Cq-Depend]: https://chromium.googlesource.com/chromiumos/docs/+/master/contributing.md#CQ-DEPEND
+[gerrit workflow]: contributing.md#Going-through-review
+[Cq-Depend]: contributing.md#CQ-DEPEND
 [chromeos-cq builders]: https://ci.chromium.org/p/chromeos/g/chromeos.cq/builders
 [Skylab]: https://goto.corp.google.com/chromeos-skylab-doc
 [go/cros-oncall]: https://goto.corp.google.com/cros-oncall

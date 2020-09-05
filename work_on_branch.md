@@ -265,5 +265,5 @@ This is why we only support the methods listed above.
 [developer-guide]: ./developer_guide.md
 [experimental-branches]: https://dev.chromium.org/developers/experimental-branches
 [developer_guide.md]: developer_guide.md
-[merge request]: https://chromium.googlesource.com/chromium/src/+/master/docs/process/merge_request.md
+[merge request]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/process/merge_request.md
 [using-remote-tryjobs]: ./remote_trybots.md

@@ -93,6 +93,6 @@ Therefore chromeos-base/root-certificates was deleted.
 [Mozilla NSS store]: https://wiki.mozilla.org/CA
 [pki.goog/roots.pem]: https://pki.google.com
 [ca-certificates]: https://packages.debian.org/sid/ca-certificates
-[security_RootCA]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/client/site_tests/security_RootCA
+[security_RootCA]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/HEAD/client/site_tests/security_RootCA
 [pki.goog/roots.pem]: https://pki.goog/roots.pem
 [FAQ page]: https://pki.google.com/faq.html

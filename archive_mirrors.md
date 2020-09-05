@@ -554,7 +554,7 @@ overwrites files, so we can recover the old version easily.
 [bugs]: reporting_bugs.md
 [Contact]: contact.md
 [CPFE]: https://goto.google.com/cpfe
-[cros-cpfe]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/eclass/cros-cpfe.eclass
+[cros-cpfe]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/eclass/cros-cpfe.eclass
 [Custom Artifacts]: #custom-artifacts
 [Custom Naming]: #custom-naming
 [distfiles mirrors]: https://gentoo.org/downloads/mirrors/

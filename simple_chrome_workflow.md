@@ -648,31 +648,31 @@ environment variable.
 [Debug builds]: #debug-builds
 [Create a bootable USB stick]: #create-a-bootable-usb-stick
 [Set up the Chrome OS device]: #set-up-the-chrome-os-device
-[OS development guide]: https://chromium.googlesource.com/chromiumos/docs/+/master/developer_guide.md
-[Chrome source code and depot_tools]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux/build_instructions.md
-[instructions for running tests on Linux]: https://chromium.googlesource.com/chromium/src/+/master/docs/linux/build_instructions.md#Running-test-targets
+[OS development guide]: developer_guide.md
+[Chrome source code and depot_tools]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/linux/build_instructions.md
+[instructions for running tests on Linux]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/linux/build_instructions.md#Running-test-targets
 [update .gclient]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/chromeos_build_instructions.md#updating-your-gclient-config
 [Chrome OS board name]: https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices
 [GN build configuration]: https://www.chromium.org/developers/gn-build-configuration
-[quick start guide]: https://gn.googlesource.com/gn/+/master/docs/quick_start.md
+[quick start guide]: https://gn.googlesource.com/gn/+/HEAD/docs/quick_start.md
 [device-specific instructions]: https://www.chromium.org/chromium-os/developer-information-for-chrome-os-devices
 [generic instructions]: https://www.chromium.org/a/chromium.org/dev/chromium-os/developer-information-for-chrome-os-devices/generic
 [rootfs has been removed]: developer_mode.md#TOC-Making-changes-to-the-filesystem
 [remounted as read-write]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips#TOC-Setting-up-the-device
 [additional debugging tips]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips#TOC-Enabling-core-dumps
 [chromite repo]: https://chromium.googlesource.com/chromiumos/chromite/
-[issue 437877]: https://bugs.chromium.org/p/chromium/issues/detail?id=403086
-[CrOS Flash page]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_flash.md
-[VM]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md
-[Running a Chrome Google Test binary in the VM]: https://chromium.googlesource.com/chromiumos/docs/+/master/cros_vm.md#Run-a-Chrome-GTest-binary-in-the-VM
+[issue 437877]: https://crbug.com/403086
+[CrOS Flash page]: cros_flash.md
+[VM]: cros_vm.md
+[Running a Chrome Google Test binary in the VM]: cros_vm.md#Run-a-Chrome-GTest-binary-in-the-VM
 [go/shortleash]: https://goto.google.com/shortleash
 [debugging tips]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/debugging-tips
 [chrome build instructions]: https://g3doc.corp.google.com/company/teams/chrome/linux_build_instructions.md
 [api-keys]: https://www.chromium.org/developers/how-tos/api-keys
-[install-build-deps-android.sh]: https://chromium.googlesource.com/chromium/src/+/master/build/install-build-deps-android.sh
+[install-build-deps-android.sh]: https://chromium.googlesource.com/chromium/src/+/HEAD/build/install-build-deps-android.sh
 [Goma]: https://chromium.googlesource.com/infra/goma/client/
 [Chrome-related logs]: https://chromium.googlesource.com/chromium/src/+/lkgr/docs/chrome_os_logging.md
-[crbug.com/360342]: https://bugs.chromium.org/p/chromium/issues/detail?id=360342
-[crbug.com/403086]: https://bugs.chromium.org/p/chromium/issues/detail?id=403086
-[web_tests_linux.md]: https://chromium.googlesource.com/chromium/src/+show/master/docs/web_tests_linux.md
-[./stack_traces.md]: https://chromium.googlesource.com/chromiumos/docs/+/master/stack_traces.md
+[crbug.com/360342]: https://crbug.com/360342
+[crbug.com/403086]: https://crbug.com/403086
+[web_tests_linux.md]: https://chromium.googlesource.com/chromium/src/+show/HEAD/docs/web_tests_linux.md
+[./stack_traces.md]: stack_traces.md

@@ -470,7 +470,7 @@ through the whitelist, there is still a file. The name of the file is
 The "new passes" indicate files that are in the whitelist but passed this time.
 
 To find the owner who wrote this test, do a git blame on this file:
-https://chromium.googlesource.com/chromiumos/third_party/autotest/+blame/master/client/site_tests/platform_ToolchainOptions/platform_ToolchainOptions.py
+https://chromium.googlesource.com/chromiumos/third_party/autotest/+blame/HEAD/client/site_tests/platform_ToolchainOptions/platform_ToolchainOptions.py
 and grep for the test name ("Executable Stack" in this case).
 
 Find the change that added the new binary that fails the test, or changed
@@ -514,11 +514,11 @@ Other handy links to information:
 [Gardeners group]: https://ganpati.corp.google.com/#Group_Info?name=chromeos-chrome-gardeners
 [Gardening Tasks]: https://code.google.com/p/chromium/issues/list?can=2&q=label%3AGardening
 [Gerrit lists recently merged changes]: https://chromium-review.googlesource.com/q/status:merged
-[Infrastructure Deputy]: http://goto.google.com/cros-infra-deputy
+[Infrastructure Deputy]: https://goto.google.com/cros-infra-deputy
 [secondary sheriff]: https://goto.google.com/secondary-sheriff
 [Shadow Gardeners Calendar]: https://oncall.corp.google.com/chromeos-shadow-gardeners
 [Shadow Gardeners group]: https://ganpati.corp.google.com/#Group_Info?name=chromeos-chrome-shadow-gardeners
-[Sheriff FAQ: Chromium OS ASAN]: https://sites.google.com/a/chromium.org/dev/developers/tree-sheriffs/sheriff-details-chromium-os/sheriff-faq-chromium-os-asan-bots
+[Sheriff FAQ: Chromium OS ASAN]: https://dev.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/sheriff-faq-chromium-os-asan-bots
 [Sheriff-o-Matic for ChromeOS]: https://sheriff-o-matic.appspot.com/chromeos
 [SoM help page]: https://sheriff-o-matic.appspot.com/help-som
 [Swap for Gardeners]: https://cs.corp.google.com/piper///depot/ops/data/mail/configs/oncall.chromeos-gardeners?edit=true
@@ -529,9 +529,9 @@ Other handy links to information:
 [West Rotation]: https://sphinx.corp.google.com/sphinx/#accessChangeRequest:systemName=chromeos-sheriffs-pacific&selectedRole=chromeos-sheriffs-pacific
 [aborting the current CQ run]: https://sites.google.com/a/google.com/chromeos/for-team-members/infrastructure/chromeos-admin/manual-cq-intervention
 [build deputy oncall]: http://oncall/chromeos-build-eng
-[crbug.com/313484]: http://crbug.com/313484
-[crbug.com/313971]: http://crbug.com/313971
-[crbug.com/314678]: http://crbug.com/314678
+[crbug.com/313484]: https://crbug.com/313484
+[crbug.com/313971]: https://crbug.com/313971
+[crbug.com/314678]: https://crbug.com/314678
 [glossary]: http://go/cros-sheriff-glossary
 [go/arc++docs]: http://go/arc++docs
 [go/chromeos-images]: https://goto.google.com/chromeos-images
@@ -541,10 +541,10 @@ Other handy links to information:
 [go/cros-gardening]: http://go/cros-gardening
 [go/cros-noncritical]: https://goto.google.com/cros-noncritical
 [go/oncall2calendar]: https://goto.google.com/oncall2calendar
-[how to run Chrome OS image under VMs]: http://www.chromium.org/chromium-os/how-tos-and-troubleshooting/running-chromeos-image-under-virtual-machines
+[how to run Chrome OS image under VMs]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/running-chromeos-image-under-virtual-machines
 [internal doc here]: http://go/cros-secondary-sheriff
 [postmortem]: https://sites.google.com/a/google.com/chromeos/resources/tree-closure-postmortems
 [postsubmit builder]: https://ci.chromium.org/p/chromeos/g/chromeos.postsubmit/console?limit=50
 [sheriffing hotlist bugs]: https://code.google.com/p/chromium/issues/list?can=2&q=label%3AHotlist-CrOS-Sheriffing
-[thesis on Sheriffing]: https://sites.google.com/a/chromium.org/dev/developers/tree-sheriffs/sheriff-philosophy
+[thesis on Sheriffing]: https://dev.chromium.org/developers/tree-sheriffs/sheriff-philosophy
 [this video]: https://drive.google.com/file/d/1NtneYDXFiGP2QJstmMmL09B8HYPmi5Ko/preview

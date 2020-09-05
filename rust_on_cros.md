@@ -320,9 +320,9 @@ export PKG_CONFIG_ALLOW_CROSS=1
 
 [rust]: https://www.rust-lang.org
 [cargo]: https://crates.io/
-[cargo.eclass]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/eclass/cargo.eclass
+[cargo.eclass]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/eclass/cargo.eclass
 [crates.io]: https://crates.io
-[cros-rust.eclass]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/eclass/cros-rust.eclass
+[cros-rust.eclass]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/eclass/cros-rust.eclass
 [localmirror]: archive_mirrors.md
 [link time optimizations]: https://en.wikipedia.org/wiki/Interprocedural_optimization
 [semver]: https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html

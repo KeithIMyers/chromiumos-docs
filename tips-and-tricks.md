@@ -331,8 +331,8 @@ into it.
 <?xml version="1.0" encoding="UTF-8"?>`
 <manifest>
   <remote  name   = "private"
-           fetch  = "ssh://gitrw.chromium.org"
-           review = "http://review.chromium.org" />
+           fetch  = "https://chromium.googlesource.com"
+           review = "https://chromium-review.googlesource.com/" />
   <project path   = "src/thirdparty/location"
            name   = "nameofgitrepo"
            remote = "private" />
@@ -432,15 +432,15 @@ repo download -b test-branch 344778
 ```
 
 
-[Chromium OS Developer Guide]: https://chromium.googlesource.com/chromiumos/docs/+/master/developer_guide.md
-[Chromium OS Developer FAQ]: https://sites.google.com/a/chromium.org/dev/chromium-os/how-tos-and-troubleshooting/developer-faq
-[repo\_bash\_completion]: https://chromium.googlesource.com/chromiumos/platform/dev-util/+/refs/heads/master/host/repo_bash_completion
-[repo Manifest format docs]: https://gerrit.googlesource.com/git-repo/+/refs/heads/master/docs/manifest-format.md
+[Chromium OS Developer Guide]: developer_guide.md
+[Chromium OS Developer FAQ]: https://dev.chromium.org/chromium-os/how-tos-and-troubleshooting/developer-faq
+[repo\_bash\_completion]: https://chromium.googlesource.com/chromiumos/platform/dev-util/+/HEAD/host/repo_bash_completion
+[repo Manifest format docs]: https://gerrit.googlesource.com/git-repo/+/HEAD/docs/manifest-format.md
 [installed depot\_tools]: https://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html#_setting_up
 [depo_tools info page]: https://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools.html
-[enable the chronos account]: https://chromium.googlesource.com/chromiumos/docs/+/master/developer_guide.md#Set-the-chronos-user-password
+[enable the chronos account]: developer_guide.md#Set-the-chronos-user-password
 [internal workstation notes]: https://g3doc.corp.google.com/company/teams/chromeos/sites/resources/ubuntu-workstation-notes.md#configuring-etcsudoers
 [sudoers man page]: https://www.sudo.ws/man/1.9.1/sudo.man.html
-[chromium-review.googlesource.com]: http://chromium-review.googlesource.com/
+[chromium-review.googlesource.com]: https://chromium-review.googlesource.com/
 [Silversearcher]: https://github.com/ggreer/the_silver_searcher
-[git and gerrit intro]: https://chromium.googlesource.com/chromiumos/docs/+/master/developer_guide.md
+[git and gerrit intro]: developer_guide.md

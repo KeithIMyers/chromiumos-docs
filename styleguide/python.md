@@ -314,13 +314,13 @@ modules (they're available in the chroot as well):
 *   There should be one blank line between conditional blocks.
 *   Do not use `GFlags` or `optparse` anymore -- stick to `argparse` everywhere.
 
-[Chromium coding style]: https://chromium.googlesource.com/chromium/src/+/master/styleguide/styleguide.md
+[Chromium coding style]: https://chromium.googlesource.com/chromium/src/+/HEAD/styleguide/styleguide.md
 [Google Python Style guide]: https://github.com/google/styleguide/blob/gh-pages/pyguide.md
 [Indentation]: https://github.com/google/styleguide/blob/gh-pages/pyguide.md#s3.4-indentation
 [Naming]: https://github.com/google/styleguide/blob/gh-pages/pyguide.md#316-naming
 [PEP-8]: https://www.python.org/dev/peps/pep-0008/
 [Comments section]: https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings
-[The CODING STYLE file for autotest]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/master/docs/coding-style.md
+[The CODING STYLE file for autotest]: https://chromium.googlesource.com/chromiumos/third_party/autotest/+/HEAD/docs/coding-style.md
 [reasonable syntax for arguments and return values]: https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings
 [section on imports in the Google Style Guide]: https://github.com/google/styleguide/blob/gh-pages/pyguide.md#313-imports-formatting
 [PEP-8]: https://www.python.org/dev/peps/pep-0008/

@@ -1304,7 +1304,7 @@ ask questions.
 
 * [Fault injection through unexpected input data (aka Fuzz Testing)](go/fuzzing)
 
-* [Getting Started with libFuzzer in Chromium](https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/getting_started.md)
+* [Getting Started with libFuzzer in Chromium](https://chromium.googlesource.com/chromium/src/+/HEAD/testing/libfuzzer/getting_started.md)
 
 * [Gentoo Cheat Sheet](https://wiki.gentoo.org/wiki/Gentoo_Cheat_Sheet)
 
@@ -1320,7 +1320,7 @@ ask questions.
 
 * [go/ClusterFuzz](https://sites.google.com/corp/google.com/clusterfuzz/home)
 
-* [go/libfuzzer-Chrome](https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/README.md)
+* [go/libfuzzer-Chrome](https://chromium.googlesource.com/chromium/src/+/HEAD/testing/libfuzzer/README.md)
 
 * [go/fuzzit](http://go/fuzzit)
 
@@ -1332,26 +1332,26 @@ ask questions.
 
 [libFuzzer]: https://llvm.org/docs/LibFuzzer.html
 [ClusterFuzz]: https://sites.google.com/corp/google.com/clusterfuzz/home
-[libFuzzer and ClusterFuzz]: https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/README.md
+[libFuzzer and ClusterFuzz]: https://chromium.googlesource.com/chromium/src/+/HEAD/testing/libfuzzer/README.md
 [security]: https://bugs.chromium.org/p/chromium/issues/list?can=1&q=reporter:clusterfuzz@chromium.org%20-status:duplicate%20-status:wontfix%20type=bug-security
 [non-security bugs]: https://bugs.chromium.org/p/chromium/issues/list?can=1&q=reporter%3Aclusterfuzz%40chromium.org+-status%3Aduplicate+-status%3Awontfix+-type%3Dbug-security&sort=modified
 [Inherit cros-fuzzer and cros-sanitizers eclasses]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/645c52be0d4388eb8200f8ef07cc60875dcc5b10/media-libs/virglrenderer/virglrenderer-9999.ebuild#6
 [Set up flags: call sanitizers-setup-env in src_configure]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/645c52be0d4388eb8200f8ef07cc60875dcc5b10/media-libs/virglrenderer/virglrenderer-9999.ebuild#47
 [USE flags: fuzzer]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/07580574deb4409eec940ed582d6139b26094c07/dev-util/puffin/puffin-9999.ebuild#29
 [Using ClusterFuzz]: #using-clusterfuzz
-[bsdiff fuzzer]: https://android.googlesource.com/platform/external/bsdiff/+/master/bspatch_fuzzer.cc
-[puffin_fuzzer]: https://android.googlesource.com/platform/external/puffin/+/master/src/fuzzer.cc
-[GURL fuzzer]: https://chromium.googlesource.com/chromium/src/+/master/url/gurl_fuzzer.cc
+[bsdiff fuzzer]: https://android.googlesource.com/platform/external/bsdiff/+/HEAD/bspatch_fuzzer.cc
+[puffin_fuzzer]: https://android.googlesource.com/platform/external/puffin/+/HEAD/src/fuzzer.cc
+[GURL fuzzer]: https://chromium.googlesource.com/chromium/src/+/HEAD/url/gurl_fuzzer.cc
 [midis GN file]: https://chromium.googlesource.com/chromiumos/platform2/+/547320548b8bd6cd1b4d78dfdeefdc720882e1dc/midis/BUILD.gn#83
-[puffin ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/dev-util/puffin/puffin-9999.ebuild
+[puffin ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/dev-util/puffin/puffin-9999.ebuild
 [Chromium issue tracker]: https://crbug.com
 [fuzzer builder]: https://cros-goldeneye.corp.google.com/chromeos/legoland/builderHistory?buildConfig=amd64-generic-fuzzer&buildBranch=master
 [chromeos-fuzzing@google.com]: mailto:chromeos-fuzzing@google.com
-[firewall implementation]: https://chromium.googlesource.com/chromiumos/platform2/+/master/permission_broker/firewall.h#33
+[firewall implementation]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/permission_broker/firewall.h#33
 [FuzzedDataProvider]: https://github.com/llvm/llvm-project/blob/d2af368aee56abf77f4a6ca3fd57ebdb697c48f2/compiler-rt/include/fuzzer/FuzzedDataProvider.h
-[google/fuzzing documentation page]: https://github.com/google/fuzzing/blob/master/docs/split-inputs.md#fuzzed-data-provider
+[google/fuzzing documentation page]: https://github.com/google/fuzzing/blob/HEAD/docs/split-inputs.md#fuzzed-data-provider
 [libprotobuf-mutator]: https://github.com/google/libprotobuf-mutator
-[firewall_fuzzer]: https://chromium.googlesource.com/chromiumos/platform2/+/master/permission_broker/firewall_fuzzer.cc
+[firewall_fuzzer]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/permission_broker/firewall_fuzzer.cc
 [Fuzzer statistics]: https://clusterfuzz.com/fuzzer-stats/by-fuzzer/fuzzer/libFuzzer/job/libfuzzer_asan_chromeos
 [Crash statistics]: https://clusterfuzz.com/crash-stats?block=day&days=7&end=423713&fuzzer=libFuzzer&group=platform&job=libfuzzer_asan_chromeos&number=count&sort=total_count
 [Fuzzer logs]: https://console.cloud.google.com/storage/browser/chromeos-libfuzzer-logs/
@@ -1362,7 +1362,7 @@ ask questions.
 [libFuzzer docs]: https://llvm.org/docs/LibFuzzer.html#options
 [a dictionary]: #adding-a-dictionary
 [a seed corpus]: #adding-a-seed-corpus
-[issue 853017]: https://bugs.chromium.org/p/chromium/issues/detail?id=853017
+[issue 853017]: https://crbug.com/853017
 [instructions to set up the `gsutil` tool]: https://cloud.google.com/storage/docs/quickstart-gsutil
 [Using cros_fuzz]: #using-cros_fuzz
 [Preparing the environment for fuzzing]: #preparing-the-environment-for-fuzzing
@@ -1381,5 +1381,5 @@ ask questions.
 [platform eclass]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/c85a04a77eb8895a4b8ef4ee3619aa539748a590/eclass/platform.eclass#183
 [libchrome blocklist]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/8c39d9715e86a6a62cc327bf2aefe4a18b430a02/chromeos-base/libchrome/files/ubsan_blocklist.txt
 [clang's sanitizer special case list page]: https://clang.llvm.org/docs/SanitizerSpecialCaseList.html
-[grammar-based-fuzzer]: https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/libprotobuf-mutator.md
+[grammar-based-fuzzer]: https://chromium.googlesource.com/chromium/src/+/HEAD/testing/libfuzzer/libprotobuf-mutator.md
 [uprev the ebuild]: ../portage/ebuild_faq.md#TOC-How-do-I-uprev-an-ebuild-

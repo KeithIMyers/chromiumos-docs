@@ -136,6 +136,6 @@ You can also search for jobs created by a
 [Gerrit]: https://chromium-review.googlesource.com/
 [Tryjobs List]: https://cros-goldeneye.corp.google.com/chromeos/legoland/builderSummary?buildConfig=&builderGroups=tryjob
 [Tryjobs User]: https://cros-goldeneye.corp.google.com/chromeos/legoland/builderSummary?buildConfig=&builderGroups=tryjob&email=tomhughes%40chromium.org
-[`chromite/config/config_dump.json`]: https://chromium.googlesource.com/chromiumos/chromite/+/master/config/config_dump.json
-[`chromite/config/chromeos_config.py`]: https://chromium.googlesource.com/chromiumos/chromite/+/master/config/chromeos_config.py
+[`chromite/config/config_dump.json`]: https://chromium.googlesource.com/chromiumos/chromite/+/HEAD/config/config_dump.json
+[`chromite/config/chromeos_config.py`]: https://chromium.googlesource.com/chromiumos/chromite/+/HEAD/config/chromeos_config.py
 [goldeneye]: http://go/goldeneye

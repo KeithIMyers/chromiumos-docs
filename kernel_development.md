@@ -288,7 +288,7 @@ kernel/root partition pairs in our partition scheme, we need to select which
 one we want to use. Usually we stay with the current pair.
 
 To sign with the devkey as per the Disk Format doc
-[http://www.chromium.org/chromium-os/chromiumos-design-docs/disk-format#TOC-Quick-development](http://www.chromium.org/chromium-os/chromiumos-design-docs/disk-format#TOC-Quick-development):
+https://www.chromium.org/chromium-os/chromiumos-design-docs/disk-format#TOC-Quick-development:
 
 ```bash
 vbutil_kernel --pack new_kern.bin --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate <keys_path>/kernel_data_key.vbprivk --version 1 --config config.txt --bootloader /lib64/bootstub/bootstub.efi --vmlinuz vmlinuz
@@ -661,10 +661,8 @@ An example message is: **CHROMIUM: config: enable aebl config**
 
 #### Committing
 
-See the [Contributing
-Guide](https://chromium.googlesource.com/chromiumos/docs/+/master/contributing.md)
-for details on how to upload your changes, get them tested & reviewed,
-and ultimately get them into the tree.
+See the [Contributing Guide](contributing.md) for details on how to upload your
+changes, get them tested & reviewed, and ultimately get them into the tree.
 
 ## Debugging
 
@@ -906,7 +904,7 @@ cat trace_pipe > /dev/null
 cat trace_pipe
 ```
 
-Another ftrace article: [https://lwn.net/Articles/370423/](https://lwn.net/Articles/370423/)
+Another ftrace article: https://lwn.net/Articles/370423/
 
 
 Other tricks:
@@ -1029,7 +1027,8 @@ objdump -e vmlinux > /tmp/objdump-output.txt
 grep your_kernel_symbol /tmp/objdump-output.txt
 ```
 
-More information [here](https://wiki.ubuntu.com/Kernel/KernelDebuggingTricks) and [here](http://www.linuxjournal.com/article/9252).
+More information [here](https://wiki.ubuntu.com/Kernel/KernelDebuggingTricks)
+and [here](http://www.linuxjournal.com/article/9252).
 
 ### Debugging with KGDB/KDB
 
@@ -1038,8 +1037,8 @@ a local GDB instance on their development machine to debug the kernel on a
 remote test machine, using a serial connection. You can find some information
 here:
 
-*   [https://www.kernel.org/pub/linux/kernel/people/jwessel/kdb/](https://www.kernel.org/pub/linux/kernel/people/jwessel/kdb/)
-*   [http://elinux.org/Kgdb](http://elinux.org/Kgdb)
+*   https://www.kernel.org/pub/linux/kernel/people/jwessel/kdb/
+*   http://elinux.org/Kgdb
 *   https://events.static.linuxfound.org/sites/events/files/slides/ELC-E%20Linux%20Awareness.pdf
 
 To use KGDB with Chromium OS requires two steps for the test machine:
@@ -1128,7 +1127,7 @@ If you want to use both KGDB and a standard serial console over the same serial
 port, you need to run a program like `kdmx` or `agent-proxy` to multiplex your
 connection. Both can be found at:
 
-[https://kernel.googlesource.com/pub/scm/utils/kernel/kgdb/agent-proxy/](https://kernel.googlesource.com/pub/scm/utils/kernel/kgdb/agent-proxy/)
+https://kernel.googlesource.com/pub/scm/utils/kernel/kgdb/agent-proxy/
 
 kdmx is probably easier to deal with. If your serial port is at `/dev/pts/80`,
 you can start it with:
@@ -1176,7 +1175,7 @@ ${CROSS_ARCH}-gdb \
 
 *   KDB's `monitor ftdump` calls sleeping allocation functions (as of
     2016-11-17)
-*   [https://lkml.kernel.org/r/20161117191605.GA21459@google.com](https://lkml.kernel.org/r/20161117191605.GA21459@google.com)
+*   https://lkml.kernel.org/r/20161117191605.GA21459@google.com
 
 ### Bisecting a stable branch merge
 
@@ -1427,8 +1426,8 @@ official release yet?
 
 Previous discussions defining this practice:
 
-*   [https://groups.google.com/a/chromium.org/forum/#!msg/chromium-os-dev/D56e2JxDhmc/IjgixwEReasJ](https://groups.google.com/a/chromium.org/forum/#!msg/chromium-os-dev/D56e2JxDhmc/IjgixwEReasJ)
-*   [https://groups.google.com/a/chromium.org/forum/#!msg/chromium-os-dev/\_nY16h27k1s/FuHbWFCABwAJ](https://groups.google.com/a/chromium.org/forum/#!msg/chromium-os-dev/_nY16h27k1s/FuHbWFCABwAJ)
+*   https://groups.google.com/a/chromium.org/forum/#!msg/chromium-os-dev/D56e2JxDhmc/IjgixwEReasJ
+*   https://groups.google.com/a/chromium.org/forum/#!msg/chromium-os-dev/\_nY16h27k1s/FuHbWFCABwAJ
 
 ### How do I build an upstream kernel?
 
@@ -1503,7 +1502,7 @@ git commit
 
 ### Picking patches from mailing lists / upstream
 
-See also [https://chromium.googlesource.com/chromiumos/docs/+/master/kernel\_faq.md#How-do-I-backport-an-upstream-patch](https://www.google.com/url?q=https://chromium.googlesource.com/chromiumos/docs/%2B/master/kernel_development.md%23How-do-I-backport-an-upstream-patch&sa=D&ust=1557465766398000).
+See also [kernel\_faq.md#How-do-I-backport-an-upstream-patch].
 
 #### FROMGIT
 
@@ -1606,7 +1605,9 @@ Various options are available. Particularly useful ones are:
 *   \-t - ignore tags in the subject line which cannot be found
 *   \-n - do a dry run
 
-Full documentation is available in the README (patman -h) or [here](http://git.denx.de/?p=u-boot.git;a=blob;f=tools/patman/README). Take a look at the automated change list creation and the alias support also.
+Full documentation is available in the README (patman -h) or
+[here](https://gitlab.denx.de/u-boot/u-boot/blob/master/tools/patman/README).
+Take a look at the automated change list creation and the alias support also.
 
 ### Sending patches manually
 
@@ -1673,10 +1674,9 @@ You can find the message id under the label <Message-Id> in gmail in the 'Show
 Original' link in the drop down options for the email you want to reply to.
 
 There is a video here:
-[http://www.youtube.com/watch?v=LLBrBBImJt4](http://www.youtube.com/watch?v=LLBrBBImJt4)
+https://youtu.be/LLBrBBImJt4
 
 The patch flow throughout the video is:
-[](http://www.youtube.com/watch?v=LLBrBBImJt4)
 
 1.  `git diff`
 2.  `git commit`
@@ -1760,21 +1760,21 @@ done
 cat $OUT
 ```
 
-[cros-kernel eclass documentation]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/refs/heads/master/eclass/cros-kernel/README.md
-[fromupstream.py]: https://chromium.googlesource.com/chromiumos/platform/dev-util/+/master/contrib/fromupstream.py
+[cros-kernel eclass documentation]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/eclass/cros-kernel/README.md
+[fromupstream.py]: https://chromium.googlesource.com/chromiumos/platform/dev-util/+/HEAD/contrib/fromupstream.py
 [cros deploy]: https://dev.chromium.org/chromium-os/build/cros-deploy
 [kernel parameters guide]: https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
 [Dynamic Debug]: https://www.kernel.org/doc/html/v4.19/admin-guide/dynamic-debug-howto.html
 [dynamic debug is disabled on Chrome OS]: https://crbug.com/188825
-[network based development]: http://www.chromium.org/chromium-os/how-tos-and-troubleshooting/network-based-development
-[crbug.com/468342]: https://bugs.chromium.org/p/chromium/issues/detail?id=468342
-[example CL]: https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/1325821
+[network based development]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/network-based-development
+[crbug.com/468342]: https://crbug.com/468342
+[example CL]: https://crrev.com/c/1325821
 [ftrace]: https://www.kernel.org/doc/Documentation/trace/ftrace.txt
 [go/chromeos-kernel-tips-and-tricks]: https://goto.google.com/chromeos-kernel-tips-and-tricks
 [Heisenbug]: https://en.wikipedia.org/wiki/Heisenbug
 [imap-upload]: https://github.com/rgladwell/imap-upload
 [KASan]: https://www.kernel.org/doc/html/v4.14/dev-tools/kasan.html
 [UPSTREAM, BACKPORT and FROMLIST]: ./kernel_development.md#UPSTREAM_BACKPORT_FROMLIST_and-you
-[SSH keys]: http://www.chromium.org/chromium-os/testing/autotest-developer-faq/ssh-test-keys-setup
+[SSH keys]: https://www.chromium.org/chromium-os/testing/autotest-developer-faq/ssh-test-keys-setup
 [trace-cmd man pages]: http://man7.org/linux/man-pages/man1/trace-cmd.1.html
 [LWN trace-cmd HOWTO]: https://lwn.net/Articles/410200/

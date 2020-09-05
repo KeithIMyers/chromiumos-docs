@@ -67,7 +67,7 @@ system functionality that's only available to the root user. Using the
 `permission_broker` service as an example, here's its Upstart config file (lives
 in `/etc/init`):
 
-[`permission_broker.conf`](https://chromium.googlesource.com/chromiumos/platform2/+/master/permission_broker/permission_broker.conf)
+[`permission_broker.conf`](https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/permission_broker/permission_broker.conf)
 
 ```bash
 start on starting system-services
@@ -116,7 +116,7 @@ access raw sockets, or performing specific file operations. Capabilities are
 passed to Minijail using the `-c` switch. `permission_broker`, for example,
 needs capabilities to be able to `chown(2)` device nodes.
 
-[`permission_broker.conf`](https://chromium.googlesource.com/chromiumos/platform2/+/master/permission_broker/permission_broker.conf)
+[`permission_broker.conf`](https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/permission_broker/permission_broker.conf)
 
 ```bash
 start on starting system-services
@@ -200,10 +200,10 @@ The mechanism we use is called [Seccomp-BPF]. Minijail can take a policy file
 that describes what syscalls will be allowed, what syscalls will be denied, and
 what syscalls will only be allowed with specific arguments. The full
 description of the policy file language can be found in the
-[`syscall_filter.c` source](https://chromium.googlesource.com/aosp/platform/external/minijail/+/master/syscall_filter.c#239).
+[`syscall_filter.c` source].
 
 Abridged policy for
-[`mtpd` on amd64 platforms](https://chromium.googlesource.com/chromiumos/platform2/+/master/mtpd/mtpd-seccomp-amd64.policy):
+[`mtpd` on amd64 platforms](https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/mtpd/mtpd-seccomp-amd64.policy):
 
 ```
 # Copyright (c) 2012 The Chromium OS Authors. All rights reserved.
@@ -254,7 +254,7 @@ forcing execution of those paths.
 The policy file needs to be installed in the system, so we need to add it to
 the ebuild file:
 
-[`mtpd-9999.ebuild`](https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/chromeos-base/mtpd/mtpd-9999.ebuild)
+[`mtpd-9999.ebuild`](https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/chromeos-base/mtpd/mtpd-9999.ebuild)
 
 ```bash
 # Install seccomp policy file.
@@ -265,7 +265,7 @@ use seccomp && newins "mtpd-seccomp-${ARCH}.policy" mtpd-seccomp.policy
 And finally, the policy file has to be passed to Minijail, using the `-S`
 option:
 
-[`mtpd.conf`](https://chromium.googlesource.com/chromiumos/platform2/+/master/mtpd/mtpd.conf)
+[`mtpd.conf`](https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/mtpd/mtpd.conf)
 
 ```bash
 # use minijail (drop root, set no_new_privs, set seccomp filter).
@@ -503,12 +503,12 @@ TODO(jorgelo)
 [Namespaces]: #Namespaces
 [Seccomp filters]: #Seccomp-filters
 [UNIX _abstract_ sockets]: http://man7.org/linux/man-pages/man7/unix.7.html
-[security.SandboxedServices]: https://chromium.googlesource.com/chromiumos/platform/tast-tests/+/refs/heads/master/src/chromiumos/tast/local/bundles/cros/security/sandboxed_services.go
+[security.SandboxedServices]: https://chromium.googlesource.com/chromiumos/platform/tast-tests/+/HEAD/src/chromiumos/tast/local/bundles/cros/security/sandboxed_services.go
 
 [libchrome]: packages/libchrome.md
-[libbrillo]: http://www.chromium.org/chromium-os/packages/libchromeos
-[shell command-injection bugs]: http://en.wikipedia.org/wiki/Code_injection#Shell_injection
-[Chrome OS user accounts README]: https://chromium.googlesource.com/chromiumos/overlays/eclass-overlay/+/master/profiles/base/accounts/README.md
+[libbrillo]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/libbrillo
+[shell command-injection bugs]: https://en.wikipedia.org/wiki/Code_injection#Shell_injection
+[Chrome OS user accounts README]: https://chromium.googlesource.com/chromiumos/overlays/eclass-overlay/+/HEAD/profiles/base/accounts/README.md
 [How do I specify the dependencies of a change?]: contributing.md#CQ-DEPEND
 [Linux capabilities]: http://man7.org/linux/man-pages/man7/capabilities.7.html
 [capability.h]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/linux/capability.h
@@ -516,9 +516,9 @@ TODO(jorgelo)
 [namespaces overview]: http://man7.org/linux/man-pages/man7/namespaces.7.html
 [control groups settings]: http://man7.org/linux/man-pages/man7/cgroups.7.html
 [Seccomp-BPF]: https://www.kernel.org/doc/Documentation/prctl/seccomp_filter.txt
-[`syscall_filter.c` source]: https://chromium.googlesource.com/aosp/platform/external/minijail/+/master/syscall_filter.c#239
-[generate_syscall_policy.py script]: https://chromium.googlesource.com/aosp/platform/external/minijail/+/master/tools/generate_seccomp_policy.py
+[`syscall_filter.c` source]: https://android.googlesource.com/platform/external/minijail/+/HEAD/syscall_filter.c
+[generate_syscall_policy.py script]: https://android.googlesource.com/platform/external/minijail/+/HEAD/tools/generate_seccomp_policy.py
 [shared subtrees]: https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt
 [syscalls table]: ./constants/syscalls.md
 [syscall calling conventions]: ./constants/syscalls.md#calling-conventions
-[gen_constants-inl.h]: https://android.googlesource.com/platform/external/minijail/+/refs/heads/master/gen_constants-inl.h
+[gen_constants-inl.h]: https://android.googlesource.com/platform/external/minijail/+/HEAD/gen_constants-inl.h

@@ -55,7 +55,7 @@ PLATFORM_SUBDIR="package" # name of the directory in src/platform2
 inherit cros-workon platform
 
 DESCRIPTION="description"
-HOMEPAGE="http://www.chromium.org/"
+HOMEPAGE="https://www.chromium.org/"
 
 LICENSE="BSD-Google"
 SLOT="0/0"
@@ -109,7 +109,7 @@ of a `USE` flag at the time of build. This is useful, for example, if
 certain targets must only be built if a certain feature (controlled by a
 `USE` flag) is enabled.
 
-See the instructions in [GN in ChromeOS](https://chromium.googlesource.com/chromiumos/docs/+/refs/heads/master/chromeos_gn.md#how-to-check-use-flags-in-gn).
+See the instructions in [GN in Chrome OS](chromeos_gn.md#how-to-check-use-flags-in-gn).
 
 ## Rapid development
 
@@ -188,12 +188,12 @@ built for AMD systems may fail when your host system uses an Intel CPU.
 
 ## Further reading
 
-* [GN in ChromeOS] further describes using GN
+* [GN in Chrome OS] further describes using GN
 * [GN] on Google Git
 * (internal) Introduction to GN tech talk [GN video]/[GN slides]
 
-[GN in ChromeOS]: https://chromium.googlesource.com/chromiumos/docs/+/refs/heads/master/chromeos_gn.md
+[GN in Chrome OS]: chromeos_gn.md
 [GN]: https://gn.googlesource.com/gn/
 [GN video]: https://goto.google.com/gn-intro-tech-talk
 [GN slides]: https://goto.google.com/gn-intro-slides
-[upstream gtest documentation]: https://github.com/google/googletest/blob/master/googletest/docs/advanced.md#running-a-subset-of-the-tests
+[upstream gtest documentation]: https://github.com/google/googletest/blob/HEAD/googletest/docs/advanced.md#running-a-subset-of-the-tests

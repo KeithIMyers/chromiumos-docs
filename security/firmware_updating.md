@@ -119,8 +119,8 @@ it. For cases where it's not, we can contract 3rd-party code audits.
 
 [badusb]: https://srlabs.de/bites/badusb/
 [broadcom vulnerability]: https://googleprojectzero.blogspot.com/2017/04/over-air-exploiting-broadcoms-wi-fi_4.html
-[DLC]: https://chromium.git.corp.google.com/chromiumos/platform2/+/master/dlcservice/docs/developer.md
+[DLC]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/dlcservice/docs/developer.md
 [sandboxing guide]: /sandboxing.md
-[fwupdtool]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/refs/heads/master/sys-apps/fwupd/files/fwupdtool-update.conf
+[fwupdtool]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/sys-apps/fwupd/files/fwupdtool-update.conf
 [Cryptographic Right Answers]: https://latacora.micro.blog/2018/04/03/cryptographic-right-answers.html
 [libsodium]: https://download.libsodium.org/doc/public-key_cryptography/public-key_signatures
