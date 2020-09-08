@@ -421,7 +421,7 @@ Finally, make it publicly visible by doing:
 *   Select `Edit permissions`.
 *   Click `Add item`.
 *   Use the settings:
-    *   Entity: `User`
+    *   Entity: `Public`
     *   Name: `allUsers`
     *   Access: `Reader`
 
