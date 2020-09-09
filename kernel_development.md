@@ -775,25 +775,19 @@ granularity is needed however, there are some options:
 
 #### Seeing early debug messages
 
-***
-**FIXME: We don't have `CONFIG_DRM_FBDEV_EMULATION` set in our kernel configs,
-so this might not work anymore.**
-**FIXME: some earlyprintk info might be useful here, if possible with current configs**
-***
+If you need to see kernel log messages (e.g., over UART) before the full
+console driver is running, `earlyprintk` or `earlycon` may help you. Find more
+info in the [kernel parameters guide].
 
-With either bootloader, you can debug early kernel failures by increasing the
-verbosity and location of kernel debug messages. You can modify the config
-files without rebuilding anything. The default boot args have this:
+Note that unlike with `earlyprintk`, you often don't need any hardware-specific
+arguments to use `earlycon` -- you only need to add `earlycon` to the kernel
+command line. The kernel can pick up the appropriate console parameters from
+either the Device Tree (via `/chosen/stdout-path`) or ACPI (via the SPCR
+table).
 
-```
-quiet console=tty2 loglevel=1
-```
-
-Using args like these instead may be helpful:
-
-```
-console=tty1 loglevel=7
-```
+Caveats apply: architecture and driver support varies. For example, ACPI/SPCR
+earlycon support is [not fully integrated in Chrome
+OS](https://issuetracker.google.com/73886662) as of this writing.
 
 #### Dynamic Debugging (dev_dbg / pr_debug)
 
@@ -1760,6 +1754,7 @@ cat $OUT
 [cros-kernel eclass documentation]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/refs/heads/master/eclass/cros-kernel/README.md
 [fromupstream.py]: https://chromium.googlesource.com/chromiumos/platform/dev-util/+/master/contrib/fromupstream.py
 [cros deploy]: https://dev.chromium.org/chromium-os/build/cros-deploy
+[kernel parameters guide]: https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
 [Dynamic Debug]: https://www.kernel.org/doc/html/v4.19/admin-guide/dynamic-debug-howto.html
 [dynamic debug is disabled on Chrome OS]: https://crbug.com/188825
 [network based development]: http://www.chromium.org/chromium-os/how-tos-and-troubleshooting/network-based-development
