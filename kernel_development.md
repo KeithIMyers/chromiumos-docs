@@ -1542,9 +1542,11 @@ In CrOS chroot (`gerrit deps` prints dependencies from top to bottom, so its
 better to use `tac` so that the bottom-most CL is set to ready first):
 
 ```bash
-gerrit deps ${CL} --raw | tee deps-${CL}
-gerrit label-v `tac deps-${CL}` 1
-gerrit label-cq `tac deps-${CL}` 2
+# If the CL of interest is HEAD, else substitute the gerrit CL number.
+cl=$(git log -1 --format='%(trailers:key=Change-Id,valueonly)')
+deps=( $(gerrit --raw deps "${cl}" | tac) )
+gerrit label-v "${deps[@]}" 1
+gerrit label-cq "${deps[@]}" 2
 ```
 
 ### Downloading a patch from patchwork into IMAP
