@@ -37,6 +37,9 @@ the repo would be moved to a more appropriate path.
 *   [`manifest-internal/`][manifest-internal]: Internal Chrome OS manifest.
 *   `src/`: Most source code people care about.
     *   `aosp/`: Mirrors of repos from the [Android project][AOSP GoB].
+    *   `config/`: Schema definitions and utilities for configuring CrOS
+        hardware and software; used to generate config payloads to drive
+        CrOS builds, manufacturing, etc.
     *   [`overlays`/][board-overlays]: Single git repo holding all public
         board/etc... overlays.
         *   `baseboard-*/`: Overlays for "base boards".  Content that is for the
