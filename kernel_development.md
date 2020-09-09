@@ -785,6 +785,13 @@ command line. The kernel can pick up the appropriate console parameters from
 either the Device Tree (via `/chosen/stdout-path`) or ACPI (via the SPCR
 table).
 
+***
+**Pitfall:** Chrome OS kernel command lines typically include an empty
+`console=` parameter by default, which prevents directing kernel logs to the
+default console (earlycon or otherwise). Remove this if you want to direct
+kernel logs to your console.
+***
+
 Caveats apply: architecture and driver support varies. For example, ACPI/SPCR
 earlycon support is [not fully integrated in Chrome
 OS](https://issuetracker.google.com/73886662) as of this writing.
