@@ -52,8 +52,8 @@ def manpage_link(name):
 
 def cs_link(name):
     """Get a link to code search for this symbol."""
-    return ('[cs/](https://cs.corp.google.com/search/?'
-            'q=SYSCALL_DEFINE.*%s+package:^chromeos_public$)') % (name,)
+    return ('[cs/](https://source.chromium.org/search?ss=chromiumos&'
+            f'q=SYSCALL_DEFINE.*{name})')
 
 
 def kernel_version(target):
