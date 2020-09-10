@@ -47,7 +47,7 @@ REGS = {
 def manpage_link(name):
     """Get a link to the man page for this symbol."""
     # There are man pages for almost every syscall, so blindly link them.
-    return '[man/](http://man7.org/linux/man-pages/man2/%s.2.html)' % (name,)
+    return '[man/](https://man7.org/linux/man-pages/man2/%s.2.html)' % (name,)
 
 
 def cs_link(name):

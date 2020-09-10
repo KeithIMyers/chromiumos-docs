@@ -502,7 +502,7 @@ TODO(jorgelo)
 [Capabilities]: #Capabilities
 [Namespaces]: #Namespaces
 [Seccomp filters]: #Seccomp-filters
-[UNIX _abstract_ sockets]: http://man7.org/linux/man-pages/man7/unix.7.html
+[UNIX _abstract_ sockets]: https://man7.org/linux/man-pages/man7/unix.7.html
 [security.SandboxedServices]: https://chromium.googlesource.com/chromiumos/platform/tast-tests/+/HEAD/src/chromiumos/tast/local/bundles/cros/security/sandboxed_services.go
 
 [libchrome]: packages/libchrome.md
@@ -510,11 +510,11 @@ TODO(jorgelo)
 [shell command-injection bugs]: https://en.wikipedia.org/wiki/Code_injection#Shell_injection
 [Chrome OS user accounts README]: https://chromium.googlesource.com/chromiumos/overlays/eclass-overlay/+/HEAD/profiles/base/accounts/README.md
 [How do I specify the dependencies of a change?]: contributing.md#CQ-DEPEND
-[Linux capabilities]: http://man7.org/linux/man-pages/man7/capabilities.7.html
+[Linux capabilities]: https://man7.org/linux/man-pages/man7/capabilities.7.html
 [capability.h]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/linux/capability.h
-[cap_from_text(3)]: http://man7.org/linux/man-pages/man3/cap_from_text.3.html
-[namespaces overview]: http://man7.org/linux/man-pages/man7/namespaces.7.html
-[control groups settings]: http://man7.org/linux/man-pages/man7/cgroups.7.html
+[cap_from_text(3)]: https://man7.org/linux/man-pages/man3/cap_from_text.3.html
+[namespaces overview]: https://man7.org/linux/man-pages/man7/namespaces.7.html
+[control groups settings]: https://man7.org/linux/man-pages/man7/cgroups.7.html
 [Seccomp-BPF]: https://www.kernel.org/doc/Documentation/prctl/seccomp_filter.txt
 [`syscall_filter.c` source]: https://android.googlesource.com/platform/external/minijail/+/HEAD/syscall_filter.c
 [generate_syscall_policy.py script]: https://android.googlesource.com/platform/external/minijail/+/HEAD/tools/generate_seccomp_policy.py

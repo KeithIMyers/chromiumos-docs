@@ -19,7 +19,7 @@ Keep this in mind if you see signal usage in that range.
 For more in-depth details, see the Real-time signals chapter in the [signal(7)]
 man page.
 
-[signal(7)]: http://man7.org/linux/man-pages/man7/signal.7.html
+[signal(7)]: https://man7.org/linux/man-pages/man7/signal.7.html
 
 ## Table
 

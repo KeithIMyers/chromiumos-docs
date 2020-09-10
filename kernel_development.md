@@ -1776,5 +1776,5 @@ cat $OUT
 [KASan]: https://www.kernel.org/doc/html/v4.14/dev-tools/kasan.html
 [UPSTREAM, BACKPORT and FROMLIST]: ./kernel_development.md#UPSTREAM_BACKPORT_FROMLIST_and-you
 [SSH keys]: https://www.chromium.org/chromium-os/testing/autotest-developer-faq/ssh-test-keys-setup
-[trace-cmd man pages]: http://man7.org/linux/man-pages/man1/trace-cmd.1.html
+[trace-cmd man pages]: https://man7.org/linux/man-pages/man1/trace-cmd.1.html
 [LWN trace-cmd HOWTO]: https://lwn.net/Articles/410200/

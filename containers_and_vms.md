@@ -1207,7 +1207,7 @@ It's not that [crouton] is bad, it's simply a completely different model.
 [MIME]: https://en.wikipedia.org/wiki/MIME
 [multiprofile]: https://support.google.com/chromebook/answer/6088201
 [NaCl]: https://developer.chrome.com/native-client
-[namespaces]: http://man7.org/linux/man-pages/man7/namespaces.7.html
+[namespaces]: https://man7.org/linux/man-pages/man7/namespaces.7.html
 [QEMU]: https://www.qemu.org/
 [seccomp]: https://en.wikipedia.org/wiki/Seccomp
 [Secure Shell]: https://chrome.google.com/webstore/detail/pnhechapfaindjhompbnflcldabbghjo
@@ -1220,7 +1220,7 @@ It's not that [crouton] is bad, it's simply a completely different model.
 [Termina]: https://chromium.googlesource.com/chromiumos/overlays/board-overlays/+/HEAD/project-termina/
 [Terminal]: #Terminal
 [Tremplin]: https://chromium.googlesource.com/chromiumos/platform/tremplin/
-[user namespaces]: http://man7.org/linux/man-pages/man7/user_namespaces.7.html
+[user namespaces]: https://man7.org/linux/man-pages/man7/user_namespaces.7.html
 [userland]: https://en.wikipedia.org/wiki/User_space
 [UTC]: https://en.wikipedia.org/wiki/Coordinated_Universal_Time
 [virtio]: http://docs.oasis-open.org/virtio/virtio/v1.0/virtio-v1.0.html

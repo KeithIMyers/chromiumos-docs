@@ -6,7 +6,7 @@ While some architectures/ABIs have different number<->symbol mappings, they're
 equivalent on x86 (32-bit & 64-bit) and arm (32-bit & 64-bit).
 
 For more details on errno's in general, see the
-[errno(3)](http://man7.org/linux/man-pages/man3/errno.3.html) man page.
+[errno(3)](https://man7.org/linux/man-pages/man3/errno.3.html) man page.
 
 If you're writing some shell scripts, check out the `errno` utility.
 
