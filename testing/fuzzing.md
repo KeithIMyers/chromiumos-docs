@@ -115,7 +115,7 @@ in the `platform` or `platform2` source directory and whose ebuild inherits from
 the `platform` eclass). If you're not working on a platform package, see
 [Build a fuzzer for any other package](#non-platform).
 
-1.  In your package, write a new test program. Start with a dummy fuzzer:
+1.  In your package, write a new test program. Start with a stub fuzzer:
 
     ```cpp
     // Copyright 2019 The Chromium OS Authors. All rights reserved.
@@ -318,7 +318,7 @@ you're working on a platform package, (one that is in the `platform` or
 eclass), see
 [Build a fuzzer for a platform package](#platform).
 
-1.  In your package, write a new test program. Start with a dummy fuzzer:
+1.  In your package, write a new test program. Start with a stub fuzzer:
 
     ```cpp
     // Copyright 2019 The Chromium OS Authors. All rights reserved.

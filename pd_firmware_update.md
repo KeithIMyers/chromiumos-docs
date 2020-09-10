@@ -183,6 +183,6 @@ successful.
 [Update private overlay of the board to include the new PD firmware]: #update
 [Google Cloud Platform Storage]: https://pantheon.corp.google.com/storage/browser/chromeos-localmirror/distfiles
 [ebuild]: #uprev
-[referring parade ebuild]: https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/third_party/chromiumos-overlay/sys-firmware/parade-ps8751a3-firmware/parade-ps8751a3-firmware-52.ebuild;l=32
-[referring analogix ebuild]: https://source.chromium.org/chromiumos/_/chromium/chromiumos/overlays/chromiumos-overlay/+/7cff724f68c06a457978311e8d8faef3265a86e5:sys-firmware/analogix-anx3429-firmware/analogix-anx3429-firmware-21.ebuild;l=32
-[package.mask]: https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/third_party/chromiumos-overlay/profiles/base/package.mask
+[referring parade ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/sys-firmware/parade-ps8751a3-firmware/parade-ps8751a3-firmware-52.ebuild
+[referring analogix ebuild]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/sys-firmware/analogix-anx3429-firmware/analogix-anx3429-firmware-21.ebuild
+[package.mask]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/profiles/base/package.mask

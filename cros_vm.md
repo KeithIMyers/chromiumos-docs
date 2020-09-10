@@ -84,7 +84,7 @@ work as well. You can also use the [VNC Viewer extension] in chrome.
 (sdk) .../chrome/src $ cros_vm --stop
 ```
 
-## Remotely run a sanity test in the VM
+## Remotely run a smoke test in the VM
 
 ```bash
 (sdk) .../chrome/src $ cros_vm --cmd -- /usr/local/autotest/bin/vm_sanity.py
@@ -112,7 +112,7 @@ StrictHostKeyChecking=no -i ./third_party/chromite/ssh_keys/testing_rsa \
 root@localhost -p 9222
 ```
 
-### Run a local sanity test in the VM
+### Run a local smoke test in the VM
 
 ```
 (vm) localhost ~ # /usr/local/autotest/bin/vm_sanity.py
@@ -257,7 +257,7 @@ launch a new one.
 
 ### In Simple Chrome
 
-To launch a VM and run a sanity test:
+To launch a VM and run a smoke test:
 ```bash
 (sdk) .../chrome/src $ cros_run_test
 ```

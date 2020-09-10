@@ -536,7 +536,7 @@ If you still need to be added, here are the groups on the servers to update:
 *   https://chromium-review.googlesource.com/admin/groups/chromeos-gerrit-sandbox-access
 *   https://chrome-internal-review.googlesource.com/admin/groups/chromeos-gerrit-sandbox-access
 
-### Switch back to master/ToT
+### Switch back to ToT
 
 While you're working on your changes, you might want to go back to the mainline
 for a little while (maybe you want to see if some bug you are seeing is related

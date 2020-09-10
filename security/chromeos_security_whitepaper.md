@@ -249,9 +249,9 @@ of browser data leaking outside of encrypted storage.
 
 Chrome OS uses ext4 encryption (using [fscrypt]) on newer devices, or the
 eCryptfs stacked filesystem (on older devices). In a nutshell, each user gets a
-unique "vault" directory and keyset that is created at her first login. The
-vault is used as the underlying encrypted storage for her data. The keyset is
-tied to her login credentials and is required to allow the system to both
+unique "vault" directory and keyset that is created at their first login. The
+vault is used as the underlying encrypted storage for their data. The keyset is
+tied to their login credentials and is required to allow the system to both
 retrieve and store information in the vault. The vault is opened transparently
 to the user at login. On logout or reboot, the user's data is locked away again.
 

@@ -1826,7 +1826,7 @@ including Chrome (which typically takes 45 minutes to build).
 
 We guarantee that binary prebuilt packages are available for everything at the
 stable ref including Chrome. Conversely, we don't guarantee Chrome binary
-prebuilts are available at master/ToT (they will be available there about 85% of
+prebuilts are available at ToT (they will be available there about 85% of
 the time). When building from stable, this should result in <10 min
 `build_packages && build_image` times in most cases.
 

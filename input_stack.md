@@ -244,8 +244,8 @@ being produced.
     `mtedit` (the online version of which is mentioned above). Not all of them
     are currently in working order.
 
-[struct gesture]: https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/platform/gestures/include/gestures.h?q=%22struct%20gesture%22&ss=chromiumos
-[interpreter-chains]: https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/platform/gestures/src/gestures.cc?q=InitializeTouchpad
+[struct gesture]: https://source.chromium.org/chromiumos/chromiumos/codesearch/+/HEAD:src/platform/gestures/include/gestures.h?q=%22struct%20gesture%22&ss=chromiumos
+[interpreter-chains]: https://source.chromium.org/chromiumos/chromiumos/codesearch/+/HEAD:src/platform/gestures/src/gestures.cc?q=InitializeTouchpad
 [Gesture Properties]: https://chromium.googlesource.com/chromiumos/platform/gestures/+/HEAD/docs/gesture_properties.md
 
 ## Chrome to Linux apps (Crostini)

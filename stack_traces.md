@@ -209,7 +209,7 @@ trace purposes, symbol_level=1 should be enough.
 
 x86/x64 symbols available with symbol_level=0 ([source]).
 
-[source]: https://source.chromium.org/chromium/chromium/src/+/master:build/config/compiler/compiler.gni;l=222;drc=97cb4f90bf93714f139f5d0b8702256499a42075
+[source]: https://source.chromium.org/chromium/chromium/src/+/HEAD:build/config/compiler/compiler.gni;l=222;drc=97cb4f90bf93714f139f5d0b8702256499a42075
 
 ### Example stack trace output
 

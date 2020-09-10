@@ -175,8 +175,8 @@ These are the branches in our repository that we care about.
     to [production].  Does not require signed tags, but won't be used unless
     explicitly opted-in to.
 *   `master`: Only used for review of CrOS-specific changes.  Normally kept in
-    sync with `stable`.  If desired, changes can be pushed here first for
-    sanity/review by others before being pushed to `stable` or `next`.
+    sync with `stable`.  If desired, changes can be pushed here first for review
+    by others before being pushed to `stable` or `next`.
 *   `upstream/*`: These refs are kept exactly in sync with upstream.  They are
     not used by any tooling.  They exist as a convenience to compare the state
     of our fork to upstream at any time.  Thus they may safely point at the
@@ -187,7 +187,7 @@ To mirror upstream branches to our fork:
 ```sh
 # This will fetch the latest branches from upstream.
 $ git fetch upstream
-# Sanity check what branches will be pushed to our fork.
+# Check which branches will be pushed to our fork.
 $ git push origin '+refs/remotes/origin/*:refs/heads/upstream/*' -n
 # Do the actual push!
 $ git push origin '+refs/remotes/origin/*:refs/heads/upstream/*'
@@ -217,7 +217,7 @@ To mirror upstream tags to our fork:
 ```sh
 # This will fetch the tags from upstream.
 $ git fetch --tags upstream
-# Sanity check which tags will be pushed to our fork.
+# Check which tags will be pushed to our fork.
 $ git push origin --tags -n
 # Do the actual push!
 $ git push origin --tags
@@ -261,7 +261,7 @@ $ ./release/sign-tag.py v2.5-cr1
 # Push the new tag.  This is safe to do as you're only pushing the tag, not
 # updating any branches.  See the next sections for those steps.
 $ git push --tags -n
-# If the -n output looked sane, push for real.
+# If the -n output looked correct, push for real.
 $ git push --tags
 ```
 
@@ -392,8 +392,8 @@ triage failures faster that might be related to the new release.
 
 ```sh
 # Push the new release to the master branch.  This is to make sure things are
-# in sync with the stable branch, and allow for any last minute sanity checks
-# via e.g. gitiles.  NB: This will not affect any bots or users.
+# in sync with the stable branch, and allow for any last minute checks via
+# e.g. gitiles.  NB: This will not affect any bots or users.
 $ git push v2.5-cr1^0:master -n
 # If that looked good, push it for real.
 $ git push v2.5-cr1^0:master

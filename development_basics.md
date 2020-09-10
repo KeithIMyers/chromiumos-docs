@@ -211,7 +211,7 @@ and mailing lists rather than the internal versions.
 [src/platform2/init]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/init/
 [init STYLE file]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/init/STYLE
 [init README file]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/init/README
-[chromiumos-overlay repository]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master
+[chromiumos-overlay repository]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay
 [Ebuild Writing]: https://devmanual.gentoo.org/ebuild-writing/index.html
 [Ebuild File Format]: https://devmanual.gentoo.org/ebuild-writing/file-format/index.html
 [Google shell style guide]: https://google.github.io/styleguide/shell.xml

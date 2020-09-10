@@ -191,7 +191,7 @@ localmirror buckets (assuming you need to do so).
 
 You should never run `tar` or `unzip` yourself in ebuilds to unpack artifacts.
 Instead, use Portage's `unpack` helper.
-This makes sure the unpacked files have sane ownership and permissions.
+This makes sure the unpacked files have correct ownership and permissions.
 
 By default, all artifacts listed in `SRC_URI` are unpacked during `src_unpack`.
 But that's not a hard requirement -- you can `unpack` archives during any source

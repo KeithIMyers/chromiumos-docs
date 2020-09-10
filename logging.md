@@ -8,7 +8,7 @@ Services write the logs into files using syslog like a Linux. Application can ca
 
 System logs are collected by rsyslog daemon from applications and stored in `/var/log/`. The rule of destinations is defined in the configuration files.
 
-Logs defined in [rsyslog.chromeos](https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/platform2/init/rsyslog.chromeos;l=1?q=rsyslog.chromeos):
+Logs defined in [rsyslog.chromeos](https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/init/rsyslog.chromeos):
 
 * `/var/log/messages`: general system logs.
 * `/var/log/net.log`: network-related logs.
@@ -16,11 +16,11 @@ Logs defined in [rsyslog.chromeos](https://source.chromium.org/chromiumos/chromi
 * `/var/log/secure`: logs with authpriv facility. May contain sensitive information.
 * `/var/log/upstart.log`: upstart logs.
 
-Logs defined in (rsyslog.arc.conf)[https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/platform2/arc/scripts/rsyslog.arc.conf?q=rsyslog.arc.conf]:
+Logs defined in [rsyslog.arc.conf](https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/arc/scripts/rsyslog.arc.conf):
 
 * `/var/log/arc.log`: ARC-related logs gathered by rsyslogd.
 
-Logs defined in (rsyslog.hammerd.conf)[https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/platform2/hammerd/rsyslog/rsyslog.hammerd.conf;l=1?q=rsyslog.ham]:
+Logs defined in [rsyslog.hammerd.conf](https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/hammerd/rsyslog/rsyslog.hammerd.conf):
 
 * `/var/log/hammerd.log`: network-related logs gathered by rsyslogd.
 
@@ -32,7 +32,7 @@ Example of format:
 
 > 2020-03-10T14:02:08.470152+09:00 INFO processname[12345]: This is the log message.
 
-The format is defined in [rsyslog.chromeos](https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/platform2/init/rsyslog.chromeos;drc=55172975434220f3a234cada1f76a5fb109bd2e0;l=18).
+The format is defined in [rsyslog.chromeos](https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/init/rsyslog.chromeos).
 
 ### Journald Deprecation
 
@@ -41,7 +41,7 @@ Jounald is deprecated and is about to be removed. Journal log has a storage and 
 
 ## Log Rotation
 
-Major log files are rotated by (chromeos-cleanup-logs)[https://source.corp.google.com/chromeos_public/src/platform2/init/chromeos-cleanup-logs?q=chromeos-cleanup-logs] script, which rotates logs every 24 hours and keeps 7 histories.
+Major log files are rotated by [chromeos-cleanup-logs](https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/init/chromeos-cleanup-logs) script, which rotates logs every 24 hours and keeps 7 histories.
 
 Chrome logs are rotated by itself (to be more specific, a new log file is generated when every process starts). And old logs are removed by chromeos-cleanup-logs script.
 

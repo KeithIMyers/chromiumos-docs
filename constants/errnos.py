@@ -50,7 +50,7 @@ def load_table():
     for target in constants.TARGETS:
         all_tables[target] = find_symbols(target)
 
-    # Sanity check that all the tables are the same.
+    # Check that all the tables are the same.
     basetarget = constants.TARGETS[0]
     baseline = all_tables[basetarget]
     for target, table in all_tables.items():

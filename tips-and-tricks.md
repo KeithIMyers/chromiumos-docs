@@ -47,8 +47,7 @@ sudo cp ~/chromiumos/chroot/build/${BOARD}/bin/busybox /media/utils/
 sudo chmod o+rx /media/utils/busybox
 ```
 
-Then, you can go crazy and add symlinks for whatever your favorite busybox
-commands are:
+Then, you can go add symlinks for whatever your favorite busybox commands are:
 
 ```bash
 for cmd in less zip; do

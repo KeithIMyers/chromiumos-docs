@@ -195,8 +195,8 @@ shell code from a noexec partition, then chances are good that your shell script
 is already at the point where you shouldn't be using shell.
 Please strongly consider switching languages, especially due to the fact that it
 is rarely feasible to unittest shell scripts.
-All code in Chrome OS should have proper unittest coverage so we can sanely ship
-as stable & reliable system to our millions of users.
+All code in Chrome OS should have proper unittest coverage so we can confidently
+ship a stable & reliable system to our millions of users.
 ***
 
 ### How to save/restore settings?

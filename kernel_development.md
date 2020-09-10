@@ -1606,7 +1606,7 @@ Various options are available. Particularly useful ones are:
 *   \-n - do a dry run
 
 Full documentation is available in the README (patman -h) or
-[here](https://gitlab.denx.de/u-boot/u-boot/blob/master/tools/patman/README).
+[here](https://gitlab.denx.de/u-boot/u-boot/blob/HEAD/tools/patman/README).
 Take a look at the automated change list creation and the alias support also.
 
 ### Sending patches manually
