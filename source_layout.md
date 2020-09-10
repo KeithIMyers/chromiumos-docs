@@ -398,7 +398,7 @@ See [How do I create a new repository on the server?](#server-new-repo) first.
 ***
 
 If the repo is public (i.e. exists on the [Chromium GoB]), then update the
-[internal full.xml] file in the internal [manifest-internal] repo.
+[full.xml][internal full.xml] file in the internal [manifest-internal] repo.
 Do not modify the [full.xml] file in the public [manifest] repo. The public
 [manifest] repo will automatically sync with the internal [manifest-internal]
 repo.
