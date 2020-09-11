@@ -1804,7 +1804,7 @@ are two structural sources of this: chumped CL's and mutually incompatible CL's
 landing at the same time.
 
 If you have previously run `repo init` without the `-b stable`, you can convert an
-existing checkout to stable (or vice versa):
+existing checkout to stable:
 
 ```shell
 (in/out)
@@ -1817,12 +1817,12 @@ and unit test stages (it ignores hardware tests so that the stables updates are
 more frequent). It should vary from 5-10 hours old, so long as ToT is not broken
 (which is rare).
 
-You can continue to use master (switch back with `repo init -b master` or just
-`repo init`), if you prefer. You would want to do this if you want to see a
-change that just landed on ToT and don't want to wait for the stable ref to be
-updated to include the change you are interested in building off of. On the
-downside, master may be broken and may not have all binaries available,
-including Chrome (which typically takes 45 minutes to build).
+You can continue to use master (switch back with `repo init -b master`), if you
+prefer. You would want to do this if you want to see a change that just landed
+on ToT and don't want to wait for the stable ref to be updated to include the
+change you are interested in building off of. On the downside, master may be
+broken and may not have all binaries available, including Chrome (which
+typically takes 45 minutes to build).
 
 We guarantee that binary prebuilt packages are available for everything at the
 stable ref including Chrome. Conversely, we don't guarantee Chrome binary
