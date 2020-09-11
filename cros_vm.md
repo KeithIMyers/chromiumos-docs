@@ -49,12 +49,19 @@ with `--download-vm`:
 *   `--download-vm` downloads a pre-packaged VM and QEMU (takes a few minutes).
 *   `--clear-sdk-cache` recommended, clears the cache.
 *   `--log-level=debug` for additional output (e.g. VM image download details).
-*   `--board=betty` will download an ARC-enabled VM (Googler-only).
-*   `--chrome-branding` will set $GN_ARGS to build and deploy a branded Chrome build including resources and components from src-internal.
+*   `--board=betty` will download an ARC-enabled VM (Googler-only). There are
+    variants for each Android versions and you need to pick the correct board
+    name if you need to trouble shoot ARC++ related issues.
+*   `--chrome-branding` will set $GN_ARGS to build and deploy a branded Chrome
+    build including resources and components from src-internal.
 *   `--version` to download a non-LKGM version, eg 10070.0.0.
+    To find out available versions for a specific board, see
+    [Tips](cros_vm.md#Tips).
+*   `--use-external-config` to use the public builders.
 
 Some boards do not generate VM images. `amd64-generic` and `betty` (for ARC,
-internal only) are recommended. Using `cros_vm` for non-X86 boards is currently not supported.
+internal only) are recommended. Using `cros_vm` for non-X86 boards is currently
+not supported.
 
 ## Launch a Chrome OS VM
 
@@ -181,10 +188,12 @@ Download the betty VM:
 ```bash
 (sdk) .../chrome/src $ cros chrome-sdk --board=betty --download-vm
 ```
+
 Run an ARC test:
 ```bash
 (vm) localhost ~ # local_test_runner arc.Boot
 ```
+
 Run a different ARC test from within your [chroot]:
 ```bash
 (chroot) ~/trunk/src/scripts $ tast run -build=false localhost:9222 arc.Downloads
@@ -200,6 +209,17 @@ list of GTests currently running in VMs (eg: `base_unittests`,
 ```bash
 (sdk) .../chrome/src $ autoninja -C out_$SDK_BOARD/Release/ $TEST
 (sdk) .../chrome/src $ ./out_$SDK_BOARD/Release/bin/run_$TEST
+```
+
+## Run a [GPU test] in the VM
+
+The following will run GPU tests that matches \<glob-file-pattern\>.
+```bash
+(sdk) .../chrome/src $ content/test/gpu/run_gpu_integration_test.py \
+webgl_conformance --show-stdout --browser=cros-chrome --passthrough -v \
+--extra-browser-args='--js-flags=--expose-gc --force_high_performance_gpu' \
+--read-abbreviated-json-results-from=content/test/data/gpu/webgl_conformance_tests_output.json \
+--remote=127.0.0.1 --remote-ssh-port=9222 --test-filter=<glob-file-pattern>
 ```
 
 ## Login and navigate to a webpage in the VM
@@ -220,6 +240,7 @@ Unzip:
 ```bash
 (shell) $ tar xvf ~/Downloads/chromiumos_qemu_image.tar.xz
 ```
+
 Launch a VM from within the [Simple Chrome] environment:
 ```bash
 (sdk) .../chrome/src $ cros_vm --start \
@@ -301,6 +322,13 @@ are run by different builders.
 
 This doc is at [go/cros-vm].
 
+#### Tips
+
+To lookup release versions for a particular board (e.g. betty):
+```bash
+(shell) .../chrome/src $ gsutil ls gs://chromeos-image-archive/betty-release/
+```
+
 [depot_tools installed]: https://www.chromium.org/developers/how-tos/install-depot-tools
 [go/cros-qemu]: https://storage.cloud.google.com/achuith-cloud.google.com.a.appspot.com/qemu.tar.gz
 [Linux Chromium checkout]: https://chromium.googlesource.com/chromium/src/+/HEAD/docs/linux/build_instructions.md
@@ -319,3 +347,4 @@ This doc is at [go/cros-vm].
 [go/cros-vm]: cros_vm.md
 [chromeos-amd64-generic-rel]: https://ci.chromium.org/p/chromium/builders/luci.chromium.ci/chromeos-amd64-generic-rel
 [VNC Viewer Extension]: https://chrome.google.com/webstore/detail/iabmpiboiopbgfabjmgeedhcmjenhbla
+[GPU test]: https://chromium.googlesource.com/chromium/src.git/+/HEAD/docs/gpu/gpu_testing.md#Running-the-GPU-Tests-Locally
