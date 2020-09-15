@@ -2,9 +2,7 @@
 
 This aims to be an reference page to help find CrOS tools and their documentation.
 
-## Definitions
-
-##Tools
+## Tools
 
 ### Alphabetical List
 
