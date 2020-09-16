@@ -22,6 +22,7 @@ It is also the directory you land in when you run [cros_sdk](#cros_sdk).
 #### cros deploy
 
 `cros deploy` is used to install a single package to a [DUT][glossary-acronyms] (Device Under Test).
+See the [`cros deploy` documentation](cros_deploy.md) for more information.
 
 #### cros flash
 

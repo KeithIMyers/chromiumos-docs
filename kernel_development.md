@@ -1688,7 +1688,7 @@ cat $OUT
 
 [cros-kernel eclass documentation]: https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/HEAD/eclass/cros-kernel/README.md
 [fromupstream.py]: https://chromium.googlesource.com/chromiumos/platform/dev-util/+/HEAD/contrib/fromupstream.py
-[cros deploy]: https://dev.chromium.org/chromium-os/build/cros-deploy
+[cros deploy]: cros_deploy.md
 [kernel parameters guide]: https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
 [Dynamic Debug]: https://www.kernel.org/doc/html/v4.19/admin-guide/dynamic-debug-howto.html
 [dynamic debug is disabled on Chrome OS]: https://crbug.com/188825

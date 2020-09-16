@@ -1946,7 +1946,7 @@ Below are a few links to external sites that you might also find helpful
 [Developer Hardware]: https://dev.chromium.org/chromium-os/getting-dev-hardware/dev-hardware-list
 [crosh]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/crosh/
 [crbug/710629]: https://crbug.com/710629
-[cros deploy]: https://dev.chromium.org/chromium-os/build/cros-deploy
+[cros deploy]: cros_deploy.md
 [Create a branch for your changes]: #Create-a-branch-for-your-changes
 [Making changes to the Chromium web browser on Chromium OS]: simple_chrome_workflow.md
 [Remote Debugging in Chromium OS]: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/remote-debugging

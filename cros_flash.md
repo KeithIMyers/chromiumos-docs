@@ -166,4 +166,3 @@ start update-engine
 [Simple Chrome]: simple_chrome_workflow.md
 [developer guide]: developer_guide.md
 [xBuddy documentation]: xbuddy.md
-[cros deploy]: https://dev.chromium.org/chromium-os/build/cros-deploy
