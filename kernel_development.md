@@ -1429,6 +1429,72 @@ Previous discussions defining this practice:
 *   https://groups.google.com/a/chromium.org/forum/#!msg/chromium-os-dev/D56e2JxDhmc/IjgixwEReasJ
 *   https://groups.google.com/a/chromium.org/forum/#!msg/chromium-os-dev/\_nY16h27k1s/FuHbWFCABwAJ
 
+### Picking patches from mailing lists / upstream
+
+See also [kernel\_faq.md#How-do-I-backport-an-upstream-patch].
+
+#### FROMGIT
+
+```bash
+../../../platform/dev/contrib/fromupstream.py -b b:123489157 \
+  -t "Deploy kukui kernel with USE=kmemleak, no kmemleak warning in __arm_v7s_alloc_table" \
+  'git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git#next/032ebd8548c9d05e8d2bdc7a7ec2fe29454b0ad0'
+```
+
+#### FROMLIST
+
+Add project url in `~/.pwclientrc`
+
+```rc
+[options]
+default=kernel
+
+[kernel]
+url=https://patchwork.kernel.org/
+
+[lore]
+url=https://lore.kernel.org/patchwork/xmlrpc/
+```
+
+Then run:
+
+```bash
+../../../platform/dev/contrib/fromupstream.py -b b:132314838 -t "no crash with CONFIG_FAILSLAB" 'pw://10957015/'
+# or
+../../../platform/dev/contrib/fromupstream.py -b b:132314838 -t "no crash with CONFIG_FAILSLAB" 'pw://kernel/10957015/'
+```
+
+#### Submitting patch series by gerrit cmd tool
+
+In CrOS chroot (`gerrit deps` prints dependencies from top to bottom, so its
+better to use `tac` so that the bottom-most CL is set to ready first):
+
+```bash
+# If the CL of interest is HEAD, else substitute the gerrit CL number.
+cl=$(git log -1 --format='%(trailers:key=Change-Id,valueonly)')
+deps=( $(gerrit --raw deps "${cl}" | tac) )
+gerrit label-v "${deps[@]}" 1
+gerrit label-cq "${deps[@]}" 2
+```
+
+### Downloading a patch from patchwork into IMAP
+
+So you have an email/patch on patchwork, but you didn't subscribe to the mailing
+list, so you can't reply to/review the change.
+
+To fetch the email into your IMAP/gmail account:
+
+1.  Download the patchwork mbox file.
+1.  Clone the [imap-upload] repo.
+1.  `python2.7 ./imap_upload.py patch.mbox --gmail`
+1.  Use @chromium.org account.
+1.  Find the email in your mailbox, and reply!
+
+mbox downloaded from patchwork doesn't include replies to the patch (e.g.
+reviewer comments). To obtain mbox containing replies, download mbox.gz files
+from https://lore.kernel.org/lkml/ instead.
+
+
 ### How do I build an upstream kernel?
 
 There are various ways of building mainline Linux, but it can be useful to use
@@ -1465,6 +1531,8 @@ kernel and mm source. You can start with a code review if you like. Take a look
 on the kernel mailing list to get a feel for how people submit and review
 patches.
 
+#### Prepare your local repository state
+
 To upstream, create a remote to track upstream.
 
 For example the main kernel:
@@ -1500,72 +1568,47 @@ git commit
 # create a suitable message
 ```
 
-### Picking patches from mailing lists / upstream
+#### How do I check my patches are correctly formatted?
 
-See also [kernel\_faq.md#How-do-I-backport-an-upstream-patch].
+There are two aspects of having correct patches to send upstream: not having
+Chromium OS-specific details, and meeting all the Linux kernel requirements.
 
-#### FROMGIT
+###### Remove Chromium OS-specific Details
 
-```bash
-../../../platform/dev/contrib/fromupstream.py -b b:123489157 \
-  -t "Deploy kukui kernel with USE=kmemleak, no kmemleak warning in __arm_v7s_alloc_table" \
-  'git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu.git#next/032ebd8548c9d05e8d2bdc7a7ec2fe29454b0ad0'
-```
+Verifying these details is as simple as loading the patch file in your favorite
+editor. Edit the file manually to become compliant; this will, of course, have
+no affect on the source or commit message stored by git.
 
-#### FROMLIST
+*   No CHROMIUM:in the subject line of the patch file.
+*   No **BUG=** in the patch file.
+*   No **TEST=** in the patch file.
+*   No **Change-Id:** in the patch file.
+*   **Signed-off-by:** is in the patch file.
 
-Add project url in `~/.pwclientrc`
+Once all of the above is true, you can move on to checking for compliance with
+the Linux Kernel guidelines.
 
-```rc
-[options]
-default=kernel
+###### Check for Compliance with Linux Kernel Requirements
 
-[kernel]
-url=https://patchwork.kernel.org/
+First off, make sure the Kernel builds with patch applied.
 
-[lore]
-url=https://lore.kernel.org/patchwork/xmlrpc/
-```
-
-Then run:
-
-```bash
-../../../platform/dev/contrib/fromupstream.py -b b:132314838 -t "no crash with CONFIG_FAILSLAB" 'pw://10957015/'
-# or
-../../../platform/dev/contrib/fromupstream.py -b b:132314838 -t "no crash with CONFIG_FAILSLAB" 'pw://kernel/10957015/'
-```
-
-### Submitting patch series by gerrit cmd tool
-
-In CrOS chroot (`gerrit deps` prints dependencies from top to bottom, so its
-better to use `tac` so that the bottom-most CL is set to ready first):
+For style, the patman tool (see below) will automatically run checkpatch.pl on
+your change. If you'd like to run the checkpatch.pl tool manually, here'a an
+example workflow:
 
 ```bash
-# If the CL of interest is HEAD, else substitute the gerrit CL number.
-cl=$(git log -1 --format='%(trailers:key=Change-Id,valueonly)')
-deps=( $(gerrit --raw deps "${cl}" | tac) )
-gerrit label-v "${deps[@]}" 1
-gerrit label-cq "${deps[@]}" 2
+git format-patch HEAD~
+scripts/checkpatch.pl 0001-my-change.patch
+# make improvements
+git add ...
+git commit --amend
+# rinse and repeat
 ```
 
-### Downloading a patch from patchwork into IMAP
+#### Send out the patch using patman
 
-So you have an email/patch on patchwork, but you didn't subscribe to the mailing
-list, so you can't reply to/review the change.
-
-To fetch the email into your IMAP/gmail account:
-
-1.  Download the patchwork mbox file.
-1.  Clone the [imap-upload] repo.
-1.  `python2.7 ./imap_upload.py patch.mbox --gmail`
-1.  Use @chromium.org account.
-1.  Find the email in your mailbox, and reply!
-
-mbox downloaded from patchwork doesn't include replies to the patch (e.g.
-reviewer comments). To obtain mbox containing replies, download mbox.gz files
-from https://lore.kernel.org/lkml/ instead.
-
-### Sending patches the easy way (patman)
+It is possible to send out patches using `git send-email` manually, but for
+most usecases using the `patman` CLI is sufficient and can save a lot of time.
 
 Patman automates patch creation, checking, change list creation, cover letter,
 sending to the mailing list, etc. You can find patman in the U-Boot tree
@@ -1609,129 +1652,11 @@ Full documentation is available in the README (patman -h) or
 [here](https://gitlab.denx.de/u-boot/u-boot/blob/HEAD/tools/patman/README).
 Take a look at the automated change list creation and the alias support also.
 
-### Sending patches manually
+###### Automating the Compliance Checks
 
-Like any kernel patch you should use checkpatch.pl to make sure it is clean
-(see below). Also see Documentation/SubmittingPatches in the kernel source tree
-for instructions. You can use `git show HEAD` to see your patch.
-
-To send upstream, you can create patch files with `git format-patch`, and
-then email then. This creates a set of patch files named '000n-<something>'
-where 'n' is incremented starting from 1, and "something" comes from the first
-line of each change description.
-
-You can use `get_maintainer.pl` to figure out who to send it to.
-
-```bash
-# turn top commit into a patch
-git format-patch HEAD~
-
-# or perhaps you want to do the top 5 commits
-git format-patch HEAD~5
-# edit patches if you like
-
-./scripts/get_maintainer.pl 0001-mypatch.patch | \
-  sed 's/ *([^)]*) *//g' | \
-  sed 's/"//g' | \
-  sed 's/^\(.*\)$/--cc="\1" /' | \
-  tr -d '\n'
-# spits out a list of --cc addresses
-
-# send out email, with subject prefix PATCH v5 (you can leave this out for default)
-git send-email --to=linux-arm-kernel@lists.infradead.org --cc=... --cc=... --signoff --subject-prefix="PATCH v5" --annotate 0001-my-change.patch
-# Edit the patch as required
-```
-
-> (**Note:** `git send-email` requires `git-email` to be installed on your host (`sudo apt-get install git-email`),
-> or you will get the message "`git: 'send-email' is not a git command. See git --help.`".
-> You also need to configure `.gitconfig` to use your SMTP server)
-
-If you are sending a series of patches it is nice to include a cover letter.
-This turns up as patch zero in the series. Pass the `--cover-letter` flag to
-`git format-patch` and it will create a 0000-subject file which you can
-edit to contain your cover letter. When you use `git send-email` you can
-send files 000\* to send the cover letter and all your patches as one email
-set.
-
-Another flow that might work is to send email directly, without going through
-`git format-patch`. For example you can email the top five commits to the
-mailing list with something like:
-
-```bash
-git send-email --to=... -cc=... --signoff --subject-prefix=... --annotate HEAD~5
-```
-
-The `--annotate` lets you edit them before they go out, which is probably a good idea in this case!
-
-When replying to an email thread with an updated patch, use the something like
-the following to attach your email to the thread:
-
-```bash
-git send-email --thread --no-chain-reply-to --in-reply-to=<message id> --to=... --cc=... --signoff --subject-prefix=... --annotate 0002-...
-```
-
-You can find the message id under the label <Message-Id> in gmail in the 'Show
-Original' link in the drop down options for the email you want to reply to.
-
-There is a video here:
-https://youtu.be/LLBrBBImJt4
-
-The patch flow throughout the video is:
-
-1.  `git diff`
-2.  `git commit`
-3.  `git show`
-4.  `git format-patch`
-5.  `git send-email`
-
-Patch checklist: (at 34:30 of the video)
-
-1.  Kernel builds with patch applied
-2.  Correct "**From:**" address
-3.  Concise "**Subject:**"
-4.  Explain the patch
-5.  **Signed-off-by**
-6.  Check you have removed **Change ID**, **TEST=** and **BUG=** from the commit message
-
-### How do I check my patches are correctly formatted?
-
-There are two aspects of having correct patches to send upstream: not having
-Chromium OS-specific details, and meeting all the Linux kernel requirements.
-
-For the following sections, you will need to have created a _patch_ file using
-git format-patch. Also note that you will have to recreate the patch file, and
+To use the following script, you will need to have created a _patch_ file using
+`git format-patch`. Also note that you will have to recreate the patch file, and
 re-check your patch file each time you check in code to your source tree.
-
-#### Remove Chromium OS-specific Details
-
-Verifying these details is as simple as loading the patch file in your favorite
-editor. Edit the file manually to become compliant; this will, of course, have
-no affect on the source or commit message stored by git.
-
-*   No CHROMIUM:in the subject line of the patch file.
-*   No **BUG=** in the patch file.
-*   No **TEST=** in the patch file.
-*   No **Change-Id:** in the patch file.
-*   **Signed-off-by:** is in the patch file.
-
-Once all of the above is true, you can move on to checking for compliance with
-the Linux Kernel guidelines.
-
-#### Check for Compliance with Linux Kernel Requirements
-
-You should use this perl script to check that your patch conforms to the kernel
-coding standard. It is kept in the linux kernel tree.
-
-```bash
-git format-patch HEAD~
-scripts/checkpatch.pl 0001-my-change.patch
-# make improvements
-git add ...
-git commit --amend
-# rinse and repeat
-```
-
-#### Automating the Compliance Checks
 
 This script might be useful also, as it checks a series of patches, checks for
 Chrome OS-specific commit tags and prints a summary at the end. Put it in your
@@ -1739,23 +1664,24 @@ path and run it from anywhere.
 
 ```bash
 #! /bin/sh
+# Pass a list of patchfiles to check for compliance
 
 KERNEL=./scripts/
 OUT=$(tempfile)
 while (( "$#" )); do
-ERRCP=
-ERR=
-"${KERNEL}/checkpatch.pl" $1 || ERRCP=1
-grep BUG= $1 && ERR="$ERR BUG"
-grep TEST= $1 && ERR="$ERR TEST"
-grep "Change-Id" $1 && ERR="$ERR Change-Id"
-grep "Review URL" $1 && ERR="$ERR Review URL"
-if [ -n "${ERR}" ]; then
-echo "Bad $1 ($ERR)" >>$OUT
-else
-echo "OK $1" >>$OUT
-fi
-shift
+	ERRCP=
+	ERR=
+	"${KERNEL}/checkpatch.pl" $1 || ERRCP=1
+	grep BUG= $1 && ERR="$ERR BUG"
+	grep TEST= $1 && ERR="$ERR TEST"
+	grep "Change-Id" $1 && ERR="$ERR Change-Id"
+	grep "Review URL" $1 && ERR="$ERR Review URL"
+	if [ -n "${ERR}" ]; then
+		echo "Bad $1 ($ERR)" >>$OUT
+	else
+		echo "OK $1" >>$OUT
+	fi
+	shift
 done
 cat $OUT
 ```
