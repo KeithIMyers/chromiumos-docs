@@ -24,6 +24,11 @@ secure. Specifically, it makes the "verified boot" that's built-in to your
 hardware a little bit more lax, allowing your hardware to run custom
 (non-Google-signed) images. It also gives you access to a "root" shell.
 
+If you’re encountering issues putting your device into Developer Mode,
+it's possible that your device administrator has blocked Developer
+Mode access on your device.  Please follow the link to read more
+details about [blocked Developer Mode].
+
 You can tell that you're in Developer Mode if you see one of these screens when
 you turn the device on:
 
@@ -248,6 +253,7 @@ bootloader when you see the developer mode boot screen.
 [keyboardless developer mode]: debug_buttons.md#firmware-menu-interface
 [mrchromebox.tech]: https://mrchromebox.tech
 [recovery process]: https://www.google.com/chromeos/recovery
+[blocked Developer Mode]: https://support.google.com/chrome/a/answer/6150653
 
 <!-- Images -->
 
