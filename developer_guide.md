@@ -1712,8 +1712,8 @@ modifying a normal system image so that integration tests can be run on it.
 
 ### Creating a VM image that has been modified for test
 
-If you wish to produce a VM image instead, you should omit the --test flag to
-build_image and let `./image_to_vm.sh` produce the test image:
+If you wish to produce a VM image instead, make sure to include the --test flag
+when running build_image and run `./image_to_vm.sh` with the --test_image flag:
 
 ```bash
 (inside) ./image_to_vm.sh --board=${BOARD} --test_image
@@ -1722,18 +1722,6 @@ build_image and let `./image_to_vm.sh` produce the test image:
 Note: this difference between `cros flash` and `./image_to_vm.sh` arises because
 `./image_to_vm.sh` does not yet support the `--image_name` flag and by default
 looks for `chromiumos_image.bin`. We expect this to change in the future.
-
-Note that creating a test image will change the root password of the image to
-**`test0000`**. The `--test_image` flag causes the `image_to_xxx commands` to
-make a copy of your `chromiumos_image.bin` file called
-`chromiumos_test_image.bin` (if that file doesn't already exist), modify that
-image for test, and use the test image as the source of the command.
-
-**SIDE NOTES:**
-
-*   If the directory already has a file called `chromiumos_test_image.bin`, that
-    file is reused. That means that calling both cros flash and `image_to_vm.sh`
-    doesn't waste time by creating the test image twice.
 
 ### Creating a recovery image that has been modified for test
 
