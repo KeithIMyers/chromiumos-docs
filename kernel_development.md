@@ -1610,6 +1610,9 @@ git commit --amend
 It is possible to send out patches using `git send-email` manually, but for
 most usecases using the `patman` CLI is sufficient and can save a lot of time.
 
+(See the next section for first-time credential setup for using `patman` or
+`git send-email`.)
+
 Patman automates patch creation, checking, change list creation, cover letter,
 sending to the mailing list, etc. You can find patman in the U-Boot tree
 (`src/third_party/u-boot/files/tools/patman`). It usually should be run outside
@@ -1651,6 +1654,57 @@ Various options are available. Particularly useful ones are:
 Full documentation is available in the README (patman -h) or
 [here](https://gitlab.denx.de/u-boot/u-boot/blob/HEAD/tools/patman/README).
 Take a look at the automated change list creation and the alias support also.
+
+###### First-Time Email Setup
+
+If you have never sent email from the command-line, or from `git send-email`, then there is some setup required.
+
+**NOTE**: Googlers who can access pre-released Google-corp binaries should use
+instructions from this internal site instead: http://go/sendgmail.
+
+The following instructions are for open-source contributors or Googlers who
+are directly using gLaptops for sending out patches.
+
+**Install `git send-email`**
+
+   * If `git send-email --help` shows an error, you'll need to install it
+      * For example, on debian: `apt-get install git-email`
+
+**Decide on the email address, password, and mail server to use**
+
+You must configure git's send-email command with the details of how to send
+email from your identity. The rest of this section will explain how to set up a
+google-mail based account (e.g. an @gmail.com address, @chromium.org, etc).
+If you have a different mail server, please contact the system administrator
+(or check some help docs related to your email service) for the correct
+settings.
+
+**NOTE**: For Googlers, note that [DMARC](http://b/14415867) restrictions
+prevent usage of your @google.com email address. Use http://go/chromium-account
+to obtain an @chromium.org address.
+
+For google-mail-based addresses, it's recommended to use an "App
+Password" for convenience when storing your real password on disk is
+undesireable (which should be most cases). Follow [these
+instructions](https://support.google.com/accounts/answer/185833) to obtain an
+App Password, and use it as the `smtppass` value in the next section.
+
+**Edit your `~/.gitconfig`**
+
+Open up your `~/.gitconfig` file to include the following stanza:
+
+```
+[sendemail]
+  smtpserver = smtp.gmail.com
+  smtpserverport = 587
+  smtpencryption = tls
+  smtpuser = YOUR_EMAIL_ADDRESS
+  smtppass = PASSWORD
+  confirm = always
+```
+
+Remember to swap in the `YOUR_EMAIL_ADDRESS` with your full email address, and
+`PASSWORD` with your password (or App Password).
 
 ###### Automating the Compliance Checks
 
