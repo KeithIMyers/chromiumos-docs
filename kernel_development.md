@@ -463,9 +463,9 @@ restriction can be disabled via the exposed sysctl:
 echo 0 >/proc/sys/kernel/chromiumos/module_locking
 ```
 
-#### Blacklisting Kernel modules for individual overlays
+#### Blocking kernel modules for individual overlays
 
-If you need to blacklist kernel modules for specific overlays. Modify the
+If you need to block kernel modules for specific overlays, modify the
 overlay-<name>/chromeos-base/chromeos-bsp-<name>/chromeos-bsp-<name>-<version>.ebuild
 file.
 
@@ -473,22 +473,22 @@ Add the following two lines to the end of the src\_install() function:
 
 ```bash
 insinto "/etc/modprobe.d"
-doins "${FILESDIR}/<blacklist file>"
+doins "${FILESDIR}/<blocklist>"
 ```
 
 The ${FILESDIR} variable points to the files/ directory within the
-chromeos-bsp-<name>/ directory. Within this directory, add your <blacklist
-file> (ex cros-blacklist.conf).
+chromeos-bsp-<name>/ directory. Within this directory, add your <blocklist>
+(ex cros-blocklist.conf).
 
-For each kernel module you wish to blacklist, add the following line to
-<blacklist file>:
+For each kernel module you wish to block, add the following line to
+<blocklist>:
 
 ```
 blacklist <module name>
 ```
 
 You can also use # comments within these files to explain why the kernel module
-needs to be blacklisted.
+needs to be blocked.
 
 ### Working on several kernel issues
 
