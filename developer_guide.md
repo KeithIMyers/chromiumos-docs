@@ -147,28 +147,45 @@ You will have a much nicer time if you also have:
 ### Install git and curl
 
 Install the git revision control system, the curl download helper, and lvm
-tools. On Ubuntu, the magic incantation to do this is (all on one line):
+tools. On Ubuntu 16.04, the magic incantation to do this is (all on one line):
 
 ```bash
 (outside)
 sudo apt-get install git-core gitk git-gui curl lvm2 thin-provisioning-tools \
      python-pkg-resources python-virtualenv python-oauth2client xz-utils \
      python3.6
+```
 
-# More recent Debian-based distributions (such as Googlers' workstations)
-# might qualify the Python package names, e.g. you might want
-# "python3-virtualenv" and "python3-oauth2client" above.
+More recent Debian-based distributions (such as Googlers' workstations)
+might qualify the Python package names and you'll need to run this instead:
 
-# If Python 3.5 is the default, switch it to Python 3.6.
+```bash
+(outside)
+sudo apt-get install git-core gitk git-gui curl lvm2 thin-provisioning-tools \
+     python3-pkg-resources python3-virtualenv python3-oauth2client xz-utils \
+     python3.6
+```
+
+These command also installs git's graphical front end (`git gui`) and revision
+history browser (`gitk`).
+
+If Python 3.5 is the default, switch it to at least Python 3.6. You can check what
+version you're using with:
+
+```bash
+(outside)
 python3 --version
-# If above version says 3.5, you'll need to run:
+```
+
+If the above says 3.5, or below, you'll need to switch it to 3.6+ (Googlers
+should be wary of modifying any python configurations). This can be done with:
+
+```bash
+(outside)
 sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.5 1
 sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 2
 sudo update-alternatives --config python3
 ```
-
-This command also installs git's graphical front end (`git gui`) and revision
-history browser (`gitk`).
 
 ### Install depot_tools
 
