@@ -23,6 +23,8 @@ Once that is all set up, you can come back here.
 
 Before uploading [CL]s, you'll need to submit a [Contributor License Agreement].
 
+**SIDE NOTE**: Googlers do not need to sign a CLA.
+
 ## Policies {#policies}
 
 CrOS uses code review systems to try and improve changes and catch bugs/problems
