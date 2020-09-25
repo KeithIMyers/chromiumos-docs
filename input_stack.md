@@ -248,7 +248,9 @@ being produced.
 [interpreter-chains]: https://source.chromium.org/chromiumos/chromiumos/codesearch/+/HEAD:src/platform/gestures/src/gestures.cc?q=InitializeTouchpad
 [Gesture Properties]: https://chromium.googlesource.com/chromiumos/platform/gestures/+/HEAD/docs/gesture_properties.md
 
-## Chrome to Linux apps (Crostini)
+## Chrome to other apps
+
+### Linux apps (Crostini)
 
 When a Linux app is run on Chrome OS, input events are forwarded to it over the
 Wayland protocol. You can read more about Wayland in the [Wayland Book]. A
@@ -277,6 +279,11 @@ If the app only works with X11, add the `-X` switch before the name:
 ```
 $ WAYLAND_DEBUG=1 sommelier -X xeyes
 ```
+
+### Android apps (ARC++)
+
+ARC++, the container in which Android apps run, also receives input events from
+[Exo] over Wayland. These events are then translated into Android input events.
 
 [Wayland Book]: https://wayland-book.com/
 [Exo]: https://chromium.googlesource.com/chromium/src/+/HEAD/components/exo
