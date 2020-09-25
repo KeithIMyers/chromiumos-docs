@@ -8,6 +8,8 @@ Each stage includes links to debugging tools, if available.
 
 ## Device to Chrome
 
+![Flowchart of the stack from device to evdev](images/input_stack/kernel.png)
+
 ### Transport
 
 This is the method used to transfer data from the device to the CPU, to be read
@@ -171,6 +173,8 @@ view.
 
 ## In Chrome
 
+![Flowchart of the Chrome part of the stack](images/input_stack/chrome.png)
+
 On Chrome OS, evdev is consumed by [Ozone], a part of Chrome which converts
 evdev events into Chrome's cross-platform UI events. Ozone has a number of
 converter classes, each of which handles a different type of input device.
@@ -249,6 +253,8 @@ being produced.
 [Gesture Properties]: https://chromium.googlesource.com/chromiumos/platform/gestures/+/HEAD/docs/gesture_properties.md
 
 ## Chrome to other apps
+
+![Flowchart of event delivery to apps](images/input_stack/vms-and-containers.png)
 
 ### Linux apps (Crostini)
 
