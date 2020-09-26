@@ -660,7 +660,8 @@ git commit id must be exactly the same).
 Certainly not!
 
 If you create a merge commit, that single CL is the only thing that needs to be
-uploaded & approved during code review.
+uploaded & approved during code review. See the [merge CL] session below for
+instructions.
 It is the reviewers responsibility to validate the changes pulled in via that
 merge commit using whatever means is appropriate, and the approval of the merge
 commit applies transitively to all of its children.
@@ -669,6 +670,42 @@ This would also apply to requesting a new branch be created from a specific
 starting point -- getting it into the overall build would require code review
 at some point (e.g. updating ebuilds or repo manifests), and those approvals
 would implicitly apply to the new source history being pulled in.
+
+### How do I upload a merge CL for review?
+
+Here's the process:
+
+1.  (Googlers only) Join the corresponding ACL group (e.g.
+    chromeos-kernel-mergers).
+2.  (Googlers only) Push a branch into the `merge/` namespace.
+    ```bash
+    $ git push cros HEAD:merge/${BRANCH_NAME}
+    ```
+    If the individual commits were ever uploaded one by one into Gerrit, you
+    need to remove all the Change-Id tag. Any commits with associated Change-Id
+    can not be involved in a merge due to Gerrit limitations.
+    ```bash
+    $ git config --local gerrit.createChangeId false
+    $ EDITOR="sed -i -e 's/Change-Id: .*//'" git rebase -i m/master -x 'git commit --amend'
+    $ git config --local gerrit.createChangeId true
+    ```
+3.  Create a merge commit.
+    ```bash
+    $ git fetch cros
+    $ git checkout m/master
+    $ git merge --no-ff --log=${NUMBER_OF_CLS} cros/merge/${BRANCH_NAME}
+    ```
+    The commit description should include a shortlog of the commits being merged
+    (e.g. the output from `git request-pull`).
+4.  Upload the merge commit by `repo upload` and go through the normal code
+    review process.
+
+    You'll have to ignore all the warnings about "too many CLs". Everything but
+    the merge CL should already be present on `cros/merge/${BRANCH_NAME}` and
+    will not create new CLs.
+
+Also see `src/platform/dev/contrib/merge-kernel`, the script to merge upstream
+kernel tags into chromeos.
 
 ### Do I have to review every commit going into upstream 3rd party releases?
 
@@ -760,6 +797,7 @@ wouldn't protect from [insider threats].
 [issuetracker.google.com]: https://issuetracker.google.com/
 [partner issue tracker]: https://partnerissuetracker.corp.google.com
 [Life of a Patch]: https://source.android.com/setup/contribute/life-of-a-patch
+[merge CL]: #How-do-I-upload-a-merge-CL-for-review
 [Policies]: #policies
 [unittests]: testing/unit_tests.md
 [Uploading Changes]: https://gerrit-review.googlesource.com/Documentation/user-upload.html
