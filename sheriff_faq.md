@@ -173,9 +173,9 @@ only run the failed bits.
 *   What is a Canary Build?
     *   An official build (with a unique version) is prepared and validated by
         canary builders a few times a day.
-    *   The Canary Master decides success/failure for a given run. You mostly
-        shouldn't look at slaves, except to see failure details. The Master
-        should link to appropriate slaves.
+    *   The Canary controller decides success/failure for a given run. You
+        mostly shouldn't look at secondaries, except to see failure details. The
+        controller should link to appropriate secondaries.
 *   What is ASAN bot?
     *   Please read [Sheriff FAQ: Chromium OS ASAN].
 *   A toolchain builder is failing. What do I do?
@@ -455,7 +455,7 @@ autotest directory. Do a grep -A10 FAILED *.DEBUG. You will find something like
 this:
 
 ```
-05/08 09:23:33 DEBUG|platform_T:0083| Test Executable Stack 2 failures, 1 in whitelist, 1 in filtered, 0 new passes FAILED:
+05/08 09:23:33 DEBUG|platform_T:0083| Test Executable Stack 2 failures, 1 in allowlist, 1 in filtered, 0 new passes FAILED:
 /opt/google/chrome/pepper/libnetflixplugin2.so
 05/08 09:23:33 ERROR|platform_T:0250| Test Executable Stack 1 failures
 FAILED:
@@ -463,11 +463,11 @@ FAILED:
 ```
 
 This means that the test called "Executable Stack" reported 2 failures, there is
-one entry in the whitelist of this test, and after filtering the failures
-through the whitelist, there is still a file. The name of the file is
+one entry in the allowlist of this test, and after filtering the failures
+through the allowlist, there is still a file. The name of the file is
 /path/to/binary.
 
-The "new passes" indicate files that are in the whitelist but passed this time.
+The "new passes" indicate files that are in the allowlist but passed this time.
 
 To find the owner who wrote this test, do a git blame on this file:
 https://chromium.googlesource.com/chromiumos/third_party/autotest/+blame/HEAD/client/site_tests/platform_ToolchainOptions/platform_ToolchainOptions.py
