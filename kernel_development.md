@@ -681,7 +681,7 @@ So the first step is to figure out _what_ are the problems:
 *   Other debugging kernel options:
 
     *   `USE=ubsan`
-    *   `USE=lockdep`
+    *   `USE=lockdebug`
     *   `USE=kmemleak`
     *   `USE=failslab`. Then configure in `/sys/kernel/debug/failslab` (setting
         `probability` to `10` and `times` to `1000` is a good start).
