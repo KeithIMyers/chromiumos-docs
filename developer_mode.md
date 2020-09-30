@@ -32,7 +32,7 @@ details about [blocked Developer Mode].
 You can tell that you're in Developer Mode if you see one of these screens when
 you turn the device on:
 
-![developer mode 1] ![developer mode 2] ![developer mode 3]
+![developer mode 1] ![developer mode 2] ![developer mode 3] ![developer mode 4]
 
 ## Switch to Normal Mode {#normal-mode}
 
@@ -260,3 +260,4 @@ bootloader when you see the developer mode boot screen.
 [developer mode 1]: ./images/developer_mode1.jpg
 [developer mode 2]: ./images/developer_mode2.jpg
 [developer mode 3]: ./images/developer_mode3.jpg
+[developer mode 4]: ./images/developer_mode4.jpg
