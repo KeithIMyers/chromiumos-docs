@@ -37,7 +37,7 @@ workflow (bug [980627](https://crbug.com/980627)).
     Devserver currently only runs in the chroot.
 2.  Credentials to download from Google Storage. External developers can only
     download images for publicly available boards such as amd64-generic and
-    kevin.
+    kevin. See the [gsutil] docs to configure your credentials.
 
 ## Example Usage
 
@@ -166,3 +166,4 @@ start update-engine
 [Simple Chrome]: simple_chrome_workflow.md
 [developer guide]: developer_guide.md
 [xBuddy documentation]: xbuddy.md
+[gsutil]: gsutil.md
