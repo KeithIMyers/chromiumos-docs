@@ -25,13 +25,13 @@ If you don't have a `~/.boto` file set up yet for your account, you can use the
 It will print out directions for you to follow.
 
 For Googlers, make sure to use your `@google.com` account.
-Otherwise you'll see auth errors trying to access non-public buckets.
+Otherwise, you'll see auth errors trying to access non-public buckets.
 
 When prompted for a project ID, enter `chromeos-bot` (this is the main Chrome OS
 project ID).
 
-```sh
-$ ~/chromiumos/chromite/scripts/gsutil config
+```bash
+(outside) $ ~/chromiumos/chromite/scripts/gsutil config
 ```
 
 ## Various GS buckets
