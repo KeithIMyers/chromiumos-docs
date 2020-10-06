@@ -6,7 +6,7 @@ This is a list of security-sensitive Portage packages that the Chrome OS team
 should strive to update **quickly** in the event of a security bug in them.
 
 On an incoming security bug report, the Chrome OS security sheriff should
-ideally update the pacakge themselves, or find an owner that can commit to
+ideally update the package themselves, or find an owner that can commit to
 updating the package quickly, namely **before the end of their sheriff shift**.
 Bear in mind that sometimes there will be no upstream fix for the bug, in which
 case the package should be updated as soon as a fix is available.
@@ -58,11 +58,13 @@ case the package should be updated as soon as a fix is available.
 
 ### `sys`
 
+*   `app-arch/unrar`
 *   `sys-apps/dbus`
 *   `sys-apps/restorecon`
 *   `sys-apps/usbguard`
-*   `sys-fs/avfs`
+*   `sys-fs/fuse-zip`
 *   `sys-fs/fuse`
+*   `sys-fs/rar2fs`
 *   `sys-fs/udev`
 *   `sys-libs/glibc`
 *   `sys-libs/libselinux-2.7`
