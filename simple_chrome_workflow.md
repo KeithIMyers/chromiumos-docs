@@ -114,6 +114,7 @@ bugs if you encounter any DCHECK crashes:
 ```
 (shell) cros chrome-sdk --chrome-branding --board=$BOARD --log-level=info --gn-extra-args='dcheck_always_on=true'
 ```
+Alternatively, you can set `dcheck_is_configurable=true` to log DCHECK errors without crashing.
 
 ### cros chrome-sdk tips
 
