@@ -99,6 +99,11 @@ $ git cherry-pick cros-coreboot/feature1
 $ git cherry-pick cros-coreboot/feature1~N..cros-coreboot/feature1
 ```
 
+The commit message should follow the [Chromium OS Contributing Guide],
+including a Signed-Off-By line which can be easily added using `git commit -s`.
+The prefix for the title should be an abbreviated path to the edited file. Use
+`git log` to check for an example.
+
 The developer can then push the patch to review.coreboot.org.
 
 ```bash
@@ -108,3 +113,4 @@ $ git push origin HEAD:refs/for/master
 [ChromeOS Developer guide]: ./../developer_guide.md
 [Gerrit account page]: https://review.coreboot.org/#/settings/ssh-keys
 [Gerrit's documentation]: https://gerrit-documentation.storage.googleapis.com/Documentation/2.14.2/user-upload.html#ssh
+[Chromium OS Contributing Guide]: ./../contributing.md#commit-messages
