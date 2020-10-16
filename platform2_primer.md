@@ -171,7 +171,7 @@ specified in `P2_TEST_FILTER`. E.g.
 
 ```sh
 # Run the string utilities unit tests for libchromeos.
-P2_TEST_FILTER="StringUtils.*" cros_workon_make --test libchromeos
+P2_TEST_FILTER="StringUtils.*" cros_workon_make --board=${BOARD} --test libchromeos
 ```
 
 For more information, consult the [upstream gtest documentation].
