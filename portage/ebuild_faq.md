@@ -927,6 +927,7 @@ The policy we have in place for versioning of our virtuals is as follows:
 overlay                               | version (pv)
 ------------------------------------- | ------------
 chromiumos-overlay                    | 1
+chromeos-overlay                      | 1.3
 project-`<project name>`              | 1.5
 project-`<project name>`-private      | 1.7
 chipset-`<chip>`                      | 1.8
