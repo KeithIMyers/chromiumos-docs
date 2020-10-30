@@ -1431,8 +1431,6 @@ Previous discussions defining this practice:
 
 ### Picking patches from mailing lists / upstream
 
-See also [kernel\_faq.md#How-do-I-backport-an-upstream-patch].
-
 #### FROMGIT
 
 ```bash
