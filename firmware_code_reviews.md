@@ -43,8 +43,15 @@
     scope.
   * If someone needs to be aware that a change is happening, add them as CC; do
     this conservatively.
-  * TODO: Use the attention set to clarify whose turn it is to respond, when
-    that feature becomes available.
+* Maintain and respect the review's [attention set][6].
+  * Owners should maintain the attention set to contain only those reviewers
+    they are waiting on.
+  * Within 1 day of a reviewer being added to the attention set, the reviewer
+    should
+    1. Respond to the review, thus removing themselves from the attention set,
+       or
+    1. Remove themselves from the attention set so that others need not wait for
+       them.
 * Consider multi-stage review: Get LGTM within a certain scope before moving to
   the next reviewer.
   * This may help reduce the number of patchsets and duplicated review effort.
@@ -115,3 +122,4 @@
 [3]: https://doc.coreboot.org/getting_started/gerrit_guidelines.html
 [4]: https://g3doc.corp.google.com/gws/tools/gwsq/v3/g3doc/gerrit.md
 [5]: https://google.github.io/eng-practices/review/developer/small-cls.html
+[6]: https://gerrit-review.googlesource.com/Documentation/user-attention-set.html
