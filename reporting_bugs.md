@@ -25,18 +25,27 @@ for more information.
 
 ## Public issue tracker {#public}
 
-The Chromium project's [public issue tracker] is used by developers to track
-Chrome OS bugs and feature requests. New issues submitted here are periodically
-triaged to receive component labels, at which point they should be examined by
-component owners. If you're a Chromium project member, you can assign components
-and other labels yourself to expedite this process.
+The Chromium project's public trackers are used to track Chrome OS bugs and
+feature requests.
 
+If you have a bug or feature request which is related to the Chrome OS operating
+system itself and not the user interface or browser, please proceed to the
+[instructions on filing bugs in Chrome OS] in the [Chrome OS Issue Tracker].
+
+If you have a bug or feature request which is related to the user interface or
+browser, please file it using the Chromium project's [public issue tracker].
 [new.crbug.com] or [crbug.com/new] are interchangeable handy shortcuts that can
-be used to start a new issue in the public tracker.
+be used to start a new issue in this public tracker. Issues are publicly-viewable
+by default, but the `Restrict-View-Google` label restricts the issue to Google
+employees. [go/newcrosbug] (internal link) may be used to start a new issue with
+this label.
 
-Issues are publicly-viewable by default, but the `Restrict-View-Google` label
-restricts the issue to Google employees. [go/newcrosbug] (internal link) may be
-used to start a new issue with this label.
+New issues submitted to these trackers are periodically triaged to receive
+correct component assignments, at which point they should be examined by
+component owners. If you are a Chromium project member or a member of Chrome
+OS, you can assign components and other labels/hotlists yourself to expedite
+this process.
+
 
 ## Security bugs {#security}
 
@@ -178,3 +187,5 @@ If you think you've identified a bug in Chrome OS, please do the following:
 [go/newcrosbug]: https://goto.google.com/newcrosbug
 [Reporting Security Bugs]: https://dev.chromium.org/Home/chromium-security/reporting-security-bugs
 [Chrome OS Security Severity Guidelines]: security_severity_guidelines.md
+[instructions on filing bugs in Chrome OS ]: platform_public_tracker.md
+[Chrome OS Issue Tracker]: https://issuetracker.google.com
