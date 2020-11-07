@@ -516,13 +516,13 @@
     </dia:object>
     <dia:object type="Flowchart - Box" version="0" id="O11">
       <dia:attribute name="obj_pos">
-        <dia:point val="19,27"/>
+        <dia:point val="22.6854,27"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="18.95,26.95;28.485,30.05"/>
+        <dia:rectangle val="22.6354,26.95;32.1704,30.05"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="19,27"/>
+        <dia:point val="22.6854,27"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
         <dia:real val="9.4349999999999987"/>
@@ -549,7 +549,7 @@ Kernel drivers#</dia:string>
             <dia:real val="0.80000000000000004"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="23.7175,28.2941"/>
+            <dia:point val="27.4029,28.2941"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000ff"/>
@@ -565,13 +565,13 @@ Kernel drivers#</dia:string>
         <dia:point val="22.5,24"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="22.45,23.95;24.0793,27.05"/>
+        <dia:rectangle val="22.45,23.95;27.7647,27.05"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="22.5,24"/>
         <dia:point val="22.5,25.5"/>
-        <dia:point val="23.7175,25.5"/>
-        <dia:point val="23.7175,27"/>
+        <dia:point val="27.4029,25.5"/>
+        <dia:point val="27.4029,27"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -600,13 +600,13 @@ Kernel drivers#</dia:string>
         <dia:point val="29.75,18"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="25.7144,17.95;29.8,27.05"/>
+        <dia:rectangle val="29.3998,17.95;30.1234,27.05"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
         <dia:point val="29.75,18"/>
-        <dia:point val="29.75,25.4933"/>
-        <dia:point val="26.0762,25.4933"/>
-        <dia:point val="26.0762,27"/>
+        <dia:point val="29.75,22.5"/>
+        <dia:point val="29.7616,22.5"/>
+        <dia:point val="29.7616,27"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -614,7 +614,7 @@ Kernel drivers#</dia:string>
         <dia:enum val="1"/>
       </dia:attribute>
       <dia:attribute name="autorouting">
-        <dia:boolean val="false"/>
+        <dia:boolean val="true"/>
       </dia:attribute>
       <dia:attribute name="end_arrow">
         <dia:enum val="22"/>
@@ -632,14 +632,14 @@ Kernel drivers#</dia:string>
     </dia:object>
     <dia:object type="Standard - ZigZagLine" version="1" id="O14">
       <dia:attribute name="obj_pos">
-        <dia:point val="21.3588,30"/>
+        <dia:point val="25.0441,30"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="19.8382,29.95;21.4088,32.05"/>
+        <dia:rectangle val="19.8382,29.95;25.0941,32.05"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="21.3588,30"/>
-        <dia:point val="21.3588,31"/>
+        <dia:point val="25.0441,30"/>
+        <dia:point val="25.0441,31"/>
         <dia:point val="20.2,31"/>
         <dia:point val="20.2,32"/>
       </dia:attribute>
@@ -823,7 +823,7 @@ Kernel drivers#</dia:string>
             <dia:real val="0.80000000000000004"/>
           </dia:attribute>
           <dia:attribute name="pos">
-            <dia:point val="28.0048,33.2191"/>
+            <dia:point val="28.0047,33.2191"/>
           </dia:attribute>
           <dia:attribute name="color">
             <dia:color val="#000000ff"/>
@@ -848,14 +848,14 @@ Kernel drivers#</dia:string>
     </dia:object>
     <dia:object type="Standard - ZigZagLine" version="1" id="O18">
       <dia:attribute name="obj_pos">
-        <dia:point val="26.0762,30"/>
+        <dia:point val="29.7616,30"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="26.0262,29.95;28.3618,32.05"/>
+        <dia:rectangle val="27.6382,29.95;29.8116,32.05"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="26.0762,30"/>
-        <dia:point val="26.0762,31"/>
+        <dia:point val="29.7616,30"/>
+        <dia:point val="29.7616,31"/>
         <dia:point val="28,31"/>
         <dia:point val="28,32"/>
       </dia:attribute>
@@ -912,6 +912,32 @@ Kernel drivers#</dia:string>
       <dia:attribute name="valign">
         <dia:enum val="3"/>
       </dia:attribute>
+    </dia:object>
+    <dia:object type="Standard - ZigZagLine" version="1" id="O20">
+      <dia:attribute name="obj_pos">
+        <dia:point val="22.5,24"/>
+      </dia:attribute>
+      <dia:attribute name="obj_bb">
+        <dia:rectangle val="20.15,23.95;22.55,31.55"/>
+      </dia:attribute>
+      <dia:attribute name="orth_points">
+        <dia:point val="22.5,24"/>
+        <dia:point val="22.5,25.5071"/>
+        <dia:point val="20.2,25.5071"/>
+        <dia:point val="20.2,31.5"/>
+      </dia:attribute>
+      <dia:attribute name="orth_orient">
+        <dia:enum val="1"/>
+        <dia:enum val="0"/>
+        <dia:enum val="1"/>
+      </dia:attribute>
+      <dia:attribute name="autorouting">
+        <dia:boolean val="false"/>
+      </dia:attribute>
+      <dia:connections>
+        <dia:connection handle="0" to="O7" connection="13"/>
+        <dia:connection handle="1" to="O14" connection="2"/>
+      </dia:connections>
     </dia:object>
   </dia:layer>
 </dia:diagram>
