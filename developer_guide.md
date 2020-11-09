@@ -1674,7 +1674,7 @@ enrollment setting:
 *   Disable the enterprise enrollment check:
 
     ```bash
-    (dut) $ vpd -i RW_VPD -scheck_enrollment=0
+    (dut) $ vpd -i RW_VPD -check_enrollment=0
     (dut) $ dump_vpd_log --force
     (dut) $ crossystem clear_tpm_owner_request=1
     (dut) $ reboot
