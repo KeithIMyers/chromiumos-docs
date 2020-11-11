@@ -17,8 +17,22 @@ These threefold purposes apply to sheriffs
     breaks.
 
 In exchange for the above, sheriffs are granted Code Review +2 access to the
-ChromeOS tree. Sheriffing is an important responsibility and fulfilling the
+Chrome OS tree. Sheriffing is an important responsibility and fulfilling the
 responsibility grants you CR+2 access.
+
+*** promo
+If you are a Chrome Gardener, an ARC++ Constable, or an ARC++ Forest Ranger,
+you don't need to join the Chrome OS sheriffing rotation. Instead, request
+membership in the
+[Chrome OS Sheriffs Exceptions group][chromeos-sheriffs-exceptions] to acquire
+CR+2 access.
+***
+
+*** aside
+If you work primarily on Chrome, the infra team generally expects that you
+coordinate with your reviewer(s) to acquire CR+2 on individual CLs, rather
+than requesting membership in the Chrome OS Sheriffs Exceptions group.
+***
 
 ## The sheriff's primary focus is the postsubmit builders
 
@@ -45,7 +59,7 @@ This diagram attempts to capture this at an abstract level:
 1.  **Do not leave the tree unattended**; coordinate with your secondary sheriff
     to ensure this. If you need to step out for a few hours, make sure that your
     secondary is covering for you. Normal work hours (for you) only.
-1. **Watch** [Sheriff-o-Matic for ChromeOS]
+1. **Watch** [Sheriff-o-Matic for Chrome OS]
    1.  **Keep this user interface open during your entire shift.**
    1.  **File or locate bugs.** File new bugs, or update existing ones. You can
        file a bug from the UI: group alerts with a similar root cause, then
@@ -111,7 +125,7 @@ At the beginning of your stint as Sheriff, please perform the following tasks:
 
 1.  Join the [CrOS Oncall] Hangouts Chat room and introduce yourself as an on-duty
     sheriff.
-1.  Pull up the [Sheriff-o-Matic for ChromeOS] interface.
+1.  Pull up the [Sheriff-o-Matic for Chrome OS] interface.
 1.  Triage any failures. You are responsible for identifying issues that need
     attention and finding someone to pay attention to them. Fixing issues
     yourself is secondary.
@@ -128,7 +142,7 @@ handoff meeting.
 
 In the diagram above, there's a purple arrow that proceeds off to the
 right. This represents the progress of the manifest-internal repository over
-time (as repos in the ChromeOS forest progress). The Annealing builder makes
+time (as repos in the Chrome OS forest progress). The Annealing builder makes
 snapshots of this progress and CQ and postsubmit builders run with one of these
 snapshots as their base commit. For postsubmit, it just always uses the most
 recent snapshot. For CQ runs, it uses one of the most recent snapshot as its
@@ -511,15 +525,15 @@ Other handy links to information:
 [East Calendar]: https://oncall.corp.google.com/chromeos-sheriffs-east
 [East Rotation]: https://sphinx.corp.google.com/sphinx/#accessChangeRequest:systemName=chromeos-sheriffs-non-pacific&selectedRole=chromeos-sheriffs-non-pacific
 [Gardeners Calendar]: https://oncall.corp.google.com/chromeos-gardeners
-[Gardeners group]: https://ganpati.corp.google.com/#Group_Info?name=chromeos-chrome-gardeners
+[Gardeners group]: http://mdb/chromeos-chrome-gardeners
 [Gardening Tasks]: https://code.google.com/p/chromium/issues/list?can=2&q=label%3AGardening
 [Gerrit lists recently merged changes]: https://chromium-review.googlesource.com/q/status:merged
 [Infrastructure Deputy]: https://goto.google.com/cros-infra-deputy
 [secondary sheriff]: https://goto.google.com/secondary-sheriff
 [Shadow Gardeners Calendar]: https://oncall.corp.google.com/chromeos-shadow-gardeners
-[Shadow Gardeners group]: https://ganpati.corp.google.com/#Group_Info?name=chromeos-chrome-shadow-gardeners
+[Shadow Gardeners group]: http://mdb/chromeos-chrome-shadow-gardeners
 [Sheriff FAQ: Chromium OS ASAN]: https://dev.chromium.org/developers/tree-sheriffs/sheriff-details-chromium-os/sheriff-faq-chromium-os-asan-bots
-[Sheriff-o-Matic for ChromeOS]: https://sheriff-o-matic.appspot.com/chromeos
+[Sheriff-o-Matic for Chrome OS]: https://sheriff-o-matic.appspot.com/chromeos
 [SoM help page]: https://sheriff-o-matic.appspot.com/help-som
 [Swap for Gardeners]: https://cs.corp.google.com/piper///depot/ops/data/mail/configs/oncall.chromeos-gardeners?edit=true
 [Swap for Shadow Gardeners]: https://cs.corp.google.com/piper///depot/ops/data/mail/configs/oncall.chromeos-shadow-gardeners?edit=true
@@ -529,6 +543,7 @@ Other handy links to information:
 [West Rotation]: https://sphinx.corp.google.com/sphinx/#accessChangeRequest:systemName=chromeos-sheriffs-pacific&selectedRole=chromeos-sheriffs-pacific
 [aborting the current CQ run]: https://sites.google.com/a/google.com/chromeos/for-team-members/infrastructure/chromeos-admin/manual-cq-intervention
 [build deputy oncall]: http://oncall/chromeos-build-eng
+[chromeos-sheriffs-exceptions]: http://mdb/chromeos-sheriffs-exceptions
 [crbug.com/313484]: https://crbug.com/313484
 [crbug.com/313971]: https://crbug.com/313971
 [crbug.com/314678]: https://crbug.com/314678
