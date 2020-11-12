@@ -108,7 +108,7 @@ based boards.*
 ### init starting up services
 
 init will start services based on the config files in /etc/init/ and their
-dependencies. The "service" here not only include the daemon process service,
+dependencies. The "service" here not only includes the daemon process service,
 but also some pre-startup, or short-lived script.
 
 #### Simple startup script embedded in init config file
@@ -158,19 +158,19 @@ the simple embedded scripts together. Complex script or script needing
 permissions more than file, or directory read, write, or creation, or exec,
 should be avoided in the simple script, and should use a separate script. Within
 the script, it will auto-transits to other domains upon executing the service
-program, directly (for example, `exec /usr/sbin/rsyslogd` or indirectly (via
+program, directly (for example, `exec /usr/sbin/rsyslogd`) or indirectly (via
 minijail0 the same as above).
 
 #### Separate script to start the service
 
-But there're some more complex service startup scripts, which are written in a
+But there are some more complex service startup scripts, which are written in a
 separate (shell) script. The init config file will look like `exec
 /path/to/script.sh` or `exec /bin/sh /path/to/script.sh`
 
-The earlier one is always preferred since it tells the kernel exact script being
-executed, so automatic domain transition can be feasible upon executing the
-script, to not to mix up permission requirements of the single script to the
-whole init scripts.
+The earlier one is always preferred since it tells the kernel the exact script
+being executed, so automatic domain transition can be feasible upon executing
+the script, to not mix up permission requirements of the single script to the
+whole init script.
 
 The latter one should be **avoided** _if the script has complex permission
 requirements_, like special capabilities, create device, modify sysfs, mount
@@ -207,10 +207,10 @@ This can be confined together with `u:r:cros_init_script:s0` since
  - Chrome OS has system image verification to make sure everything under
    /etc/init is the same as original state.
 
-Like startup script, there're still very small number of services, using an
+Like startup script, there are still a very small number of services using an
 external script file for the startup. For example `pre-start exec
 /usr/share/cros/init/shill-pre-start.sh` in shill.conf. This can be either
-separate domains if they involves complex permissions like mounting/unmounting
+separate domains if they involve complex permissions like mounting/unmounting
 filesystems, loading/unloading kernel modules, or special capabilities.
 
 ## How to write SELinux policy for Chrome OS
@@ -231,7 +231,7 @@ Types can be defined in the following syntax
 type <type_name>[, <attribute1>, <attribute2>, ...];
 ```
 
-This defines a type named `<type_name>`, and optionally add the attributes:
+This defines a type named `<type_name>`, and optionally adds the attributes:
 `<attribute1>`, `<attribute2>`, ...
 
 Also, for an already defined type `<type_name>`, it can add an additional
@@ -251,7 +251,7 @@ attribute <attribute>;
 
 #### System Image
 
-File contexts for files in system image is defined in
+File contexts for files in system image are defined in
 `platform2/sepolicy/file_contexts/chromeos_file_contexts`.
 
 Each line defines a path and its security context. For example,
@@ -261,12 +261,12 @@ Each line defines a path and its security context. For example,
 ```
 
 It defines the security context (label) for file `/sbin/init` to be
-`u:object_r:chromeos_init_exec:s0`. Security context here must be complete
+`u:object_r:chromeos_init_exec:s0`. The security context here must be a complete
 security context containing user, role, type, and range. Type-only will not
 work. Chrome OS files always use `u` as user, `object_r` as role, and `s0` as
 range for files in system image.
 
-The path can also be an regular expression. For example
+The path can also be a regular expression. For example
 
 ```
 /usr/share/zoneinfo(/.*)? u:object_r:cros_tz_data_file:s0
