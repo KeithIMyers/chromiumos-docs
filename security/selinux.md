@@ -284,8 +284,8 @@ example, /var/lib, /var/log), and volatile runtime files in tmpfs (for example,
 
 ##### At creation
 
-Both runtime files needs to be created at the correct security context. Relabel
-are prohibited in general, except for policy upgrades.
+Both runtime files need to be created at the correct security context.
+Relabeling is prohibited in general, except for policy upgrades.
 
 Creation label can be handled by either
 [`setfscreatecon`(3)](https://manpages.ubuntu.com/manpages/bionic/en/man3/setfscreatecon.3.html)
@@ -295,18 +295,18 @@ Type transition is recommended since it doesn't require to modify the program to
 be SELinux-aware. Developers should try their best to make sure files that need
 type transition on creation, are created at a unique path to reduce the usage of
 file name in the type transition rules. For example, only the daemon process
-create the corresponding directory like `/var/lib/<service>`,
-`/var/log/<service>`, etc, not startup script, nor some random tests.
+creates the corresponding directory like `/var/lib/<service>`,
+`/var/log/<service>`, etc, not the startup script, nor some random tests.
 
 ```
 filetrans_pattern(<domain>, <contextA>, <contextB>, file|dir|...);
 filetrans_pattern(<domain>, <contextA>, <contextB>, file|dir|..., <file name>);
 ```
 
-Above macros, provides ability when `<domain>` create a file|dir|... under
-`<contextA>`, the created file|dir|... will be labelled as `<contextB>`. If the
-`<file name>` is provided, only created file|dir|... with exact name will be
-labelled as `<contextB>`.
+On the above macros, when `<domain>` creates a file|dir|... under
+`<contextA>`, the created file|dir|... will be labelled as `<contextB>`. If
+`<file name>` is provided, only the created file|dir|... with the exact name
+will be labelled as `<contextB>`.
 
 For example,
 
@@ -314,8 +314,8 @@ For example,
 filetrans_pattern(cros_rsyslogd, cros_var_log, cros_syslog, file, "messages");
 ```
 
-will label "messages" created by process in `cros_rsyslogd` domain under
-directory with `cros_var_log` type be labelled as `cros_syslog`. Thus, the
+will label "messages" as `cros_syslog`, because it was created by a process
+in `cros_rsyslogd` domain, under directory with `cros_var_log` type. Thus, the
 created structure will look like
 
 ```
@@ -336,10 +336,10 @@ startup script without the need to recreate the files.
 
 ### Type Transition
 
-Transition rules controls auto type transition upon creating of an object (file,
-dir, sock_file, etc.), or executing an executables.
+Transition rules control auto type transition upon creation of an object (file,
+dir, sock_file, etc.), or executing an executable.
 
-`type_transition` share the same syntax for both file type and process type,
+`type_transition` shares the same syntax for both file type and process type,
 
 ```
 type_transition `source_type` `target_type` : `class` new_type [object name];
@@ -362,25 +362,25 @@ to one single macro to let creating object as a different type more easily.
 
 #### Process Type Transition
 
-For process transition, when a process running in `source_type` execute an
+For process transition, when a process running in `source_type` executes an
 executable labelled as `target_type`, the process automatically transits to
 `new_type`.
 
-The example is
+The example is:
 
 ```
 type_transition minijail cros_anomaly_detector_exec:process cros_anomaly_detector;
 ```
 
-When a process under minijail execute a file labelled as
-cros_anomaly_detector_exec, the after-exec process will be running under
-cros_anomaly_detector domain.
+When a process under minijail executes a file labelled as
+`cros_anomaly_detector_exec`, the `after-exec` process will be running under
+`cros_anomaly_detector` domain.
 
 There's also a useful macro like `filetrans_pattern` for process type transition
 that wraps not only type_transition rule but also corresponding AV rules, called
 `domain_auto_trans`. The detail will be explained the later sections.
 
-Besides type_transition rule, there're also some other type rules that's less
+Besides type_transition rule, there are also some other type rules that are less
 frequently used, it can be referred from [SELinux Project
 Wiki](https://selinuxproject.org/page/TypeRules)
 
@@ -408,7 +408,7 @@ Wiki](https://selinuxproject.org/page/TypeRules)
     with the `class` created under `target_type` by `source_type` will be
     `new_type`, no matter what name the new object is.
 
-    This macro will also grants necessary access for the creation, it will allow
+    This macro will also grant necessary access for the creation, it will allow
     - `source_type` to create a `class` as `new_type`.
     - `source_type` to `add_name` in a directory labelled as `target_type`
 
@@ -435,9 +435,9 @@ Wiki](https://selinuxproject.org/page/TypeRules)
     When a process running in `source_domain`, executes a `file` labelled as
     `exec_type`, it becomes a process running in `new_domain`.
 
-    The macro will also grants necessary for the execution, it will allow
+    The macro will also grant necessary access for the execution, it will allow
     - `source_domain` to `execute` `exec_type`.
-    - use `exec_type` as the entrypoint of `new_domain`.
+    - to use `exec_type` as the entrypoint of `new_domain`.
 
   - Example:
 
@@ -467,16 +467,16 @@ Wiki](https://selinuxproject.org/page/TypeRules)
 
 ### Naming Conventions
 
-Chrome OS policies will be combined with Android policy before compiling into
-final monolithic policy. Therefore care should be taken to ensure names don't
+Chrome OS policies will be combined with Android policies before compiling into
+a final monolithic policy. Therefore care should be taken to ensure names don't
 conflict with Android policies.
 
-We use the following naming conventions to reduce possibilities of conflicts.
+We use the following naming conventions to reduce the possibilities of conflicts.
 
 1. Labels created and used before June 2018, including files and directories in
    the stateful partition, are most likely being used in multiple Android
    branches, and can be difficult to remove. To reduce the chance of breakage,
-   these files and directories remains on original label even it doesn't fit
+   these files and directories remain on original label even if it doesn't fit
    into the naming conventions.
 
 1. minijail domain is `u:r:minijail:s0` or `u:r:<something>_minijail:s0`. Most
@@ -487,7 +487,7 @@ We use the following naming conventions to reduce possibilities of conflicts.
    unless it's described in previous rules.
 
 1. Individual executables that desire automatic domain transition on execution
-   must has its type suffixed with `_exec`. Usually these executables are
+   must have their type suffixed with `_exec`. Usually these executables are
    labelled as `u:object_r:cros_<something>_exec:s0`
 
 1. Regarding runtime files
@@ -532,17 +532,17 @@ Minijail is a tool combined with a library and a wrapper program to apply
 different kind of restrictions (cgroups, caps, seccomps, etc), and
 namespaces(mountns, pidns, IPCns, etc) in a correct way.
 
-There major problem facing on SELinux with minijail wrapper program is:
+The major problem that the minijail wrapper program faces on SELinux is:
 
-    By default, minijail use a preload library to hook `__libc_start_main` to
+    By default, minijail uses a preload library to hook `__libc_start_main` to
     apply all kinds of restrictions.
-    This put all the privileges that minijail needs into post-exec, where the
+    This puts all the privileges that minijail needs into post-exec, where the
     kernel can not distinguish the boundary between minijail and the main
     program without an explicit setcon(3).
     While setcon(3) is unlikely to be possible for our minijail usage since it
-    usually attempt to mount procfs readonly.
+    usually attempts to mount procfs readonly.
 
-Of course, granting many unnecessary privilege to the domain is discouraged
+Of course, granting many unnecessary privileges to the domain is discouraged
 since an exploited process will be allowed to do what minijail could do
 (mknod, mount filesystems, etc). And we want to reduce the attack surface if
 possible.
@@ -550,24 +550,25 @@ possible.
 #### /sbin/minijail0
 
 Minijail wrapper has a static mode that does all the enforcement and lockdowns
-pre-exec. Due to lack of ambient caps in the past and seccomp issue, minijail
-developed a preload mode that runs default for shared-linked ELFs that uses a
+pre-exec. Due to lack of ambient caps in the past and seccomp issues, minijail
+developed a preload mode that runs as default for shared-linked ELFs that use a
 preload library to do the lockdowns post-exec.
 
 But static mode introduces another issue: seccomp.
 
 - If your seccomp filters doesn't have `execve` allowed, minijail0 cannot even
   execute the target program. One workaround for execve is to allow execve but
-  it's not want we want even minijail has isolated many other resources.
+  it's not what we want even if minijail has isolated many other resources.
 - seccomp requires either `sys_admin` capabilities or `no_new_privs` bit.
-  Granting `sys_admin` just for install seccomp filter is a terrible idea. But
+  Granting `sys_admin` just to install seccomp filter is a terrible idea. But
   `no_new_privs` prevents SELinux domain transition to arbitrary domains
   pre-4.14 kernel.
 
-A common workaround for two problems above is to install seccomp filter
-post-execve, just like what a preload library has been doing. This comes an idea
-to have embedded minijail for quickly installing seccomp rules post-exec since
-installing seccomp rules doesn't need special capabilities on SELinux.
+A common workaround for the two problems above is to install seccomp filter
+post-execve, just like what a preload library has been doing. A way to solve
+this could be to have embedded minijail, for quickly installing seccomp rules
+post-exec since installing seccomp rules doesn't need special capabilities on
+SELinux.
 
 ##### Example with minijail0 wrapper
 
@@ -577,12 +578,12 @@ recommended to isolate pre-minijail and post-minijail as much as possible.
 1.  Use `-T static` static mode. This puts all the lockdown steps in the
     minijail0 process.
 
-1.  Use `--ambient` if you have `-c`. Capabilities is not preserved across
+1.  Use `--ambient` if you have `-c`. Capabilities are not preserved across
     `execve` without ambient caps. You should use `--ambient` whenever possible,
     otherwise your caps won't be preserved to the actual process with `-T
     static`.
 
-1.  Put seccomp into an inner preload minijail. It will look look like this to
+1.  Put seccomp into an inner preload minijail. It will look like this to
     launch your program
 
     ```
@@ -592,8 +593,8 @@ recommended to isolate pre-minijail and post-minijail as much as possible.
 
 SELinux domain remains on minijail when applying all other restrictions. Upon
 first execve to execute inner minijail0, there's no domain transition. And the
-inner minijail simply execute target program with preload library, when the
-domain transition happens before setting nnp bit.
+inner minijail simply executes the target program with preload library, when
+the domain transition happens before setting nnp bit.
 
 #### Libminijail
 
