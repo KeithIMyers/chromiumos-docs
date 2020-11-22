@@ -201,12 +201,12 @@ publish it by using the `cros-rust_publish` command.
 
 ### Cargo.toml macros
 
-Using `cros-rust` ebuild could support building crates in Chrome OS build
-system, but it will break local `cargo build` in some situations. We add two
-macros which are recognized by ebuild for `Cargo.toml` to keep both build system
-work.
+The `cros-rust` eclass supports building crates in the Chrome OS build system,
+but it breaks `cargo build` in some situations. We add two macros which are
+recognized by the eclass to keep both build systems working. The macros take
+the form of special comments in `Cargo.toml`.
 
--   Provided by ebuild
+-   `# provided by ebuild`
 
     This macro introduces a replacement of:
 
@@ -233,7 +233,7 @@ work.
     data_model = { path = "../data_model" }  # provided by ebuild
     ```
 
--   Ignored by ebuild
+-   `# ignored by ebuild`
 
     We will use this to discard parts of `[patch.crates-io]` which should be
     applied to local developer builds but not to ebuilds.
