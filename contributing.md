@@ -278,9 +278,16 @@ Picking reviewers who will just rubber-stamp your changes is a bad idea.
 The point of submitting changes is to submit good code, not to submit as much
 code as you can.
 
-If you don't know who should review your changes, start by looking for OWNERS
-files in directories your commit touches.
-These are great for finding the maintainers for the respective projects.
+If you don't know who should review your changes, use the `[FIND OWNERS]` button
+in Gerrit after you've uploaded the CL.
+It'll automatically parse the OWNERS files that match the files you've modified.
+If you see an entry like `foo-reviews`, it's best to start there as those tend
+to be automatic rotations of developers.
+
+Some OWNERS files include inline comments to help direct to the right groups or
+people, but the Gerrit UI doesn't show those currently.
+If a lot of people are shown in the list, you can consult the file directly to
+see if there are any rules to help.
 
 If there are no OWNERS files, you can use `git log` to find people.
 You can use it on the specific files you're touching, or on the entire project.
