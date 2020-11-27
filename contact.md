@@ -57,8 +57,6 @@ nights & weekends), so please be patient when first joining.
 *   [chromium-os-bugs]: A read-only high-volume list of all Chromium bugs.
 *   [chromium-os-checkins]: A read-only high-volume list for all commits that
     are made to all Chromium OS repositories.
-*   [chromium-os-reviews]: A read-only high-volume list of all Chromium OS
-    code reviews.
 
 For more specific developer groups, see this page:
 https://dev.chromium.org/developers/technical-discussion-groups
@@ -67,6 +65,11 @@ https://dev.chromium.org/developers/technical-discussion-groups
 
 Please see the [Reporting Chrome OS bugs] document for more details.
 That covers all types of reports: public, private, security, etc...
+
+## Code reviews
+
+Please see the [Contributing](./contributing.md#reviewers) document.
+It includes tips for finding suitable reviewers.
 
 ## Private discussion groups
 
@@ -131,7 +134,6 @@ It has a section specifically about filing security sensitive bugs.
 [chromium-os-checkins]: https://groups.google.com/a/chromium.org/group/chromium-os-checkins
 [chromium-os-dev]: https://groups.google.com/a/chromium.org/group/chromium-os-dev
 [chromium-os-discuss]: https://groups.google.com/a/chromium.org/group/chromium-os-discuss
-[chromium-os-reviews]: https://groups.google.com/a/chromium.org/group/chromium-os-reviews
 [Crouton]: https://github.com/dnschneid/crouton
 [Google Chrome Help Center]: https://www.google.com/support/chrome/
 [Report a problem or send feedback]: https://support.google.com/chromebook/answer/2982029

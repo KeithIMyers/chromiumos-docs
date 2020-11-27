@@ -144,7 +144,10 @@ You will have a much nicer time if you also have:
     This will help for the initial download (minimum of about 2 GB) and any
     further updates.
 
-### Install git and curl
+### Install development tools
+
+Some host OS tools are needed to manipulate code, bootstrap the development
+environment, and run preupload hooks later on.
 
 Install the git revision control system, the curl download helper, and lvm
 tools. On Ubuntu 16.04, the magic incantation to do this is (all on one line):
