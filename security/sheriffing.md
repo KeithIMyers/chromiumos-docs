@@ -52,6 +52,19 @@ If this is the case, you can often disable features during the configuration
 step
 ([example](https://crrev.com/c/1641862/1/chromeos/config/env/net-misc/curl)).
 
+### What to do with syzkaller bug reports
+
+Google maintains a kernel fuzzing project called [syzkaller]. The
+[syzkaller dashboard] is public and therefore folks are able to find
+syzkaller-found kernel bugs and report them to Chrome/Chrome OS. This is not
+immediately helpful, for a couple of reasons:
+
+*   We receive internal notifications for syzkaller bugs.
+*   The bugs don't normally reproduce on Chrome OS kernels.
+
+The approach for these bugs is to ask for a repro case that applies to a
+currently-shipping Chrome OS device (including VM images.)
+
 ## Sheriffing and full-chain exploits
 
 ### Ownership
@@ -99,3 +112,5 @@ successfully broken.
 [chromeos-security@]: https://groups.google.com/a/google.com/forum/#!forum/chromeos-security
 [crash reporter security document]: https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/crash-reporter/docs/security.md
 [A tale of two Pwnies (part 1)]: https://blog.chromium.org/2012/05/tale-of-two-pwnies-part-1.html
+[syzkaller]: https://github.com/google/syzkaller
+[syzkaller dashboard]: https://syzkaller.appspot.com/upstream
